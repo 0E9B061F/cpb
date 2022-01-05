@@ -1,5 +1,6 @@
 <script>
 	import Link from './Link.svelte'
+	import Content from './Content.svelte'
   import {setContext, getContext} from 'svelte'
   import {writable} from 'svelte/store'
 
@@ -13,6 +14,9 @@
 <p>PATH: {$gs.path}</p>
 
 <Link href="/foo/bar">foo</Link>
+<Link href="/foo/baz">baz</Link>
+
+<Content/>
 
 <style>
   p {
