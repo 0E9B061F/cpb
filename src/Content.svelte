@@ -1,31 +1,35 @@
 <script>
   import Link from './Link.svelte'
-  import {getContext} from 'svelte'
+  import PageForm from './PageForm.svelte'
   import SvelteMarkdown from 'svelte-markdown'
+  import {getContext} from 'svelte'
   const gs = getContext('gs')
-  $: source = xxx($gs.path)
   const renderers = { link: Link }
-  const xxx =path=> {
-    return `
-  # This is '${$gs.human(path)}'
-
-* [HOME](/)
-* [FOO](/foo)
-
-* This is a list
-* With two items
-  1. And a sublist
-  2. That is ordered
-    * With another
-    * Sublist inside
-
-| And this is | A table |
-|-------------|---------|
-| With two    | columns |`
+  $: rurl = $gs.rp($gs.path)
+  let error, title, body, noerror
+  const request =u=> {
+    fetch(u)
+    .then(res=> res.json())
+    .then(res=> {
+      error = res.error
+      title = res.title
+      body = res.body
+      noerror = (error == 0 || error == undefined)
+    })
   }
+  $: request(rurl)
 </script>
 
-<SvelteMarkdown {source} {renderers} />
+<p>RP: {rurl}</p>
+<p>Title: {title}</p>
+
+{#if noerror}
+  <SvelteMarkdown source={body} {renderers} />
+{:else if error == 1}
+  <PageForm {title} on:success={request(rurl)}/>
+{:else}
+  <p>ERROR {error}</p>
+{/if}
 
 <style>
 </style>
