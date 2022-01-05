@@ -7,7 +7,7 @@
   const renderers = { link: Link }
   const xxx =path=> {
     return `
-  # This is '${path}'
+  # This is '${$gs.human(path)}'
 
 * [HOME](/)
 * [FOO](/foo)
