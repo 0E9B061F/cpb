@@ -1,13 +1,16 @@
 <script>
+  import Link from './Link.svelte'
   import {getContext} from 'svelte'
   import SvelteMarkdown from 'svelte-markdown'
   const gs = getContext('gs')
   $: source = xxx($gs.path)
+  const renderers = { link: Link }
   const xxx =path=> {
     return `
   # This is '${path}'
 
-[HOME](/)
+* [HOME](/)
+* [FOO](/foo)
 
 * This is a list
 * With two items
@@ -22,7 +25,7 @@
   }
 </script>
 
-<SvelteMarkdown {source} />
+<SvelteMarkdown {source} {renderers} />
 
 <style>
 </style>
