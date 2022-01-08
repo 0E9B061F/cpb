@@ -15,16 +15,25 @@
       title = res.title
       body = res.body
       noerror = (error == 0 || error == undefined)
+      edit = false
     })
   }
   $: request(rurl)
+  $: edit = false
+  const enteredit =()=> edit = true
+  const exitedit =()=> edit = false
 </script>
 
 <p>RP: {rurl}</p>
 <p>Title: {title}</p>
 
 {#if noerror}
-  <SvelteMarkdown source={body} {renderers} />
+  {#if edit}
+    <PageForm {title} {body} editing={true} on:success={request(rurl)} on:cancel={exitedit}/>
+  {:else}
+    <button on:click|preventDefault={enteredit}>EDIT</button>
+    <SvelteMarkdown source={body} {renderers} />
+  {/if}
 {:else if error == 1}
   <PageForm {title} on:success={request(rurl)}/>
 {:else}

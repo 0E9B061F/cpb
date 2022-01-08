@@ -20,9 +20,30 @@
     cmd: (n, p='')=> `http://localhost:3000/CPB.${n}${p}`,
   })
   setContext('gs', gs)
+  let links = writable([])
+  setContext('links', links)
+  let linkmap = writable({})
+  setContext('linkmap', linkmap)
   
-  const retrieve =path=> { 
+
+  const linkupdate =links=> {
+    console.log('update')
+    const titles = [...new Set(links)].join('+')
+    const cmd = $gs.cmd('missing', '/'+titles)
+    fetch(cmd)
+    .then(res=> res.json())
+    .then(res=> $linkmap = res)
   }
+  let lut
+  const mklut =links=> {
+    if (lut) clearTimeout(lut)
+    lut = setTimeout(linkupdate, 200, links)
+  }
+  $: mklut($links)
+  const onpop =e=> {
+    $gs.path = window.location.pathname
+  }
+  window.onpopstate = onpop
 </script>
 
 <form>
@@ -34,6 +55,7 @@
 <Link href="/foo">foo</Link>
 <Link href="/bar">bar</Link>
 <Link href="/Home">HOME 2</Link>
+<Link href="/FAKE">RED LINK</Link>
 
 <TitleList/>
 <Content/>

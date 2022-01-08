@@ -23,3 +23,10 @@
 {/if}
 </div>
 
+<style>
+.title-list {
+  display: flex;
+  justify-content: space-around;
+}
+</style>
+
