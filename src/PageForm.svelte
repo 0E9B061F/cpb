@@ -3,16 +3,21 @@
 	const dispatch = createEventDispatcher();
   import {getContext} from 'svelte'
   const gs = getContext('gs')
-  $: rurl = $gs.rp($gs.path)
-  export let body = ""
-  export let title
+  const path = getContext('path')
+  const loc = getContext('loc')
+  $: rurl = $gs.rp($loc)
+  export let page
+  let title = page.title
+  let space = page.namespace
+  let body = page.body
+  let historical = page.hsitorical
   export let editing = false
   const update = $gs.cmd('update', '/'+title)
   const postpage = async ()=> {
     const url = editing ? update : rurl
     await fetch(url, {
       method: 'POST',
-      body: JSON.stringify({title, body}),
+      body: JSON.stringify({namespace: space, title, body}),
       headers: {
         'Content-Type': 'application/json'
       },

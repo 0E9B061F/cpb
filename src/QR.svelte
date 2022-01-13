@@ -1,9 +1,12 @@
 <script>
+  import {getContext} from 'svelte'
+  const gs = getContext('gs')
   import { onMount } from 'svelte'
   import QRCode from 'qrcode'
   export let data
   export let title
   export let href
+  $: if (!data) data = href
   let canvas
   const generate =data=> {
     QRCode.toCanvas(canvas, data, {

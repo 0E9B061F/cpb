@@ -7,8 +7,10 @@
   import SvelteMarkdown from 'svelte-markdown'
   import {getContext} from 'svelte'
   const gs = getContext('gs')
+  const path = getContext('path')
+  const loc = getContext('loc')
   const renderers = { link: Link }
-  $: rurl = $gs.rp($gs.path)
+  $: rurl = $gs.rp($loc)
   let error, noerror, page
   const request =u=> {
     fetch(u)
@@ -16,14 +18,19 @@
     .then(res=> {
       error = res.error
       page = {
+        namespace: res.namespace,
         title: res.title,
         body: res.body,
         uuid: res.uuid,
         vuuid: res.vuuid,
+        parentVuuid: res.parentVuuid,
+        childVuuid: res.childVuuid,
         vnum: res.vnum,
       }
+      page.historical = !!page.childVuuid
       noerror = (error == 0 || error == undefined)
-      edit = false
+      exitedit()
+      exithistory()
     })
   }
   $: request(rurl)
@@ -37,19 +44,19 @@
   const exithistory =()=> history = false
 </script>
 
-<p>RP: {rurl}</p>
+<p>RP: <a href={rurl}>{rurl}</a></p>
 {#if page}<p>Title: {page.title}</p>{/if}
 
 {#if noerror}
   {#if edit}
-    <PageForm title={page.title} body={page.body} editing={true} on:success={request(rurl)} on:cancel={exitedit}/>
+    <PageForm {page} editing={true} on:success={request(rurl)} on:cancel={exitedit}/>
   {:else if history}
     <History {page} />
   {:else}
     <Viewer {page} on:edit={enteredit} on:history={enterhistory}/>
   {/if}
 {:else if error == 1}
-  <PageForm title={page.title} on:success={request(rurl)}/>
+  <PageForm {page} on:success={request(rurl)}/>
 {:else}
   <p>ERROR {error}</p>
 {/if}

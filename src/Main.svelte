@@ -5,8 +5,45 @@
   import {setContext, getContext} from 'svelte'
   import {writable} from 'svelte/store'
 
+  let rc = writable({
+    apikey: 'CPBAPI',
+    proto: 'http',
+    domain: 'localhost',
+    port: 3000,
+    defns: 'main',
+    deftitle: 'Home',
+  })
+  const burl =()=> `${$rc.proto}://${$rc.domain}${$rc.port ? ':'+$rc.port : ''}`
+  const aurl =()=> `${burl()}/${$rc.apikey}`
+
+  let path = writable(window.location.pathname)
+  let loc = writable({})
+
+  const parseloc =p=> {
+    const loc = {
+      namespace: null, title: null, uuid: null
+    }
+    if (p[0] == '/') p = p.slice(1)
+    p = p.split('/')
+    const ns = p[0]
+    const t = p[1]
+    const hex = '[a-fA-F0-9]'
+    if (ns.match(`${hex}{8}-(${hex}{4}-){3}${hex}{12}`)) {
+      loc.uuid = ns
+    } else if (ns == '') {
+      loc.namespace = $rc.defns
+      loc.title = $rc.deftitle
+    } else if (!t) {
+      loc.namespace = ns
+      loc.title = $rc.deftitle
+    } else {
+      loc.namespace = ns
+      loc.title = t
+    }
+    return loc
+  }
+
   let gs = writable({
-    path: '/',
     aod: 0,
     human: path=> {
       if (path == '/' || path == '') {
@@ -16,20 +53,33 @@
         return path.split('/').join(' > ')
       }
     },
-    rp: p=> `http://localhost:3000/CPB.get${p}`,
-    cmd: (n, p='')=> `http://localhost:3000/CPB.${n}${p}`,
+    rp: loc=> {
+      if (loc.uuid) {
+        return `${aurl()}/uuid/${loc.uuid}`
+      } else {
+        return `${aurl()}/get/${loc.namespace}/${loc.title}`
+      }
+    },
+    cmd: (n, p='')=> `${aurl()}/${n}${p}`,
+    full: p=> `${burl()}/${p}`
   })
-  setContext('gs', gs)
   let links = writable([])
-  setContext('links', links)
   let linkmap = writable({})
-  setContext('linkmap', linkmap)
   
+  setContext('rc', rc)
+  setContext('gs', gs)
+  setContext('links', links)
+  setContext('linkmap', linkmap) 
+  
+  setContext('path', path) 
+  setContext('loc', loc) 
+
+  $: $loc = parseloc($path)
 
   const linkupdate =links=> {
-    console.log('update')
     const titles = [...new Set(links)].join('+')
-    const cmd = $gs.cmd('missing', '/'+titles)
+    const cmd = $gs.cmd('missing', `/${titles}`)
+    console.log(`update: ${cmd}`)
     fetch(cmd)
     .then(res=> res.json())
     .then(res=> $linkmap = res)
@@ -41,23 +91,25 @@
   }
   $: mklut($links)
   const onpop =e=> {
-    $gs.path = window.location.pathname
+    $path = window.location.pathname
   }
   window.onpopstate = onpop
+
+  $: console.log($links)
 </script>
 
 <form>
 <label for="address">PATH</label>
-<input name="address" type="text" bind:value={$gs.path}/>
+<input name="address" type="text" bind:value={$path}/>
 </form>
 
-<Link href="/">HOME</Link>
-<Link href="/foo">foo</Link>
-<Link href="/bar">bar</Link>
-<Link href="/Home">HOME 2</Link>
-<Link href="/FAKE">RED LINK</Link>
+<Link nst="main">HOME</Link>
+<Link nst="main/foo">foo</Link>
+<Link nst="main/bar">bar</Link>
+<Link nst="main/Home">HOME 2</Link>
+<Link nst="main/FAKE">RED LINK</Link>
 
-<TitleList/>
+<TitleList ns={$loc.namespace}/>
 <Content/>
 
 <style>

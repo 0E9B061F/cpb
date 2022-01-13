@@ -5,7 +5,7 @@
   export let page
   let items
 
-  $: url = $gs.cmd('history', '/'+page.title)
+  $: url = $gs.cmd('history', `/${page.namespace}/${page.title}`)
   const request =u=> {
     fetch(u).then(res=> res.json()).then(res=> {
       items = res

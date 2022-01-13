@@ -1,33 +1,54 @@
 <script>
   import { getContext, onDestroy } from 'svelte'
   const gs = getContext('gs')
+  const path = getContext('path')
   const links = getContext('links')
   const linkmap = getContext('linkmap')
  
-  export let href = '/'
-  export let title = undefined
-  
-  const clicked =()=> {
-    $gs.path = href
-    window.history.pushState({}, $gs.path, $gs.path)
+  export let space = null
+  export let title = null
+  export let nst = null
+  export let uuid = null
+
+  let href
+  if (uuid) href = `/${uuid}`
+  else if (nst) {
+    const p = nst.split('/')
+    const n = p[0]
+    const t = p[1]
+    space = n || 'main'
+    title = t || 'Home'
+    if (t) href = `/${n}/${t}`
+    else href = `/${n}`
+  }
+  else {
+    if (!space) space = 'main'
+    if (!title) title = 'Home'
+    nst = `${space}/${title}`
+    href = `/${space}/${title}`
   }
 
-  title = href
-  if (title == '/' || title == '') title = 'Home'
-  if (title[0] == '/') title = title.slice(1)
+  const clicked =()=> {
+    $path = href
+    window.history.pushState({}, $path, $path)
+  }
 
-  $links = [...$links, title]
+  const nstc = nst ? nst.replace('/', ':') : null
+
+  console.log(`${space} | ${title} | ${nst} | ${uuid} | ${nstc}`)
+
+  $links = [...$links, nstc || uuid]
 
   onDestroy(()=> {
-    const i = $links.indexOf(title)
+    const i = $links.indexOf(nstc || uuid)
     $links.splice(i, 1)
     $links = $links
   })
 
-  $: klass = $linkmap[title] ? 'missing' : ''
+  $: klass = $linkmap[nstc || uuid] ? 'missing' : ''
 </script>
 
-{#if $gs.path == href}
+{#if $path == href}
   <span class="current-link" title="you are here"><slot></slot></span>
 {:else}
   <a {href} {title} class={klass} on:click|preventDefault={clicked}><slot></slot></a>

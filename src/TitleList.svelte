@@ -5,7 +5,9 @@
 
   let error, result, noerror, nop
 
-  $: fetch($gs.cmd('titles'))
+  export let ns = 'main'
+
+  $: fetch($gs.cmd('titles', '/'+ns))
   .then(res=> res.json())
   .then(res=> {
     error = res.error
@@ -18,7 +20,7 @@
 <div class="title-list">
 {#if result}
 {#each result as title}
-  <Link href="/{title}">{title}</Link>
+  <Link nst="{ns}/{title}">{ns}: {title}</Link>
 {/each}
 {/if}
 </div>
