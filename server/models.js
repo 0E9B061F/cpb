@@ -7,6 +7,23 @@ const db = new Sequelize({
   storage: 'server/database.sqlite'
 })
 
+const User = db.define('User', {
+  uuid: {
+    primaryKey: true,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    allowNull: false,
+  },
+  handle: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  key: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+})
+
 const Page = db.define('Page', {
   vuuid: {
     primaryKey: true,
@@ -40,5 +57,5 @@ const Page = db.define('Page', {
 Page.belongsTo(Page, {as: 'parent'})
 Page.belongsTo(Page, {as: 'child'})
 
-module.exports = { db, Page }
+module.exports = { db, Page, User }
 

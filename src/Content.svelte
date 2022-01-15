@@ -7,13 +7,15 @@
   import SvelteMarkdown from 'svelte-markdown'
   import {getContext} from 'svelte'
   const gs = getContext('gs')
+  const session = getContext('session')
   const path = getContext('path')
   const loc = getContext('loc')
   const renderers = { link: Link }
   $: rurl = $gs.rp($loc)
+  $: cmd = $loc.cmd
   let error, noerror, page
   const request =u=> {
-    fetch(u)
+    return fetch(u)
     .then(res=> res.json())
     .then(res=> {
       error = res.error
@@ -29,14 +31,18 @@
       }
       page.historical = !!page.childVuuid
       noerror = (error == 0 || error == undefined)
+    })
+  }
+  const rereq =u=> {
+    request(u).then(res=> {
       exitedit()
       exithistory()
     })
   }
   $: request(rurl)
 
-  $: edit = false
-  $: history = false
+  $: edit = cmd == 'edit'
+  $: history = cmd == 'history'
 
   const enteredit =()=> edit = true
   const exitedit =()=> edit = false
@@ -49,14 +55,18 @@
 
 {#if noerror}
   {#if edit}
-    <PageForm {page} editing={true} on:success={request(rurl)} on:cancel={exitedit}/>
+    <PageForm {page} editing={true} on:success={rereq(rurl)} on:cancel={exitedit}/>
   {:else if history}
     <History {page} />
   {:else}
     <Viewer {page} on:edit={enteredit} on:history={enterhistory}/>
   {/if}
 {:else if error == 1}
-  <PageForm {page} on:success={request(rurl)}/>
+  {#if $session.user.login}
+    <PageForm {page} on:success={rereq(rurl)}/>
+  {:else}
+    <p>no page here. please log in to edit</p>
+  {/if}
 {:else}
   <p>ERROR {error}</p>
 {/if}

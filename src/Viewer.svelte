@@ -1,6 +1,8 @@
 <script>
   import {getContext} from 'svelte'
   const gs = getContext('gs')
+  const loc = getContext('loc')
+  const session = getContext('session')
   import Link from './Link.svelte'
   import QR from './QR.svelte'
   import SvelteMarkdown from 'svelte-markdown'
@@ -21,8 +23,16 @@
   $: vpermac = crop(vperma)
 </script>
 
-{#if !page.historical}<button on:click|preventDefault={edit}>EDIT</button>{/if}
-<button on:click|preventDefault={history}>HISTORY</button>
+{#if $session.user.login && !page.historical}
+  <Link self cmd="edit">EDIT</Link>
+{/if}
+<Link self cmd="history">HISTORY</Link>
+{#if page.historical}
+  <Link uuid={page.uuid}>HEAD</Link>
+{/if}
+{#if $loc.uuid && !page.historical}
+  <Link space={page.namespace} title={page.title}>ANCHOR</Link>
+{/if}
 <br/>
 <QR data={`http://${permac}`} href={perma} title="Page Permalink" />
 <QR data={vpermac} href={vperma} title="Version Permalink" />

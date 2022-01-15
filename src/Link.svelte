@@ -1,6 +1,7 @@
 <script>
   import { getContext, onDestroy } from 'svelte'
   const gs = getContext('gs')
+  const trail = getContext('trail')
   const path = getContext('path')
   const links = getContext('links')
   const linkmap = getContext('linkmap')
@@ -9,9 +10,22 @@
   export let title = null
   export let nst = null
   export let uuid = null
+  export let special = null
+  export let cmd = null
+  export let first = null
+  export let global = false
+  export let bounce = false
+  export let nolink = false
+  export let self = false
+  export let decmd = false
+
+  if (bounce && typeof(bounce) != 'string') bounce = '/'
 
   let href
-  if (uuid) href = `/${uuid}`
+  if (self || decmd || nolink) href = null
+  else if (bounce) href = $trail[1] || bounce
+  else if (special) href = `/CPB/${special}`
+  else if (uuid) href = `/${uuid}`
   else if (nst) {
     const p = nst.split('/')
     const n = p[0]
@@ -20,41 +34,54 @@
     title = t || 'Home'
     if (t) href = `/${n}/${t}`
     else href = `/${n}`
-  }
-  else {
+  } else {
     if (!space) space = 'main'
     if (!title) title = 'Home'
     nst = `${space}/${title}`
     href = `/${space}/${title}`
   }
+  const hash = cmd ? `#${cmd}` : ''
+  $: if (self) href = $gs.bare($path) + hash
+  else if (decmd) href = $gs.bare($path)
+  else href += hash
+
+  const goto =p=> {
+    if (!nolink) $gs.goto(href)
+  }
 
   const clicked =()=> {
-    $path = href
-    window.history.pushState({}, $path, $path)
+    if (first) first().then(r=> goto(href))
+    else goto(href)
   }
 
   const nstc = nst ? nst.replace('/', ':') : null
 
   console.log(`${space} | ${title} | ${nst} | ${uuid} | ${nstc}`)
 
-  $links = [...$links, nstc || uuid]
+  if (!special) $links = [...$links, nstc || uuid]
 
   onDestroy(()=> {
-    const i = $links.indexOf(nstc || uuid)
-    $links.splice(i, 1)
-    $links = $links
+    if (!special) {
+      const i = $links.indexOf(nstc || uuid)
+      $links.splice(i, 1)
+      $links = $links
+    }
   })
 
-  $: klass = $linkmap[nstc || uuid] ? 'missing' : ''
+  $: klass = (!special && !nolink && $linkmap[nstc || uuid]) ? 'missing' : ''
 </script>
-
-{#if $path == href}
+{#if nolink}
+  <span class="nolink" {title} on:click={clicked}><slot></slot></span>
+{:else if !global && $path == href}
   <span class="current-link" title="you are here"><slot></slot></span>
 {:else}
   <a {href} {title} class={klass} on:click|preventDefault={clicked}><slot></slot></a>
 {/if}
 
 <style>
+  .nolink {
+    cursor: pointer;
+  }
   a {
     color: #6e7fd2;
   }

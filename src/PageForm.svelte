@@ -1,4 +1,5 @@
 <script>
+  import Link from './Link.svelte'
   import { createEventDispatcher } from 'svelte';
 	const dispatch = createEventDispatcher();
   import {getContext} from 'svelte'
@@ -26,7 +27,12 @@
     .then(res=> {
       if (!res.error || res.error == 0) {
         dispatch('success')
-        if (!editing) $gs.aod = Date.now()
+        if (!editing) {
+          $gs.aod = Date.now()
+          $gs.msg(`Created '${$gs.tag()}'`)
+        } else {
+          $gs.msg(`Saved changes to '${$gs.tag()}'`)
+        }
       }
     })
   }
@@ -37,8 +43,8 @@
 
 <form>
   <textarea bind:value={body}></textarea>
-  <button on:click|preventDefault={postpage}>SAVE</button>
-  {#if editing}<button on:click|preventDefault={canceledit}>CANCEL</button>{/if}
+  <Link decmd first={postpage}>SAVE</Link>
+  {#if editing}<Link decmd>CANCEL</Link>{/if}
 </form>
 
 <p>T: {title}</p>
