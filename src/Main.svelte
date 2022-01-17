@@ -1,9 +1,14 @@
 <script>
 	import Link from './Link.svelte'
 	import Login from './Login.svelte'
+	import Headframe from './Headframe.svelte'
+	import Titleframe from './Titleframe.svelte'
+	import User from './User.svelte'
 	import LocRO from './LocRO.svelte'
 	import QR from './QR.svelte'
+	import FB from './FB.svelte'
 	import Messenger from './Messenger.svelte'
+	import Bookmarks from './Bookmarks.svelte'
 	import UserBar from './UserBar.svelte'
 	import Content from './Content.svelte'
 	import TitleList from './TitleList.svelte'
@@ -20,12 +25,15 @@
     defapi: 'api',
     deftitle: 'Home',
     deflogin: 'login',
+    defuser: 'user',
   })
   const burl =()=> `${$rc.proto}://${$rc.domain}${$rc.port ? ':'+$rc.port : ''}`
   const aurl =()=> `${burl()}/${$rc.syskey}/${$rc.defapi}`
 
   let path = writable(window.location.pathname + window.location.hash)
   let loc = writable({})
+  let space = writable('')
+  let title = writable('')
 
   let trail = writable([])
   $: if ($path != $trail[0]) $trail.unshift($path)
@@ -34,7 +42,8 @@
 
   const parseloc =p=> {
     const loc = {
-      namespace: null, title: null, uuid: null, special: null, cmd: null
+      namespace: null, title: null, uuid: null,
+      special: null, cmd: null
     }
     p = p.split('#')
     if (p[1]) loc.cmd = p[1]
@@ -47,6 +56,8 @@
     if (ns == $rc.syskey) {
       if (t == $rc.deflogin) {
         loc.special = 'login'
+      } else if (t == $rc.defuser) {
+        loc.special = 'user'
       } else {
         loc.special = '404'
       }
@@ -106,6 +117,7 @@
       return `${$loc.namespace}:${$loc.title}`
     },
     bare: ()=> $path.split('#')[0],
+    cur: ()=> `${burl()}/${$path}`,
   })
   let links = writable([])
   let linkmap = writable({})
@@ -118,6 +130,8 @@
   
   setContext('path', path) 
   setContext('loc', loc) 
+  setContext('space', space) 
+  setContext('title', title) 
   
   setContext('session', session)
   setContext('message', message)
@@ -127,7 +141,21 @@
 
   $gs.refreshuser()
 
+  const parsenst =loc=> {
+    let ns, t
+    if (loc.special) {
+      t = loc.special
+      ns = 'special'
+    }
+    if (loc.uuid) t = loc.uuid
+    if (loc.namespace) ns = loc.namespace
+    if (loc.title) t = loc.title
+    $space = ns
+    $title = t
+  }
+
   $: $loc = parseloc($path)
+  $: parsenst($loc)
 
   const linkupdate =links=> {
     const titles = [...new Set(links)].join('+')
@@ -151,27 +179,23 @@
   $: console.log($links)
 </script>
 
-<UserBar/>
+<FB vert>
+<Headframe/>
+<Titleframe/>
+</FB>
+
+
+
 <Messenger/>
 
 <LocRO/>
 
-<QR href={$path} title="Title Permalink" />
-
-<form>
-<label for="address">PATH</label>
-<input name="address" type="text" bind:value={$path}/>
-</form>
-
-<Link nst="main">HOME</Link>
-<Link nst="main/foo">foo</Link>
-<Link nst="main/bar">bar</Link>
-<Link nst="main/Home">HOME 2</Link>
-<Link nst="main/FAKE">RED LINK</Link>
-
 <TitleList ns={$loc.namespace}/>
+
 {#if $loc.special == 'login'}
   <Login/>
+{:else if $loc.special == 'user'}
+  <User/>
 {:else if $loc.special == '404'}
   <h1>404</h1>
   <p>404 not found</p>
@@ -179,6 +203,14 @@
   <Content/>
 {/if}
 
+<div class="heart-line">&#x2764;</div>
+
 <style>
+  .heart-line {
+    text-align: center;
+    font-size: 2rem;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
 </style>
 

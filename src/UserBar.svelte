@@ -16,12 +16,23 @@
 </script>
 
 <div class="user-bar">
-  <span class="uuid">{$session.uuid}</span>
-  {#if $session.user}<span>{$session.user.handle}</span>{/if}
+  {#if $session.user}
+    {#if $session.user.login}
+      <Link special="user">{$session.user.handle}</Link>
+    {:else}
+      <span>{$session.user.handle}</span>
+    {/if}
+  {/if}
   {#if $session.user && $session.user.login}
     <Link first={dologout} global nolink>LOGOUT</Link>
   {:else}
     <Link special="login">LOGIN / REGISTER</Link>
   {/if}
 </div>
+
+<style>
+  .user-bar {
+    text-align: right;
+  }
+</style>
 

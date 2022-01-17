@@ -34,7 +34,7 @@
   <Link space={page.namespace} title={page.title}>ANCHOR</Link>
 {/if}
 <br/>
-<QR data={`http://${permac}`} href={perma} title="Page Permalink" />
+<QR data={permac} href={perma} title="Page Permalink" />
 <QR data={vpermac} href={vperma} title="Version Permalink" />
 <SvelteMarkdown source={page.body} {renderers} />
 <p class="uuid">UUID: {page.uuid}</p>
@@ -44,8 +44,5 @@
 <p>vnum: {page.vnum}</p>
 
 <style>
-  .uuid {
-    font-family: monospace;
-  }
 </style>
 

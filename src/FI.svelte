@@ -1,9 +1,11 @@
 <script>
   export let lab = ''
+  export let expand = false
   let labeled = lab && lab.length > 0
+  const c = expand ? 'expand' : ''
 </script>
 
-<div class="flexitem">
+<div class="flexitem {c}">
   {#if labeled}<div class="fi-label">{lab}: </div>{/if}
   <div class="fi-item"><slot></slot></div>
 </div>
@@ -18,6 +20,9 @@
     background-color: #dfdfdf;
     font-family: monospace;
   }
+  .expand {
+    flex: 1;
+  }
   .flexitem:not(:first-child) {
     margin-left: 0.6em;
   }
@@ -26,6 +31,7 @@
     font-weight: bold;
   }
   .fi-item {
+    width: 100%;
   }
 </style>
 

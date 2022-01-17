@@ -6,13 +6,14 @@
   export let data
   export let title
   export let href
+  export let scale = 3
   $: if (!data) data = href
   let canvas
   const generate =data=> {
     QRCode.toCanvas(canvas, data, {
       errorCorrectionLevel: 'L',
       margin: 1,
-      scale: 3,
+      scale,
       color: {
         dark: '#353535ff',
         light: '#ffffff00'

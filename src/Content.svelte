@@ -10,6 +10,8 @@
   const session = getContext('session')
   const path = getContext('path')
   const loc = getContext('loc')
+  const space = getContext('space')
+  const title = getContext('title')
   const renderers = { link: Link }
   $: rurl = $gs.rp($loc)
   $: cmd = $loc.cmd
@@ -31,6 +33,8 @@
       }
       page.historical = !!page.childVuuid
       noerror = (error == 0 || error == undefined)
+      if ($space != page.namespace) $space = page.namespace
+      if ($title != page.title) $title = page.title
     })
   }
   const rereq =u=> {

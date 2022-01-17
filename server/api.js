@@ -83,6 +83,16 @@ api.get(bi('/get/:ns/:title'), (req, res) => {
   util.getnstu(req.params.ns, title).then(obj=> res.json(obj))
 })
 
+const loggedas =h=> {
+  return (req, res, next)=> {
+    if (req.session.user.login && req.session.user.handle == h) {
+      next()
+    } else {
+      res.json({error: 10, message: 'access denied'})
+      res.end()
+    }
+  }
+}
 const reqlogin =(req, res, next)=> {
   if (req.session.user.login) {
     next()
@@ -166,6 +176,16 @@ api.post('/register', [reqlogout, (req, res)=> {
 }])
 api.get('/session', (req, res)=> {
   res.json(req.session)
+})
+api.get('/user/:handle', (req, res)=> {
+  if (req.session.user.handle == req.params.handle) {
+    User.findOne({where: {handle: req.params.handle}}).then(u=> {
+      res.json(u)
+    })
+  } else {
+    res.json({error: 10, message: 'access denied'})
+    res.end()
+  }
 })
 
 module.exports = api
