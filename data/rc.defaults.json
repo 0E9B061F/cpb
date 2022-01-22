@@ -1,0 +1,12 @@
+{
+  "syskey": "CPB",
+  "proto": "http",
+  "domain": "localhost",
+  "port": 3000,
+  "defns": "main",
+  "defapi": "api",
+  "deftitle": "Home",
+  "deflogin": "login",
+  "defuser": "user",
+  "secret": "oed und leer"
+}

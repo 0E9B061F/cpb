@@ -5,7 +5,7 @@
   const path = getContext('path')
   const links = getContext('links')
   const linkmap = getContext('linkmap')
- 
+
   export let space = null
   export let title = null
   export let nst = null
@@ -56,8 +56,6 @@
 
   const nstc = nst ? nst.replace('/', ':') : null
 
-  console.log(`${space} | ${title} | ${nst} | ${uuid} | ${nstc}`)
-
   if (!special) $links = [...$links, nstc || uuid]
 
   onDestroy(()=> {
@@ -71,11 +69,22 @@
   $: klass = (!special && !nolink && $linkmap[nstc || uuid]) ? 'missing' : ''
 </script>
 {#if nolink}
-  <span class="nolink" {title} on:click={clicked}><slot></slot></span>
+  <span class="cpblink nolink" {title} on:click={clicked}>
+    <svg class="mark" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="3" cy="3" r="2.5"/>
+    </svg>
+    <slot></slot>
+  </span>
 {:else if !global && $path == href}
-  <span class="current-link" title="you are here"><slot></slot></span>
+  <span class="cpblink current-link" title="you are here">
+    <div class="mark"></div>
+    <slot></slot>
+  </span>
 {:else}
-  <a {href} {title} class={klass} on:click|preventDefault={clicked}><slot></slot></a>
+  <a {href} {title} class="cpblink {klass}" on:click|preventDefault={clicked}>
+    <div class="mark"></div>
+    <slot></slot>
+  </a>
 {/if}
 
 <style>
@@ -92,4 +101,3 @@
     border-bottom: 1px dotted black;
   }
 </style>
-

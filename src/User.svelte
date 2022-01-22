@@ -1,14 +1,10 @@
 <script>
-  import {getContext} from 'svelte'
-  const gs = getContext('gs')
-  const session = getContext('session')
-  let user = {}
-  $: if ($session.user) {
-    let url = $gs.cmd('user', '/'+$session.user.handle)
-    fetch(url).then(res=> res.json()).then(res=> user = res)
-  }
+  import { getContext } from 'svelte'
+  const hasuser = getContext('hasuser')
+  const user = getContext('user')
 </script>
 
-<h1>{user.handle}</h1>
-
-<p>Circa {user.createdAt}</p>
+{#if $hasuser}
+  <h1>{$user.val.handle}</h1>
+  <p>Circa {$user.val.createdAt}</p>
+{/if}

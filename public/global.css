@@ -7,9 +7,8 @@ html, body {
 body {
 	color: #333;
 	margin: 0;
-	padding: 8px;
 	box-sizing: border-box;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
 a, .nolink {
@@ -62,11 +61,207 @@ button:focus {
 	border-color: #666;
 }
 
+.cpb-ui {
+	padding: 8px;
+	min-height: 100vh;
+}
+
+.cpb-main {
+	max-width: 1024px;
+}
+
+.cpb-main > .flexbox.footer {
+	margin-top: 2rem;
+	margin-bottom: 1rem;
+}
+
 .uuid {
   text-transform: uppercase;
   font-family: 'Azeret Mono', monospace;
+	height: 1rem;
+	font-size: 1rem;
+	line-height: 1rem;
+	display: block;
 }
 
-.fb-grid > * {
-  padding: 0.25rem;
+
+.cpblink {
+	position: relative;
 }
+.cpblink .mark {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 6px;
+	width: 6px;
+	fill: none;
+	stroke-width: 1px;
+	stroke: #454545;
+}
+
+
+.fb-pipe {
+	height: 1rem;
+}
+.fb-pipe-exp {
+	height: 1rem;
+}
+
+.flexbox {
+	box-sizing: border-box;
+}
+.fb-box {
+  display: flex;
+}
+.fb-expand {
+  flex: 1;
+}
+.fb-center {
+	justify-content: center;
+}
+.fb-vert.fb-norm {
+  flex-direction: column;
+}
+.fb-vert.fb-flip {
+  flex-direction: column-reverse;
+}
+.fb-hori.fb-norm {
+  flex-direction: row;
+}
+.fb-hori.fb-flip {
+  flex-direction: row-reverse;
+}
+.fb-box.fb-grid {
+  gap: 0.3rem;
+}
+
+.fb-form input {
+  height: 1.8rem;
+  line-height: 1.8rem;
+  border: 0;
+  border-bottom: 1px solid rgb(0,100,200);
+	background-color: #f5f5f5;
+}
+.fb-form .cpblink {
+  line-height: 1.8rem;
+}
+
+
+.fp-pair {
+	background-color: #dfdfdf;
+	border-radius: 5px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-left: 6px;
+	padding-right: 6px;
+}
+.fp-label {
+	font-weight: bold;
+}
+.fp-pair.fp-metalabel {
+	font-weight: bold;
+	background: none;
+	padding-right: 0;
+}
+.fp-item {
+	width: 100%;
+}
+.fp-table {
+	background-color: #dfdfdf;
+	padding: 4px;
+	font-family: 'Azeret Mono', monospace;
+	border-radius: 5px;
+	font-size: 0.85rem;
+	flex-wrap: wrap;
+}
+.fp-run {
+	border-radius: 5px;
+}
+.fp-table > .fp-pair,
+.fp-table > .fp-run {
+	border: 1px solid #c0c0c0;
+}
+.fp-table > .fp-run {
+	background-color: #d6d6d6;
+	padding: 2px;
+}
+.fp-table > .fp-pair {
+	background-color: #e2e2e2;
+	margin: 2px;
+}
+
+.fp-cond.pp-true {
+	background-color: #d0d0ff;
+}
+.fp-cond.pp-false {
+	background-color: #ffd0d0;
+}
+.fp-cond.pp-false {
+	background-color: #ffd0d0;
+}
+.fp-cond.pp-null {
+	background: repeating-linear-gradient(
+	  45deg,
+	  #c9c9c9,
+	  #c9c9c9 1px,
+	  #dfdfdf 1px,
+	  #dfdfdf 2px
+	);
+}
+.fp-cond.pp-string-full {
+	background-color: #d0efd0;
+}
+.fp-cond.pp-string-empty {
+	background-color: #efefd0;
+}
+
+
+.heartmark {
+	font-family: 'Inter', sans-serif;
+	text-align: center;
+	font-size: 1.5rem;
+}
+
+
+.h-pipe {
+	height: 2px;
+	background-color: #555555;
+}
+.v-pipe {
+	width: 2px;
+	background-color: #555555;
+}
+
+
+.balance-left {
+	margin-left: 0.3rem;
+}
+.balance-right {
+	margin-right: 0.3rem;
+}
+
+.history-items {
+	width: 100%;
+}
+.history-item .history-num {
+	font-family: 'Azeret Mono', monospace;
+	text-align: right;
+	padding-right: 0.6rem;
+}
+.history-item .history-vuuid {
+}
+
+.title .title-main {
+	font-size: 3.741583195028231rem;
+	font-weight: bold;
+}
+.title .title-sub {
+	font-size: 1.2617978993792645rem;
+}
+
+h1 { font-size: 2.6325894968937034rem; }
+h2 { font-size: 1.9471936981367461rem; }
+h3 { font-size: 1.523595798758329rem; }
+h4 { font-size: 1.2617978993792645rem; }
+h5 { font-size: 1.0999978993795883rem; }
+h6 { font-size: 1rem; }

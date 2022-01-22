@@ -1,44 +1,226 @@
 <script>
 	import Link from './Link.svelte'
-	import Login from './Login.svelte'
+	import FB from './FB.svelte'
+
+	import Debugger from './Debugger.svelte'
 	import Headframe from './Headframe.svelte'
 	import Titleframe from './Titleframe.svelte'
-	import User from './User.svelte'
-	import LocRO from './LocRO.svelte'
-	import QR from './QR.svelte'
-	import FB from './FB.svelte'
+	import Bodyframe from './Bodyframe.svelte'
+	import Footer from './Footer.svelte'
 	import Messenger from './Messenger.svelte'
-	import Bookmarks from './Bookmarks.svelte'
-	import UserBar from './UserBar.svelte'
-	import Content from './Content.svelte'
-	import TitleList from './TitleList.svelte'
-  import {setContext, getContext, onMount} from 'svelte'
-  import {writable} from 'svelte/store'
-  import Cookies from 'js-cookie'
 
-  let rc = writable({
-    syskey: 'CPB',
-    proto: 'http',
-    domain: 'localhost',
-    port: 3000,
-    defns: 'main',
-    defapi: 'api',
-    deftitle: 'Home',
-    deflogin: 'login',
-    defuser: 'user',
-  })
-  const burl =()=> `${$rc.proto}://${$rc.domain}${$rc.port ? ':'+$rc.port : ''}`
-  const aurl =()=> `${burl()}/${$rc.syskey}/${$rc.defapi}`
+  import { setContext } from 'svelte'
+  import { writable } from 'svelte/store'
 
-  let path = writable(window.location.pathname + window.location.hash)
-  let loc = writable({})
-  let space = writable('')
-  let title = writable('')
+	import rco from '../lib/rc.js'
 
-  let trail = writable([])
-  $: if ($path != $trail[0]) $trail.unshift($path)
 
-  let session = writable({})
+	let lut
+
+  let rc = writable(rco)
+
+	let aod = writable(0)
+
+	let links = writable([])
+	let linkmap = writable({})
+
+	let path = writable(window.location.pathname + window.location.hash)
+	let loc = writable({})
+
+	let session = writable({})
+
+	let message = writable({})
+	let loading = writable(true)
+	let debug = writable(true)
+
+	let space = writable('')
+	let title = writable('')
+
+	let page = writable(null)
+	let user = writable(null)
+	let history = writable(null)
+
+	let trail = writable([])
+	$: if ($path != $trail[0]) $trail.unshift($path)
+
+	let haspage = writable(false)
+	let hashistory = writable(false)
+	let hasuser = writable(false)
+	let hassess = writable(null)
+
+  setContext('rc', rc)
+  setContext('aod', aod)
+	setContext('links', links)
+	setContext('linkmap', linkmap)
+	setContext('path', path)
+	setContext('loc', loc)
+	setContext('session', session)
+	setContext('message', message)
+	setContext('loading', loading)
+	setContext('debug', debug)
+	setContext('space', space)
+	setContext('title', title)
+	setContext('page', page)
+	setContext('user', user)
+	setContext('history', history)
+	setContext('trail', trail)
+	setContext('haspage', haspage)
+	setContext('hashistory', hashistory)
+	setContext('hasuser', hasuser)
+	setContext('hassess', hassess)
+
+
+	const burl =()=> `${$rc.proto}://${$rc.domain}${$rc.port ? ':'+$rc.port : ''}`
+  const surl =()=> `${burl()}/${$rc.syskey}`
+  const aurl =()=> `${surl()}/${$rc.defapi}`
+	const cmdu =(c, ...a)=> {
+		a = a.length? `/${a.join('/')}` : ''
+		return`${aurl()}/${c}${a}`
+	}
+
+	const grab =(...a)=> {
+		return fetch(cmdu(...a)).then(res=> res.json())
+	}
+
+	// post('update', ns, t, {title, body})
+	const post =(...a)=> {
+		const body = a.pop()
+		return fetch(cmdu(...a), {
+			method: 'POST',
+			body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
+		}).then(res=> res.json())
+	}
+
+	const postpage =b=> {
+		const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
+		post('get', ...a, b).then(res=> {
+			$aod = Date.now()
+			msg(`Created '${$gs.tag()}'`)
+		}).catch(e=> console.log('ERROR!!!'))
+	}
+	const updatepage =b=> {
+		const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
+		post('update', ...a, b).then(res=> {
+			msg(`Saved changes to '${$gs.tag()}'`)
+		}).catch(e=> console.log('ERROR!!!'))
+	}
+	const postuser =b=> {
+		post('register', b).then(res=> {
+			msg(`Created user '${b.handle}'`)
+		}).catch(e=> console.log('ERROR!!!'))
+	}
+
+	setContext('postpage', postpage)
+	setContext('updatepage', updatepage)
+	setContext('postuser', postuser)
+
+	const login =b=> {
+    return post('login', b)
+  	.then(res=> {
+      getsession().then(s=> {
+				if ($hassess) msg(`Logged in as '${$session.val.handle}'`)
+			})
+    }).catch(e=> console.log('ERR!!'))
+  }
+	const register =b=> {
+    return post('register', b)
+  	.then(res=> {
+			getsession().then(s=> {
+				if ($hassess) msg(`Registered as '${$session.val.handle}'`)
+			})
+    }).catch(e=> console.log('ERR!!'))
+  }
+	const logout =()=> {
+    return post('logout', {})
+		.then(r=> {
+			getsession().then(s=> {
+				if ($hassess) msg(`Logged out`)
+			})
+    })
+  }
+
+	setContext('login', login)
+	setContext('register', register)
+	setContext('logout', logout)
+
+	const msg =(text='', level=0)=> {
+		$message = { text, level }
+	}
+	setContext('msg', msg)
+
+	const getsession =()=> {
+    return grab('session')
+    .then(ses=> {
+			$session = ses;
+			$hassess = !!$session && $session.err == 0 && !!$session.val;
+			console.log(`LAUNCH: Got session (${$hassess}) ${$session.val.uuid}`);
+		})
+	}
+
+	const cleardata =(to={})=> {
+		if (to.user) $user = to.user
+		else if ($user) $user = null
+		if (to.page) $page = to.page
+		else if ($page) $page = null
+		if (to.history) $history = to.history
+		else if ($history) $history = null
+	}
+
+	const checkresp =r=> !!r && r.err == 0 && !!r.val
+
+	const checkdata =()=> {
+		$hasuser = checkresp($user)
+		$haspage = checkresp($page)
+		$hashistory = checkresp($history)
+		console.log(`LAUNCH: Data check - user: ${$hasuser} - page: ${$haspage} - hist: ${$hashistory}`)
+	}
+
+	const load =p=> {
+		$loading = true
+		$loc = parseloc(p)
+
+		let after = false
+		if ($loc.special == 'user') {
+			after = grab('user', $session.val.handle).then(user=> {
+				cleardata({user})
+				$loading = false
+			})
+		} else if ($loc.cmd == 'history') {
+			const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
+			after = grab('history', ...a).then(history=> {
+				cleardata({history})
+				$loading = false
+			})
+		} else if ($loc.uuid || $loc.namespace) {
+			const a = $loc.uuid ? ['uuid', $loc.uuid] : ['get', $loc.namespace, $loc.title]
+			after = grab(...a).then(page=> {
+				if (page.val) page.val.historical = !!page.val.childVuuid
+				console.log(page)
+				cleardata({page})
+				$loading = false
+			})
+		} else {
+			cleardata()
+			$loading = false
+		}
+		if (after) {
+			after.then(r=> {
+				checkdata()
+				parsenst()
+			}).catch(e=> console.log('ERR!'))
+		} else {
+			checkdata()
+			parsenst()
+		}
+	}
+
+	const launch =p=> {
+		console.log('COMMONPLACE BOOK: LAUNCH')
+		console.log(`LAUNCH: ${JSON.stringify($rc)}`)
+		if ($hassess) load($path)
+		else getsession().then(s=> load($path))
+	}
 
   const parseloc =p=> {
     const loc = {
@@ -52,50 +234,78 @@
     p = p.split('/')
     const ns = p[0]
     const t = p[1]
+		console.log(ns, t)
     const hex = '[a-fA-F0-9]'
     if (ns == $rc.syskey) {
+			console.log('in sys space')
       if (t == $rc.deflogin) {
         loc.special = 'login'
       } else if (t == $rc.defuser) {
         loc.special = 'user'
       } else {
-        loc.special = '404'
+        loc.special = 'e404'
       }
-    } else if (ns.match(`${hex}{8}-(${hex}{4}-){3}${hex}{12}`)) {
-      loc.uuid = ns
-    } else if (ns == '') {
-      loc.namespace = $rc.defns
-      loc.title = $rc.deftitle
-    } else if (!t) {
-      loc.namespace = ns
-      loc.title = $rc.deftitle
     } else {
-      loc.namespace = ns
-      loc.title = t
-    }
+			console.log('in content space')
+			loc.special = 'content'
+			if (ns.match(`${hex}{8}-(${hex}{4}-){3}${hex}{12}`)) {
+	      loc.uuid = ns
+	    } else if (ns == '') {
+	      loc.namespace = $rc.defns
+	      loc.title = $rc.deftitle
+	    } else if (!t) {
+	      loc.namespace = ns
+	      loc.title = $rc.deftitle
+	    } else {
+	      loc.namespace = ns
+	      loc.title = t
+	    }
+		}
     return loc
   }
-  
-  let message = writable({})
+
+	const parsenst =()=> {
+		let ns, t
+		if ($haspage) {
+			ns = $page.val.namespace
+			t = $page.val.title
+		} else if ($loc.uuid) {
+			ns = 'ID'
+			t = $loc.uuid
+		} else if ($loc.namespace || $loc.title) {
+			ns = $loc.namespace || ''
+			t = $loc.title || ''
+		} else {
+			ns = 'SPECIAL'
+			t = $loc.special
+		}
+		$space = ns
+		$title = t
+	}
+
+	const linkupdate =links=> {
+    const titles = [...new Set(links)].join('+')
+    grab('missing', titles)
+    .then(res=> $linkmap = res)
+		.catch(e=> console.log('ERROR!!!'))
+  }
+
+	const mklut =links=> {
+    if (lut) clearTimeout(lut)
+    lut = setTimeout(linkupdate, 200, links)
+  }
+
+	const onpop =e=> {
+    $path = window.location.pathname
+  }
+
+	const controls =e=> {
+		if (event.keyCode == 8) {
+			console.log('backspace')
+		}
+	}
 
   let gs = writable({
-    aod: 0,
-    human: path=> {
-      if (path == '/' || path == '') {
-        return 'Home'
-      } else {
-        if (path[0] == '/') path = path.slice(1)
-        return path.split('/').join(' > ')
-      }
-    },
-    rp: loc=> {
-      if (loc.uuid) {
-        return `${aurl()}/uuid/${loc.uuid}`
-      } else {
-        return `${aurl()}/get/${loc.namespace}/${loc.title}`
-      }
-    },
-    cmd: (n, p='')=> `${aurl()}/${n}${p}`,
     full: p=> `${burl()}/${p}`,
     goto: p=> {
       $path = p
@@ -105,112 +315,31 @@
       $path = trail[1] ? trail[1] : d
       window.history.pushState({}, $path, $path)
     },
-    refreshuser: ()=> {
-      fetch(`${aurl()}/session`)
-      .then(res=> res.json())
-      .then(res=> $session = res)
-    },
-    msg: (text='', level=0)=> {
-      $message = { text, level }
-    },
     tag: ()=> {
       return `${$loc.namespace}:${$loc.title}`
     },
     bare: ()=> $path.split('#')[0],
     cur: ()=> `${burl()}/${$path}`,
   })
-  let links = writable([])
-  let linkmap = writable({})
-  
-  
-  setContext('rc', rc)
+
   setContext('gs', gs)
-  setContext('links', links)
-  setContext('linkmap', linkmap) 
-  
-  setContext('path', path) 
-  setContext('loc', loc) 
-  setContext('space', space) 
-  setContext('title', title) 
-  
-  setContext('session', session)
-  setContext('message', message)
-  setContext('trail', trail)
 
-  $gs.msg()
-
-  $gs.refreshuser()
-
-  const parsenst =loc=> {
-    let ns, t
-    if (loc.special) {
-      t = loc.special
-      ns = 'special'
-    }
-    if (loc.uuid) t = loc.uuid
-    if (loc.namespace) ns = loc.namespace
-    if (loc.title) t = loc.title
-    $space = ns
-    $title = t
-  }
-
-  $: $loc = parseloc($path)
-  $: parsenst($loc)
-
-  const linkupdate =links=> {
-    const titles = [...new Set(links)].join('+')
-    const cmd = $gs.cmd('missing', `/${titles}`)
-    console.log(`update: ${cmd}`)
-    fetch(cmd)
-    .then(res=> res.json())
-    .then(res=> $linkmap = res)
-  }
-  let lut
-  const mklut =links=> {
-    if (lut) clearTimeout(lut)
-    lut = setTimeout(linkupdate, 200, links)
-  }
-  $: mklut($links)
-  const onpop =e=> {
-    $path = window.location.pathname
-  }
   window.onpopstate = onpop
 
-  $: console.log($links)
+	msg()
+	$: mklut($links)
+	$: launch($path)
 </script>
 
-<FB vert>
-<Headframe/>
-<Titleframe/>
+<svelte:window on:keydown={controls}/>
+
+<FB center c="cpb-ui">
+	<FB vert c="cpb-main">
+		{#if $debug}<Debugger/>{/if}
+	  <Headframe/>
+	  <Titleframe/>
+	  <Messenger/>
+	  <FB expand leaf><Bodyframe/></FB>
+	  <Footer/>
+	</FB>
 </FB>
-
-
-
-<Messenger/>
-
-<LocRO/>
-
-<TitleList ns={$loc.namespace}/>
-
-{#if $loc.special == 'login'}
-  <Login/>
-{:else if $loc.special == 'user'}
-  <User/>
-{:else if $loc.special == '404'}
-  <h1>404</h1>
-  <p>404 not found</p>
-{:else}
-  <Content/>
-{/if}
-
-<div class="heart-line">&#x2764;</div>
-
-<style>
-  .heart-line {
-    text-align: center;
-    font-size: 2rem;
-    margin-top: 3rem;
-    margin-bottom: 3rem;
-  }
-</style>
-

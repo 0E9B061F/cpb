@@ -1,15 +1,15 @@
 <script>
-  import FT from './FT.svelte'
-  import FI from './FI.svelte'
+  import FP from './FP.svelte'
+  import PP from './PP.svelte'
+  import FR from './FR.svelte'
   import { getContext } from 'svelte'
   const loc = getContext('loc')
 </script>
 
-<FT c="readout location-ro">
-  <FI lab="SPACE">{$loc.namespace}</FI>
-  <FI lab="TITLE">{$loc.title}</FI>
-  <FI lab="UUID">{$loc.uuid}</FI>
-  <FI lab="SPEC">{$loc.special}</FI>
-  <FI lab="CMD">{$loc.cmd}</FI>
-</FT>
-
+<FR lab="loc">
+  <PP lab="space" val={$loc.namespace} />
+  <PP lab="title" val={$loc.title} />
+  <PP lab="uuid" val={$loc.uuid} />
+  <PP lab="special" val={$loc.special} />
+  <PP lab="cmd" val={$loc.cmd} />
+</FR>

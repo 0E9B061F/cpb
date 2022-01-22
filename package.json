@@ -19,6 +19,7 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "@rollup/plugin-json": "^4.1.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
     "connect-session-sequelize": "^7.1.2",

@@ -24,6 +24,23 @@ const User = db.define('User', {
   },
 })
 
+const Config = db.define('Config', {
+  uuid: {
+    primaryKey: true,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    allowNull: false,
+  },
+  debug: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+})
+
+User.belongsTo(Config)
+Config.hasOne(User)
+
 const Page = db.define('Page', {
   vuuid: {
     primaryKey: true,
@@ -57,5 +74,4 @@ const Page = db.define('Page', {
 Page.belongsTo(Page, {as: 'parent'})
 Page.belongsTo(Page, {as: 'child'})
 
-module.exports = { db, Page, User }
-
+module.exports = { db, Page, User, Config }

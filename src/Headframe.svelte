@@ -9,6 +9,7 @@
   const gs = getContext('gs')
   const path = getContext('path')
   const session = getContext('session')
+  const hassess = getContext('hassess')
 </script>
 
 <FB>
@@ -19,17 +20,17 @@
   </FB>
 
   <FB vert>
-    {#if $session.uuid}
-      <div class="suuid uuid">{$session.uuid}</div>
+    {#if $hassess}
+      <div class="suuid uuid">{$session.val.uuid}</div>
     {/if}
 
-    <FB grid>
-      <FB expand vert>
+    <FB>
+      <FB expand vert zero>
         <FB leaf expand><UserBar/></FB>
         <Logo/>
       </FB>
-      {#if $session.uuid}
-        <QR data={$session.uuid} title="Session UUID" scale={2}/>
+      {#if $hassess}
+        <QR data={$session.val.uuid} title="Session UUID" scale={2}/>
       {/if}
     </FB>
   </FB>
@@ -40,4 +41,3 @@
     text-align: right;
   }
 </style>
-

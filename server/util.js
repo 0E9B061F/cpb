@@ -36,16 +36,9 @@ const getnstu =(namespace, title)=> {
   }
   return Page.findOne({where}).then(page=> {
     if (page) return proc(page)
-    else {
-      return {
-        namespace, title,
-        error: 1,
-        msg: 'no such page',
-      }
-    }
+    else false
   })
 }
 
 
 module.exports = { exid, imid, proc, getnstu }
-

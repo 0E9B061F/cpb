@@ -1,5 +1,7 @@
 'use strict'
 
+const rc = require('../lib/rc.js')
+
 const api = require('express').Router()
 const { Page, User } = require('./models.js')
 const util = require('./util.js')
@@ -14,9 +16,26 @@ const bi =r=> {
   return [b, r]
 }
 
+const resp =(err=0, msg=null, val=null)=> {
+  const r = { err }
+  if (msg && msg.length) r.msg = msg
+  if (val !== null && val !== undefined) r.val = val
+  return r
+}
+const ok =v=> resp(0, '', v)
+const missing =v=> resp(1, 'record not found', v)
+const forbidden =v=> resp(2, 'unauthorized action', v)
+const invalid =v=> resp(3, 'invalid action', v)
+const internal =v=> resp(4, 'internal error', v)
+
 api.get('/uuid/:uuid', (req, res) => {
   const uuid = util.imid(req.params.uuid)
-  util.getnstu(uuid).then(page=> res.json(page))
+  util.getnstu(uuid)
+  .then(page=> {
+    if (page) res.json(ok(util.proc(page)))
+    else res.json(missing())
+  })
+  .catch(e=> res.json(internal()))
 })
 
 api.get('/titles/:ns', (req, res) => {
@@ -25,24 +44,31 @@ api.get('/titles/:ns', (req, res) => {
     where: {
       childVuuid: null,
       namespace: req.params.ns
-    }
+    },
   }).then(titles=> {
-    return res.json({result: titles.map(t=> t.title)})
-  })
+    res.json(ok(titles.map(t=> t.title)))
+  }).catch(e=> res.json(internal()))
 })
 
-api.get(bi('/history/:ns/:title'), (req, res) => {
+const gethist =u=> {
+  return Page.findAll({
+    attributes: ['title', 'vnum', 'vuuid'],
+    where: {uuid: u.toLowerCase()}
+  }).then(vers=> vers.map(v=> util.proc(v)))
+}
+
+api.get([...bi('/history/:ns/:title'), '/history/:uuid'], (req, res) => {
   const title = req.params.title || 'Home'
-  util.getnstu(req.params.ns, title).then(obj=> {
-    Page.findAll({
-      attributes: ['title', 'vnum', 'vuuid'],
-      where: {
-        uuid: obj.uuid.toLowerCase()
-      }
-    }).then(versions=> {
-      res.json(versions.map(v=> util.proc(v)))
-    })
-  })
+  let a
+  if (req.params.uuid) a = [req.params.uuid]
+  else a = [req.params.ns, title]
+  util.getnstu(...a)
+  .then(page=> {
+    if (page) {
+      gethist(page.uuid)
+      .then(vers=> res.json(ok(vers)))
+    } else res.json(missing())
+  }).catch(e=> res.json(internal()))
 })
 
 api.get('/missing/:titles', (req, res) => {
@@ -57,7 +83,6 @@ api.get('/missing/:titles', (req, res) => {
       titles[t] = {namespace, title, childVuuid: null}
     }
   })
-  console.log(titles)
   Page.findAll({
     where: {
       [Op.or]: Object.values(titles),
@@ -74,38 +99,43 @@ api.get('/missing/:titles', (req, res) => {
     Object.keys(titles).forEach(nstu=> {
       if (!found[nstu]) map[nstu] = true
     })
-    res.json(map)
-  })
+    res.json(ok(map))
+  }).catch(e=> res.json(internal()))
 })
 
 api.get(bi('/get/:ns/:title'), (req, res) => {
   const title = req.params.title || 'Home'
-  util.getnstu(req.params.ns, title).then(obj=> res.json(obj))
+  util.getnstu(req.params.ns, title)
+  .then(page=> {
+    if (page) res.json(ok(page))
+    else res.json(missing({namespace: req.params.ns, title}))
+  })
+  .catch(e=> res.json(internal()))
 })
 
 const loggedas =h=> {
   return (req, res, next)=> {
-    if (req.session.user.login && req.session.user.handle == h) {
+    if (req.session.cpb.login && req.session.cpb.handle == h) {
       next()
     } else {
-      res.json({error: 10, message: 'access denied'})
+      res.json(forbidden())
       res.end()
     }
   }
 }
 const reqlogin =(req, res, next)=> {
-  if (req.session.user.login) {
+  if (req.session.cpb.login) {
     next()
   } else {
-    res.json({error: 10, message: 'access denied, you must be logged in'})
+    res.json(forbidden())
     res.end()
   }
 }
 const reqlogout =(req, res, next)=> {
-  if (!req.session.user.login) {
+  if (!req.session.cpb.login) {
     next()
   } else {
-    res.json({error: 11, message: 'access denied, you must be logged out'})
+    res.json(invalid())
     res.end()
   }
 }
@@ -116,9 +146,9 @@ api.post(bi('/get/:ns/:title'), [reqlogin, (req, res)=> {
     namespace: req.body.namespace,
     title: req.body.title,
     body: req.body.body,
-  }).then(p=> {
-    res.json({error: 0})
   })
+  .then(p=> res.json(ok()))
+  .catch(e=> res.json(internal()))
 }])
 
 api.post(bi('/update/:ns/:title'), [reqlogin, (req, res)=> {
@@ -136,9 +166,11 @@ api.post(bi('/update/:ns/:title'), [reqlogin, (req, res)=> {
       body: req.body.body,
     }).then(p2=> {
       p1.childVuuid = p2.vuuid
-      p1.save().then(x=> res.json({error: 0}))
+      p1.save().then(x=> {
+        res.json(ok())
+      })
     })
-  })
+  }).catch(e=> res.json(internal()))
 }])
 
 api.post('/login', [reqlogout, (req, res)=> {
@@ -147,46 +179,53 @@ api.post('/login', [reqlogout, (req, res)=> {
   }}).then(u=> {
     bcrypt.compare(req.body.pass, u.key, (err, result)=> {
       if (result) {
-        req.session.user.handle = u.handle
-        req.session.user.login = true
-        res.json({error: 0})
+        req.session.cpb.handle = u.handle
+        req.session.cpb.login = true
+        res.json(ok())
       } else {
-        res.json({error: 10, message: 'unauthorized'})
+        res.json(forbidden())
       }
     })
-  })
+  }).catch(e=> res.json(internal()))
 }])
+
 api.post('/logout', [reqlogin, (req, res)=> {
-  req.session.user.handle = 'guest'
-  req.session.user.login = false
-  res.json({error: 0})
+  req.session.cpb.handle = 'guest'
+  req.session.cpb.login = false
+  res.json(ok())
 }])
+
 api.post('/register', [reqlogout, (req, res)=> {
   bcrypt.hash(req.body.pass, saltRounds, (err, hash)=> {
-    // Store hash in your password DB.
-    User.create({
-      handle: req.body.handle,
-      key: hash,
-    }).then(u=> {
-      req.session.user.handle = u.handle
-      req.session.user.login = true
-      res.json({error: 0})
-    })
+    if (err) {
+      res.json(internal())
+      res.end()
+    } else {
+      User.create({
+        handle: req.body.handle,
+        key: hash,
+      }).then(u=> {
+        req.session.cpb.handle = u.handle
+        req.session.cpb.login = true
+        res.json(ok())
+      }).catch(e=> res.json(internal()))
+    }
   })
 }])
+
 api.get('/session', (req, res)=> {
-  res.json(req.session)
+  res.json(ok(req.session.cpb))
 })
+
 api.get('/user/:handle', (req, res)=> {
-  if (req.session.user.handle == req.params.handle) {
+  if (req.session.cpb.handle == req.params.handle) {
     User.findOne({where: {handle: req.params.handle}}).then(u=> {
-      res.json(u)
-    })
+      res.json(ok(u))
+    }).catch(e=> res.json(internal()))
   } else {
-    res.json({error: 10, message: 'access denied'})
+    res.json(forbidden())
     res.end()
   }
 })
 
 module.exports = api
-

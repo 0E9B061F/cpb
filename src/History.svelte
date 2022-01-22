@@ -1,21 +1,14 @@
 <script>
   import HistoryItem from './HistoryItem.svelte'
-  import {getContext} from 'svelte'
-  const gs = getContext('gs')
-  export let page
-  let items
-
-  $: url = $gs.cmd('history', `/${page.namespace}/${page.title}`)
-  const request =u=> {
-    fetch(u).then(res=> res.json()).then(res=> {
-      items = res
-      console.log(items)
-    })
-  }
-  $: request(url)
+  import { getContext } from 'svelte'
+  const history = getContext('history')
+  const hashistory = getContext('hashistory')
 </script>
 
-{#if items}{#each items as item}
-  <HistoryItem {item} />
-{/each}{/if}
-
+{#if $hashistory}
+  <table class="history-items">
+  {#each $history.val as item}
+    <HistoryItem {item} />
+  {/each}
+  </table>
+{/if}

@@ -1,15 +1,10 @@
 <script>
-  import { getContext } from 'svelte'
-  export let c = ''
+  import FB from './FB.svelte'
+  export let c = []
+  if (typeof(c) == 'string') c = c.split(' ')
+  c.push('fp-table')
 </script>
 
-<div class="flextab ${c}">
+<FB {c}>
   <slot></slot>
-</div>
-
-<style>
-  .flextab {
-    display: flex;
-  }
-</style>
-
+</FB>

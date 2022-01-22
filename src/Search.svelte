@@ -7,7 +7,7 @@
   let exists = false
 </script>
 
-<FB>
+<FB form>
   <input type="text" />
   <Link nolink>SEARCH</Link>
   {#if exists}
@@ -16,3 +16,12 @@
     <Link nolink>CREATE</Link>
   {/if}
 </FB>
+
+<style>
+  input {
+    line-height: 1.8rem;
+  }
+  input {
+    height: 1.8rem;
+  }
+</style>

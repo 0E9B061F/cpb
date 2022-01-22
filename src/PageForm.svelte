@@ -1,54 +1,38 @@
 <script>
   import Link from './Link.svelte'
-  import { createEventDispatcher } from 'svelte';
-	const dispatch = createEventDispatcher();
-  import {getContext} from 'svelte'
-  const gs = getContext('gs')
-  const path = getContext('path')
+  import FB from './FB.svelte'
+
+  import { getContext } from 'svelte'
+  const page = getContext('page')
+  const updatepage = getContext('updatepage')
+  const postpage = getContext('postpage')
   const loc = getContext('loc')
-  $: rurl = $gs.rp($loc)
-  export let page
-  let title = page.title
-  let space = page.namespace
-  let body = page.body
-  let historical = page.hsitorical
+
   export let editing = false
-  const update = $gs.cmd('update', '/'+title)
-  const postpage = async ()=> {
-    const url = editing ? update : rurl
-    await fetch(url, {
-      method: 'POST',
-      body: JSON.stringify({namespace: space, title, body}),
-      headers: {
-        'Content-Type': 'application/json'
-      },
-    })
-    .then(res=> res.json())
-    .then(res=> {
-      if (!res.error || res.error == 0) {
-        dispatch('success')
-        if (!editing) {
-          $gs.aod = Date.now()
-          $gs.msg(`Created '${$gs.tag()}'`)
-        } else {
-          $gs.msg(`Saved changes to '${$gs.tag()}'`)
-        }
-      }
-    })
-  }
-  const canceledit =()=> {
-    dispatch('cancel')
+  let namespace = $page.val ? $page.val.namespace : $loc.namespace
+  let title = $page.val ? $page.val.title : $loc.title
+  let body = $page.val ? $page.val.body : ''
+
+  const save =()=> {
+    const data = {namespace, title, body}
+    return editing ? updatepage(data) : postpage(data)
   }
 </script>
 
-<form>
-  <textarea bind:value={body}></textarea>
-  <Link decmd first={postpage}>SAVE</Link>
-  {#if editing}<Link decmd>CANCEL</Link>{/if}
-</form>
-
-<p>T: {title}</p>
-<p>B: {body}</p>
+<FB vert form>
+  <textarea class="main-editor" bind:value={body}></textarea>
+  <FB flip>
+    {#if editing}
+      <Link decmd first={save}>SAVE</Link>
+      <Link decmd>CANCEL</Link>
+    {:else}
+      <Link self global first={save}>SAVE</Link>
+    {/if}
+  </FB>
+</FB>
 
 <style>
+  .main-editor {
+    height: 60vh;
+  }
 </style>

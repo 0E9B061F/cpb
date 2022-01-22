@@ -1,6 +1,8 @@
+'use strict'
+
+const rc = require('../lib/rc.js')
 const express = require('express')
 const cors = require('cors')
-const port = 3000
 const { Op } = require('sequelize')
 const { db, Page } = require('./models.js')
 const sirv = require('sirv')
@@ -16,18 +18,18 @@ const assets = sirv('public', {
 
 const app = express()
 app.use(session({
-  secret: 'kigig989iu3nrnndkfsaloip3;lqmkfkjfjdkij nn',
+  secret: rc.secret,
   store: new SequelizeStore({db}),
   resave: false,
 }))
 app.use((req, res, next)=> {
-  if (!req.session.user) {
-    req.session.user = {
+  if (!req.session.cpb) {
+    req.session.cpb = {
       handle: 'guest',
       login: false,
+      uuid: v4(),
     }
   }
-  if (!req.session.uuid) req.session.uuid = v4()
   next()
 })
 app.use(express.json())
@@ -39,8 +41,7 @@ app.use(assets);
 
 (async ()=> {
   await db.sync()
-  app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+  app.listen(rc.port, ()=> {
+    console.log(`Example app listening at http://localhost:${rc.port}`)
   })
 })()
-

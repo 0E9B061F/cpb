@@ -10,6 +10,7 @@
   $: if (!data) data = href
   let canvas
   const generate =data=> {
+    data = data.toUpperCase()
     QRCode.toCanvas(canvas, data, {
       errorCorrectionLevel: 'L',
       margin: 1,

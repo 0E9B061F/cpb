@@ -1,30 +1,21 @@
 <script>
   import Link from './Link.svelte'
-  import {getContext} from 'svelte'
-  const gs = getContext('gs')
+  import { getContext } from 'svelte'
   const session = getContext('session')
-  const dologout =()=> {
-    return fetch($gs.cmd('logout'), {
-      method: 'POST',
-      body: JSON.stringify({}),
-      headers: {'Content-Type': 'application/json'},
-    }).then(r=> {
-      $gs.refreshuser()
-      $gs.msg('logged out')
-    })
-  }
+  const hassess = getContext('hassess')
+  const logout = getContext('logout')
 </script>
 
 <div class="user-bar">
-  {#if $session.user}
-    {#if $session.user.login}
-      <Link special="user">{$session.user.handle}</Link>
+  {#if $hassess}
+    {#if $session.val.login}
+      <Link special="user">{$session.val.handle}</Link>
     {:else}
-      <span>{$session.user.handle}</span>
+      <span>{$session.val.handle}</span>
     {/if}
   {/if}
-  {#if $session.user && $session.user.login}
-    <Link first={dologout} global nolink>LOGOUT</Link>
+  {#if $hassess && $session.val.login}
+    <Link first={logout} global nolink>LOGOUT</Link>
   {:else}
     <Link special="login">LOGIN / REGISTER</Link>
   {/if}
@@ -35,4 +26,3 @@
     text-align: right;
   }
 </style>
-
