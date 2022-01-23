@@ -3,13 +3,11 @@
 const repl = require('repl')
 
 const init =c=> {
-  const m = require('./models.js')
-  c.Version = m.Version
-  c.Page = m.Page
+  const db = require('./models')
+  c.db = db
 }
 
 const r = repl.start({prompt: '> '})
 init(r.context)
 
 r.on('reset', init)
-

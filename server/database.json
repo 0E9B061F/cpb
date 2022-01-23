@@ -1,0 +1,14 @@
+{
+  "development": {
+    "dialect": "sqlite",
+    "storage": "cpb.dev.sqlite"
+  },
+  "test": {
+    "dialect": "sqlite",
+    "storage": "cpb.test.sqlite"
+  },
+  "production": {
+    "dialect": "sqlite",
+    "storage": "cpb.prod.sqlite"
+  }
+}
