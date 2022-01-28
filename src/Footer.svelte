@@ -12,8 +12,8 @@
 <FB c="footer">
   <FB vert>
 		{#if $haspage}
-		<MaybeUUID right uuid={$page.val.uuid} />
-		<MaybeUUID right uuid={$page.val.parentVuuid} />
+		<MaybeUUID right uuid={$page.val.pageUuid} />
+		<MaybeUUID right uuid={$page.val.prevUuid} />
 		{/if}
   </FB>
   <FB expand vert center>
@@ -21,8 +21,8 @@
   </FB>
   <FB vert>
 		{#if $haspage}
-		<MaybeUUID left uuid={$page.val.vuuid} />
-		<MaybeUUID left uuid={$page.val.childVuuid} />
+		<MaybeUUID left uuid={$page.val.uuid} />
+		<MaybeUUID left uuid={$page.val.nextUuid} />
 		{/if}
   </FB>
 </FB>

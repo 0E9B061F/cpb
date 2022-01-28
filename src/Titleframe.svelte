@@ -2,7 +2,6 @@
 	import FB from './FB.svelte'
 	import QR from './QR.svelte'
 	import TitleBar from './TitleBar.svelte'
-	import TitleControls from './TitleControls.svelte'
 
   import { getContext } from 'svelte'
   const gs = getContext('gs')
@@ -12,8 +11,8 @@
   const crop =u=> u.match(/.*?\/\/(.*)/)[1]
 	let perma, vperma, permac, vpermac
 	$: if ($haspage) {
-		perma = $gs.full($page.val.uuid)
-		vperma = $gs.full($page.val.vuuid)
+		perma = $gs.full($page.val.pageUuid)
+		vperma = $gs.full($page.val.uuid)
 		permac = crop(perma)
 		vpermac = crop(vperma)
 	}
@@ -21,7 +20,6 @@
 
 <FB>
   <FB vert expand zero>
-    <TitleControls/>
     <FB expand><TitleBar/></FB>
   </FB>
 	{#if $haspage}<QR data={permac} href={perma} title="Page Permalink" />{/if}

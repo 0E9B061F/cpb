@@ -9,8 +9,9 @@
 
 <tr class="history-item">
   <td class="history-num">{item.vnum}</td>
+  <td class="history-user">{item.user.handle}</td>
   <td class="history-title">{item.title}</td>
-  <td class="history-vuuid">
-    <Balance right><Link uuid={item.vuuid}><UUID>{item.vuuid}</UUID></Link></Balance>
+  <td class="history-vuuid grow">
+    <Balance right><Link uuid={item.uuid}><UUID>{item.uuid}</UUID></Link></Balance>
   </td>
 </tr>

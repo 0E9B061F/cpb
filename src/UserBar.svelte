@@ -15,7 +15,7 @@
     {/if}
   {/if}
   {#if $hassess && $session.val.login}
-    <Link first={logout} global nolink>LOGOUT</Link>
+    <Link first={logout} global self>LOGOUT</Link>
   {:else}
     <Link special="login">LOGIN / REGISTER</Link>
   {/if}

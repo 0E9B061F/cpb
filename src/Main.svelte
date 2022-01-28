@@ -47,6 +47,11 @@
 	let hashistory = writable(false)
 	let hasuser = writable(false)
 	let hassess = writable(null)
+	let haslogin = writable(false)
+
+	let uc = writable({
+		debug: false,
+	})
 
   setContext('rc', rc)
   setContext('aod', aod)
@@ -68,7 +73,14 @@
 	setContext('hashistory', hashistory)
 	setContext('hasuser', hasuser)
 	setContext('hassess', hassess)
+	setContext('haslogin', haslogin)
+	setContext('uc', uc)
 
+
+	const handle =e=> {
+		if ($uc.debug) console.log(e)
+		else console.log('ERROR')
+	}
 
 	const burl =()=> `${$rc.proto}://${$rc.domain}${$rc.port ? ':'+$rc.port : ''}`
   const surl =()=> `${burl()}/${$rc.syskey}`
@@ -80,6 +92,11 @@
 
 	const grab =(...a)=> {
 		return fetch(cmdu(...a)).then(res=> res.json())
+		.then(r=> {
+			console.log(cmdu(...a))
+			console.log(r)
+			return r
+		})
 	}
 
 	// post('update', ns, t, {title, body})
@@ -90,25 +107,30 @@
 			body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' },
 		}).then(res=> res.json())
+		.then(r=> {
+			console.log(cmdu(...a))
+			console.log(r)
+			return r
+		})
 	}
 
 	const postpage =b=> {
 		const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
-		post('get', ...a, b).then(res=> {
+		return post('get', ...a, b).then(res=> {
 			$aod = Date.now()
 			msg(`Created '${$gs.tag()}'`)
-		}).catch(e=> console.log('ERROR!!!'))
+		}).catch(e=> handle(e))
 	}
 	const updatepage =b=> {
 		const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
-		post('update', ...a, b).then(res=> {
+		return post('update', ...a, b).then(res=> {
 			msg(`Saved changes to '${$gs.tag()}'`)
-		}).catch(e=> console.log('ERROR!!!'))
+		}).catch(e=> handle(e))
 	}
 	const postuser =b=> {
 		post('register', b).then(res=> {
 			msg(`Created user '${b.handle}'`)
-		}).catch(e=> console.log('ERROR!!!'))
+		}).catch(e=> handle(e))
 	}
 
 	setContext('postpage', postpage)
@@ -116,20 +138,39 @@
 	setContext('postuser', postuser)
 
 	const login =b=> {
+		const start = $session.val.handle
     return post('login', b)
   	.then(res=> {
-      getsession().then(s=> {
-				if ($hassess) msg(`Logged in as '${$session.val.handle}'`)
-			})
-    }).catch(e=> console.log('ERR!!'))
+			setsession(res)
+			if (res.err == 0) {
+				if (start != $session.val.handle) {
+					msg(`Logged in as '${$session.val.handle}'`)
+				}
+				return true
+			} else {
+				if (res.err == 5) msg(res.val.join('\n'))
+				else msg(`Sorry, an error occurred.`)
+				return false
+			}
+    }).catch(e=> handle(e))
   }
 	const register =b=> {
     return post('register', b)
   	.then(res=> {
-			getsession().then(s=> {
-				if ($hassess) msg(`Registered as '${$session.val.handle}'`)
-			})
-    }).catch(e=> console.log('ERR!!'))
+			console.log(res)
+			getsession()
+			if (res.err == 0) {
+				msg(`Registered as '${b.handle}'`)
+				return true
+			} else {
+				if (res.err == 5) {
+					msg(res.val.join('\n'))
+				} else {
+					msg(`Sorry, an error occurred.`)
+				}
+				return false
+			}
+    }).catch(e=> handle(e))
   }
 	const logout =()=> {
     return post('logout', {})
@@ -149,13 +190,43 @@
 	}
 	setContext('msg', msg)
 
-	const getsession =()=> {
-    return grab('session')
-    .then(ses=> {
-			$session = ses;
-			$hassess = !!$session && $session.err == 0 && !!$session.val;
-			console.log(`LAUNCH: Got session (${$hassess}) ${$session.val.uuid}`);
+	const getconf =k=> {
+		return $uc[k]
+	}
+	const setconf =(k,v)=> {
+		$uc[k] = v
+		if ($haslogin) saveconf({[k]: v})
+		else savels()
+	}
+	const saveconf =c=> {
+		post('config', $session.val.handle, c)
+		.then(c=> {
+			if (c.err == 0) $uc = c.val
 		})
+		.catch(e=> handle(e))
+	}
+	const savels =()=> {
+		localStorage.setItem('CPBUC', JSON.stringify($uc))
+	}
+	const loadls =()=> {
+		$uc = JSON.parse(localStorage.getItem('CPBUC'))
+	}
+
+	const setsession =s=> {
+		$session = s
+		$hassess = !!$session && $session.err == 0 && !!$session.val
+		$haslogin = !!$hassess && !!$session.val.login
+		if ($haslogin) {
+			$uc = $session.val.config
+		} else {
+			if (localStorage.getItem('CPBUC')) loadls()
+			else savels()
+		}
+		console.log(`LAUNCH: Got session (${$hassess}) ${$session.val.uuid}`)
+	}
+
+	const getsession =()=> {
+		return grab('session').then(s=> setsession(s))
 	}
 
 	const cleardata =(to={})=> {
@@ -165,6 +236,7 @@
 		else if ($page) $page = null
 		if (to.history) $history = to.history
 		else if ($history) $history = null
+		checkdata()
 	}
 
 	const checkresp =r=> !!r && r.err == 0 && !!r.val
@@ -178,19 +250,18 @@
 
 	const load =p=> {
 		$loading = true
+		cleardata()
 		$loc = parseloc(p)
 
 		let after = false
 		if ($loc.special == 'user') {
 			after = grab('user', $session.val.handle).then(user=> {
 				cleardata({user})
-				$loading = false
 			})
 		} else if ($loc.cmd == 'history') {
 			const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
 			after = grab('history', ...a).then(history=> {
 				cleardata({history})
-				$loading = false
 			})
 		} else if ($loc.uuid || $loc.namespace) {
 			const a = $loc.uuid ? ['uuid', $loc.uuid] : ['get', $loc.namespace, $loc.title]
@@ -198,20 +269,16 @@
 				if (page.val) page.val.historical = !!page.val.childVuuid
 				console.log(page)
 				cleardata({page})
-				$loading = false
 			})
-		} else {
-			cleardata()
-			$loading = false
 		}
 		if (after) {
 			after.then(r=> {
-				checkdata()
 				parsenst()
-			}).catch(e=> console.log('ERR!'))
+				$loading = false
+			}).catch(e=> handle(e))
 		} else {
-			checkdata()
 			parsenst()
+			$loading = false
 		}
 	}
 
@@ -287,7 +354,7 @@
     const titles = [...new Set(links)].join('+')
     grab('missing', titles)
     .then(res=> $linkmap = res)
-		.catch(e=> console.log('ERROR!!!'))
+		.catch(e=> handle(e))
   }
 
 	const mklut =links=> {
@@ -301,7 +368,7 @@
 
 	const controls =e=> {
 		if (event.keyCode == 8) {
-			console.log('backspace')
+			setconf('debug', !getconf('debug'))
 		}
 	}
 
@@ -335,7 +402,7 @@
 
 <FB center c="cpb-ui">
 	<FB vert c="cpb-main">
-		{#if $debug}<Debugger/>{/if}
+		{#if $uc.debug}<Debugger/>{/if}
 	  <Headframe/>
 	  <Titleframe/>
 	  <Messenger/>

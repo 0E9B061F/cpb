@@ -9,7 +9,7 @@
 </script>
 
 {#if valid}
-  <UUID>{uuid}</UUID>
+  <UUID link={uuid}/>
 {:else}
   <Balance {left} {right}><UUID>{uuid}</UUID></Balance>
 {/if}

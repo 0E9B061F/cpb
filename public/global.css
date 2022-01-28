@@ -24,6 +24,13 @@ a:visited {
 	color: rgb(0,80,160);
 }
 
+th {
+	text-align: left;
+}
+.grow {
+	width: 100%;
+}
+
 label {
 	display: block;
 }
@@ -67,7 +74,7 @@ button:focus {
 }
 
 .cpb-main {
-	max-width: 1024px;
+	width: 1024px;
 }
 
 .cpb-main > .flexbox.footer {
@@ -252,16 +259,36 @@ button:focus {
 }
 
 .title .title-main {
-	font-size: 3.741583195028231rem;
+	font-size: 2.497902432574926rem;
 	font-weight: bold;
 }
 .title .title-sub {
-	font-size: 1.2617978993792645rem;
+	font-size: 1.03466506505728rem;
 }
 
-h1 { font-size: 2.6325894968937034rem; }
-h2 { font-size: 1.9471936981367461rem; }
-h3 { font-size: 1.523595798758329rem; }
-h4 { font-size: 1.2617978993792645rem; }
-h5 { font-size: 1.0999978993795883rem; }
-h6 { font-size: 1rem; }
+h1 { font-size: 1.9324390203593294rem; }
+
+h2 { font-size: 1.582963412215598rem; }
+
+h3 { font-size: 1.3669756081437323rem; }
+
+h4 { font-size: 1.2334878040718662rem; }
+
+h5 { font-size: 1.1509878040718664rem; }
+h6 { font-size: 1.1rem; }
+
+
+.rendered h1,
+.rendered h2,
+.rendered h3,
+.rendered h4,
+.rendered h5,
+.rendered h6 {
+	margin-top: 1.618rem;
+	margin-bottom: 1rem;
+}
+.rendered p {
+	margin-top: 0;
+	margin-bottom: 1rem;
+	font-size: 1.1rem;
+}

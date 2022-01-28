@@ -6,7 +6,8 @@ module.exports = (sequelize, DataTypes) => {
   class Config extends Model {
     static associate(models) {
       this.User = this.hasOne(models.user, {
-        foreignKey: 'configUuid'
+        foreignKey: 'configUuid',
+        type: DataTypes.UUID,
       })
     }
   }

@@ -6,10 +6,10 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       this.Config = this.belongsTo(models.config, {
-        foreignKey: {
-          type: DataTypes.UUID,
-        }
+        foreignKey: { type: DataTypes.UUID }
       })
+      this.hasMany(models.page)
+      this.hasMany(models.version)
     }
   }
   User.init({
@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: [2, 16],
         is: /^[A-Za-z0-9_\-]+$/,
+        notIn: ['guest'],
       },
     },
     key: {

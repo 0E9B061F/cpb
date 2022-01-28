@@ -1,7 +1,7 @@
 <script>
   import FB from './FB.svelte'
-  export let lab = ''
-  export let t
+  export let lab = null
+  export let t = null
   export let val
   export let c = []
   const type =v=> {
@@ -22,6 +22,6 @@
 </script>
 
 <FB c={cc}>
-  <div class="fp-label">{lab}:</div>
+  {#if lab}<div class="fp-label">{lab}:</div>{/if}
   <div class="fp-item">{JSON.stringify(val)}</div>
 </FB>

@@ -8,6 +8,8 @@
 </script>
 
 {#if $page.val}
-  <SvelteMarkdown source={$page.val.body} {renderers} />
+  <div class="rendered">
+    <SvelteMarkdown source={$page.val.body} {renderers} />
+  </div>
   <p>vnum: {$page.val.vnum}</p>
 {/if}

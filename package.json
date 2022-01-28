@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "dev": "env NODE_ENV=development rollup -c -w",
     "app": "node server/app.js",
     "start": "sirv public --no-clear"
   },

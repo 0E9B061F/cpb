@@ -1,24 +1,13 @@
 'use strict'
 
-const { Page } = require('./models.js')
+const db = require('./models')
 const { Op } = require('sequelize')
 
 const exid =u=> u ? u.toUpperCase() : u
 const imid =u=> u ? u.toLowerCase() : u
 
 const proc =page=> {
-  return {
-    namespace: page.namespace,
-    title: page.title,
-    body: page.body,
-    uuid: exid(page.uuid),
-    vuuid: exid(page.vuuid),
-    parentVuuid: exid(page.parentVuuid),
-    childVuuid: exid(page.childVuuid),
-    vnum: page.vnum,
-    createdAt: page.createdAt,
-    updatedAt: page.updatedAt,
-  }
+  return page
 }
 
 const getnstu =(namespace, title)=> {
@@ -27,18 +16,44 @@ const getnstu =(namespace, title)=> {
   let uuid
   if (namespace.match(`${hex}{8}-(${hex}{4}-){3}${hex}{12}`)) {
     uuid = namespace
-    where = {[Op.or]: [{uuid, childVuuid: null}, {vuuid: uuid}]}
+    where = {[Op.or]: [{uuid}, {pageUuid: uuid, nextUuid: null}]}
   } else {
     where = {
       namespace, title,
-      childVuuid: null
+      nextUuid: null
     }
   }
-  return Page.findOne({where}).then(page=> {
+  return db.version.findOne({where}).then(page=> {
     if (page) return proc(page)
     else false
   })
 }
 
+const guestsess =()=> {
+  return {
+    handle: 'guest',
+    login: false,
+    uuid: '00000000-0000-0000-0000-000000000000',
+  }
+}
 
-module.exports = { exid, imid, proc, getnstu }
+const mklogin =u=> {
+  return {
+    login: true,
+    uuid: u.uuid,
+    handle: u.handle,
+    config: u.config,
+  }
+}
+
+const exportsess =s=> {
+  if (!s.cpb || typeof(s.cpb) != 'object') {
+    throw new Error(`'${JSON.stringify(s)}' is not a valid session`)
+  }
+  const e = Object.assign({}, s.cpb)
+  e.uuid = s.uuid
+  return e
+}
+
+
+module.exports = { exid, imid, proc, getnstu, guestsess, mklogin, exportsess }
