@@ -3,7 +3,7 @@
 	import FB from './FB.svelte'
 </script>
 
-<FB>
+<FB flip>
 <Link nst="main">HOME</Link>
 <Link nst="main/foo">foo</Link>
 <Link nst="main/bar">bar</Link>

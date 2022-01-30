@@ -44,7 +44,7 @@ app.use(cors())
 
 app.use('/CPB/api', api)
 
-app.use(assets);
+app.use(assets)
 
 (async ()=> {
   await db.sequelize.sync()

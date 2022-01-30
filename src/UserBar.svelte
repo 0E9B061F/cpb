@@ -20,9 +20,3 @@
     <Link special="login">LOGIN / REGISTER</Link>
   {/if}
 </div>
-
-<style>
-  .user-bar {
-    text-align: right;
-  }
-</style>

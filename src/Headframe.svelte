@@ -12,28 +12,31 @@
   const hassess = getContext('hassess')
 </script>
 
-<FB>
-
-  <FB vert expand>
-    <Search/>
-    <Bookmarks/>
-  </FB>
+<FB c="head-frame">
 
   <FB vert>
     {#if $hassess}
       <div class="suuid uuid">{$session.val.uuid}</div>
     {/if}
 
-    <FB>
-      <FB expand vert zero>
-        <FB leaf expand><UserBar/></FB>
-        <Logo/>
-      </FB>
-      {#if $hassess}
+    <FB c="head-subframe">
+			{#if $hassess}
         <QR data={$session.val.uuid} title="Session UUID" scale={2}/>
       {/if}
+      <FB expand vert zero>
+        <UserBar/>
+				<FB expand/>
+        <Logo/>
+      </FB>
     </FB>
   </FB>
+
+	<FB vert expand>
+		<Bookmarks/>
+		<FB expand/>
+		<Search/>
+	</FB>
+
 </FB>
 
 <style>

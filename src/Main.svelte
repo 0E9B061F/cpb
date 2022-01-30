@@ -8,6 +8,8 @@
 	import Bodyframe from './Bodyframe.svelte'
 	import Footer from './Footer.svelte'
 	import Messenger from './Messenger.svelte'
+	import Heartbox from './Heartbox.svelte'
+	import RecentPages from './RecentPages.svelte'
 
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
@@ -39,9 +41,13 @@
 	let page = writable(null)
 	let user = writable(null)
 	let history = writable(null)
+	let draft = writable(null)
 
 	let trail = writable([])
 	$: if ($path != $trail[0]) $trail.unshift($path)
+
+	let creating = writable(false)
+	let editing = writable(false)
 
 	let haspage = writable(false)
 	let hashistory = writable(false)
@@ -68,7 +74,10 @@
 	setContext('page', page)
 	setContext('user', user)
 	setContext('history', history)
+	setContext('draft', draft)
 	setContext('trail', trail)
+	setContext('creating', creating)
+	setContext('editing', editing)
 	setContext('haspage', haspage)
 	setContext('hashistory', hashistory)
 	setContext('hasuser', hasuser)
@@ -78,9 +87,10 @@
 
 
 	const handle =e=> {
-		if ($uc.debug) console.log(e)
+		if ($uc.debug) throw e
 		else console.log('ERROR')
 	}
+	setContext('handle', handle)
 
 	const burl =()=> `${$rc.proto}://${$rc.domain}${$rc.port ? ':'+$rc.port : ''}`
   const surl =()=> `${burl()}/${$rc.syskey}`
@@ -91,9 +101,10 @@
 	}
 
 	const grab =(...a)=> {
-		return fetch(cmdu(...a)).then(res=> res.json())
+		const url = cmdu(...a)
+		console.log(`GET ${url}`)
+		return fetch(url).then(res=> res.json())
 		.then(r=> {
-			console.log(cmdu(...a))
 			console.log(r)
 			return r
 		})
@@ -102,29 +113,29 @@
 	// post('update', ns, t, {title, body})
 	const post =(...a)=> {
 		const body = a.pop()
-		return fetch(cmdu(...a), {
+		const url = cmdu(...a)
+		console.log(`POST ${url}`)
+		return fetch(url, {
 			method: 'POST',
 			body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' },
 		}).then(res=> res.json())
 		.then(r=> {
-			console.log(cmdu(...a))
 			console.log(r)
 			return r
 		})
 	}
 
-	const postpage =b=> {
+	setContext('grab', grab)
+	setContext('post', post)
+
+	const postdraft =()=> {
 		const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
-		return post('get', ...a, b).then(res=> {
-			$aod = Date.now()
+		const c = $loc.cmd == 'edit' ? 'update' : 'get'
+		return post(c, ...a, $draft).then(res=> {
+			$draft = null
+			if (!!$creating) $aod = Date.now()
 			msg(`Created '${$gs.tag()}'`)
-		}).catch(e=> handle(e))
-	}
-	const updatepage =b=> {
-		const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
-		return post('update', ...a, b).then(res=> {
-			msg(`Saved changes to '${$gs.tag()}'`)
 		}).catch(e=> handle(e))
 	}
 	const postuser =b=> {
@@ -133,8 +144,7 @@
 		}).catch(e=> handle(e))
 	}
 
-	setContext('postpage', postpage)
-	setContext('updatepage', updatepage)
+	setContext('postdraft', postdraft)
 	setContext('postuser', postuser)
 
 	const login =b=> {
@@ -250,6 +260,8 @@
 
 	const load =p=> {
 		$loading = true
+		$creating = false
+		$editing = false
 		cleardata()
 		$loc = parseloc(p)
 
@@ -274,10 +286,14 @@
 		if (after) {
 			after.then(r=> {
 				parsenst()
+				if (!!$page && $page.err == 1) $creating = true
+				else if ($loc.cmd == 'edit') $editing = true
 				$loading = false
 			}).catch(e=> handle(e))
 		} else {
 			parsenst()
+			if (!!$page && $page.err == 1) $creating = true
+			else if ($loc.cmd == 'edit') $editing = true
 			$loading = false
 		}
 	}
@@ -404,9 +420,20 @@
 	<FB vert c="cpb-main">
 		{#if $uc.debug}<Debugger/>{/if}
 	  <Headframe/>
-	  <Titleframe/>
-	  <Messenger/>
-	  <FB expand leaf><Bodyframe/></FB>
-	  <Footer/>
+		{#if !$loading}
+			<FB vert expand c="cpb-content">
+		  	<Titleframe/>
+		  	{#if $message.text}
+					<Messenger/>
+				{/if}
+		  	<FB vert expand>
+					<Bodyframe/>
+				</FB>
+		  	<Footer/>
+			</FB>
+		{:else}
+			<Heartbox/>
+		{/if}
 	</FB>
+	<RecentPages count={10}/>
 </FB>

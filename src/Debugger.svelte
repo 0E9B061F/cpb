@@ -15,6 +15,8 @@
   const haspage = getContext('haspage')
   const hasuser = getContext('hasuser')
   const hashistory = getContext('hashistory')
+  const creating = getContext('creating')
+  const editing = getContext('editing')
   const page = getContext('page')
   const user = getContext('user')
   const history = getContext('history')
@@ -43,6 +45,8 @@
 <FT lab={tab}>
   <PP lab="path" val={$path} />
   <LocRO/>
+  <PP lab="creating" val={$creating} />
+  <PP lab="editing" val={$editing} />
   <PP lab="hassess" val={$hassess} />
   <PP lab="haslogin" val={$haslogin} />
   <SessRO/>

@@ -7,7 +7,7 @@
   let exists = false
 </script>
 
-<FB form>
+<FB form flip>
   <input type="text" />
   <Link nolink>SEARCH</Link>
   {#if exists}

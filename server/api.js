@@ -59,6 +59,22 @@ api.get('/titles/:ns', (req, res)=> {
   }).catch(e=> res.json(internal(e)))
 })
 
+api.get(bi('/recent/:num'), (req, res)=> {
+  const num = req.params.num || 5
+  db.version.findAll({
+    attributes: ['namespace', 'title', 'createdAt'],
+    where: { nextUuid: null },
+    order: [['createdAt', 'DESC']],
+    include: {
+      model: db.user,
+      attributes: ['handle']
+    },
+    limit: num,
+  })
+  .then(vers=> res.json(ok(vers)))
+  .catch(e=> res.json(internal(e)))
+})
+
 const gethist =u=> {
   return db.version.findAll({
     attributes: ['title', 'vnum', 'uuid', 'views'],

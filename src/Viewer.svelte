@@ -1,10 +1,11 @@
 <script>
   import Link from './Link.svelte'
+  import LinkShim from './LinkShim.svelte'
   import { getContext } from 'svelte'
   const page = getContext('page')
   import SvelteMarkdown from 'svelte-markdown'
 
-  const renderers = { link: Link }
+  const renderers = { link: LinkShim }
 </script>
 
 {#if $page.val}

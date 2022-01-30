@@ -40,7 +40,6 @@ input, button, select, textarea {
 	font-size: inherit;
 	-webkit-padding: 0.4em 0;
 	padding: 0.4em;
-	margin: 0 0 0.5em 0;
 	box-sizing: border-box;
 	border: 1px solid #ccc;
 	border-radius: 2px;
@@ -68,18 +67,47 @@ button:focus {
 	border-color: #666;
 }
 
+
+
+
 .cpb-ui {
 	padding: 8px;
-	min-height: 100vh;
+	height: 100vh;
 }
 
 .cpb-main {
 	width: 1024px;
+	height: calc(100vh - 16px);
 }
 
-.cpb-main > .flexbox.footer {
-	margin-top: 2rem;
-	margin-bottom: 1rem;
+.footer {
+	height: 2.375rem;
+}
+
+.cpb-content {
+	overflow-y: scroll;
+	scrollbar-color: black;
+  scrollbar-width: 10px;
+	padding-right: 8px;
+	justify-content: space-between;
+}
+.cpb-content::-webkit-scrollbar {
+	background-color: #c0c0c0;
+	width: 5px;
+}
+.cpb-content::-webkit-scrollbar-thumb {
+	background: #353535;
+}
+
+.user-bar {
+	font-size: 1rem;
+	line-height: 1rem;
+}
+
+.logo {
+	font-size: 2rem;
+	line-height: 2rem;
+	font-family: 'Azeret Mono', monospace;
 }
 
 .uuid {
@@ -104,6 +132,16 @@ button:focus {
 	fill: none;
 	stroke-width: 1px;
 	stroke: #454545;
+}
+
+.head-frame {
+	height: calc(1rem + 0.3rem + 54px);
+	padding-right: 8px;
+	border-right: 5px solid #353535;
+}
+
+.head-subframe {
+	height: 54px;
 }
 
 
@@ -151,6 +189,18 @@ button:focus {
 }
 .fb-form .cpblink {
   line-height: 1.8rem;
+}
+.fb-form .main-editor {
+	width: 100%;
+	resize: none;
+	flex: 1;
+}
+.main-editor::-webkit-scrollbar {
+	background-color: #c0c0c0;
+	width: 5px;
+}
+.main-editor::-webkit-scrollbar-thumb {
+	background: #353535;
 }
 
 
@@ -291,4 +341,15 @@ h6 { font-size: 1.1rem; }
 	margin-top: 0;
 	margin-bottom: 1rem;
 	font-size: 1.1rem;
+}
+
+
+.recent-pages {
+	display: none;
+	width: 300px;
+}
+@media (min-width: 1324px) {
+	.recent-pages {
+		display: inherit;
+	}
 }
