@@ -8,8 +8,15 @@
   export let flip = false
   export let zero = false
   export let center = false
+  export let between = false
+  export let around = false
+  export let hide = false
 
-  const mkc =cc=> {
+  let cf = ''
+  let cc
+
+  $: {
+    cc = c
     if (typeof(cc) == 'string') cc = cc.split(' ')
 
     if (expand) cc.push('fb-expand')
@@ -26,11 +33,12 @@
     else cc.push('fb-grid')
 
     if (center) cc.push('fb-center')
+    if (between) cc.push('fb-between')
+    if (around) cc.push('fb-around')
+    if (hide) cc.push('hidden')
 
-    return cc.join(' ')
+    cf = cc.join(' ')
   }
-
-  $: cf = mkc(c)
 </script>
 
 <div class="flexbox {cf}">

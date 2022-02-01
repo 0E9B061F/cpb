@@ -19,9 +19,9 @@
 </script>
 
 <FB>
-	{#if $haspage}<QR data={permac} href={perma} title="Page Permalink" />{/if}
-	{#if $haspage}<QR data={vpermac} href={vperma} title="Version Permalink" />{/if}
   <FB vert expand zero>
     <FB expand><TitleBar/></FB>
   </FB>
+	{#if $haspage}<QR data={permac} ver={3} scale={2} href={perma} title="Page Permalink" />{/if}
+	{#if $haspage}<QR data={vpermac} ver={3} scale={2} href={vperma} title="Version Permalink" />{/if}
 </FB>

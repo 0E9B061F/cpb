@@ -2,12 +2,13 @@
   import History from './History.svelte'
   import PageForm from './PageForm.svelte'
   import Viewer from './Viewer.svelte'
+  import E401 from './E401.svelte'
   import { getContext } from 'svelte'
   const session = getContext('session')
   const page = getContext('page')
   const haspage = getContext('haspage')
   const hashistory = getContext('hashistory')
-  const hassess = getContext('hassess')
+  const haslogin = getContext('haslogin')
   const loc = getContext('loc')
 </script>
 
@@ -16,15 +17,19 @@
   <History/>
 {:else if $haspage}
   {#if $loc.cmd == 'edit'}
-    <PageForm editing/>
+    {#if $haslogin}
+      <PageForm/>
+    {:else}
+      <E401/>
+    {/if}
   {:else}
     <Viewer/>
   {/if}
 {:else if !!$page && $page.err == 1}
-  {#if $hassess && $session.val.login}
+  {#if $haslogin}
     <PageForm/>
   {:else}
-    <p>no page here. please log in to edit</p>
+    <E401/>
   {/if}
 {:else}
   <p>ERROR</p>

@@ -44,19 +44,19 @@
     ctx.moveTo(g, dim.qy)
     ctx.lineTo(g, g)
     ctx.lineTo(dim.qx, g)
-    
+
     ctx.moveTo(dim.x-dim.qx, g)
     ctx.lineTo(dim.x-g, g)
     ctx.lineTo(dim.x-g, dim.qy)
-    
+
     ctx.moveTo(dim.x-g, dim.y-dim.qy)
     ctx.lineTo(dim.x-g, dim.y-g)
     ctx.lineTo(dim.x-dim.qx, dim.y-g)
-    
+
     ctx.moveTo(dim.qx, dim.y-g)
     ctx.lineTo(g, dim.y-g)
     ctx.lineTo(g, dim.y-dim.qy)
-   
+
    ctx.imageSmoothingEnabled = false
     ctx.drawImage(ico, dim.hx-cid.hx, dim.hy-cid.hy, 32, 28)
 
@@ -70,8 +70,6 @@
 
 <canvas on:click={draw(x, y)} width={x} height={y} bind:this={canvas}/>
 <div >
-  <img alt="foo" src="/images/heart-even.png" width={16} height={14} bind:this={eico} />
-  <img alt="foo" src="/images/heart-odd.png" width={15} height={13} bind:this={oico} />
+  <img alt="foo" src="/CPB/images/heart-2.png" width={16} height={14} bind:this={eico} />
+  <img alt="foo" src="/CPB/images/heart-2.png" width={15} height={13} bind:this={oico} />
 </div>
-
-

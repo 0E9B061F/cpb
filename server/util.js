@@ -15,7 +15,7 @@ const getnstu =(namespace, title)=> {
   let where
   let uuid
   if (namespace.match(`${hex}{8}-(${hex}{4}-){3}${hex}{12}`)) {
-    uuid = namespace
+    uuid = imid(namespace)
     where = {[Op.or]: [{uuid}, {pageUuid: uuid, nextUuid: null}]}
   } else {
     where = {

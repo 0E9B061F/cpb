@@ -37,6 +37,20 @@ const internal =(e,v)=> {
 }
 const inputerr =v=> resp(5, 'input error', v)
 
+api.get('/titlesearch/:query', (req, res)=> {
+  db.version.findAll({
+    where: {
+      nextUuid: null,
+      title: {
+        [Op.like]: `%${req.params.query}%`
+      }
+    },
+    attributes: ['namespace', 'title'],
+  })
+  .then(vers=> res.json(ok(vers)))
+  .catch(e=> res.json(internal(e)))
+})
+
 api.get('/uuid/:uuid', (req, res)=> {
   const uuid = util.imid(req.params.uuid)
   util.getnstu(uuid)
@@ -90,8 +104,9 @@ const gethist =u=> {
 
 api.get([...bi('/history/:ns/:title'), '/history/:uuid'], (req, res) => {
   const title = req.params.title || 'Home'
+  const uuid = req.params.uuid ? util.imid(req.params.uuid) : null
   let a
-  if (req.params.uuid) a = [req.params.uuid]
+  if (uuid) a = [uuid]
   else a = [req.params.ns, title]
   util.getnstu(...a)
   .then(ver=> {

@@ -8,8 +8,9 @@
 	import Bodyframe from './Bodyframe.svelte'
 	import Footer from './Footer.svelte'
 	import Messenger from './Messenger.svelte'
-	import Heartbox from './Heartbox.svelte'
+	import Reticle from './Reticle.svelte'
 	import RecentPages from './RecentPages.svelte'
+	import Search from './Search.svelte'
 
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
@@ -87,8 +88,8 @@
 
 
 	const handle =e=> {
-		if ($uc.debug) throw e
-		else console.log('ERROR')
+		// XXX
+		throw e
 	}
 	setContext('handle', handle)
 
@@ -200,6 +201,12 @@
 	}
 	setContext('msg', msg)
 
+	const titlesearch =q=> {
+		return grab('titlesearch', q)
+		.catch(e=> handle(e))
+	}
+	setContext('titlesearch', titlesearch)
+
 	const getconf =k=> {
 		return $uc[k]
 	}
@@ -258,7 +265,21 @@
 		console.log(`LAUNCH: Data check - user: ${$hasuser} - page: ${$haspage} - hist: ${$hashistory}`)
 	}
 
+	const loadend =()=> {
+		parsenst()
+		if (!!$page && $page.err == 1) $creating = true
+		else if ($loc.cmd == 'edit') $editing = true
+		$loading = false
+	}
+
+	const loadshim =t=> {
+		const d = Date.now() - t
+		if (d >= $rc.fade) loadend()
+		else setTimeout(loadend, $rc.fade - d)
+	}
+
 	const load =p=> {
+		const loadstart = Date.now()
 		$loading = true
 		$creating = false
 		$editing = false
@@ -278,23 +299,17 @@
 		} else if ($loc.uuid || $loc.namespace) {
 			const a = $loc.uuid ? ['uuid', $loc.uuid] : ['get', $loc.namespace, $loc.title]
 			after = grab(...a).then(page=> {
-				if (page.val) page.val.historical = !!page.val.childVuuid
+				if (page.val) page.val.historical = !!page.val.nextUuid
 				console.log(page)
 				cleardata({page})
 			})
 		}
 		if (after) {
 			after.then(r=> {
-				parsenst()
-				if (!!$page && $page.err == 1) $creating = true
-				else if ($loc.cmd == 'edit') $editing = true
-				$loading = false
+				loadshim(loadstart)
 			}).catch(e=> handle(e))
 		} else {
-			parsenst()
-			if (!!$page && $page.err == 1) $creating = true
-			else if ($loc.cmd == 'edit') $editing = true
-			$loading = false
+			loadshim(loadstart)
 		}
 	}
 
@@ -382,11 +397,32 @@
     $path = window.location.pathname
   }
 
-	const controls =e=> {
-		if (event.keyCode == 8) {
+
+	const modifiers = writable({
+		Shift: false,
+		Alt: false,
+		Control: false,
+	})
+	setContext('modifiers', modifiers)
+	const setmod =n=> $modifiers[n] = true
+	const unsetmod =n=> $modifiers[n] = false
+
+	const controls =(m, e)=> {
+		if (m.Control && e.key == 'Backspace') {
 			setconf('debug', !getconf('debug'))
 		}
 	}
+	let controlset = controls
+	const setcontrols =c=> controlset = c ? c : controls
+
+	const keydown =e=> {
+		if ($modifiers.hasOwnProperty(e.key)) setmod(e.key)
+		else controlset($modifiers, e)
+	}
+	const keyup =e=> {
+		if ($modifiers.hasOwnProperty(e.key)) unsetmod(e.key)
+	}
+	setContext('setcontrols', setcontrols)
 
   let gs = writable({
     full: p=> `${burl()}/${p}`,
@@ -414,7 +450,7 @@
 	$: launch($path)
 </script>
 
-<svelte:window on:keydown={controls}/>
+<svelte:window on:keydown={keydown} on:keyup={keyup} />
 
 <FB center c="cpb-ui">
 	<FB vert c="cpb-main">
@@ -432,8 +468,12 @@
 		  	<Footer/>
 			</FB>
 		{:else}
-			<Heartbox/>
+			<Reticle/>
 		{/if}
 	</FB>
-	<RecentPages count={10}/>
+	<FB vert c="medium-right">
+		<Search/>
+		<RecentPages count={10}/>
+		<Reticle/>
+	</FB>
 </FB>

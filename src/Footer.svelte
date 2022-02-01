@@ -1,6 +1,7 @@
 <script>
 	import FB from './FB.svelte'
 	import Link from './Link.svelte'
+	import Pipe from './Pipe.svelte'
 	import MaybeUUID from './MaybeUUID.svelte'
   import { getContext } from 'svelte'
   const page = getContext('page')
@@ -12,18 +13,20 @@
 
 <FB c="footer">
   <FB vert>
-		{#if !!$editing}
-			<Link decmd>CANCEL</Link>
-		{:else if $haspage}
+		{#if !$editing && $haspage}
 			<MaybeUUID right uuid={$page.val.pageUuid} />
 			<MaybeUUID right uuid={$page.val.prevUuid} />
+		{:else}
+			<Pipe expand/>
 		{/if}
   </FB>
   <FB expand vert center>
     <div class="heartmark">&#x2764;</div>
   </FB>
   <FB vert>
-		{#if !!$editing || !!$creating}
+		{#if !!$creating}
+			<Link self global first={postdraft}>CREATE</Link>
+		{:else if !!$editing}
 			<Link self global first={postdraft}>SAVE</Link>
 		{:else if $haspage}
 			<MaybeUUID left uuid={$page.val.uuid} />

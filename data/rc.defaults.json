@@ -8,5 +8,6 @@
   "deftitle": "Home",
   "deflogin": "login",
   "defuser": "user",
-  "secret": "oed und leer"
+  "secret": "oed und leer",
+  "fade": 500
 }

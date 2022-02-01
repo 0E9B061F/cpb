@@ -6,6 +6,7 @@ const util = require('./util.js')
 const express = require('express')
 const cors = require('cors')
 const sirv = require('sirv')
+const compress = require('compression')()
 const session = require('express-session')
 
 const { Op } = require('sequelize')
@@ -19,9 +20,12 @@ const api = require('./api.js')
 const SequelizeStore = require("connect-session-sequelize")(session.Store)
 
 
-const assets = sirv('public', {
+const html = sirv('public', {
   maxAge: 31536000, // 1Y
   single: true
+})
+const assets = sirv('assets', {
+  maxAge: 31536000, // 1Y
 })
 
 const app = express()
@@ -43,8 +47,8 @@ app.use(express.json())
 app.use(cors())
 
 app.use('/CPB/api', api)
-
-app.use(assets)
+app.use('/CPB', compress, assets)
+app.use(compress, html);
 
 (async ()=> {
   await db.sequelize.sync()

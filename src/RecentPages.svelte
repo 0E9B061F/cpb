@@ -1,6 +1,7 @@
 <script>
   import FB from './FB.svelte'
   import Link from './Link.svelte'
+  import date from 'date-and-time'
   import { getContext } from 'svelte'
   const grab = getContext('grab')
   const handle = getContext('handle')
@@ -15,14 +16,21 @@
     })
     .catch(e=> handle(e))
   }
+  const fmt =s=> {
+    const d = new Date(s)
+    return date.format(d, 'ddd, MMM DD YYYY')
+  }
   $: refresh($aod, count)
 </script>
 
 <FB vert c="recent-pages">
   {#each recents as page}
-    <FB vert c="recent-page">
+    <FB zero vert c="recent-page">
       <FB c="recent-title"><Link space={page.namespace} title={page.title}>{page.title}</Link></FB>
-      <FB c="recent-user">BY: {page.user.handle}</FB>
+      <FB between>
+        <FB c="recent-date">{fmt(page.createdAt)}</FB>
+        <FB c="recent-user">({page.user.handle})</FB>
+      </FB>
     </FB>
   {/each}
 </FB>

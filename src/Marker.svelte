@@ -5,7 +5,6 @@
   const path = getContext('path')
   const links = getContext('links')
   const linkmap = getContext('linkmap')
-  const loading = getContext('loading')
 
   export let space = null
   export let title = null
@@ -81,46 +80,12 @@
   })
 
   $: klass = (!special && !nolink && !!$linkmap.val && !!$linkmap.val[nstc || uuid]) ? 'missing' : ''
-  $: off = disable || !!$loading
 </script>
-{#if off}
-  <span class="cpblink disabled-link" title="disabled">
-    <div class="mark"></div>
-    <slot></slot>
-  </span>
-{:else if nolink}
-  <span class="cpblink nolink" {title} on:click={clicked}>
-    <svg class="mark" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="3" cy="3" r="2.5"/>
-    </svg>
-    <slot></slot>
-  </span>
-{:else if !global && $path == href}
-  <span class="cpblink current-link" title="you are here">
-    <div class="mark"></div>
-    <slot></slot>
-  </span>
-{:else}
-  <a {href} {title} class="cpblink {klass}" on:click|preventDefault={clicked}>
-    <div class="mark"></div>
-    <slot></slot>
-  </a>
-{/if}
 
-<style>
-  .nolink {
-    cursor: pointer;
-  }
-  a {
-    color: #6e7fd2;
-  }
-  a.missing {
-    color: #de2657
-  }
-  .current-link {
-    font-weight: bold;
-  }
-  .disabled-link {
-    color: #a1a8cf;
-  }
-</style>
+{#if circle}
+<svg class="mark" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="3" cy="3" r="2.5"/>
+</svg>
+{:else if text}
+<span class="mark uitxt s3txt">{text}</span>
+{/if}

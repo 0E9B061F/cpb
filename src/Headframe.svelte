@@ -5,7 +5,7 @@
 	import Search from './Search.svelte'
 	import Bookmarks from './Bookmarks.svelte'
 	import UserBar from './UserBar.svelte'
-  import {getContext} from 'svelte'
+  import { getContext } from 'svelte'
   const gs = getContext('gs')
   const path = getContext('path')
   const session = getContext('session')
@@ -21,7 +21,7 @@
 
     <FB c="head-subframe">
 			{#if $hassess}
-        <QR data={$session.val.uuid} title="Session UUID" scale={2}/>
+        <QR data={$session.val.uuid} ver={2} title="Session UUID" scale={2}/>
       {/if}
       <FB expand vert zero>
         <UserBar/>

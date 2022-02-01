@@ -29,6 +29,7 @@
   const uc = getContext('uc')
   const links = getContext('links')
   const linkmap = getContext('linkmap')
+  const modifiers = getContext('modifiers')
 
   let tab = 'main'
   const go =n=> tab = n
@@ -40,6 +41,7 @@
   <Link nolink does={()=> go('uc')} disable={tab == 'uc'}>UC</Link>
   <Link nolink does={()=> go('links')} disable={tab == 'links'}>LINKS</Link>
   <Link nolink does={()=> go('linkmap')} disable={tab == 'linkmap'}>LINKMAP</Link>
+  <Link nolink does={()=> go('page')} disable={tab == 'page'}>PAGE</Link>
 </FB>
 {#if tab == 'main'}
 <FT lab={tab}>
@@ -61,6 +63,11 @@
   <PP lab="loading" t={v=> !v} val={$loading} />
   <PP lab="space" val={$space} />
   <PP lab="title" val={$title} />
+  <FR lab="modifiers">
+    <PP lab="shift" val={$modifiers.Shift} />
+    <PP lab="ctrl" val={$modifiers.Control} />
+    <PP lab="alt" val={$modifiers.Alt} />
+  </FR>
 </FT>
 {:else if tab == 'rc'}
 <FT lab={tab}>
@@ -85,5 +92,23 @@
   {#each Object.entries($linkmap) as link}
     <PP lab={link[0]} val={link[1]}/>
   {/each}
+</FT>
+{:else if tab == 'page'}
+<FT lab={tab}>
+  {#if !!$page}
+  {#each Object.entries($page) as resp}
+    {#if resp[0] == 'val'}
+      {#each Object.entries(resp[1]) as pair}
+        {#if pair[0] == 'body'}
+          <PP lab={pair[0]} val={pair[1].slice(0,100)}/>
+        {:else}
+          <PP lab={pair[0]} val={pair[1]}/>
+        {/if}
+      {/each}
+    {:else}
+      <PP lab={resp[0]} val={resp[1]}/>
+    {/if}
+  {/each}
+  {/if}
 </FT>
 {/if}
