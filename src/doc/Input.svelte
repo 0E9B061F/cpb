@@ -1,6 +1,7 @@
 <script>
   import R2Over from '../r2/R2Over.svelte'
   import FB from '../FB.svelte'
+  import { outclick } from "../../lib/outclick.js"
   import { createEventDispatcher } from 'svelte'
 	const dispatch = createEventDispatcher()
   export let value = ''
@@ -13,12 +14,16 @@
     dispatch('focus')
   }
   const onblur =()=> {
+    if (focused) input.focus()
+  }
+  export const exit =()=> {
     focused = false
+    input.blur()
     dispatch('blur')
   }
-  export const blur =()=> input.blur()
 </script>
 
+<div class="input-wrapper" use:outclick on:outclick={exit}>
 <R2Over size={0.4} fillv={true} c="flexinput {focused ? 'focused' : ''}">
   <svelte:fragment slot="inner">
   {#if text && !focused && !value}
@@ -38,3 +43,4 @@
     </FB>
   {/if}
 </R2Over>
+</div>

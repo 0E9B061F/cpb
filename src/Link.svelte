@@ -26,6 +26,7 @@
   export let disable = false
   export let marked = false
   export let user = false
+  export let query = null
 
   if (bounce && typeof(bounce) != 'string') bounce = '/'
 
@@ -41,6 +42,9 @@
         else href = '/~'
       }
     } else href = `/CPB/${special}`
+    if (special == 'search' && query) {
+      href = `${href}/${query}`
+    }
   }
   else if (uuid) href = `/${uuid.toUpperCase()}`
   else if (nst) {
@@ -78,23 +82,22 @@
     } else nav()
   }
 
-  if (!special && !nolink && !bounce && !self && !decmd) {
+  if (!special && !nolink && !bounce && !self && !decmd && !global) {
     if (!ident) throw new Error('broke link')
     $links = [...$links, ident]
   }
 
   onDestroy(()=> {
-    if (!special && !nolink && !bounce && !self && !decmd) {
+    if (!special && !nolink && !bounce && !self && !decmd && !global) {
       const i = $links.indexOf(ident)
       $links.splice(i, 1)
       $links = $links
     }
   })
 
-  $: klass = (!special && !nolink && !!$linkmap.val && !!$linkmap.val[nstc || uuid]) ? 'missing' : ''
-  $: off = disable || !!$loading
+  $: klass = (!special && !nolink && !global && !!$linkmap.val && !!$linkmap.val[nstc || uuid]) ? 'missing' : ''
 </script>
-{#if off}
+{#if disable}
   <span class="cpblink disabled-link" title="disabled">
     <div class="mark"></div>
     <slot></slot>

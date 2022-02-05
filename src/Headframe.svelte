@@ -44,7 +44,7 @@
       <div class="title-main">{$title}</div>
     </FB>
 		<FB expand/>
-		<FB vert between>
+		<FB vert flip>
 			<TitleControls/>
 		</FB>
   </FB>

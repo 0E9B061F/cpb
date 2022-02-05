@@ -357,6 +357,14 @@ canvas {
 .history-item .history-vuuid {
 }
 
+.title-frame .flexlab {
+  width: 10rem;
+}
+.title-frame .h-pipe {
+  background-color: #d0d0d0;
+  height: 1px;
+}
+
 .title-frame .title-main {
 	font-size: 2.497902432574926rem;
 	line-height: 2.497902432574926rem;
@@ -448,9 +456,11 @@ h6 {
 	position: relative;
 	height: 1.8rem;
 }
-.search-input {
-	height: 1.8rem;
-	line-height: 1.8rem;
+.search-bar .r2-input {
+  color: #909090;
+}
+.search-bar .r2-input:focus {
+  color: #252525;
 }
 .search-input:focus {
 	outline: none;

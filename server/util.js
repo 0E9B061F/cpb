@@ -23,7 +23,12 @@ const getnstu =(namespace, title)=> {
       nextUuid: null
     }
   }
-  return db.version.findOne({where}).then(page=> {
+  return db.version.findOne({where,
+    include: {
+      model: db.user,
+      attributes: ['handle'],
+    },
+  }).then(page=> {
     if (page) return proc(page)
     else false
   })

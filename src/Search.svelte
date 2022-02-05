@@ -5,6 +5,7 @@
   import { getContext } from 'svelte'
   const gs = getContext('gs')
   const path = getContext('path')
+  const loc = getContext('loc')
   const titlesearch = getContext('titlesearch')
   const modifiers = getContext('modifiers')
   const setcontrols = getContext('setcontrols')
@@ -23,7 +24,7 @@
 		}
 	}
 	const exit =()=> {
-		if (input) input.blur()
+		if (input) input.exit()
 	}
 	const search =()=> {
 		if (!query || query == '') {
@@ -48,7 +49,7 @@
 	$: if (result.length) {
 		exists = false
 		result.forEach(i=> {
-			if (i.title == query) exists = true
+			if (i.title == query) exists = i
 		})
 	}
 
@@ -87,13 +88,13 @@
 
 			<FB around c="search-controls">
 			  {#if exists}
-			    <Link nolink>GO</Link>
+			    <Link space={exists.namespace} title={exists.title} global>GO</Link>
 			  {:else}
-			    <Link nolink>CREATE</Link>
+			    <Link space={$loc.namesapce} title={query} disable={!query} global>CREATE</Link>
 			  {/if}
-				<Link nolink>SEARCH</Link>
+				<Link special="search" {query} disable={!query}>SEARCH</Link>
 			</FB>
 		</FB>
-	</svelte:fragment>
+		</svelte:fragment>
 	</Input>
 </FB>

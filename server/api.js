@@ -81,7 +81,7 @@ api.get(bi('/recent/:num'), (req, res)=> {
     order: [['createdAt', 'DESC']],
     include: {
       model: db.user,
-      attributes: ['handle']
+      attributes: ['handle'],
     },
     limit: num,
   })
