@@ -1,6 +1,7 @@
 <script>
 	import FB from './FB.svelte'
 	import Link from './Link.svelte'
+	import Input from './doc/Input.svelte'
   import { getContext } from 'svelte'
   const gs = getContext('gs')
   const path = getContext('path')
@@ -8,7 +9,7 @@
   const modifiers = getContext('modifiers')
   const setcontrols = getContext('setcontrols')
   let exists = false
-	let focused = false
+	let focused
 	export let query = ''
 	let result = []
 	let timer = null
@@ -18,16 +19,10 @@
 		if (e.key == 'Enter') {
 			console.log('ENTER')
 		} else if (e.key == 'Escape') {
-			blur()
+			exit()
 		}
 	}
-	const focus =()=> {
-		setcontrols(controls)
-		focused = true
-	}
-	const blur =()=> {
-		setcontrols()
-		focused = false
+	const exit =()=> {
 		if (input) input.blur()
 	}
 	const search =()=> {
@@ -50,35 +45,55 @@
 
 	$: delay(query)
 
+	$: if (result.length) {
+		exists = false
+		result.forEach(i=> {
+			if (i.title == query) exists = true
+		})
+	}
+
 	$: markcg = !!$modifiers.Shift
 	$: marksearch = !$modifiers.Shift
+
+	$: if (focused) {
+		setcontrols(controls)
+	} else {
+		setcontrols()
+	}
 </script>
 
-<FB form vert zero c="search-bar">
-
-  <input type="text" class="search-input"
+<FB vert zero c="search-bar r2-s4">
+  <Input
 		bind:this={input}
 		bind:value={query}
-		on:focus={focus} on:blur={blur} />
-
-	<FB vert c="search-dropdown" hide={!focused}>
-
-		<FB vert c="search-preview">
-			{#each result as item}
-				<FB leaf c="search-preview-item">
-					<Link space={item.namespace} title={item.title}>{item.title}</Link>
-				</FB>
-			{/each}
+		bind:focused={focused}
+		text="SEARCH"
+	>
+		<svelte:fragment slot="extra">
+		<FB between zero c="r2-row r2-top">
+			<div class="r2-bar r2-hori"></div>
+			<div class="r2-bar r2-hori"></div>
 		</FB>
+		<FB vert c="search-preview-wrapper">
+			{#if result.length}
+			<FB vert c="search-preview">
+				{#each result as item}
+					<FB leaf c="search-preview-item">
+						<Link space={item.namespace} title={item.title}>{item.title}</Link>
+					</FB>
+				{/each}
+			</FB>
+			{/if}
 
-		<FB around c="search-controls">
-		  {#if exists}
-		    <Link nolink>GO</Link>
-		  {:else}
-		    <Link nolink>CREATE</Link>
-		  {/if}
-			<Link nolink>SEARCH</Link>
+			<FB around c="search-controls">
+			  {#if exists}
+			    <Link nolink>GO</Link>
+			  {:else}
+			    <Link nolink>CREATE</Link>
+			  {/if}
+				<Link nolink>SEARCH</Link>
+			</FB>
 		</FB>
-
-	</FB>
+	</svelte:fragment>
+	</Input>
 </FB>

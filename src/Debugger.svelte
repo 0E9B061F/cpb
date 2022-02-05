@@ -30,6 +30,7 @@
   const links = getContext('links')
   const linkmap = getContext('linkmap')
   const modifiers = getContext('modifiers')
+  const contcls = getContext('contcls')
 
   let tab = 'main'
   const go =n=> tab = n

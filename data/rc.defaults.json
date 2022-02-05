@@ -7,7 +7,10 @@
   "defapi": "api",
   "deftitle": "Home",
   "deflogin": "login",
+  "defregister": "register",
   "defuser": "user",
+  "deftest": "test",
   "secret": "oed und leer",
-  "fade": 500
+  "fade": 500,
+  "homekey": "~"
 }

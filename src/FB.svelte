@@ -11,6 +11,7 @@
   export let between = false
   export let around = false
   export let hide = false
+  export let w = null
 
   let cf = ''
   let cc
@@ -37,10 +38,14 @@
     if (around) cc.push('fb-around')
     if (hide) cc.push('hidden')
 
+    if (w) cc.push(`w${w}`)
+
+    cc.push('flexbox')
+
     cf = cc.join(' ')
   }
 </script>
 
-<div class="flexbox {cf}">
+<div class={cf}>
   <slot></slot>
 </div>

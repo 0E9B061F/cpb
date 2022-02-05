@@ -6,24 +6,28 @@
   import { onMount } from 'svelte'
   import QRCode from 'qrcode'
   export let data
-  export let title
-  export let href
+  export let title = null
+  export let href = null
   export let scale = 3
   export let margin = 0
   export let ver = 1
+  export let mask = 7
   $: if (!data) data = href
   let canvas
   let hidden = true
   const generate =data=> {
-    data = data.toUpperCase()
-    QRCode.toCanvas(canvas, data, {
+    if (typeof(data) == 'string') data = data.toUpperCase()
+    const opt = {
       errorCorrectionLevel: 'L',
-      margin, scale, version: ver,
+      margin, scale,
       color: {
         dark: '#353535ff',
         light: '#ffffff00'
       },
-    }, display)
+    }
+    if (mask) opt.maskPattern = mask
+    if (ver) opt.version = ver
+    QRCode.toCanvas(canvas, data, opt, display)
   }
   const display =e=> {
     console.log(`qr code generated: ${!e}`)
@@ -32,7 +36,7 @@
   }
   $: size = (17 + (4 * ver)) * scale
   onMount(()=> generate(data))
-  $: if (canvas) generate(data)
+  $: if (canvas) generate(data, scale, margin, ver, mask)
 </script>
 
 <div class="qrcode" style="width: {size}px; height: {size}px;">

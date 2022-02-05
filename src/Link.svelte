@@ -6,6 +6,8 @@
   const links = getContext('links')
   const linkmap = getContext('linkmap')
   const loading = getContext('loading')
+  const haslogin = getContext('haslogin')
+  const session = getContext('session')
 
   export let space = null
   export let title = null
@@ -23,6 +25,7 @@
   export let does = null
   export let disable = false
   export let marked = false
+  export let user = false
 
   if (bounce && typeof(bounce) != 'string') bounce = '/'
 
@@ -30,7 +33,15 @@
   let ident
   if (self || decmd || nolink) href = null
   else if (bounce) href = $trail[1] || bounce
-  else if (special) href = `/CPB/${special}`
+  else if (special) {
+    if (special == 'user') {
+      if (user) href = `/~${user}`
+      else {
+        if (!!$haslogin) href = `/~${$session.val.handle}`
+        else href = '/~'
+      }
+    } else href = `/CPB/${special}`
+  }
   else if (uuid) href = `/${uuid.toUpperCase()}`
   else if (nst) {
     const p = nst.split('/')

@@ -18,7 +18,7 @@
 	}
 </script>
 
-<FB>
+<FB c="title-frame">
   <FB vert expand zero>
     <FB expand><TitleBar/></FB>
   </FB>

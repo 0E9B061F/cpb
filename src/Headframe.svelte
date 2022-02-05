@@ -1,42 +1,53 @@
 <script>
 	import QR from './QR.svelte'
 	import FB from './FB.svelte'
+	import UUID from './UUID.svelte'
 	import Logo from './Logo.svelte'
 	import Search from './Search.svelte'
 	import Bookmarks from './Bookmarks.svelte'
 	import UserBar from './UserBar.svelte'
+	import TitleControls from './TitleControls.svelte'
+	import Messenger from './Messenger.svelte'
   import { getContext } from 'svelte'
   const gs = getContext('gs')
   const path = getContext('path')
   const session = getContext('session')
   const hassess = getContext('hassess')
+  const space = getContext('space')
+  const title = getContext('title')
 </script>
 
-<FB c="head-frame">
-
-  <FB vert>
-    {#if $hassess}
-      <div class="suuid uuid">{$session.val.uuid}</div>
-    {/if}
-
-    <FB c="head-subframe">
-			{#if $hassess}
-        <QR data={$session.val.uuid} ver={2} title="Session UUID" scale={2}/>
-      {/if}
-      <FB expand vert zero>
-        <UserBar/>
-				<FB expand/>
-        <Logo/>
-      </FB>
-    </FB>
-  </FB>
-
-	<FB vert expand>
-		<Bookmarks/>
-		<FB expand/>
-		<Search/>
+<FB vert c="head-frame">
+	<FB between c="prehead">
+		{#if !!$hassess}<UUID>{$session.val.uuid}</UUID>{/if}
+		<FB>
+		<Messenger/>
+		<UserBar/>
+		</FB>
 	</FB>
 
+  <FB c="head-subframe">
+		{#if $hassess}
+			<QR data={$session.val.uuid} ver={2} title="Session UUID" scale={2}/>
+		{/if}
+    <FB vert zero>
+			<div class="logofill"></div>
+			<Logo/>
+    </FB>
+		<FB vert between zero>
+			<FB>
+      	<div class="title-sub">{$space}</div>
+				<FB vert center>
+					<span class="ns-sep uitxt s3txt">&#9654;</span>
+				</FB>
+			</FB>
+      <div class="title-main">{$title}</div>
+    </FB>
+		<FB expand/>
+		<FB vert between>
+			<TitleControls/>
+		</FB>
+  </FB>
 </FB>
 
 <style>

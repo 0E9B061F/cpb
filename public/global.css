@@ -48,10 +48,9 @@ input, button, select, textarea {
 	font-family: inherit;
 	font-size: inherit;
 	-webkit-padding: 0.4em 0;
-	padding: 0.4em;
+	padding: 0.325rem;
 	box-sizing: border-box;
 	border: 1px solid #ccc;
-	border-radius: 2px;
 }
 
 input:disabled {
@@ -76,6 +75,16 @@ button:focus {
 	border-color: #666;
 }
 
+canvas {
+  image-rendering: optimizeSpeed;             /* Older versions of FF          */
+  image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
+  image-rendering: -webkit-optimize-contrast; /* Safari                        */
+  image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
+  image-rendering: pixelated;                 /* Awesome future-browsers       */
+  -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
+  background-color: #f7f7f7;
+}
+
 
 
 
@@ -95,6 +104,7 @@ button:focus {
 
 .cpb-content {
 	overflow-y: scroll;
+  overflow-x: hidden;
 	scrollbar-color: black;
   scrollbar-width: 10px;
 	padding-right: 8px;
@@ -108,6 +118,15 @@ button:focus {
 	background: #353535;
 }
 
+.cpb-content.edit-mode {
+  overflow-y: hidden;
+  padding-right: 0;
+}
+.cpb-content.edit-mode .footer {
+  border-right: 5px solid #353535;
+  padding-right: 8px;
+}
+
 .user-bar {
 	font-size: 1rem;
 	line-height: 1rem;
@@ -117,6 +136,14 @@ button:focus {
 	font-size: 2rem;
 	line-height: 2rem;
 	font-family: 'Azeret Mono', monospace;
+}
+.logofill {
+  background-color: #353535;
+  margin-top: 0.315rem;
+  margin-bottom: 0.315rem;
+  margin-left: 2px;
+  margin-right: 2px;
+  height: 100%;
 }
 
 .uuid {
@@ -140,13 +167,23 @@ button:focus {
 }
 
 .head-frame {
-	height: calc(1rem + 0.3125rem + 54px);
+	height: calc(0.75rem + 0.3125rem + 50px);
 	padding-right: 8px;
 	border-right: 5px solid #353535;
 }
 
+.prehead {
+  font-size: 0.75rem;
+  line-height: 0.75rem;
+}
+
 .head-subframe {
 	height: 54px;
+}
+
+.user-bar {
+  font-size: 1rem;
+  line-height: 1rem;
 }
 
 
@@ -205,6 +242,7 @@ button:focus {
 	width: 100%;
 	resize: none;
 	flex: 1;
+  overflow-y: scroll;
 }
 .main-editor::-webkit-scrollbar {
 	background-color: #c0c0c0;
@@ -319,14 +357,20 @@ button:focus {
 .history-item .history-vuuid {
 }
 
-.title .title-main {
+.title-frame .title-main {
 	font-size: 2.497902432574926rem;
 	line-height: 2.497902432574926rem;
 	font-weight: 900;
 }
-.title .title-sub {
-	font-size: 1.03466506505728rem;
-	line-height: 1.03466506505728rem;
+.head-frame .title-main {
+	font-size: 2rem;
+	line-height: 2rem;
+	font-weight: 900;
+}
+.head-frame .title-sub {
+	font-size: 1rem;
+	line-height: 1rem;
+  font-weight: 500;
 }
 
 h1 {
@@ -416,10 +460,6 @@ h6 {
 	width: 100%;
 	z-index: 100;
 	top: 1.8rem;
-	background-color: white;
-	border-width: 0 1px 1px 1px;
-	border-color: #6e7fd2;
-	border-style: solid;
 }
 .search-preview-item {
 	padding-left: 0.3125rem;
@@ -442,25 +482,53 @@ h6 {
 	display: none;
 }
 
-.uitxt {
+.uitxt,
+.uitxt.ntxt {
 	font-size: 1rem;
 	line-height: 1rem;
 }
+.nline { height: 1rem; }
+.nline.input {
+  height: 1.82rem;
+  line-height: 1.82rem;
+}
+
 .uitxt.s3txt {
 	font-size: 0.625rem;
 	line-height: 0.625rem;
 }
+.s3line { height: 0.625rem; }
 .uitxt.s2txt {
 	font-size: 0.75rem;
 	line-height: 0.75rem;
 }
+.s2line { height: 0.75rem; }
+
 .uitxt.s1txt {
 	font-size: 0.875rem;
 	line-height: 0.875rem;
 }
+.s1line { height: 0.875rem; }
+.s1line.input {
+  height: 1.5925rem;
+}
+
 .uitxt.b1txt {
 	font-size: 1.1rem;
 	line-height: 1.1rem;
+}
+.b1line { height: 1.1rem; }
+.b1line.input {
+  height: 2rem;
+}
+
+.uitxt.b2txt {
+  font-size: 1.25rem;
+	line-height: 1.25rem;
+}
+.b2line { height: 1.25rem; }
+.b2line.input {
+  height: 2.275rem;
 }
 
 .uitxt.w1txt { font-weight: 100; }
@@ -530,6 +598,173 @@ h6 {
   background-color: #353535;
 }
 
+
+
+.r2 {
+  width: 100%;
+  height: 100%;
+  background-color: #f9f9f9;
+  border: 1px solid #efefef;
+}
+.r2-bar {
+  background-color: #353535;
+}
+.r2-row { height: 5px; }
+.r2-hori {
+  height: 5px;
+}
+.r2-vert, .r2-left, .r2-right {
+  width: 5px;
+}
+.r2-col {
+  height: 100%;
+}
+.r2-s1 .r2-hori { width: 1px; }
+.r2-s1 .r2-vert { height: 6px; }
+.r2-s2 .r2-hori { width: 2px; }
+.r2-s2 .r2-vert { height: 7px; }
+.r2-s3 .r2-hori { width: 3px; }
+.r2-s3 .r2-vert { height: 8px; }
+.r2-s4 .r2-hori { width: 4px; }
+.r2-s4 .r2-vert { height: 9px; }
+.r2-s5 .r2-hori { width: 5px; }
+.r2-s5 .r2-vert { height: 10px; }
+.r2-s10 .r2-hori { width: 10px; }
+.r2-s10 .r2-vert { height: 15px; }
+.r2-s20 .r2-hori { width: 20px; }
+.r2-s20 .r2-vert { height: 25px; }
+.r2-s30 .r2-hori { width: 30px; }
+.r2-s30 .r2-vert { height: 35px; }
+.r2-s40 .r2-hori { width: 40px; }
+.r2-s40 .r2-vert { height: 45px; }
+.r2-s50 .r2-hori { width: 50px; }
+.r2-s50 .r2-vert { height: 55px; }
+
+.r2-over {
+  height: 100%;
+  position: relative;
+  z-index: 1;
+}
+.r2-over .r2 {
+  position: absolute;
+  height: 100%;
+}
+.r2-over.focused .r2 {
+  background-color: #e9e8f7;
+  border-color: #cedff0;
+}
+.r2-inside {
+  position: relative;
+  height: 100%;
+}
+.r2-input {
+  width: 100%;
+  height: 100%;
+  background: none;
+  border: 0;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.r2-input:focus {
+  outline: none;
+}
+.r2-over-inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+.r2-wrapper {
+  position: relative;
+}
+.input-label {
+  color: #afafaf;
+  font-weight: 500;
+  height: 100%;
+}
+.input-dropdown {
+  position: relative;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+}
+.search-preview {
+}
+.search-preview-wrapper {
+  padding-left: 4px;
+  padding-bottom: 1px;
+}
+
 .qrdefault {
   height: 100%;
+}
+
+.qr-tests .qr-bay {
+  gap: 12px;
+  padding: 7px;
+}
+
+.w10  { width: 10%; }
+.w20  { width: 20%; }
+.w25  { width: 25%; }
+.w30  { width: 30%; }
+.w40  { width: 40%; }
+.w50  { width: 50%; }
+.w60  { width: 60%; }
+.w70  { width: 70%; }
+.w80  { width: 80%; }
+.w90  { width: 90%; }
+.w100 { width: 100%; }
+
+.flexdoc {
+
+}
+.flexline {
+
+}
+.flexlab {
+}
+.flexlab > input {
+  width: 100%;
+}
+.flexlab-txt {
+  font-weight: 600;
+  min-width: 3rem;
+  text-align: right;
+}
+
+.qrblab {
+  height: 100%;
+  aspect-ratio: 1;
+  text-align: right;
+  font-weight: 600;
+}
+.qrt63 {
+  width: 63px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.ns-sep {
+  font-family: 'Azeret Mono', monospace;
+}
+
+
+.special-page {
+  margin-top: 5rem;
+}
+
+.login-special .flexdoc {
+  position: relative;
+  left: -3rem;
+}
+.login-special .flexlab-txt {
+  width: 6rem;
+}
+.register-special .flexdoc {
+  position: relative;
+  left: -3rem;
+}
+.register-special .flexlab-txt {
+  width: 6rem;
 }

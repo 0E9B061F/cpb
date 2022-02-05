@@ -12,4 +12,5 @@
   <PP lab="uuid" val={$loc.uuid} />
   <PP lab="special" val={$loc.special} />
   <PP lab="cmd" val={$loc.cmd} />
+  <PP lab="user" val={$loc.user} />
 </FR>

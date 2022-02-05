@@ -7,8 +7,8 @@
 	import Titleframe from './Titleframe.svelte'
 	import Bodyframe from './Bodyframe.svelte'
 	import Footer from './Footer.svelte'
-	import Messenger from './Messenger.svelte'
-	import Reticle from './Reticle.svelte'
+	import R2 from './r2/R2.svelte'
+	import R2Over from './r2/R2Over.svelte'
 	import RecentPages from './RecentPages.svelte'
 	import Search from './Search.svelte'
 
@@ -18,6 +18,7 @@
 	import rco from '../lib/rc.js'
 
 
+	let booted = writable(false)
 	let lut
 
   let rc = writable(rco)
@@ -60,6 +61,7 @@
 		debug: false,
 	})
 
+  setContext('booted', booted)
   setContext('rc', rc)
   setContext('aod', aod)
 	setContext('links', links)
@@ -196,8 +198,14 @@
 	setContext('register', register)
 	setContext('logout', logout)
 
+	const unmsg =()=> {
+		$message = { text: '', level: 0 }
+	}
+	let msgt
 	const msg =(text='', level=0)=> {
 		$message = { text, level }
+		if (msgt) clearTimeout(msgt)
+		msgt = setTimeout(unmsg, 5000)
 	}
 	setContext('msg', msg)
 
@@ -269,6 +277,10 @@
 		parsenst()
 		if (!!$page && $page.err == 1) $creating = true
 		else if ($loc.cmd == 'edit') $editing = true
+		if (!$booted) {
+			msg('CPB BOOTED')
+			$booted = true
+		}
 		$loading = false
 	}
 
@@ -283,14 +295,18 @@
 		$loading = true
 		$creating = false
 		$editing = false
-		cleardata()
 		$loc = parseloc(p)
+		cleardata()
 
 		let after = false
 		if ($loc.special == 'user') {
-			after = grab('user', $session.val.handle).then(user=> {
-				cleardata({user})
-			})
+			let u = $loc.user
+			if (!u && !!$haslogin) u = $session.val.handle
+			if (u) {
+				after = grab('user', u).then(user=> {
+					cleardata({user})
+				})
+			}
 		} else if ($loc.cmd == 'history') {
 			const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
 			after = grab('history', ...a).then(history=> {
@@ -323,7 +339,7 @@
   const parseloc =p=> {
     const loc = {
       namespace: null, title: null, uuid: null,
-      special: null, cmd: null
+      special: null, cmd: null, user: null,
     }
     p = p.split('#')
     if (p[1]) loc.cmd = p[1]
@@ -332,14 +348,23 @@
     p = p.split('/')
     const ns = p[0]
     const t = p[1]
+		let u
 		console.log(ns, t)
     const hex = '[a-fA-F0-9]'
-    if (ns == $rc.syskey) {
+		if (ns.startsWith($rc.homekey)) {
+			loc.special = 'user'
+			u = ns.slice(1)
+			if (u) loc.user = u
+		} else if (ns == $rc.syskey) {
 			console.log('in sys space')
       if (t == $rc.deflogin) {
         loc.special = 'login'
+      } else if (t == $rc.defregister) {
+        loc.special = 'register'
       } else if (t == $rc.defuser) {
         loc.special = 'user'
+			} else if (t == $rc.deftest) {
+				loc.special = 'test'
       } else {
         loc.special = 'e404'
       }
@@ -375,7 +400,7 @@
 			t = $loc.title || ''
 		} else {
 			ns = 'SPECIAL'
-			t = $loc.special
+			t = $loc.special.toUpperCase()
 		}
 		$space = ns
 		$title = t
@@ -408,7 +433,7 @@
 	const unsetmod =n=> $modifiers[n] = false
 
 	const controls =(m, e)=> {
-		if (m.Control && e.key == 'Backspace') {
+		if (m.Control && e.code == 'Backslash') {
 			setconf('debug', !getconf('debug'))
 		}
 	}
@@ -448,6 +473,8 @@
 	msg()
 	$: mklut($links)
 	$: launch($path)
+
+	$: editmode = $loc.cmd == 'edit' ? 'edit-mode' : ''
 </script>
 
 <svelte:window on:keydown={keydown} on:keyup={keyup} />
@@ -457,23 +484,20 @@
 		{#if $uc.debug}<Debugger/>{/if}
 	  <Headframe/>
 		{#if !$loading}
-			<FB vert expand c="cpb-content">
-		  	<Titleframe/>
-		  	{#if $message.text}
-					<Messenger/>
+			<FB vert expand c="cpb-content {editmode}">
+		  	{#if !$editing && !$creating && !$hashistory && $loc.special == 'content'}
+					<Titleframe/>
 				{/if}
-		  	<FB vert expand>
-					<Bodyframe/>
-				</FB>
+				<Bodyframe/>
 		  	<Footer/>
 			</FB>
 		{:else}
-			<Reticle/>
+			<R2/>
 		{/if}
 	</FB>
 	<FB vert c="medium-right">
 		<Search/>
 		<RecentPages count={10}/>
-		<Reticle/>
+		<R2 fillh={true}/>
 	</FB>
 </FB>
