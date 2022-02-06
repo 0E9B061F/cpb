@@ -16,9 +16,15 @@
 	let timer = null
 	let input
 
+	let gb, sb
+
 	const controls =(m, e)=> {
 		if (e.key == 'Enter') {
-			input.erase()
+			if (e.getModifierState('Shift')) {
+				gb.trigger()
+			} else {
+				sb.trigger()
+			}
 		} else if (e.key == 'Escape') {
 			exit()
 		}
@@ -96,11 +102,30 @@
 
 			<FB around c="search-controls">
 			  {#if exists}
-			    <Link does={quit} space={exists.namespace} title={exists.title} global>GO</Link>
+			    <Link global does={quit}
+						space={exists.namespace}
+						title={exists.title}
+						marked={$modifiers.Shift}
+						bind:this={gb}>
+						GO
+					</Link>
 			  {:else}
-			    <Link does={quit} space={$loc.namespace || 'main'} title={query} disable={!query} global>CREATE</Link>
+			    <Link global does={quit}
+						space={$loc.namespace || 'main'}
+						title={query}
+						disable={!query}
+						marked={$modifiers.Shift}
+						bind:this={gb}>
+						CREATE
+					</Link>
 			  {/if}
-				<Link does={quit} special="search" {query} disable={!query}>SEARCH</Link>
+				<Link does={quit}
+					special="search" {query}
+					disable={!query}
+					marked={!$modifiers.Shift}
+					bind:this={sb}>
+					SEARCH
+				</Link>
 			</FB>
 		</FB>
 		</svelte:fragment>

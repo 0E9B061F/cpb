@@ -1,4 +1,5 @@
 <script>
+  import LinkMark from './LinkMark.svelte'
   import { getContext, onDestroy } from 'svelte'
   const gs = getContext('gs')
   const trail = getContext('trail')
@@ -120,6 +121,8 @@
     register(ident)
   }
 
+  export const trigger =()=> clicked()
+
   $: if (!special && !nolink && !bounce && !self && !decmd && !global) {
     reddable = true
   } else {
@@ -142,24 +145,22 @@
 </script>
 {#if disable}
   <span class="cpblink disabled-link" title="disabled">
-    <div class="mark"></div>
+    {#if marked}<LinkMark/>{/if}
     <slot></slot>
   </span>
 {:else if nolink}
   <span class="cpblink nolink" {title} on:click={clicked}>
-    <svg class="mark" viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="3" cy="3" r="2.5"/>
-    </svg>
+    {#if marked}<LinkMark/>{/if}
     <slot></slot>
   </span>
 {:else if !global && $path == href}
   <span class="cpblink current-link" title="you are here">
-    <div class="mark"></div>
+    {#if marked}<LinkMark/>{/if}
     <slot></slot>
   </span>
 {:else}
   <a {href} {title} class="cpblink {klass}" on:click|preventDefault={clicked}>
-    <div class="mark"></div>
+    {#if marked}<LinkMark/>{/if}
     <slot></slot>
   </a>
 {/if}
