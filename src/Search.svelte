@@ -18,7 +18,7 @@
 
 	const controls =(m, e)=> {
 		if (e.key == 'Enter') {
-			console.log('ENTER')
+			input.erase()
 		} else if (e.key == 'Escape') {
 			exit()
 		}
@@ -26,6 +26,10 @@
 	const exit =()=> {
 		if (input) input.exit()
 	}
+	const erase =()=> {
+		input.erase()
+	}
+	const quit =()=> input.quit()
 	const search =()=> {
 		if (!query || query == '') {
 			result = []
@@ -43,6 +47,10 @@
     if (timer) clearTimeout(timer)
     timer = setTimeout(search, 500)
   }
+
+	const edited =e=> {
+		query = e.detail.val
+	}
 
 	$: delay(query)
 
@@ -66,8 +74,8 @@
 <FB vert zero c="search-bar r2-s4">
   <Input
 		bind:this={input}
-		bind:value={query}
 		bind:focused={focused}
+		on:edited={edited}
 		text="SEARCH"
 	>
 		<svelte:fragment slot="extra">
@@ -80,7 +88,7 @@
 			<FB vert c="search-preview">
 				{#each result as item}
 					<FB leaf c="search-preview-item">
-						<Link space={item.namespace} title={item.title}>{item.title}</Link>
+						<Link space={item.namespace} title={item.title} global>{item.title}</Link>
 					</FB>
 				{/each}
 			</FB>
@@ -88,11 +96,11 @@
 
 			<FB around c="search-controls">
 			  {#if exists}
-			    <Link space={exists.namespace} title={exists.title} global>GO</Link>
+			    <Link does={quit} space={exists.namespace} title={exists.title} global>GO</Link>
 			  {:else}
-			    <Link space={$loc.namesapce} title={query} disable={!query} global>CREATE</Link>
+			    <Link does={quit} space={$loc.namespace || 'main'} title={query} disable={!query} global>CREATE</Link>
 			  {/if}
-				<Link special="search" {query} disable={!query}>SEARCH</Link>
+				<Link does={quit} special="search" {query} disable={!query}>SEARCH</Link>
 			</FB>
 		</FB>
 		</svelte:fragment>

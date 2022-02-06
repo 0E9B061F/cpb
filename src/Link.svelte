@@ -8,6 +8,7 @@
   const loading = getContext('loading')
   const haslogin = getContext('haslogin')
   const session = getContext('session')
+  const loc = getContext('loc')
 
   export let space = null
   export let title = null
@@ -21,6 +22,7 @@
   export let nolink = false
   export let self = false
   export let decmd = false
+  export let recmd = false
   export let cond = null
   export let does = null
   export let disable = false
@@ -28,45 +30,9 @@
   export let user = false
   export let query = null
 
-  if (bounce && typeof(bounce) != 'string') bounce = '/'
-
   let href
   let ident
-  if (self || decmd || nolink) href = null
-  else if (bounce) href = $trail[1] || bounce
-  else if (special) {
-    if (special == 'user') {
-      if (user) href = `/~${user}`
-      else {
-        if (!!$haslogin) href = `/~${$session.val.handle}`
-        else href = '/~'
-      }
-    } else href = `/CPB/${special}`
-    if (special == 'search' && query) {
-      href = `${href}/${query}`
-    }
-  }
-  else if (uuid) href = `/${uuid.toUpperCase()}`
-  else if (nst) {
-    const p = nst.split('/')
-    const n = p[0]
-    const t = p[1]
-    space = n || 'main'
-    title = t || 'Home'
-    if (t) href = `/${n}/${t}`
-    else href = `/${n}`
-  } else {
-    if (!space) space = 'main'
-    if (!title) title = 'Home'
-    nst = `${space}/${title}`
-    href = `/${space}/${title}`
-  }
-  const hash = cmd ? `#${cmd}` : ''
-  $: if (self) href = $gs.bare($path) + hash
-  else if (decmd) href = $gs.bare($path)
-  else href += hash
-  const nstc = nst ? nst.replace('/', ':') : null
-  ident = nstc || uuid
+  let reddable = false
 
   const goto =p=> {
     if (does) does()
@@ -82,20 +48,97 @@
     } else nav()
   }
 
-  if (!special && !nolink && !bounce && !self && !decmd && !global) {
-    if (!ident) throw new Error('broke link')
-    $links = [...$links, ident]
+  const register =id=> {
+    if (reddable) {
+      if (!id) throw new Error('broke link')
+      $links = [...$links, id]
+    }
   }
 
-  onDestroy(()=> {
-    if (!special && !nolink && !bounce && !self && !decmd && !global) {
-      const i = $links.indexOf(ident)
-      $links.splice(i, 1)
-      $links = $links
-    }
-  })
+  const deregister =id=> {
+    if (!id) return
+    const n = $links.indexOf(id)
+    if (n < 0) return
+    $links.splice(n, 1)
+    $links = $links
+  }
 
-  $: klass = (!special && !nolink && !global && !!$linkmap.val && !!$linkmap.val[nstc || uuid]) ? 'missing' : ''
+  const parsenst =()=> {
+    const [n, t] = nst.split('/')
+    space = n || 'main'
+    title = t || 'Home'
+  }
+
+  const trace =()=> {
+    href = $trail[1] || bounce
+  }
+
+  const follow =()=> {
+    uuid = $loc.uuid
+    space = $loc.namespace
+    title = $loc.title
+    special = $loc.special
+    query = $loc.query
+    user = $loc.user
+    cmd = $loc.cmd
+    mkhref()
+  }
+
+  const mkhref =()=> {
+    if (recmd) cmd = recmd
+    if (nolink) href = null
+    else if (uuid) href = `/${uuid.toUpperCase()}`
+    else if (title) {
+      href = `/${space}/${title}`
+    } else if (space) {
+      href = `/${space}`
+    } else if (special == 'content') {
+      href = `/`
+    } else if (special == 'user') {
+      if (user) href = `/~${user}`
+      else {
+        if (!!$haslogin) href = `/~${$session.val.handle}`
+        else href = '/~'
+      }
+    } else if (special) {
+      href = `/CPB/${special}`
+      if (special == 'search' && query) {
+        href = `${href}/${query}`
+      }
+    }
+
+    if (cmd && !decmd) href = `${href}#${cmd}`
+  }
+
+  const mkident =()=> {
+    if (uuid) ident = uuid
+    else if (title) {
+      ident = `${space}:${title}`
+    } else if (space) {
+      ident = space
+    } else ident = null
+    register(ident)
+  }
+
+  $: if (!special && !nolink && !bounce && !self && !decmd && !global) {
+    reddable = true
+  } else {
+    reddable = false
+    deregister(ident)
+  }
+  $: if (bounce && typeof(bounce) != 'string') bounce = '/'
+  $: if (nst) parsenst(nst)
+  else if (self || decmd) follow($loc)
+  else if (bounce) trace($trail)
+  $: mkhref(
+    space, title, uuid, special, cmd,
+    global, nolink, disable, user, query
+  )
+  $: mkident(uuid, space, title)
+
+  onDestroy(()=> deregister(ident))
+
+  $: klass = (!special && !nolink && !global && !!$linkmap.val && !!$linkmap.val[ident]) ? 'missing' : ''
 </script>
 {#if disable}
   <span class="cpblink disabled-link" title="disabled">

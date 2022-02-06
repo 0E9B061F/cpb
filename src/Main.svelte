@@ -46,7 +46,10 @@
 	let draft = writable(null)
 
 	let trail = writable([])
-	$: if ($path != $trail[0]) $trail.unshift($path)
+	$: if ($path != $trail[0]) {
+		$trail.unshift($path)
+		$trail = $trail
+	}
 
 	let creating = writable(false)
 	let editing = writable(false)
@@ -407,6 +410,7 @@
 	}
 
 	const linkupdate =links=> {
+		if (!links.length) return
     const titles = [...new Set(links)].join('+')
     grab('missing', titles)
     .then(res=> $linkmap = res)

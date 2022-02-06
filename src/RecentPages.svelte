@@ -26,7 +26,7 @@
 <FB vert c="recent-pages">
   {#each recents as page}
     <FB zero vert c="recent-page">
-      <FB c="recent-title"><Link space={page.namespace} title={page.title}>{page.title}</Link></FB>
+      <FB c="recent-title"><Link global space={page.namespace} title={page.title}>{page.title}</Link></FB>
       <FB between>
         <FB c="recent-date">{fmt(page.createdAt)}</FB>
         <FB c="recent-user">({page.user.handle})</FB>

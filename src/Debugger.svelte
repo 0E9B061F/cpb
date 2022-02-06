@@ -32,8 +32,11 @@
   const modifiers = getContext('modifiers')
   const contcls = getContext('contcls')
 
-  let tab = 'main'
-  const go =n=> tab = n
+  let tab = localStorage.getItem('debugtab') || 'main'
+  const go =n=> {
+    tab = n
+    localStorage.setItem('debugtab', tab)
+  }
 </script>
 
 <FB>
@@ -84,6 +87,7 @@
 </FT>
 {:else if tab == 'links'}
 <FT lab={tab}>
+  <PP lab="count" val={$links.length}/>
   {#each $links as link}
     <PP val={link}/>
   {/each}

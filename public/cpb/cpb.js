@@ -649,7 +649,7 @@ var app = (function () {
     const { Error: Error_1 } = globals;
     const file$K = "src/Link.svelte";
 
-    // (117:0) {:else}
+    // (160:0) {:else}
     function create_else_block$h(ctx) {
     	let a;
     	let div;
@@ -658,8 +658,8 @@ var app = (function () {
     	let current;
     	let mounted;
     	let dispose;
-    	const default_slot_template = /*#slots*/ ctx[32].default;
-    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[31], null);
+    	const default_slot_template = /*#slots*/ ctx[36].default;
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[35], null);
 
     	const block = {
     		c: function create() {
@@ -668,11 +668,11 @@ var app = (function () {
     			t = space();
     			if (default_slot) default_slot.c();
     			attr_dev(div, "class", "mark");
-    			add_location(div, file$K, 118, 4, 3236);
-    			attr_dev(a, "href", /*href*/ ctx[5]);
+    			add_location(div, file$K, 161, 4, 3921);
+    			attr_dev(a, "href", /*href*/ ctx[4]);
     			attr_dev(a, "title", /*title*/ ctx[0]);
-    			attr_dev(a, "class", a_class_value = "cpblink " + /*klass*/ ctx[6] + " svelte-3b7d80");
-    			add_location(a, file$K, 117, 2, 3155);
+    			attr_dev(a, "class", a_class_value = "cpblink " + /*klass*/ ctx[5] + " svelte-3b7d80");
+    			add_location(a, file$K, 160, 2, 3840);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, a, anchor);
@@ -686,35 +686,35 @@ var app = (function () {
     			current = true;
 
     			if (!mounted) {
-    				dispose = listen_dev(a, "click", prevent_default(/*clicked*/ ctx[14]), false, true, false);
+    				dispose = listen_dev(a, "click", prevent_default(/*clicked*/ ctx[15]), false, true, false);
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
     			if (default_slot) {
-    				if (default_slot.p && (!current || dirty[1] & /*$$scope*/ 1)) {
+    				if (default_slot.p && (!current || dirty[1] & /*$$scope*/ 16)) {
     					update_slot_base(
     						default_slot,
     						default_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[31],
+    						/*$$scope*/ ctx[35],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[31])
-    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[31], dirty, null),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[35])
+    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[35], dirty, null),
     						null
     					);
     				}
     			}
 
-    			if (!current || dirty[0] & /*href*/ 32) {
-    				attr_dev(a, "href", /*href*/ ctx[5]);
+    			if (!current || dirty[0] & /*href*/ 16) {
+    				attr_dev(a, "href", /*href*/ ctx[4]);
     			}
 
     			if (!current || dirty[0] & /*title*/ 1) {
     				attr_dev(a, "title", /*title*/ ctx[0]);
     			}
 
-    			if (!current || dirty[0] & /*klass*/ 64 && a_class_value !== (a_class_value = "cpblink " + /*klass*/ ctx[6] + " svelte-3b7d80")) {
+    			if (!current || dirty[0] & /*klass*/ 32 && a_class_value !== (a_class_value = "cpblink " + /*klass*/ ctx[5] + " svelte-3b7d80")) {
     				attr_dev(a, "class", a_class_value);
     			}
     		},
@@ -739,21 +739,21 @@ var app = (function () {
     		block,
     		id: create_else_block$h.name,
     		type: "else",
-    		source: "(117:0) {:else}",
+    		source: "(160:0) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (112:35) 
+    // (155:35) 
     function create_if_block_2$d(ctx) {
     	let span;
     	let div;
     	let t;
     	let current;
-    	const default_slot_template = /*#slots*/ ctx[32].default;
-    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[31], null);
+    	const default_slot_template = /*#slots*/ ctx[36].default;
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[35], null);
 
     	const block = {
     		c: function create() {
@@ -762,10 +762,10 @@ var app = (function () {
     			t = space();
     			if (default_slot) default_slot.c();
     			attr_dev(div, "class", "mark");
-    			add_location(div, file$K, 113, 4, 3092);
+    			add_location(div, file$K, 156, 4, 3777);
     			attr_dev(span, "class", "cpblink current-link svelte-3b7d80");
     			attr_dev(span, "title", "you are here");
-    			add_location(span, file$K, 112, 2, 3031);
+    			add_location(span, file$K, 155, 2, 3716);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -780,15 +780,15 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (default_slot) {
-    				if (default_slot.p && (!current || dirty[1] & /*$$scope*/ 1)) {
+    				if (default_slot.p && (!current || dirty[1] & /*$$scope*/ 16)) {
     					update_slot_base(
     						default_slot,
     						default_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[31],
+    						/*$$scope*/ ctx[35],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[31])
-    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[31], dirty, null),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[35])
+    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[35], dirty, null),
     						null
     					);
     				}
@@ -813,14 +813,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2$d.name,
     		type: "if",
-    		source: "(112:35) ",
+    		source: "(155:35) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (105:17) 
+    // (148:17) 
     function create_if_block_1$l(ctx) {
     	let span;
     	let svg;
@@ -829,8 +829,8 @@ var app = (function () {
     	let current;
     	let mounted;
     	let dispose;
-    	const default_slot_template = /*#slots*/ ctx[32].default;
-    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[31], null);
+    	const default_slot_template = /*#slots*/ ctx[36].default;
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[35], null);
 
     	const block = {
     		c: function create() {
@@ -842,14 +842,14 @@ var app = (function () {
     			attr_dev(circle, "cx", "3");
     			attr_dev(circle, "cy", "3");
     			attr_dev(circle, "r", "2.5");
-    			add_location(circle, file$K, 107, 6, 2922);
+    			add_location(circle, file$K, 150, 6, 3607);
     			attr_dev(svg, "class", "mark");
     			attr_dev(svg, "viewBox", "0 0 6 6");
     			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
-    			add_location(svg, file$K, 106, 4, 2844);
+    			add_location(svg, file$K, 149, 4, 3529);
     			attr_dev(span, "class", "cpblink nolink svelte-3b7d80");
     			attr_dev(span, "title", /*title*/ ctx[0]);
-    			add_location(span, file$K, 105, 2, 2783);
+    			add_location(span, file$K, 148, 2, 3468);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -864,21 +864,21 @@ var app = (function () {
     			current = true;
 
     			if (!mounted) {
-    				dispose = listen_dev(span, "click", /*clicked*/ ctx[14], false, false, false);
+    				dispose = listen_dev(span, "click", /*clicked*/ ctx[15], false, false, false);
     				mounted = true;
     			}
     		},
     		p: function update(ctx, dirty) {
     			if (default_slot) {
-    				if (default_slot.p && (!current || dirty[1] & /*$$scope*/ 1)) {
+    				if (default_slot.p && (!current || dirty[1] & /*$$scope*/ 16)) {
     					update_slot_base(
     						default_slot,
     						default_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[31],
+    						/*$$scope*/ ctx[35],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[31])
-    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[31], dirty, null),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[35])
+    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[35], dirty, null),
     						null
     					);
     				}
@@ -909,21 +909,21 @@ var app = (function () {
     		block,
     		id: create_if_block_1$l.name,
     		type: "if",
-    		source: "(105:17) ",
+    		source: "(148:17) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (100:0) {#if disable}
+    // (143:0) {#if disable}
     function create_if_block$y(ctx) {
     	let span;
     	let div;
     	let t;
     	let current;
-    	const default_slot_template = /*#slots*/ ctx[32].default;
-    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[31], null);
+    	const default_slot_template = /*#slots*/ ctx[36].default;
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[35], null);
 
     	const block = {
     		c: function create() {
@@ -932,10 +932,10 @@ var app = (function () {
     			t = space();
     			if (default_slot) default_slot.c();
     			attr_dev(div, "class", "mark");
-    			add_location(div, file$K, 101, 4, 2710);
+    			add_location(div, file$K, 144, 4, 3395);
     			attr_dev(span, "class", "cpblink disabled-link svelte-3b7d80");
     			attr_dev(span, "title", "disabled");
-    			add_location(span, file$K, 100, 2, 2652);
+    			add_location(span, file$K, 143, 2, 3337);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -950,15 +950,15 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (default_slot) {
-    				if (default_slot.p && (!current || dirty[1] & /*$$scope*/ 1)) {
+    				if (default_slot.p && (!current || dirty[1] & /*$$scope*/ 16)) {
     					update_slot_base(
     						default_slot,
     						default_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[31],
+    						/*$$scope*/ ctx[35],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[31])
-    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[31], dirty, null),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[35])
+    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[35], dirty, null),
     						null
     					);
     				}
@@ -983,7 +983,7 @@ var app = (function () {
     		block,
     		id: create_if_block$y.name,
     		type: "if",
-    		source: "(100:0) {#if disable}",
+    		source: "(143:0) {#if disable}",
     		ctx
     	});
 
@@ -1001,7 +1001,7 @@ var app = (function () {
     	function select_block_type(ctx, dirty) {
     		if (/*disable*/ ctx[3]) return 0;
     		if (/*nolink*/ ctx[2]) return 1;
-    		if (!/*global*/ ctx[1] && /*$path*/ ctx[4] == /*href*/ ctx[5]) return 2;
+    		if (!/*global*/ ctx[1] && /*$path*/ ctx[6] == /*href*/ ctx[4]) return 2;
     		return 3;
     	}
 
@@ -1077,36 +1077,40 @@ var app = (function () {
     function instance$16($$self, $$props, $$invalidate) {
     	let klass;
     	let $linkmap;
+    	let $trail;
+    	let $loc;
+    	let $session;
+    	let $haslogin;
     	let $links;
     	let $gs;
     	let $path;
-    	let $session;
-    	let $haslogin;
-    	let $trail;
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Link', slots, ['default']);
     	const gs = getContext('gs');
     	validate_store(gs, 'gs');
-    	component_subscribe($$self, gs, value => $$invalidate(30, $gs = value));
+    	component_subscribe($$self, gs, value => $$invalidate(41, $gs = value));
     	const trail = getContext('trail');
     	validate_store(trail, 'trail');
-    	component_subscribe($$self, trail, value => $$invalidate(37, $trail = value));
+    	component_subscribe($$self, trail, value => $$invalidate(33, $trail = value));
     	const path = getContext('path');
     	validate_store(path, 'path');
-    	component_subscribe($$self, path, value => $$invalidate(4, $path = value));
+    	component_subscribe($$self, path, value => $$invalidate(6, $path = value));
     	const links = getContext('links');
     	validate_store(links, 'links');
-    	component_subscribe($$self, links, value => $$invalidate(34, $links = value));
+    	component_subscribe($$self, links, value => $$invalidate(40, $links = value));
     	const linkmap = getContext('linkmap');
     	validate_store(linkmap, 'linkmap');
-    	component_subscribe($$self, linkmap, value => $$invalidate(29, $linkmap = value));
+    	component_subscribe($$self, linkmap, value => $$invalidate(32, $linkmap = value));
     	const loading = getContext('loading');
     	const haslogin = getContext('haslogin');
     	validate_store(haslogin, 'haslogin');
-    	component_subscribe($$self, haslogin, value => $$invalidate(36, $haslogin = value));
+    	component_subscribe($$self, haslogin, value => $$invalidate(39, $haslogin = value));
     	const session = getContext('session');
     	validate_store(session, 'session');
-    	component_subscribe($$self, session, value => $$invalidate(35, $session = value));
+    	component_subscribe($$self, session, value => $$invalidate(38, $session = value));
+    	const loc = getContext('loc');
+    	validate_store(loc, 'loc');
+    	component_subscribe($$self, loc, value => $$invalidate(34, $loc = value));
     	let { space = null } = $$props;
     	let { title = null } = $$props;
     	let { nst = null } = $$props;
@@ -1119,43 +1123,16 @@ var app = (function () {
     	let { nolink = false } = $$props;
     	let { self = false } = $$props;
     	let { decmd = false } = $$props;
+    	let { recmd = false } = $$props;
     	let { cond = null } = $$props;
     	let { does = null } = $$props;
     	let { disable = false } = $$props;
     	let { marked = false } = $$props;
     	let { user = false } = $$props;
     	let { query = null } = $$props;
-    	if (bounce && typeof bounce != 'string') bounce = '/';
     	let href;
     	let ident;
-
-    	if (self || decmd || nolink) href = null; else if (bounce) href = $trail[1] || bounce; else if (special) {
-    		if (special == 'user') {
-    			if (user) href = `/~${user}`; else {
-    				if (!!$haslogin) href = `/~${$session.val.handle}`; else href = '/~';
-    			}
-    		} else href = `/CPB/${special}`;
-
-    		if (special == 'search' && query) {
-    			href = `${href}/${query}`;
-    		}
-    	} else if (uuid) href = `/${uuid.toUpperCase()}`; else if (nst) {
-    		const p = nst.split('/');
-    		const n = p[0];
-    		const t = p[1];
-    		space = n || 'main';
-    		title = t || 'Home';
-    		if (t) href = `/${n}/${t}`; else href = `/${n}`;
-    	} else {
-    		if (!space) space = 'main';
-    		if (!title) title = 'Home';
-    		nst = `${space}/${title}`;
-    		href = `/${space}/${title}`;
-    	}
-
-    	const hash = cmd ? `#${cmd}` : '';
-    	const nstc = nst ? nst.replace('/', ':') : null;
-    	ident = nstc || uuid;
+    	let reddable = false;
 
     	const goto = p => {
     		if (does) does();
@@ -1174,18 +1151,77 @@ var app = (function () {
     		} else nav();
     	};
 
-    	if (!special && !nolink && !bounce && !self && !decmd && !global) {
-    		if (!ident) throw new Error('broke link');
-    		set_store_value(links, $links = [...$links, ident], $links);
-    	}
-
-    	onDestroy(() => {
-    		if (!special && !nolink && !bounce && !self && !decmd && !global) {
-    			const i = $links.indexOf(ident);
-    			$links.splice(i, 1);
-    			links.set($links);
+    	const register = id => {
+    		if (reddable) {
+    			if (!id) throw new Error('broke link');
+    			set_store_value(links, $links = [...$links, id], $links);
     		}
-    	});
+    	};
+
+    	const deregister = id => {
+    		if (!id) return;
+    		const n = $links.indexOf(id);
+    		if (n < 0) return;
+    		$links.splice(n, 1);
+    		links.set($links);
+    	};
+
+    	const parsenst = () => {
+    		const [n, t] = nst.split('/');
+    		$$invalidate(16, space = n || 'main');
+    		$$invalidate(0, title = t || 'Home');
+    	};
+
+    	const trace = () => {
+    		$$invalidate(4, href = $trail[1] || bounce);
+    	};
+
+    	const follow = () => {
+    		$$invalidate(17, uuid = $loc.uuid);
+    		$$invalidate(16, space = $loc.namespace);
+    		$$invalidate(0, title = $loc.title);
+    		$$invalidate(18, special = $loc.special);
+    		$$invalidate(22, query = $loc.query);
+    		$$invalidate(21, user = $loc.user);
+    		$$invalidate(19, cmd = $loc.cmd);
+    		mkhref();
+    	};
+
+    	const mkhref = () => {
+    		if (recmd) $$invalidate(19, cmd = recmd);
+
+    		if (nolink) $$invalidate(4, href = null); else if (uuid) $$invalidate(4, href = `/${uuid.toUpperCase()}`); else if (title) {
+    			$$invalidate(4, href = `/${space}/${title}`);
+    		} else if (space) {
+    			$$invalidate(4, href = `/${space}`);
+    		} else if (special == 'content') {
+    			$$invalidate(4, href = `/`);
+    		} else if (special == 'user') {
+    			if (user) $$invalidate(4, href = `/~${user}`); else {
+    				if (!!$haslogin) $$invalidate(4, href = `/~${$session.val.handle}`); else $$invalidate(4, href = '/~');
+    			}
+    		} else if (special) {
+    			$$invalidate(4, href = `/CPB/${special}`);
+
+    			if (special == 'search' && query) {
+    				$$invalidate(4, href = `${href}/${query}`);
+    			}
+    		}
+
+    		if (cmd && !decmd) $$invalidate(4, href = `${href}#${cmd}`);
+    	};
+
+    	const mkident = () => {
+    		if (uuid) $$invalidate(31, ident = uuid); else if (title) {
+    			$$invalidate(31, ident = `${space}:${title}`);
+    		} else if (space) {
+    			$$invalidate(31, ident = space);
+    		} else $$invalidate(31, ident = null);
+
+    		register(ident);
+    	};
+
+    	onDestroy(() => deregister(ident));
 
     	const writable_props = [
     		'space',
@@ -1200,6 +1236,7 @@ var app = (function () {
     		'nolink',
     		'self',
     		'decmd',
+    		'recmd',
     		'cond',
     		'does',
     		'disable',
@@ -1213,25 +1250,26 @@ var app = (function () {
     	});
 
     	$$self.$$set = $$props => {
-    		if ('space' in $$props) $$invalidate(15, space = $$props.space);
+    		if ('space' in $$props) $$invalidate(16, space = $$props.space);
     		if ('title' in $$props) $$invalidate(0, title = $$props.title);
-    		if ('nst' in $$props) $$invalidate(16, nst = $$props.nst);
-    		if ('uuid' in $$props) $$invalidate(18, uuid = $$props.uuid);
-    		if ('special' in $$props) $$invalidate(19, special = $$props.special);
-    		if ('cmd' in $$props) $$invalidate(20, cmd = $$props.cmd);
-    		if ('first' in $$props) $$invalidate(21, first = $$props.first);
+    		if ('nst' in $$props) $$invalidate(23, nst = $$props.nst);
+    		if ('uuid' in $$props) $$invalidate(17, uuid = $$props.uuid);
+    		if ('special' in $$props) $$invalidate(18, special = $$props.special);
+    		if ('cmd' in $$props) $$invalidate(19, cmd = $$props.cmd);
+    		if ('first' in $$props) $$invalidate(24, first = $$props.first);
     		if ('global' in $$props) $$invalidate(1, global = $$props.global);
-    		if ('bounce' in $$props) $$invalidate(17, bounce = $$props.bounce);
+    		if ('bounce' in $$props) $$invalidate(20, bounce = $$props.bounce);
     		if ('nolink' in $$props) $$invalidate(2, nolink = $$props.nolink);
-    		if ('self' in $$props) $$invalidate(22, self = $$props.self);
-    		if ('decmd' in $$props) $$invalidate(23, decmd = $$props.decmd);
-    		if ('cond' in $$props) $$invalidate(24, cond = $$props.cond);
-    		if ('does' in $$props) $$invalidate(25, does = $$props.does);
+    		if ('self' in $$props) $$invalidate(25, self = $$props.self);
+    		if ('decmd' in $$props) $$invalidate(26, decmd = $$props.decmd);
+    		if ('recmd' in $$props) $$invalidate(27, recmd = $$props.recmd);
+    		if ('cond' in $$props) $$invalidate(28, cond = $$props.cond);
+    		if ('does' in $$props) $$invalidate(29, does = $$props.does);
     		if ('disable' in $$props) $$invalidate(3, disable = $$props.disable);
-    		if ('marked' in $$props) $$invalidate(26, marked = $$props.marked);
-    		if ('user' in $$props) $$invalidate(27, user = $$props.user);
-    		if ('query' in $$props) $$invalidate(28, query = $$props.query);
-    		if ('$$scope' in $$props) $$invalidate(31, $$scope = $$props.$$scope);
+    		if ('marked' in $$props) $$invalidate(30, marked = $$props.marked);
+    		if ('user' in $$props) $$invalidate(21, user = $$props.user);
+    		if ('query' in $$props) $$invalidate(22, query = $$props.query);
+    		if ('$$scope' in $$props) $$invalidate(35, $$scope = $$props.$$scope);
     	};
 
     	$$self.$capture_state = () => ({
@@ -1245,6 +1283,7 @@ var app = (function () {
     		loading,
     		haslogin,
     		session,
+    		loc,
     		space,
     		title,
     		nst,
@@ -1257,6 +1296,7 @@ var app = (function () {
     		nolink,
     		self,
     		decmd,
+    		recmd,
     		cond,
     		does,
     		disable,
@@ -1265,43 +1305,52 @@ var app = (function () {
     		query,
     		href,
     		ident,
-    		hash,
-    		nstc,
+    		reddable,
     		goto,
     		nav,
     		clicked,
+    		register,
+    		deregister,
+    		parsenst,
+    		trace,
+    		follow,
+    		mkhref,
+    		mkident,
     		klass,
     		$linkmap,
-    		$links,
-    		$gs,
-    		$path,
+    		$trail,
+    		$loc,
     		$session,
     		$haslogin,
-    		$trail
+    		$links,
+    		$gs,
+    		$path
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('space' in $$props) $$invalidate(15, space = $$props.space);
+    		if ('space' in $$props) $$invalidate(16, space = $$props.space);
     		if ('title' in $$props) $$invalidate(0, title = $$props.title);
-    		if ('nst' in $$props) $$invalidate(16, nst = $$props.nst);
-    		if ('uuid' in $$props) $$invalidate(18, uuid = $$props.uuid);
-    		if ('special' in $$props) $$invalidate(19, special = $$props.special);
-    		if ('cmd' in $$props) $$invalidate(20, cmd = $$props.cmd);
-    		if ('first' in $$props) $$invalidate(21, first = $$props.first);
+    		if ('nst' in $$props) $$invalidate(23, nst = $$props.nst);
+    		if ('uuid' in $$props) $$invalidate(17, uuid = $$props.uuid);
+    		if ('special' in $$props) $$invalidate(18, special = $$props.special);
+    		if ('cmd' in $$props) $$invalidate(19, cmd = $$props.cmd);
+    		if ('first' in $$props) $$invalidate(24, first = $$props.first);
     		if ('global' in $$props) $$invalidate(1, global = $$props.global);
-    		if ('bounce' in $$props) $$invalidate(17, bounce = $$props.bounce);
+    		if ('bounce' in $$props) $$invalidate(20, bounce = $$props.bounce);
     		if ('nolink' in $$props) $$invalidate(2, nolink = $$props.nolink);
-    		if ('self' in $$props) $$invalidate(22, self = $$props.self);
-    		if ('decmd' in $$props) $$invalidate(23, decmd = $$props.decmd);
-    		if ('cond' in $$props) $$invalidate(24, cond = $$props.cond);
-    		if ('does' in $$props) $$invalidate(25, does = $$props.does);
+    		if ('self' in $$props) $$invalidate(25, self = $$props.self);
+    		if ('decmd' in $$props) $$invalidate(26, decmd = $$props.decmd);
+    		if ('recmd' in $$props) $$invalidate(27, recmd = $$props.recmd);
+    		if ('cond' in $$props) $$invalidate(28, cond = $$props.cond);
+    		if ('does' in $$props) $$invalidate(29, does = $$props.does);
     		if ('disable' in $$props) $$invalidate(3, disable = $$props.disable);
-    		if ('marked' in $$props) $$invalidate(26, marked = $$props.marked);
-    		if ('user' in $$props) $$invalidate(27, user = $$props.user);
-    		if ('query' in $$props) $$invalidate(28, query = $$props.query);
-    		if ('href' in $$props) $$invalidate(5, href = $$props.href);
-    		if ('ident' in $$props) ident = $$props.ident;
-    		if ('klass' in $$props) $$invalidate(6, klass = $$props.klass);
+    		if ('marked' in $$props) $$invalidate(30, marked = $$props.marked);
+    		if ('user' in $$props) $$invalidate(21, user = $$props.user);
+    		if ('query' in $$props) $$invalidate(22, query = $$props.query);
+    		if ('href' in $$props) $$invalidate(4, href = $$props.href);
+    		if ('ident' in $$props) $$invalidate(31, ident = $$props.ident);
+    		if ('reddable' in $$props) reddable = $$props.reddable;
+    		if ('klass' in $$props) $$invalidate(5, klass = $$props.klass);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -1309,12 +1358,33 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty[0] & /*self, $gs, $path, decmd, href*/ 1086324784) {
-    			if (self) $$invalidate(5, href = $gs.bare($path) + hash); else if (decmd) $$invalidate(5, href = $gs.bare($path)); else $$invalidate(5, href += hash);
+    		if ($$self.$$.dirty[0] & /*bounce*/ 1048576) {
+    			if (bounce && typeof bounce != 'string') $$invalidate(20, bounce = '/');
     		}
 
-    		if ($$self.$$.dirty[0] & /*special, nolink, global, $linkmap, uuid*/ 537657350) {
-    			$$invalidate(6, klass = !special && !nolink && !global && !!$linkmap.val && !!$linkmap.val[nstc || uuid]
+    		if ($$self.$$.dirty[0] & /*special, nolink, bounce, self, decmd, global*/ 101974022 | $$self.$$.dirty[1] & /*ident*/ 1) {
+    			if (!special && !nolink && !bounce && !self && !decmd && !global) {
+    				reddable = true;
+    			} else {
+    				reddable = false;
+    				deregister(ident);
+    			}
+    		}
+
+    		if ($$self.$$.dirty[0] & /*nst, self, decmd, bounce*/ 110100480 | $$self.$$.dirty[1] & /*$loc, $trail*/ 12) {
+    			if (nst) parsenst(); else if (self || decmd) follow(); else if (bounce) trace();
+    		}
+
+    		if ($$self.$$.dirty[0] & /*space, title, uuid, special, cmd, global, nolink, disable, user, query*/ 7274511) {
+    			mkhref();
+    		}
+
+    		if ($$self.$$.dirty[0] & /*uuid, space, title*/ 196609) {
+    			mkident();
+    		}
+
+    		if ($$self.$$.dirty[0] & /*special, nolink, global*/ 262150 | $$self.$$.dirty[1] & /*$linkmap, ident*/ 3) {
+    			$$invalidate(5, klass = !special && !nolink && !global && !!$linkmap.val && !!$linkmap.val[ident]
     			? 'missing'
     			: '');
     		}
@@ -1325,9 +1395,9 @@ var app = (function () {
     		global,
     		nolink,
     		disable,
-    		$path,
     		href,
     		klass,
+    		$path,
     		gs,
     		trail,
     		path,
@@ -1335,23 +1405,27 @@ var app = (function () {
     		linkmap,
     		haslogin,
     		session,
+    		loc,
     		clicked,
     		space,
-    		nst,
-    		bounce,
     		uuid,
     		special,
     		cmd,
+    		bounce,
+    		user,
+    		query,
+    		nst,
     		first,
     		self,
     		decmd,
+    		recmd,
     		cond,
     		does,
     		marked,
-    		user,
-    		query,
+    		ident,
     		$linkmap,
-    		$gs,
+    		$trail,
+    		$loc,
     		$$scope,
     		slots
     	];
@@ -1368,24 +1442,25 @@ var app = (function () {
     			create_fragment$16,
     			safe_not_equal,
     			{
-    				space: 15,
+    				space: 16,
     				title: 0,
-    				nst: 16,
-    				uuid: 18,
-    				special: 19,
-    				cmd: 20,
-    				first: 21,
+    				nst: 23,
+    				uuid: 17,
+    				special: 18,
+    				cmd: 19,
+    				first: 24,
     				global: 1,
-    				bounce: 17,
+    				bounce: 20,
     				nolink: 2,
-    				self: 22,
-    				decmd: 23,
-    				cond: 24,
-    				does: 25,
+    				self: 25,
+    				decmd: 26,
+    				recmd: 27,
+    				cond: 28,
+    				does: 29,
     				disable: 3,
-    				marked: 26,
-    				user: 27,
-    				query: 28
+    				marked: 30,
+    				user: 21,
+    				query: 22
     			},
     			null,
     			[-1, -1]
@@ -1492,6 +1567,14 @@ var app = (function () {
     	}
 
     	set decmd(value) {
+    		throw new Error_1("<Link>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get recmd() {
+    		throw new Error_1("<Link>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set recmd(value) {
     		throw new Error_1("<Link>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
@@ -3864,7 +3947,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (40:2) <Link nolink does={()=> go('main')} disable={tab == 'main'}>
+    // (43:2) <Link nolink does={()=> go('main')} disable={tab == 'main'}>
     function create_default_slot_14$1(ctx) {
     	let t;
 
@@ -3884,14 +3967,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_14$1.name,
     		type: "slot",
-    		source: "(40:2) <Link nolink does={()=> go('main')} disable={tab == 'main'}>",
+    		source: "(43:2) <Link nolink does={()=> go('main')} disable={tab == 'main'}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (41:2) <Link nolink does={()=> go('rc')} disable={tab == 'rc'}>
+    // (44:2) <Link nolink does={()=> go('rc')} disable={tab == 'rc'}>
     function create_default_slot_13$1(ctx) {
     	let t;
 
@@ -3911,14 +3994,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_13$1.name,
     		type: "slot",
-    		source: "(41:2) <Link nolink does={()=> go('rc')} disable={tab == 'rc'}>",
+    		source: "(44:2) <Link nolink does={()=> go('rc')} disable={tab == 'rc'}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (42:2) <Link nolink does={()=> go('uc')} disable={tab == 'uc'}>
+    // (45:2) <Link nolink does={()=> go('uc')} disable={tab == 'uc'}>
     function create_default_slot_12$1(ctx) {
     	let t;
 
@@ -3938,14 +4021,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_12$1.name,
     		type: "slot",
-    		source: "(42:2) <Link nolink does={()=> go('uc')} disable={tab == 'uc'}>",
+    		source: "(45:2) <Link nolink does={()=> go('uc')} disable={tab == 'uc'}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (43:2) <Link nolink does={()=> go('links')} disable={tab == 'links'}>
+    // (46:2) <Link nolink does={()=> go('links')} disable={tab == 'links'}>
     function create_default_slot_11$3(ctx) {
     	let t;
 
@@ -3965,14 +4048,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_11$3.name,
     		type: "slot",
-    		source: "(43:2) <Link nolink does={()=> go('links')} disable={tab == 'links'}>",
+    		source: "(46:2) <Link nolink does={()=> go('links')} disable={tab == 'links'}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (44:2) <Link nolink does={()=> go('linkmap')} disable={tab == 'linkmap'}>
+    // (47:2) <Link nolink does={()=> go('linkmap')} disable={tab == 'linkmap'}>
     function create_default_slot_10$4(ctx) {
     	let t;
 
@@ -3992,14 +4075,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_10$4.name,
     		type: "slot",
-    		source: "(44:2) <Link nolink does={()=> go('linkmap')} disable={tab == 'linkmap'}>",
+    		source: "(47:2) <Link nolink does={()=> go('linkmap')} disable={tab == 'linkmap'}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (45:2) <Link nolink does={()=> go('page')} disable={tab == 'page'}>
+    // (48:2) <Link nolink does={()=> go('page')} disable={tab == 'page'}>
     function create_default_slot_9$6(ctx) {
     	let t;
 
@@ -4019,14 +4102,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_9$6.name,
     		type: "slot",
-    		source: "(45:2) <Link nolink does={()=> go('page')} disable={tab == 'page'}>",
+    		source: "(48:2) <Link nolink does={()=> go('page')} disable={tab == 'page'}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (39:0) <FB>
+    // (42:0) <FB>
     function create_default_slot_8$6(ctx) {
     	let link0;
     	let t0;
@@ -4223,14 +4306,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_8$6.name,
     		type: "slot",
-    		source: "(39:0) <FB>",
+    		source: "(42:0) <FB>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (97:24) 
+    // (101:24) 
     function create_if_block_5$5(ctx) {
     	let ft;
     	let current;
@@ -4280,14 +4363,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5$5.name,
     		type: "if",
-    		source: "(97:24) ",
+    		source: "(101:24) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (91:27) 
+    // (95:27) 
     function create_if_block_4$6(ctx) {
     	let ft;
     	let current;
@@ -4337,14 +4420,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4$6.name,
     		type: "if",
-    		source: "(91:27) ",
+    		source: "(95:27) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (85:25) 
+    // (88:25) 
     function create_if_block_3$9(ctx) {
     	let ft;
     	let current;
@@ -4352,7 +4435,7 @@ var app = (function () {
     	ft = new FT({
     			props: {
     				lab: /*tab*/ ctx[0],
-    				$$slots: { default: [create_default_slot_5$b] },
+    				$$slots: { default: [create_default_slot_5$c] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -4394,14 +4477,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3$9.name,
     		type: "if",
-    		source: "(85:25) ",
+    		source: "(88:25) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (79:22) 
+    // (82:22) 
     function create_if_block_2$c(ctx) {
     	let ft;
     	let current;
@@ -4451,14 +4534,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2$c.name,
     		type: "if",
-    		source: "(79:22) ",
+    		source: "(82:22) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (73:22) 
+    // (76:22) 
     function create_if_block_1$j(ctx) {
     	let ft;
     	let current;
@@ -4508,14 +4591,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$j.name,
     		type: "if",
-    		source: "(73:22) ",
+    		source: "(76:22) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (47:0) {#if tab == 'main'}
+    // (50:0) {#if tab == 'main'}
     function create_if_block$s(ctx) {
     	let ft;
     	let current;
@@ -4565,14 +4648,14 @@ var app = (function () {
     		block,
     		id: create_if_block$s.name,
     		type: "if",
-    		source: "(47:0) {#if tab == 'main'}",
+    		source: "(50:0) {#if tab == 'main'}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (99:2) {#if !!$page}
+    // (103:2) {#if !!$page}
     function create_if_block_6$2(ctx) {
     	let each_1_anchor;
     	let current;
@@ -4661,14 +4744,14 @@ var app = (function () {
     		block,
     		id: create_if_block_6$2.name,
     		type: "if",
-    		source: "(99:2) {#if !!$page}",
+    		source: "(103:2) {#if !!$page}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (109:4) {:else}
+    // (113:4) {:else}
     function create_else_block_1$5(ctx) {
     	let pp;
     	let current;
@@ -4713,14 +4796,14 @@ var app = (function () {
     		block,
     		id: create_else_block_1$5.name,
     		type: "else",
-    		source: "(109:4) {:else}",
+    		source: "(113:4) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (101:4) {#if resp[0] == 'val'}
+    // (105:4) {#if resp[0] == 'val'}
     function create_if_block_7$1(ctx) {
     	let each_1_anchor;
     	let current;
@@ -4809,14 +4892,14 @@ var app = (function () {
     		block,
     		id: create_if_block_7$1.name,
     		type: "if",
-    		source: "(101:4) {#if resp[0] == 'val'}",
+    		source: "(105:4) {#if resp[0] == 'val'}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (105:8) {:else}
+    // (109:8) {:else}
     function create_else_block$f(ctx) {
     	let pp;
     	let current;
@@ -4861,14 +4944,14 @@ var app = (function () {
     		block,
     		id: create_else_block$f.name,
     		type: "else",
-    		source: "(105:8) {:else}",
+    		source: "(109:8) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (103:8) {#if pair[0] == 'body'}
+    // (107:8) {#if pair[0] == 'body'}
     function create_if_block_8$1(ctx) {
     	let pp;
     	let current;
@@ -4913,14 +4996,14 @@ var app = (function () {
     		block,
     		id: create_if_block_8$1.name,
     		type: "if",
-    		source: "(103:8) {#if pair[0] == 'body'}",
+    		source: "(107:8) {#if pair[0] == 'body'}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (102:6) {#each Object.entries(resp[1]) as pair}
+    // (106:6) {#each Object.entries(resp[1]) as pair}
     function create_each_block_5$2(ctx) {
     	let current_block_type_index;
     	let if_block;
@@ -4993,14 +5076,14 @@ var app = (function () {
     		block,
     		id: create_each_block_5$2.name,
     		type: "each",
-    		source: "(102:6) {#each Object.entries(resp[1]) as pair}",
+    		source: "(106:6) {#each Object.entries(resp[1]) as pair}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (100:2) {#each Object.entries($page) as resp}
+    // (104:2) {#each Object.entries($page) as resp}
     function create_each_block_4$2(ctx) {
     	let current_block_type_index;
     	let if_block;
@@ -5073,14 +5156,14 @@ var app = (function () {
     		block,
     		id: create_each_block_4$2.name,
     		type: "each",
-    		source: "(100:2) {#each Object.entries($page) as resp}",
+    		source: "(104:2) {#each Object.entries($page) as resp}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (98:0) <FT lab={tab}>
+    // (102:0) <FT lab={tab}>
     function create_default_slot_7$7(ctx) {
     	let if_block_anchor;
     	let current;
@@ -5139,14 +5222,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_7$7.name,
     		type: "slot",
-    		source: "(98:0) <FT lab={tab}>",
+    		source: "(102:0) <FT lab={tab}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (93:2) {#each Object.entries($linkmap) as link}
+    // (97:2) {#each Object.entries($linkmap) as link}
     function create_each_block_3$2(ctx) {
     	let pp;
     	let current;
@@ -5191,14 +5274,14 @@ var app = (function () {
     		block,
     		id: create_each_block_3$2.name,
     		type: "each",
-    		source: "(93:2) {#each Object.entries($linkmap) as link}",
+    		source: "(97:2) {#each Object.entries($linkmap) as link}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (92:0) <FT lab={tab}>
+    // (96:0) <FT lab={tab}>
     function create_default_slot_6$9(ctx) {
     	let each_1_anchor;
     	let current;
@@ -5287,14 +5370,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_6$9.name,
     		type: "slot",
-    		source: "(92:0) <FT lab={tab}>",
+    		source: "(96:0) <FT lab={tab}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (87:2) {#each $links as link}
+    // (91:2) {#each $links as link}
     function create_each_block_2$2(ctx) {
     	let pp;
     	let current;
@@ -5335,17 +5418,28 @@ var app = (function () {
     		block,
     		id: create_each_block_2$2.name,
     		type: "each",
-    		source: "(87:2) {#each $links as link}",
+    		source: "(91:2) {#each $links as link}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (86:0) <FT lab={tab}>
-    function create_default_slot_5$b(ctx) {
+    // (89:0) <FT lab={tab}>
+    function create_default_slot_5$c(ctx) {
+    	let pp;
+    	let t;
     	let each_1_anchor;
     	let current;
+
+    	pp = new PP({
+    			props: {
+    				lab: "count",
+    				val: /*$links*/ ctx[20].length
+    			},
+    			$$inline: true
+    		});
+
     	let each_value_2 = /*$links*/ ctx[20];
     	validate_each_argument(each_value_2);
     	let each_blocks = [];
@@ -5360,6 +5454,9 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
+    			create_component(pp.$$.fragment);
+    			t = space();
+
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
@@ -5367,6 +5464,9 @@ var app = (function () {
     			each_1_anchor = empty();
     		},
     		m: function mount(target, anchor) {
+    			mount_component(pp, target, anchor);
+    			insert_dev(target, t, anchor);
+
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].m(target, anchor);
     			}
@@ -5375,6 +5475,10 @@ var app = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
+    			const pp_changes = {};
+    			if (dirty[0] & /*$links*/ 1048576) pp_changes.val = /*$links*/ ctx[20].length;
+    			pp.$set(pp_changes);
+
     			if (dirty[0] & /*$links*/ 1048576) {
     				each_value_2 = /*$links*/ ctx[20];
     				validate_each_argument(each_value_2);
@@ -5405,6 +5509,7 @@ var app = (function () {
     		},
     		i: function intro(local) {
     			if (current) return;
+    			transition_in(pp.$$.fragment, local);
 
     			for (let i = 0; i < each_value_2.length; i += 1) {
     				transition_in(each_blocks[i]);
@@ -5413,6 +5518,7 @@ var app = (function () {
     			current = true;
     		},
     		o: function outro(local) {
+    			transition_out(pp.$$.fragment, local);
     			each_blocks = each_blocks.filter(Boolean);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
@@ -5422,6 +5528,8 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
+    			destroy_component(pp, detaching);
+    			if (detaching) detach_dev(t);
     			destroy_each(each_blocks, detaching);
     			if (detaching) detach_dev(each_1_anchor);
     		}
@@ -5429,16 +5537,16 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_5$b.name,
+    		id: create_default_slot_5$c.name,
     		type: "slot",
-    		source: "(86:0) <FT lab={tab}>",
+    		source: "(89:0) <FT lab={tab}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (81:2) {#each Object.entries($uc) as conf}
+    // (84:2) {#each Object.entries($uc) as conf}
     function create_each_block_1$2(ctx) {
     	let pp;
     	let current;
@@ -5483,14 +5591,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1$2.name,
     		type: "each",
-    		source: "(81:2) {#each Object.entries($uc) as conf}",
+    		source: "(84:2) {#each Object.entries($uc) as conf}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (80:0) <FT lab={tab}>
+    // (83:0) <FT lab={tab}>
     function create_default_slot_4$c(ctx) {
     	let each_1_anchor;
     	let current;
@@ -5579,14 +5687,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_4$c.name,
     		type: "slot",
-    		source: "(80:0) <FT lab={tab}>",
+    		source: "(83:0) <FT lab={tab}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (75:2) {#each Object.entries($rc) as conf}
+    // (78:2) {#each Object.entries($rc) as conf}
     function create_each_block$5(ctx) {
     	let pp;
     	let current;
@@ -5631,14 +5739,14 @@ var app = (function () {
     		block,
     		id: create_each_block$5.name,
     		type: "each",
-    		source: "(75:2) {#each Object.entries($rc) as conf}",
+    		source: "(78:2) {#each Object.entries($rc) as conf}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (74:0) <FT lab={tab}>
+    // (77:0) <FT lab={tab}>
     function create_default_slot_3$f(ctx) {
     	let each_1_anchor;
     	let current;
@@ -5727,14 +5835,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3$f.name,
     		type: "slot",
-    		source: "(74:0) <FT lab={tab}>",
+    		source: "(77:0) <FT lab={tab}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (60:2) <FR lab="message">
+    // (63:2) <FR lab="message">
     function create_default_slot_2$h(ctx) {
     	let pp0;
     	let t;
@@ -5799,14 +5907,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2$h.name,
     		type: "slot",
-    		source: "(60:2) <FR lab=\\\"message\\\">",
+    		source: "(63:2) <FR lab=\\\"message\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (67:2) <FR lab="modifiers">
+    // (70:2) <FR lab="modifiers">
     function create_default_slot_1$k(ctx) {
     	let pp0;
     	let t0;
@@ -5892,14 +6000,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$k.name,
     		type: "slot",
-    		source: "(67:2) <FR lab=\\\"modifiers\\\">",
+    		source: "(70:2) <FR lab=\\\"modifiers\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (48:0) <FT lab={tab}>
+    // (51:0) <FT lab={tab}>
     function create_default_slot$t(ctx) {
     	let pp0;
     	let t0;
@@ -6243,7 +6351,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$t.name,
     		type: "slot",
-    		source: "(48:0) <FT lab={tab}>",
+    		source: "(51:0) <FT lab={tab}>",
     		ctx
     	});
 
@@ -6480,8 +6588,13 @@ var app = (function () {
     	validate_store(modifiers, 'modifiers');
     	component_subscribe($$self, modifiers, value => $$invalidate(17, $modifiers = value));
     	const contcls = getContext('contcls');
-    	let tab = 'main';
-    	const go = n => $$invalidate(0, tab = n);
+    	let tab = localStorage.getItem('debugtab') || 'main';
+
+    	const go = n => {
+    		$$invalidate(0, tab = n);
+    		localStorage.setItem('debugtab', tab);
+    	};
+
     	const writable_props = [];
 
     	Object_1.keys($$props).forEach(key => {
@@ -7234,7 +7347,7 @@ var app = (function () {
     }
 
     // (22:2) <FB zero c="corner-h">
-    function create_default_slot_5$a(ctx) {
+    function create_default_slot_5$b(ctx) {
     	let fb0;
     	let t;
     	let fb1;
@@ -7283,7 +7396,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_5$a.name,
+    		id: create_default_slot_5$b.name,
     		type: "slot",
     		source: "(22:2) <FB zero c=\\\"corner-h\\\">",
     		ctx
@@ -7362,7 +7475,7 @@ var app = (function () {
     			props: {
     				zero: true,
     				c: "corner-h",
-    				$$slots: { default: [create_default_slot_5$a] },
+    				$$slots: { default: [create_default_slot_5$b] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -11124,7 +11237,7 @@ var app = (function () {
 
     /* src/QR.svelte generated by Svelte v3.44.3 */
 
-    const { console: console_1$4 } = globals;
+    const { console: console_1$3 } = globals;
     const file$G = "src/QR.svelte";
 
     // (46:4) {:else}
@@ -11135,7 +11248,7 @@ var app = (function () {
     		c: function create() {
     			canvas_1 = element("canvas");
     			attr_dev(canvas_1, "title", /*title*/ ctx[0]);
-    			add_location(canvas_1, file$G, 46, 6, 1267);
+    			add_location(canvas_1, file$G, 46, 6, 1259);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, canvas_1, anchor);
@@ -11165,15 +11278,14 @@ var app = (function () {
     	return block;
     }
 
-    // (44:4) {#if href}
+    // (44:4) {#if uuid}
     function create_if_block_2$a(ctx) {
     	let link;
     	let current;
 
     	link = new Link$1({
     			props: {
-    				href: /*href*/ ctx[1],
-    				title: /*title*/ ctx[0],
+    				uuid: /*uuid*/ ctx[1],
     				$$slots: { default: [create_default_slot_1$h] },
     				$$scope: { ctx }
     			},
@@ -11190,8 +11302,7 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const link_changes = {};
-    			if (dirty & /*href*/ 2) link_changes.href = /*href*/ ctx[1];
-    			if (dirty & /*title*/ 1) link_changes.title = /*title*/ ctx[0];
+    			if (dirty & /*uuid*/ 2) link_changes.uuid = /*uuid*/ ctx[1];
 
     			if (dirty & /*$$scope, canvas*/ 32772) {
     				link_changes.$$scope = { dirty, ctx };
@@ -11217,21 +11328,21 @@ var app = (function () {
     		block,
     		id: create_if_block_2$a.name,
     		type: "if",
-    		source: "(44:4) {#if href}",
+    		source: "(44:4) {#if uuid}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (45:6) <Link {href} {title}>
+    // (45:6) <Link {uuid}>
     function create_default_slot_1$h(ctx) {
     	let canvas_1;
 
     	const block = {
     		c: function create() {
     			canvas_1 = element("canvas");
-    			add_location(canvas_1, file$G, 44, 27, 1205);
+    			add_location(canvas_1, file$G, 44, 19, 1197);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, canvas_1, anchor);
@@ -11248,7 +11359,7 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$h.name,
     		type: "slot",
-    		source: "(45:6) <Link {href} {title}>",
+    		source: "(45:6) <Link {uuid}>",
     		ctx
     	});
 
@@ -11264,7 +11375,7 @@ var app = (function () {
     			span = element("span");
     			span.textContent = "QR CODE FAILED";
     			attr_dev(span, "class", "uitxt s3txt");
-    			add_location(span, file$G, 55, 8, 1577);
+    			add_location(span, file$G, 55, 8, 1569);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -11294,7 +11405,7 @@ var app = (function () {
     			span = element("span");
     			span.textContent = "FAILED TO GENERATE QR CODE";
     			attr_dev(span, "class", "uitxt s3txt");
-    			add_location(span, file$G, 53, 8, 1482);
+    			add_location(span, file$G, 53, 8, 1474);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -11337,7 +11448,7 @@ var app = (function () {
     			if (if_block) if_block.c();
     			if_block_anchor = empty();
     			attr_dev(span, "class", "uitxt s1txt w5txt");
-    			add_location(span, file$G, 51, 6, 1409);
+    			add_location(span, file$G, 51, 6, 1401);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -11392,7 +11503,7 @@ var app = (function () {
     	const if_blocks = [];
 
     	function select_block_type(ctx, dirty) {
-    		if (/*href*/ ctx[1]) return 0;
+    		if (/*uuid*/ ctx[1]) return 0;
     		return 1;
     	}
 
@@ -11421,7 +11532,7 @@ var app = (function () {
     			add_location(div0, file$G, 42, 2, 1118);
     			attr_dev(div1, "class", "qrdefault");
     			toggle_class(div1, "hidden", !/*hidden*/ ctx[3]);
-    			add_location(div1, file$G, 49, 2, 1333);
+    			add_location(div1, file$G, 49, 2, 1325);
     			attr_dev(div2, "class", "qrcode");
     			set_style(div2, "width", /*size*/ ctx[4] + "px");
     			set_style(div2, "height", /*size*/ ctx[4] + "px");
@@ -11526,7 +11637,7 @@ var app = (function () {
     	const gs = getContext('gs');
     	let { data } = $$props;
     	let { title = null } = $$props;
-    	let { href = null } = $$props;
+    	let { uuid = null } = $$props;
     	let { scale = 3 } = $$props;
     	let { margin = 0 } = $$props;
     	let { ver = 1 } = $$props;
@@ -11556,10 +11667,10 @@ var app = (function () {
     	};
 
     	onMount(() => generate(data));
-    	const writable_props = ['data', 'title', 'href', 'scale', 'margin', 'ver', 'mask'];
+    	const writable_props = ['data', 'title', 'uuid', 'scale', 'margin', 'ver', 'mask'];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$4.warn(`<QR> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$3.warn(`<QR> was created with unknown prop '${key}'`);
     	});
 
     	function canvas_1_binding($$value) {
@@ -11579,7 +11690,7 @@ var app = (function () {
     	$$self.$$set = $$props => {
     		if ('data' in $$props) $$invalidate(5, data = $$props.data);
     		if ('title' in $$props) $$invalidate(0, title = $$props.title);
-    		if ('href' in $$props) $$invalidate(1, href = $$props.href);
+    		if ('uuid' in $$props) $$invalidate(1, uuid = $$props.uuid);
     		if ('scale' in $$props) $$invalidate(6, scale = $$props.scale);
     		if ('margin' in $$props) $$invalidate(7, margin = $$props.margin);
     		if ('ver' in $$props) $$invalidate(8, ver = $$props.ver);
@@ -11595,7 +11706,7 @@ var app = (function () {
     		QRCode: browser,
     		data,
     		title,
-    		href,
+    		uuid,
     		scale,
     		margin,
     		ver,
@@ -11610,7 +11721,7 @@ var app = (function () {
     	$$self.$inject_state = $$props => {
     		if ('data' in $$props) $$invalidate(5, data = $$props.data);
     		if ('title' in $$props) $$invalidate(0, title = $$props.title);
-    		if ('href' in $$props) $$invalidate(1, href = $$props.href);
+    		if ('uuid' in $$props) $$invalidate(1, uuid = $$props.uuid);
     		if ('scale' in $$props) $$invalidate(6, scale = $$props.scale);
     		if ('margin' in $$props) $$invalidate(7, margin = $$props.margin);
     		if ('ver' in $$props) $$invalidate(8, ver = $$props.ver);
@@ -11625,8 +11736,8 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*data, href*/ 34) {
-    			if (!data) $$invalidate(5, data = href);
+    		if ($$self.$$.dirty & /*data, uuid*/ 34) {
+    			if (!data) $$invalidate(5, data = uuid);
     		}
 
     		if ($$self.$$.dirty & /*ver, scale*/ 320) {
@@ -11640,7 +11751,7 @@ var app = (function () {
 
     	return [
     		title,
-    		href,
+    		uuid,
     		canvas,
     		hidden,
     		size,
@@ -11661,7 +11772,7 @@ var app = (function () {
     		init(this, options, instance$W, create_fragment$W, safe_not_equal, {
     			data: 5,
     			title: 0,
-    			href: 1,
+    			uuid: 1,
     			scale: 6,
     			margin: 7,
     			ver: 8,
@@ -11679,7 +11790,7 @@ var app = (function () {
     		const props = options.props || {};
 
     		if (/*data*/ ctx[5] === undefined && !('data' in props)) {
-    			console_1$4.warn("<QR> was created without expected prop 'data'");
+    			console_1$3.warn("<QR> was created without expected prop 'data'");
     		}
     	}
 
@@ -11699,11 +11810,11 @@ var app = (function () {
     		throw new Error("<QR>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	get href() {
+    	get uuid() {
     		throw new Error("<QR>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set href(value) {
+    	set uuid(value) {
     		throw new Error("<QR>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
@@ -12223,7 +12334,7 @@ var app = (function () {
     }
 
     // (22:4) <FB between zero c="r2-row r2-top {fillh ? 'r2-bar' : ''}">
-    function create_default_slot_5$9(ctx) {
+    function create_default_slot_5$a(ctx) {
     	let if_block_anchor;
     	let if_block = !/*fillh*/ ctx[1] && create_if_block_3$7(ctx);
 
@@ -12256,7 +12367,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_5$9.name,
+    		id: create_default_slot_5$a.name,
     		type: "slot",
     		source: "(22:4) <FB between zero c=\\\"r2-row r2-top {fillh ? 'r2-bar' : ''}\\\">",
     		ctx
@@ -12476,7 +12587,7 @@ var app = (function () {
     				between: true,
     				zero: true,
     				c: "r2-row r2-top " + (/*fillh*/ ctx[1] ? 'r2-bar' : ''),
-    				$$slots: { default: [create_default_slot_5$9] },
+    				$$slots: { default: [create_default_slot_5$a] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -13394,7 +13505,7 @@ var app = (function () {
     const get_extra_slot_changes = dirty => ({});
     const get_extra_slot_context = ctx => ({});
 
-    // (40:2) {#if focused && $$slots.extra}
+    // (51:2) {#if focused && $$slots.extra}
     function create_if_block_1$e(ctx) {
     	let fb;
     	let current;
@@ -13421,7 +13532,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const fb_changes = {};
 
-    			if (dirty & /*$$scope*/ 4096) {
+    			if (dirty & /*$$scope*/ 16384) {
     				fb_changes.$$scope = { dirty, ctx };
     			}
 
@@ -13445,18 +13556,18 @@ var app = (function () {
     		block,
     		id: create_if_block_1$e.name,
     		type: "if",
-    		source: "(40:2) {#if focused && $$slots.extra}",
+    		source: "(51:2) {#if focused && $$slots.extra}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (41:4) <FB leaf c="input-dropdown" slot="extra">
+    // (52:4) <FB leaf c="input-dropdown" slot="extra">
     function create_default_slot_2$d(ctx) {
     	let current;
-    	const extra_slot_template = /*#slots*/ ctx[9].extra;
-    	const extra_slot = create_slot(extra_slot_template, ctx, /*$$scope*/ ctx[12], get_extra_slot_context);
+    	const extra_slot_template = /*#slots*/ ctx[11].extra;
+    	const extra_slot = create_slot(extra_slot_template, ctx, /*$$scope*/ ctx[14], get_extra_slot_context);
 
     	const block = {
     		c: function create() {
@@ -13471,15 +13582,15 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if (extra_slot) {
-    				if (extra_slot.p && (!current || dirty & /*$$scope*/ 4096)) {
+    				if (extra_slot.p && (!current || dirty & /*$$scope*/ 16384)) {
     					update_slot_base(
     						extra_slot,
     						extra_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[12],
+    						/*$$scope*/ ctx[14],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[12])
-    						: get_slot_changes(extra_slot_template, /*$$scope*/ ctx[12], dirty, get_extra_slot_changes),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[14])
+    						: get_slot_changes(extra_slot_template, /*$$scope*/ ctx[14], dirty, get_extra_slot_changes),
     						get_extra_slot_context
     					);
     				}
@@ -13503,14 +13614,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2$d.name,
     		type: "slot",
-    		source: "(41:4) <FB leaf c=\\\"input-dropdown\\\" slot=\\\"extra\\\">",
+    		source: "(52:4) <FB leaf c=\\\"input-dropdown\\\" slot=\\\"extra\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (27:0) <R2Over size={0.4} fillv={true} c="flexinput {focused ? 'focused' : ''}">
+    // (38:0) <R2Over size={0.4} fillv={true} c="flexinput {focused ? 'focused' : ''}">
     function create_default_slot_1$f(ctx) {
     	let input_1;
     	let t;
@@ -13527,11 +13638,11 @@ var app = (function () {
     			if (if_block) if_block.c();
     			if_block_anchor = empty();
     			attr_dev(input_1, "class", "r2-input");
-    			add_location(input_1, file$B, 34, 2, 861);
+    			add_location(input_1, file$B, 45, 2, 1041);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, input_1, anchor);
-    			/*input_1_binding*/ ctx[10](input_1);
+    			/*input_1_binding*/ ctx[12](input_1);
     			set_input_value(input_1, /*value*/ ctx[0]);
     			insert_dev(target, t, anchor);
     			if (if_block) if_block.m(target, anchor);
@@ -13540,7 +13651,7 @@ var app = (function () {
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(input_1, "input", /*input_1_input_handler*/ ctx[11]),
+    					listen_dev(input_1, "input", /*input_1_input_handler*/ ctx[13]),
     					listen_dev(input_1, "focus", /*onfocus*/ ctx[5], false, false, false),
     					listen_dev(input_1, "blur", /*onblur*/ ctx[6], false, false, false)
     				];
@@ -13587,7 +13698,7 @@ var app = (function () {
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(input_1);
-    			/*input_1_binding*/ ctx[10](null);
+    			/*input_1_binding*/ ctx[12](null);
     			if (detaching) detach_dev(t);
     			if (if_block) if_block.d(detaching);
     			if (detaching) detach_dev(if_block_anchor);
@@ -13600,14 +13711,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$f.name,
     		type: "slot",
-    		source: "(27:0) <R2Over size={0.4} fillv={true} c=\\\"flexinput {focused ? 'focused' : ''}\\\">",
+    		source: "(38:0) <R2Over size={0.4} fillv={true} c=\\\"flexinput {focused ? 'focused' : ''}\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (29:2) {#if text && !focused && !value}
+    // (40:2) {#if text && !focused && !value}
     function create_if_block$m(ctx) {
     	let fb;
     	let current;
@@ -13634,7 +13745,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const fb_changes = {};
 
-    			if (dirty & /*$$scope, text*/ 4100) {
+    			if (dirty & /*$$scope, text*/ 16388) {
     				fb_changes.$$scope = { dirty, ctx };
     			}
 
@@ -13658,14 +13769,14 @@ var app = (function () {
     		block,
     		id: create_if_block$m.name,
     		type: "if",
-    		source: "(29:2) {#if text && !focused && !value}",
+    		source: "(40:2) {#if text && !focused && !value}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (30:4) <FB vert center c="input-label">
+    // (41:4) <FB vert center c="input-label">
     function create_default_slot$m(ctx) {
     	let t;
 
@@ -13688,14 +13799,14 @@ var app = (function () {
     		block,
     		id: create_default_slot$m.name,
     		type: "slot",
-    		source: "(30:4) <FB vert center c=\\\"input-label\\\">",
+    		source: "(41:4) <FB vert center c=\\\"input-label\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (28:2) <svelte:fragment slot="inner">
+    // (39:2) <svelte:fragment slot="inner">
     function create_inner_slot(ctx) {
     	let if_block_anchor;
     	let current;
@@ -13754,7 +13865,7 @@ var app = (function () {
     		block,
     		id: create_inner_slot.name,
     		type: "slot",
-    		source: "(28:2) <svelte:fragment slot=\\\"inner\\\">",
+    		source: "(39:2) <svelte:fragment slot=\\\"inner\\\">",
     		ctx
     	});
 
@@ -13787,7 +13898,7 @@ var app = (function () {
     			div = element("div");
     			create_component(r2over.$$.fragment);
     			attr_dev(div, "class", "input-wrapper");
-    			add_location(div, file$B, 25, 0, 568);
+    			add_location(div, file$B, 36, 0, 748);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -13810,7 +13921,7 @@ var app = (function () {
     			const r2over_changes = {};
     			if (dirty & /*focused*/ 2) r2over_changes.c = "flexinput " + (/*focused*/ ctx[1] ? 'focused' : '');
 
-    			if (dirty & /*$$scope, text, focused, value, $$slots, input*/ 4247) {
+    			if (dirty & /*$$scope, text, focused, value, $$slots, input*/ 16535) {
     				r2over_changes.$$scope = { dirty, ctx };
     			}
 
@@ -13870,6 +13981,19 @@ var app = (function () {
     		dispatch('blur');
     	};
 
+    	const erase = () => {
+    		$$invalidate(0, value = '');
+    	};
+
+    	const quit = () => {
+    		exit();
+    		erase();
+    	};
+
+    	const edited = val => {
+    		dispatch('edited', { val });
+    	};
+
     	const writable_props = ['value', 'text', 'mini', 'focused'];
 
     	Object.keys($$props).forEach(key => {
@@ -13893,7 +14017,7 @@ var app = (function () {
     		if ('text' in $$props) $$invalidate(2, text = $$props.text);
     		if ('mini' in $$props) $$invalidate(8, mini = $$props.mini);
     		if ('focused' in $$props) $$invalidate(1, focused = $$props.focused);
-    		if ('$$scope' in $$props) $$invalidate(12, $$scope = $$props.$$scope);
+    		if ('$$scope' in $$props) $$invalidate(14, $$scope = $$props.$$scope);
     	};
 
     	$$self.$capture_state = () => ({
@@ -13909,7 +14033,10 @@ var app = (function () {
     		input,
     		onfocus,
     		onblur,
-    		exit
+    		exit,
+    		erase,
+    		quit,
+    		edited
     	});
 
     	$$self.$inject_state = $$props => {
@@ -13924,6 +14051,12 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*value*/ 1) {
+    			edited(value);
+    		}
+    	};
+
     	return [
     		value,
     		focused,
@@ -13934,6 +14067,8 @@ var app = (function () {
     		onblur,
     		$$slots,
     		mini,
+    		erase,
+    		quit,
     		slots,
     		input_1_binding,
     		input_1_input_handler,
@@ -13950,7 +14085,9 @@ var app = (function () {
     			text: 2,
     			mini: 8,
     			focused: 1,
-    			exit: 3
+    			exit: 3,
+    			erase: 9,
+    			quit: 10
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -14000,20 +14137,34 @@ var app = (function () {
     	set exit(value) {
     		throw new Error("<Input>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
+
+    	get erase() {
+    		return this.$$.ctx[9];
+    	}
+
+    	set erase(value) {
+    		throw new Error("<Input>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get quit() {
+    		return this.$$.ctx[10];
+    	}
+
+    	set quit(value) {
+    		throw new Error("<Input>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
     }
 
     /* src/Search.svelte generated by Svelte v3.44.3 */
-
-    const { console: console_1$3 } = globals;
     const file$A = "src/Search.svelte";
 
     function get_each_context$4(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[23] = list[i];
+    	child_ctx[25] = list[i];
     	return child_ctx;
     }
 
-    // (74:2) <FB between zero c="r2-row r2-top">
+    // (82:2) <FB between zero c="r2-row r2-top">
     function create_default_slot_9$4(ctx) {
     	let div0;
     	let t;
@@ -14025,9 +14176,9 @@ var app = (function () {
     			t = space();
     			div1 = element("div");
     			attr_dev(div0, "class", "r2-bar r2-hori");
-    			add_location(div0, file$A, 74, 3, 1462);
+    			add_location(div0, file$A, 82, 3, 1574);
     			attr_dev(div1, "class", "r2-bar r2-hori");
-    			add_location(div1, file$A, 75, 3, 1500);
+    			add_location(div1, file$A, 83, 3, 1612);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div0, anchor);
@@ -14045,14 +14196,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_9$4.name,
     		type: "slot",
-    		source: "(74:2) <FB between zero c=\\\"r2-row r2-top\\\">",
+    		source: "(82:2) <FB between zero c=\\\"r2-row r2-top\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (79:3) {#if result.length}
+    // (87:3) {#if result.length}
     function create_if_block_1$d(ctx) {
     	let fb;
     	let current;
@@ -14078,7 +14229,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const fb_changes = {};
 
-    			if (dirty & /*$$scope, result*/ 67108868) {
+    			if (dirty & /*$$scope, result*/ 268435460) {
     				fb_changes.$$scope = { dirty, ctx };
     			}
 
@@ -14102,16 +14253,16 @@ var app = (function () {
     		block,
     		id: create_if_block_1$d.name,
     		type: "if",
-    		source: "(79:3) {#if result.length}",
+    		source: "(87:3) {#if result.length}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (83:6) <Link space={item.namespace} title={item.title}>
+    // (91:6) <Link space={item.namespace} title={item.title} global>
     function create_default_slot_8$4(ctx) {
-    	let t_value = /*item*/ ctx[23].title + "";
+    	let t_value = /*item*/ ctx[25].title + "";
     	let t;
 
     	const block = {
@@ -14122,7 +14273,7 @@ var app = (function () {
     			insert_dev(target, t, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*result*/ 4 && t_value !== (t_value = /*item*/ ctx[23].title + "")) set_data_dev(t, t_value);
+    			if (dirty & /*result*/ 4 && t_value !== (t_value = /*item*/ ctx[25].title + "")) set_data_dev(t, t_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(t);
@@ -14133,14 +14284,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_8$4.name,
     		type: "slot",
-    		source: "(83:6) <Link space={item.namespace} title={item.title}>",
+    		source: "(91:6) <Link space={item.namespace} title={item.title} global>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (82:5) <FB leaf c="search-preview-item">
+    // (90:5) <FB leaf c="search-preview-item">
     function create_default_slot_7$5(ctx) {
     	let link;
     	let t;
@@ -14148,8 +14299,9 @@ var app = (function () {
 
     	link = new Link$1({
     			props: {
-    				space: /*item*/ ctx[23].namespace,
-    				title: /*item*/ ctx[23].title,
+    				space: /*item*/ ctx[25].namespace,
+    				title: /*item*/ ctx[25].title,
+    				global: true,
     				$$slots: { default: [create_default_slot_8$4] },
     				$$scope: { ctx }
     			},
@@ -14168,10 +14320,10 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const link_changes = {};
-    			if (dirty & /*result*/ 4) link_changes.space = /*item*/ ctx[23].namespace;
-    			if (dirty & /*result*/ 4) link_changes.title = /*item*/ ctx[23].title;
+    			if (dirty & /*result*/ 4) link_changes.space = /*item*/ ctx[25].namespace;
+    			if (dirty & /*result*/ 4) link_changes.title = /*item*/ ctx[25].title;
 
-    			if (dirty & /*$$scope, result*/ 67108868) {
+    			if (dirty & /*$$scope, result*/ 268435460) {
     				link_changes.$$scope = { dirty, ctx };
     			}
 
@@ -14196,14 +14348,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_7$5.name,
     		type: "slot",
-    		source: "(82:5) <FB leaf c=\\\"search-preview-item\\\">",
+    		source: "(90:5) <FB leaf c=\\\"search-preview-item\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (81:4) {#each result as item}
+    // (89:4) {#each result as item}
     function create_each_block$4(ctx) {
     	let fb;
     	let current;
@@ -14229,7 +14381,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const fb_changes = {};
 
-    			if (dirty & /*$$scope, result*/ 67108868) {
+    			if (dirty & /*$$scope, result*/ 268435460) {
     				fb_changes.$$scope = { dirty, ctx };
     			}
 
@@ -14253,14 +14405,14 @@ var app = (function () {
     		block,
     		id: create_each_block$4.name,
     		type: "each",
-    		source: "(81:4) {#each result as item}",
+    		source: "(89:4) {#each result as item}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (80:3) <FB vert c="search-preview">
+    // (88:3) <FB vert c="search-preview">
     function create_default_slot_6$6(ctx) {
     	let each_1_anchor;
     	let current;
@@ -14349,25 +14501,26 @@ var app = (function () {
     		block,
     		id: create_default_slot_6$6.name,
     		type: "slot",
-    		source: "(80:3) <FB vert c=\\\"search-preview\\\">",
+    		source: "(88:3) <FB vert c=\\\"search-preview\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (92:5) {:else}
+    // (100:5) {:else}
     function create_else_block$c(ctx) {
     	let link;
     	let current;
 
     	link = new Link$1({
     			props: {
-    				space: /*$loc*/ ctx[5].namesapce,
+    				does: /*quit*/ ctx[8],
+    				space: /*$loc*/ ctx[5].namespace || 'main',
     				title: /*query*/ ctx[0],
     				disable: !/*query*/ ctx[0],
     				global: true,
-    				$$slots: { default: [create_default_slot_5$8] },
+    				$$slots: { default: [create_default_slot_5$9] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -14383,11 +14536,11 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const link_changes = {};
-    			if (dirty & /*$loc*/ 32) link_changes.space = /*$loc*/ ctx[5].namesapce;
+    			if (dirty & /*$loc*/ 32) link_changes.space = /*$loc*/ ctx[5].namespace || 'main';
     			if (dirty & /*query*/ 1) link_changes.title = /*query*/ ctx[0];
     			if (dirty & /*query*/ 1) link_changes.disable = !/*query*/ ctx[0];
 
-    			if (dirty & /*$$scope*/ 67108864) {
+    			if (dirty & /*$$scope*/ 268435456) {
     				link_changes.$$scope = { dirty, ctx };
     			}
 
@@ -14411,20 +14564,21 @@ var app = (function () {
     		block,
     		id: create_else_block$c.name,
     		type: "else",
-    		source: "(92:5) {:else}",
+    		source: "(100:5) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (90:5) {#if exists}
+    // (98:5) {#if exists}
     function create_if_block$l(ctx) {
     	let link;
     	let current;
 
     	link = new Link$1({
     			props: {
+    				does: /*quit*/ ctx[8],
     				space: /*exists*/ ctx[3].namespace,
     				title: /*exists*/ ctx[3].title,
     				global: true,
@@ -14447,7 +14601,7 @@ var app = (function () {
     			if (dirty & /*exists*/ 8) link_changes.space = /*exists*/ ctx[3].namespace;
     			if (dirty & /*exists*/ 8) link_changes.title = /*exists*/ ctx[3].title;
 
-    			if (dirty & /*$$scope*/ 67108864) {
+    			if (dirty & /*$$scope*/ 268435456) {
     				link_changes.$$scope = { dirty, ctx };
     			}
 
@@ -14471,15 +14625,15 @@ var app = (function () {
     		block,
     		id: create_if_block$l.name,
     		type: "if",
-    		source: "(90:5) {#if exists}",
+    		source: "(98:5) {#if exists}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (93:7) <Link space={$loc.namesapce} title={query} disable={!query} global>
-    function create_default_slot_5$8(ctx) {
+    // (101:7) <Link does={quit} space={$loc.namespace || 'main'} title={query} disable={!query} global>
+    function create_default_slot_5$9(ctx) {
     	let t;
 
     	const block = {
@@ -14496,16 +14650,16 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_5$8.name,
+    		id: create_default_slot_5$9.name,
     		type: "slot",
-    		source: "(93:7) <Link space={$loc.namesapce} title={query} disable={!query} global>",
+    		source: "(101:7) <Link does={quit} space={$loc.namespace || 'main'} title={query} disable={!query} global>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (91:7) <Link space={exists.namespace} title={exists.title} global>
+    // (99:7) <Link does={quit} space={exists.namespace} title={exists.title} global>
     function create_default_slot_4$9(ctx) {
     	let t;
 
@@ -14525,14 +14679,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_4$9.name,
     		type: "slot",
-    		source: "(91:7) <Link space={exists.namespace} title={exists.title} global>",
+    		source: "(99:7) <Link does={quit} space={exists.namespace} title={exists.title} global>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (95:4) <Link special="search" {query} disable={!query}>
+    // (103:4) <Link does={quit} special="search" {query} disable={!query}>
     function create_default_slot_3$b(ctx) {
     	let t;
 
@@ -14552,14 +14706,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3$b.name,
     		type: "slot",
-    		source: "(95:4) <Link special=\\\"search\\\" {query} disable={!query}>",
+    		source: "(103:4) <Link does={quit} special=\\\"search\\\" {query} disable={!query}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (89:3) <FB around c="search-controls">
+    // (97:3) <FB around c="search-controls">
     function create_default_slot_2$c(ctx) {
     	let current_block_type_index;
     	let if_block;
@@ -14579,6 +14733,7 @@ var app = (function () {
 
     	link = new Link$1({
     			props: {
+    				does: /*quit*/ ctx[8],
     				special: "search",
     				query: /*query*/ ctx[0],
     				disable: !/*query*/ ctx[0],
@@ -14631,7 +14786,7 @@ var app = (function () {
     			if (dirty & /*query*/ 1) link_changes.query = /*query*/ ctx[0];
     			if (dirty & /*query*/ 1) link_changes.disable = !/*query*/ ctx[0];
 
-    			if (dirty & /*$$scope*/ 67108864) {
+    			if (dirty & /*$$scope*/ 268435456) {
     				link_changes.$$scope = { dirty, ctx };
     			}
 
@@ -14659,14 +14814,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2$c.name,
     		type: "slot",
-    		source: "(89:3) <FB around c=\\\"search-controls\\\">",
+    		source: "(97:3) <FB around c=\\\"search-controls\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (78:2) <FB vert c="search-preview-wrapper">
+    // (86:2) <FB vert c="search-preview-wrapper">
     function create_default_slot_1$e(ctx) {
     	let t;
     	let fb;
@@ -14721,7 +14876,7 @@ var app = (function () {
 
     			const fb_changes = {};
 
-    			if (dirty & /*$$scope, query, exists, $loc*/ 67108905) {
+    			if (dirty & /*$$scope, query, exists, $loc*/ 268435497) {
     				fb_changes.$$scope = { dirty, ctx };
     			}
 
@@ -14749,14 +14904,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$e.name,
     		type: "slot",
-    		source: "(78:2) <FB vert c=\\\"search-preview-wrapper\\\">",
+    		source: "(86:2) <FB vert c=\\\"search-preview-wrapper\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (73:2) <svelte:fragment slot="extra">
+    // (81:2) <svelte:fragment slot="extra">
     function create_extra_slot(ctx) {
     	let fb0;
     	let t;
@@ -14799,14 +14954,14 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const fb0_changes = {};
 
-    			if (dirty & /*$$scope*/ 67108864) {
+    			if (dirty & /*$$scope*/ 268435456) {
     				fb0_changes.$$scope = { dirty, ctx };
     			}
 
     			fb0.$set(fb0_changes);
     			const fb1_changes = {};
 
-    			if (dirty & /*$$scope, query, exists, $loc, result*/ 67108909) {
+    			if (dirty & /*$$scope, query, exists, $loc, result*/ 268435501) {
     				fb1_changes.$$scope = { dirty, ctx };
     			}
 
@@ -14834,26 +14989,21 @@ var app = (function () {
     		block,
     		id: create_extra_slot.name,
     		type: "slot",
-    		source: "(73:2) <svelte:fragment slot=\\\"extra\\\">",
+    		source: "(81:2) <svelte:fragment slot=\\\"extra\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (66:0) <FB vert zero c="search-bar r2-s4">
+    // (74:0) <FB vert zero c="search-bar r2-s4">
     function create_default_slot$l(ctx) {
     	let input_1;
-    	let updating_value;
     	let updating_focused;
     	let current;
 
-    	function input_1_value_binding(value) {
-    		/*input_1_value_binding*/ ctx[10](value);
-    	}
-
     	function input_1_focused_binding(value) {
-    		/*input_1_focused_binding*/ ctx[11](value);
+    		/*input_1_focused_binding*/ ctx[12](value);
     	}
 
     	let input_1_props = {
@@ -14862,18 +15012,14 @@ var app = (function () {
     		$$scope: { ctx }
     	};
 
-    	if (/*query*/ ctx[0] !== void 0) {
-    		input_1_props.value = /*query*/ ctx[0];
-    	}
-
     	if (/*focused*/ ctx[1] !== void 0) {
     		input_1_props.focused = /*focused*/ ctx[1];
     	}
 
     	input_1 = new Input({ props: input_1_props, $$inline: true });
-    	/*input_1_binding*/ ctx[9](input_1);
-    	binding_callbacks.push(() => bind(input_1, 'value', input_1_value_binding));
+    	/*input_1_binding*/ ctx[11](input_1);
     	binding_callbacks.push(() => bind(input_1, 'focused', input_1_focused_binding));
+    	input_1.$on("edited", /*edited*/ ctx[9]);
 
     	const block = {
     		c: function create() {
@@ -14886,14 +15032,8 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const input_1_changes = {};
 
-    			if (dirty & /*$$scope, query, exists, $loc, result*/ 67108909) {
+    			if (dirty & /*$$scope, query, exists, $loc, result*/ 268435501) {
     				input_1_changes.$$scope = { dirty, ctx };
-    			}
-
-    			if (!updating_value && dirty & /*query*/ 1) {
-    				updating_value = true;
-    				input_1_changes.value = /*query*/ ctx[0];
-    				add_flush_callback(() => updating_value = false);
     			}
 
     			if (!updating_focused && dirty & /*focused*/ 2) {
@@ -14914,7 +15054,7 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			/*input_1_binding*/ ctx[9](null);
+    			/*input_1_binding*/ ctx[11](null);
     			destroy_component(input_1, detaching);
     		}
     	};
@@ -14923,7 +15063,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$l.name,
     		type: "slot",
-    		source: "(66:0) <FB vert zero c=\\\"search-bar r2-s4\\\">",
+    		source: "(74:0) <FB vert zero c=\\\"search-bar r2-s4\\\">",
     		ctx
     	});
 
@@ -14959,7 +15099,7 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			const fb_changes = {};
 
-    			if (dirty & /*$$scope, input, query, focused, exists, $loc, result*/ 67108927) {
+    			if (dirty & /*$$scope, input, focused, query, exists, $loc, result*/ 268435519) {
     				fb_changes.$$scope = { dirty, ctx };
     			}
 
@@ -15005,7 +15145,7 @@ var app = (function () {
     	const titlesearch = getContext('titlesearch');
     	const modifiers = getContext('modifiers');
     	validate_store(modifiers, 'modifiers');
-    	component_subscribe($$self, modifiers, value => $$invalidate(8, $modifiers = value));
+    	component_subscribe($$self, modifiers, value => $$invalidate(10, $modifiers = value));
     	const setcontrols = getContext('setcontrols');
     	let exists = false;
     	let focused;
@@ -15016,7 +15156,7 @@ var app = (function () {
 
     	const controls = (m, e) => {
     		if (e.key == 'Enter') {
-    			console.log('ENTER');
+    			input.erase();
     		} else if (e.key == 'Escape') {
     			exit();
     		}
@@ -15025,6 +15165,12 @@ var app = (function () {
     	const exit = () => {
     		if (input) input.exit();
     	};
+
+    	const erase = () => {
+    		input.erase();
+    	};
+
+    	const quit = () => input.quit();
 
     	const search = () => {
     		if (!query || query == '') {
@@ -15045,10 +15191,14 @@ var app = (function () {
     		timer = setTimeout(search, 500);
     	};
 
+    	const edited = e => {
+    		$$invalidate(0, query = e.detail.val);
+    	};
+
     	const writable_props = ['query'];
 
     	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1$3.warn(`<Search> was created with unknown prop '${key}'`);
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Search> was created with unknown prop '${key}'`);
     	});
 
     	function input_1_binding($$value) {
@@ -15056,11 +15206,6 @@ var app = (function () {
     			input = $$value;
     			$$invalidate(4, input);
     		});
-    	}
-
-    	function input_1_value_binding(value) {
-    		query = value;
-    		$$invalidate(0, query);
     	}
 
     	function input_1_focused_binding(value) {
@@ -15091,8 +15236,11 @@ var app = (function () {
     		input,
     		controls,
     		exit,
+    		erase,
+    		quit,
     		search,
     		delay,
+    		edited,
     		marksearch,
     		markcg,
     		$modifiers,
@@ -15129,11 +15277,11 @@ var app = (function () {
     			}
     		}
 
-    		if ($$self.$$.dirty & /*$modifiers*/ 256) {
+    		if ($$self.$$.dirty & /*$modifiers*/ 1024) {
     			markcg = !!$modifiers.Shift;
     		}
 
-    		if ($$self.$$.dirty & /*$modifiers*/ 256) {
+    		if ($$self.$$.dirty & /*$modifiers*/ 1024) {
     			marksearch = !$modifiers.Shift;
     		}
 
@@ -15155,9 +15303,10 @@ var app = (function () {
     		$loc,
     		loc,
     		modifiers,
+    		quit,
+    		edited,
     		$modifiers,
     		input_1_binding,
-    		input_1_value_binding,
     		input_1_focused_binding
     	];
     }
@@ -15187,7 +15336,7 @@ var app = (function () {
     /* src/Bookmarks.svelte generated by Svelte v3.44.3 */
 
     // (7:0) <Link nst="main">
-    function create_default_slot_5$7(ctx) {
+    function create_default_slot_5$8(ctx) {
     	let t;
 
     	const block = {
@@ -15204,7 +15353,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_5$7.name,
+    		id: create_default_slot_5$8.name,
     		type: "slot",
     		source: "(7:0) <Link nst=\\\"main\\\">",
     		ctx
@@ -15337,7 +15486,7 @@ var app = (function () {
     	link0 = new Link$1({
     			props: {
     				nst: "main",
-    				$$slots: { default: [create_default_slot_5$7] },
+    				$$slots: { default: [create_default_slot_5$8] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -16158,7 +16307,82 @@ var app = (function () {
     /* src/TitleControls.svelte generated by Svelte v3.44.3 */
     const file$y = "src/TitleControls.svelte";
 
-    // (21:1) {#if $haspage}
+    // (21:1) {#if !$editing && $haspage}
+    function create_if_block_10(ctx) {
+    	let link;
+    	let current;
+
+    	link = new Link$1({
+    			props: {
+    				self: true,
+    				recmd: "history",
+    				$$slots: { default: [create_default_slot_5$7] },
+    				$$scope: { ctx }
+    			},
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(link.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(link, target, anchor);
+    			current = true;
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(link.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(link.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(link, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_10.name,
+    		type: "if",
+    		source: "(21:1) {#if !$editing && $haspage}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (22:2) <Link self recmd="history">
+    function create_default_slot_5$7(ctx) {
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			t = text("HISTORY");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, t, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(t);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_default_slot_5$7.name,
+    		type: "slot",
+    		source: "(22:2) <Link self recmd=\\\"history\\\">",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (24:1) {#if showedit}
     function create_if_block_9(ctx) {
     	let link;
     	let current;
@@ -16166,7 +16390,7 @@ var app = (function () {
     	link = new Link$1({
     			props: {
     				self: true,
-    				cmd: "history",
+    				recmd: "edit",
     				$$slots: { default: [create_default_slot_4$7] },
     				$$scope: { ctx }
     			},
@@ -16199,81 +16423,6 @@ var app = (function () {
     		block,
     		id: create_if_block_9.name,
     		type: "if",
-    		source: "(21:1) {#if $haspage}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (22:2) <Link self cmd="history">
-    function create_default_slot_4$7(ctx) {
-    	let t;
-
-    	const block = {
-    		c: function create() {
-    			t = text("HISTORY");
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, t, anchor);
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(t);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_default_slot_4$7.name,
-    		type: "slot",
-    		source: "(22:2) <Link self cmd=\\\"history\\\">",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (24:1) {#if showedit}
-    function create_if_block_8(ctx) {
-    	let link;
-    	let current;
-
-    	link = new Link$1({
-    			props: {
-    				self: true,
-    				cmd: "edit",
-    				$$slots: { default: [create_default_slot_3$8] },
-    				$$scope: { ctx }
-    			},
-    			$$inline: true
-    		});
-
-    	const block = {
-    		c: function create() {
-    			create_component(link.$$.fragment);
-    		},
-    		m: function mount(target, anchor) {
-    			mount_component(link, target, anchor);
-    			current = true;
-    		},
-    		i: function intro(local) {
-    			if (current) return;
-    			transition_in(link.$$.fragment, local);
-    			current = true;
-    		},
-    		o: function outro(local) {
-    			transition_out(link.$$.fragment, local);
-    			current = false;
-    		},
-    		d: function destroy(detaching) {
-    			destroy_component(link, detaching);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_if_block_8.name,
-    		type: "if",
     		source: "(24:1) {#if showedit}",
     		ctx
     	});
@@ -16281,8 +16430,8 @@ var app = (function () {
     	return block;
     }
 
-    // (25:3) <Link self cmd="edit">
-    function create_default_slot_3$8(ctx) {
+    // (25:3) <Link self recmd="edit">
+    function create_default_slot_4$7(ctx) {
     	let t;
 
     	const block = {
@@ -16299,9 +16448,9 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_3$8.name,
+    		id: create_default_slot_4$7.name,
     		type: "slot",
-    		source: "(25:3) <Link self cmd=\\\"edit\\\">",
+    		source: "(25:3) <Link self recmd=\\\"edit\\\">",
     		ctx
     	});
 
@@ -16309,15 +16458,15 @@ var app = (function () {
     }
 
     // (27:1) {#if showhead}
-    function create_if_block_7(ctx) {
+    function create_if_block_8(ctx) {
     	let link;
     	let current;
 
     	link = new Link$1({
     			props: {
-    				space: /*$page*/ ctx[4].val.namespace,
-    				title: /*$page*/ ctx[4].val.title,
-    				$$slots: { default: [create_default_slot_2$9] },
+    				space: /*$page*/ ctx[5].val.namespace,
+    				title: /*$page*/ ctx[5].val.title,
+    				$$slots: { default: [create_default_slot_3$8] },
     				$$scope: { ctx }
     			},
     			$$inline: true
@@ -16333,8 +16482,8 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const link_changes = {};
-    			if (dirty & /*$page*/ 16) link_changes.space = /*$page*/ ctx[4].val.namespace;
-    			if (dirty & /*$page*/ 16) link_changes.title = /*$page*/ ctx[4].val.title;
+    			if (dirty & /*$page*/ 32) link_changes.space = /*$page*/ ctx[5].val.namespace;
+    			if (dirty & /*$page*/ 32) link_changes.title = /*$page*/ ctx[5].val.title;
 
     			if (dirty & /*$$scope*/ 262144) {
     				link_changes.$$scope = { dirty, ctx };
@@ -16358,7 +16507,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_7.name,
+    		id: create_if_block_8.name,
     		type: "if",
     		source: "(27:1) {#if showhead}",
     		ctx
@@ -16368,7 +16517,7 @@ var app = (function () {
     }
 
     // (28:3) <Link space={$page.val.namespace} title={$page.val.title}>
-    function create_default_slot_2$9(ctx) {
+    function create_default_slot_3$8(ctx) {
     	let t;
 
     	const block = {
@@ -16385,7 +16534,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_default_slot_2$9.name,
+    		id: create_default_slot_3$8.name,
     		type: "slot",
     		source: "(28:3) <Link space={$page.val.namespace} title={$page.val.title}>",
     		ctx
@@ -16395,6 +16544,80 @@ var app = (function () {
     }
 
     // (30:1) {#if $editing}
+    function create_if_block_7(ctx) {
+    	let link;
+    	let current;
+
+    	link = new Link$1({
+    			props: {
+    				decmd: true,
+    				$$slots: { default: [create_default_slot_2$9] },
+    				$$scope: { ctx }
+    			},
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(link.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(link, target, anchor);
+    			current = true;
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(link.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(link.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(link, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_7.name,
+    		type: "if",
+    		source: "(30:1) {#if $editing}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (31:3) <Link decmd>
+    function create_default_slot_2$9(ctx) {
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			t = text("CANCEL");
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, t, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(t);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_default_slot_2$9.name,
+    		type: "slot",
+    		source: "(31:3) <Link decmd>",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (33:1) {#if $hashistory}
     function create_if_block_6$1(ctx) {
     	let link;
     	let current;
@@ -16434,20 +16657,20 @@ var app = (function () {
     		block,
     		id: create_if_block_6$1.name,
     		type: "if",
-    		source: "(30:1) {#if $editing}",
+    		source: "(33:1) {#if $hashistory}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (31:3) <Link decmd>
+    // (34:3) <Link decmd>
     function create_default_slot_1$b(ctx) {
     	let t;
 
     	const block = {
     		c: function create() {
-    			t = text("CANCEL");
+    			t = text("BACK");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t, anchor);
@@ -16461,14 +16684,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$b.name,
     		type: "slot",
-    		source: "(31:3) <Link decmd>",
+    		source: "(34:3) <Link decmd>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (33:1) {#if showany}
+    // (36:1) {#if showany}
     function create_if_block_5$4(ctx) {
     	let span;
 
@@ -16477,7 +16700,7 @@ var app = (function () {
     			span = element("span");
     			span.textContent = "·";
     			attr_dev(span, "class", "content-subtitle");
-    			add_location(span, file$y, 33, 2, 963);
+    			add_location(span, file$y, 36, 2, 1050);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -16491,14 +16714,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5$4.name,
     		type: "if",
-    		source: "(33:1) {#if showany}",
+    		source: "(36:1) {#if showany}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (45:46) 
+    // (48:46) 
     function create_if_block_4$4(ctx) {
     	let t;
 
@@ -16518,14 +16741,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4$4.name,
     		type: "if",
-    		source: "(45:46) ",
+    		source: "(48:46) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (43:45) 
+    // (46:45) 
     function create_if_block_3$6(ctx) {
     	let t;
 
@@ -16545,14 +16768,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3$6.name,
     		type: "if",
-    		source: "(43:45) ",
+    		source: "(46:45) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (41:24) 
+    // (44:24) 
     function create_if_block_2$7(ctx) {
     	let t;
 
@@ -16572,14 +16795,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2$7.name,
     		type: "if",
-    		source: "(41:24) ",
+    		source: "(44:24) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (39:21) 
+    // (42:21) 
     function create_if_block_1$b(ctx) {
     	let t;
 
@@ -16599,14 +16822,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$b.name,
     		type: "if",
-    		source: "(39:21) ",
+    		source: "(42:21) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (37:2) {#if $creating}
+    // (40:2) {#if $creating}
     function create_if_block$j(ctx) {
     	let t;
 
@@ -16626,7 +16849,7 @@ var app = (function () {
     		block,
     		id: create_if_block$j.name,
     		type: "if",
-    		source: "(37:2) {#if $creating}",
+    		source: "(40:2) {#if $creating}",
     		ctx
     	});
 
@@ -16640,24 +16863,26 @@ var app = (function () {
     	let t2;
     	let t3;
     	let t4;
+    	let t5;
     	let span;
     	let current;
-    	let if_block0 = /*$haspage*/ ctx[3] && create_if_block_9(ctx);
-    	let if_block1 = /*showedit*/ ctx[1] && create_if_block_8(ctx);
-    	let if_block2 = /*showhead*/ ctx[0] && create_if_block_7(ctx);
-    	let if_block3 = /*$editing*/ ctx[2] && create_if_block_6$1(ctx);
-    	let if_block4 = /*showany*/ ctx[5] && create_if_block_5$4(ctx);
+    	let if_block0 = !/*$editing*/ ctx[3] && /*$haspage*/ ctx[4] && create_if_block_10(ctx);
+    	let if_block1 = /*showedit*/ ctx[1] && create_if_block_9(ctx);
+    	let if_block2 = /*showhead*/ ctx[0] && create_if_block_8(ctx);
+    	let if_block3 = /*$editing*/ ctx[3] && create_if_block_7(ctx);
+    	let if_block4 = /*$hashistory*/ ctx[2] && create_if_block_6$1(ctx);
+    	let if_block5 = /*showany*/ ctx[6] && create_if_block_5$4(ctx);
 
     	function select_block_type(ctx, dirty) {
-    		if (/*$creating*/ ctx[6]) return create_if_block$j;
-    		if (/*$editing*/ ctx[2]) return create_if_block_1$b;
-    		if (/*$hashistory*/ ctx[7]) return create_if_block_2$7;
-    		if (/*$haspage*/ ctx[3] && /*$page*/ ctx[4].val.historical) return create_if_block_3$6;
-    		if (/*$haspage*/ ctx[3] && !/*$page*/ ctx[4].val.historical) return create_if_block_4$4;
+    		if (/*$creating*/ ctx[7]) return create_if_block$j;
+    		if (/*$editing*/ ctx[3]) return create_if_block_1$b;
+    		if (/*$hashistory*/ ctx[2]) return create_if_block_2$7;
+    		if (/*$haspage*/ ctx[4] && /*$page*/ ctx[5].val.historical) return create_if_block_3$6;
+    		if (/*$haspage*/ ctx[4] && !/*$page*/ ctx[5].val.historical) return create_if_block_4$4;
     	}
 
     	let current_block_type = select_block_type(ctx);
-    	let if_block5 = current_block_type && current_block_type(ctx);
+    	let if_block6 = current_block_type && current_block_type(ctx);
 
     	const block = {
     		c: function create() {
@@ -16671,10 +16896,12 @@ var app = (function () {
     			t3 = space();
     			if (if_block4) if_block4.c();
     			t4 = space();
-    			span = element("span");
     			if (if_block5) if_block5.c();
+    			t5 = space();
+    			span = element("span");
+    			if (if_block6) if_block6.c();
     			attr_dev(span, "class", "content-subtitle");
-    			add_location(span, file$y, 35, 1, 1018);
+    			add_location(span, file$y, 38, 1, 1105);
     		},
     		m: function mount(target, anchor) {
     			if (if_block0) if_block0.m(target, anchor);
@@ -16687,18 +16914,20 @@ var app = (function () {
     			insert_dev(target, t3, anchor);
     			if (if_block4) if_block4.m(target, anchor);
     			insert_dev(target, t4, anchor);
+    			if (if_block5) if_block5.m(target, anchor);
+    			insert_dev(target, t5, anchor);
     			insert_dev(target, span, anchor);
-    			if (if_block5) if_block5.m(span, null);
+    			if (if_block6) if_block6.m(span, null);
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (/*$haspage*/ ctx[3]) {
+    			if (!/*$editing*/ ctx[3] && /*$haspage*/ ctx[4]) {
     				if (if_block0) {
-    					if (dirty & /*$haspage*/ 8) {
+    					if (dirty & /*$editing, $haspage*/ 24) {
     						transition_in(if_block0, 1);
     					}
     				} else {
-    					if_block0 = create_if_block_9(ctx);
+    					if_block0 = create_if_block_10(ctx);
     					if_block0.c();
     					transition_in(if_block0, 1);
     					if_block0.m(t0.parentNode, t0);
@@ -16719,7 +16948,7 @@ var app = (function () {
     						transition_in(if_block1, 1);
     					}
     				} else {
-    					if_block1 = create_if_block_8(ctx);
+    					if_block1 = create_if_block_9(ctx);
     					if_block1.c();
     					transition_in(if_block1, 1);
     					if_block1.m(t1.parentNode, t1);
@@ -16742,7 +16971,7 @@ var app = (function () {
     						transition_in(if_block2, 1);
     					}
     				} else {
-    					if_block2 = create_if_block_7(ctx);
+    					if_block2 = create_if_block_8(ctx);
     					if_block2.c();
     					transition_in(if_block2, 1);
     					if_block2.m(t2.parentNode, t2);
@@ -16757,13 +16986,13 @@ var app = (function () {
     				check_outros();
     			}
 
-    			if (/*$editing*/ ctx[2]) {
+    			if (/*$editing*/ ctx[3]) {
     				if (if_block3) {
-    					if (dirty & /*$editing*/ 4) {
+    					if (dirty & /*$editing*/ 8) {
     						transition_in(if_block3, 1);
     					}
     				} else {
-    					if_block3 = create_if_block_6$1(ctx);
+    					if_block3 = create_if_block_7(ctx);
     					if_block3.c();
     					transition_in(if_block3, 1);
     					if_block3.m(t3.parentNode, t3);
@@ -16778,24 +17007,45 @@ var app = (function () {
     				check_outros();
     			}
 
-    			if (/*showany*/ ctx[5]) {
-    				if (if_block4) ; else {
-    					if_block4 = create_if_block_5$4(ctx);
+    			if (/*$hashistory*/ ctx[2]) {
+    				if (if_block4) {
+    					if (dirty & /*$hashistory*/ 4) {
+    						transition_in(if_block4, 1);
+    					}
+    				} else {
+    					if_block4 = create_if_block_6$1(ctx);
     					if_block4.c();
+    					transition_in(if_block4, 1);
     					if_block4.m(t4.parentNode, t4);
     				}
     			} else if (if_block4) {
-    				if_block4.d(1);
-    				if_block4 = null;
+    				group_outros();
+
+    				transition_out(if_block4, 1, 1, () => {
+    					if_block4 = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			if (/*showany*/ ctx[6]) {
+    				if (if_block5) ; else {
+    					if_block5 = create_if_block_5$4(ctx);
+    					if_block5.c();
+    					if_block5.m(t5.parentNode, t5);
+    				}
+    			} else if (if_block5) {
+    				if_block5.d(1);
+    				if_block5 = null;
     			}
 
     			if (current_block_type !== (current_block_type = select_block_type(ctx))) {
-    				if (if_block5) if_block5.d(1);
-    				if_block5 = current_block_type && current_block_type(ctx);
+    				if (if_block6) if_block6.d(1);
+    				if_block6 = current_block_type && current_block_type(ctx);
 
-    				if (if_block5) {
-    					if_block5.c();
-    					if_block5.m(span, null);
+    				if (if_block6) {
+    					if_block6.c();
+    					if_block6.m(span, null);
     				}
     			}
     		},
@@ -16805,6 +17055,7 @@ var app = (function () {
     			transition_in(if_block1);
     			transition_in(if_block2);
     			transition_in(if_block3);
+    			transition_in(if_block4);
     			current = true;
     		},
     		o: function outro(local) {
@@ -16812,6 +17063,7 @@ var app = (function () {
     			transition_out(if_block1);
     			transition_out(if_block2);
     			transition_out(if_block3);
+    			transition_out(if_block4);
     			current = false;
     		},
     		d: function destroy(detaching) {
@@ -16825,10 +17077,12 @@ var app = (function () {
     			if (detaching) detach_dev(t3);
     			if (if_block4) if_block4.d(detaching);
     			if (detaching) detach_dev(t4);
+    			if (if_block5) if_block5.d(detaching);
+    			if (detaching) detach_dev(t5);
     			if (detaching) detach_dev(span);
 
-    			if (if_block5) {
-    				if_block5.d();
+    			if (if_block6) {
+    				if_block6.d();
     			}
     		}
     	};
@@ -16905,12 +17159,12 @@ var app = (function () {
     	let showedit;
     	let showhead;
     	let showany;
+    	let $hashistory;
     	let $editing;
     	let $haspage;
     	let $page;
     	let $haslogin;
     	let $creating;
-    	let $hashistory;
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('TitleControls', slots, []);
     	const session = getContext('session');
@@ -16920,20 +17174,20 @@ var app = (function () {
     	component_subscribe($$self, haslogin, value => $$invalidate(14, $haslogin = value));
     	const hashistory = getContext('hashistory');
     	validate_store(hashistory, 'hashistory');
-    	component_subscribe($$self, hashistory, value => $$invalidate(7, $hashistory = value));
+    	component_subscribe($$self, hashistory, value => $$invalidate(2, $hashistory = value));
     	const page = getContext('page');
     	validate_store(page, 'page');
-    	component_subscribe($$self, page, value => $$invalidate(4, $page = value));
+    	component_subscribe($$self, page, value => $$invalidate(5, $page = value));
     	const haspage = getContext('haspage');
     	validate_store(haspage, 'haspage');
-    	component_subscribe($$self, haspage, value => $$invalidate(3, $haspage = value));
+    	component_subscribe($$self, haspage, value => $$invalidate(4, $haspage = value));
     	const loc = getContext('loc');
     	const editing = getContext('editing');
     	validate_store(editing, 'editing');
-    	component_subscribe($$self, editing, value => $$invalidate(2, $editing = value));
+    	component_subscribe($$self, editing, value => $$invalidate(3, $editing = value));
     	const creating = getContext('creating');
     	validate_store(creating, 'creating');
-    	component_subscribe($$self, creating, value => $$invalidate(6, $creating = value));
+    	component_subscribe($$self, creating, value => $$invalidate(7, $creating = value));
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
@@ -16956,18 +17210,18 @@ var app = (function () {
     		showhead,
     		showedit,
     		showany,
+    		$hashistory,
     		$editing,
     		$haspage,
     		$page,
     		$haslogin,
-    		$creating,
-    		$hashistory
+    		$creating
     	});
 
     	$$self.$inject_state = $$props => {
     		if ('showhead' in $$props) $$invalidate(0, showhead = $$props.showhead);
     		if ('showedit' in $$props) $$invalidate(1, showedit = $$props.showedit);
-    		if ('showany' in $$props) $$invalidate(5, showany = $$props.showany);
+    		if ('showany' in $$props) $$invalidate(6, showany = $$props.showany);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -16975,28 +17229,28 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$haslogin, $haspage, $page, $editing*/ 16412) {
+    		if ($$self.$$.dirty & /*$haslogin, $haspage, $page, $editing*/ 16440) {
     			$$invalidate(1, showedit = !!$haslogin && !!$haspage && !$page.val.historical && !$editing);
     		}
 
-    		if ($$self.$$.dirty & /*$haspage, $page*/ 24) {
+    		if ($$self.$$.dirty & /*$haspage, $page*/ 48) {
     			$$invalidate(0, showhead = !!$haspage && $page.val.historical);
     		}
 
-    		if ($$self.$$.dirty & /*$haspage, showedit, showhead, $editing*/ 15) {
-    			$$invalidate(5, showany = !!$haspage || showedit || showhead || !!$editing);
+    		if ($$self.$$.dirty & /*$haspage, showedit, showhead, $editing, $hashistory*/ 31) {
+    			$$invalidate(6, showany = !!$haspage || showedit || showhead || !!$editing || !!$hashistory);
     		}
     	};
 
     	return [
     		showhead,
     		showedit,
+    		$hashistory,
     		$editing,
     		$haspage,
     		$page,
     		showany,
     		$creating,
-    		$hashistory,
     		haslogin,
     		hashistory,
     		page,
@@ -19373,10 +19627,10 @@ var app = (function () {
 
     	qr0 = new QR({
     			props: {
-    				data: /*vpermac*/ ctx[5],
+    				data: /*vpermac*/ ctx[3],
     				ver: 3,
     				scale: 2,
-    				href: /*vperma*/ ctx[1],
+    				uuid: /*$page*/ ctx[0].val.uuid,
     				title: "Version Permalink"
     			},
     			$$inline: true
@@ -19384,10 +19638,10 @@ var app = (function () {
 
     	qr1 = new QR({
     			props: {
-    				data: /*permac*/ ctx[4],
+    				data: /*permac*/ ctx[2],
     				ver: 3,
     				scale: 2,
-    				href: /*perma*/ ctx[0],
+    				uuid: /*$page*/ ctx[0].val.pageUuid,
     				title: "Page Permalink"
     			},
     			$$inline: true
@@ -19421,16 +19675,16 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const qr0_changes = {};
-    			if (dirty & /*vpermac*/ 32) qr0_changes.data = /*vpermac*/ ctx[5];
-    			if (dirty & /*vperma*/ 2) qr0_changes.href = /*vperma*/ ctx[1];
+    			if (dirty & /*vpermac*/ 8) qr0_changes.data = /*vpermac*/ ctx[3];
+    			if (dirty & /*$page*/ 1) qr0_changes.uuid = /*$page*/ ctx[0].val.uuid;
     			qr0.$set(qr0_changes);
     			const qr1_changes = {};
-    			if (dirty & /*permac*/ 16) qr1_changes.data = /*permac*/ ctx[4];
-    			if (dirty & /*perma*/ 1) qr1_changes.href = /*perma*/ ctx[0];
+    			if (dirty & /*permac*/ 4) qr1_changes.data = /*permac*/ ctx[2];
+    			if (dirty & /*$page*/ 1) qr1_changes.uuid = /*$page*/ ctx[0].val.pageUuid;
     			qr1.$set(qr1_changes);
     			const doc_changes = {};
 
-    			if (dirty & /*$$scope, $page*/ 2052) {
+    			if (dirty & /*$$scope, $page*/ 2049) {
     				doc_changes.$$scope = { dirty, ctx };
     			}
 
@@ -19471,7 +19725,7 @@ var app = (function () {
 
     // (31:4) <Lab between txt="AUTHOR">
     function create_default_slot_7$3(ctx) {
-    	let t_value = /*$page*/ ctx[2].val.user.handle + "";
+    	let t_value = /*$page*/ ctx[0].val.user.handle + "";
     	let t;
 
     	const block = {
@@ -19482,7 +19736,7 @@ var app = (function () {
     			insert_dev(target, t, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$page*/ 4 && t_value !== (t_value = /*$page*/ ctx[2].val.user.handle + "")) set_data_dev(t, t_value);
+    			if (dirty & /*$page*/ 1 && t_value !== (t_value = /*$page*/ ctx[0].val.user.handle + "")) set_data_dev(t, t_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(t);
@@ -19526,7 +19780,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const lab_changes = {};
 
-    			if (dirty & /*$$scope, $page*/ 2052) {
+    			if (dirty & /*$$scope, $page*/ 2049) {
     				lab_changes.$$scope = { dirty, ctx };
     			}
 
@@ -19559,7 +19813,7 @@ var app = (function () {
 
     // (34:4) <Lab between txt="VERSION">
     function create_default_slot_5$5(ctx) {
-    	let t_value = /*$page*/ ctx[2].val.vnum + "";
+    	let t_value = /*$page*/ ctx[0].val.vnum + "";
     	let t;
 
     	const block = {
@@ -19570,7 +19824,7 @@ var app = (function () {
     			insert_dev(target, t, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$page*/ 4 && t_value !== (t_value = /*$page*/ ctx[2].val.vnum + "")) set_data_dev(t, t_value);
+    			if (dirty & /*$page*/ 1 && t_value !== (t_value = /*$page*/ ctx[0].val.vnum + "")) set_data_dev(t, t_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(t);
@@ -19614,7 +19868,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const lab_changes = {};
 
-    			if (dirty & /*$$scope, $page*/ 2052) {
+    			if (dirty & /*$$scope, $page*/ 2049) {
     				lab_changes.$$scope = { dirty, ctx };
     			}
 
@@ -19647,7 +19901,7 @@ var app = (function () {
 
     // (37:4) <Lab between txt="VIEWS">
     function create_default_slot_3$6(ctx) {
-    	let t_value = /*$page*/ ctx[2].val.views + "";
+    	let t_value = /*$page*/ ctx[0].val.views + "";
     	let t;
 
     	const block = {
@@ -19658,7 +19912,7 @@ var app = (function () {
     			insert_dev(target, t, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$page*/ 4 && t_value !== (t_value = /*$page*/ ctx[2].val.views + "")) set_data_dev(t, t_value);
+    			if (dirty & /*$page*/ 1 && t_value !== (t_value = /*$page*/ ctx[0].val.views + "")) set_data_dev(t, t_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(t);
@@ -19702,7 +19956,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const lab_changes = {};
 
-    			if (dirty & /*$$scope, $page*/ 2052) {
+    			if (dirty & /*$$scope, $page*/ 2049) {
     				lab_changes.$$scope = { dirty, ctx };
     			}
 
@@ -19788,21 +20042,21 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const line0_changes = {};
 
-    			if (dirty & /*$$scope, $page*/ 2052) {
+    			if (dirty & /*$$scope, $page*/ 2049) {
     				line0_changes.$$scope = { dirty, ctx };
     			}
 
     			line0.$set(line0_changes);
     			const line1_changes = {};
 
-    			if (dirty & /*$$scope, $page*/ 2052) {
+    			if (dirty & /*$$scope, $page*/ 2049) {
     				line1_changes.$$scope = { dirty, ctx };
     			}
 
     			line1.$set(line1_changes);
     			const line2_changes = {};
 
-    			if (dirty & /*$$scope, $page*/ 2052) {
+    			if (dirty & /*$$scope, $page*/ 2049) {
     				line2_changes.$$scope = { dirty, ctx };
     			}
 
@@ -19845,7 +20099,7 @@ var app = (function () {
     function create_default_slot$c(ctx) {
     	let if_block_anchor;
     	let current;
-    	let if_block = /*$haspage*/ ctx[3] && create_if_block$e(ctx);
+    	let if_block = /*$haspage*/ ctx[1] && create_if_block$e(ctx);
 
     	const block = {
     		c: function create() {
@@ -19858,11 +20112,11 @@ var app = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (/*$haspage*/ ctx[3]) {
+    			if (/*$haspage*/ ctx[1]) {
     				if (if_block) {
     					if_block.p(ctx, dirty);
 
-    					if (dirty & /*$haspage*/ 8) {
+    					if (dirty & /*$haspage*/ 2) {
     						transition_in(if_block, 1);
     					}
     				} else {
@@ -19935,7 +20189,7 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			const fb_changes = {};
 
-    			if (dirty & /*$$scope, $page, permac, perma, vpermac, vperma, $haspage*/ 2111) {
+    			if (dirty & /*$$scope, $page, permac, vpermac, $haspage*/ 2063) {
     				fb_changes.$$scope = { dirty, ctx };
     			}
 
@@ -19977,10 +20231,10 @@ var app = (function () {
     	component_subscribe($$self, gs, value => $$invalidate(9, $gs = value));
     	const page = getContext('page');
     	validate_store(page, 'page');
-    	component_subscribe($$self, page, value => $$invalidate(2, $page = value));
+    	component_subscribe($$self, page, value => $$invalidate(0, $page = value));
     	const haspage = getContext('haspage');
     	validate_store(haspage, 'haspage');
-    	component_subscribe($$self, haspage, value => $$invalidate(3, $haspage = value));
+    	component_subscribe($$self, haspage, value => $$invalidate(1, $haspage = value));
     	const crop = u => u.match(/.*?\/\/(.*)/)[1];
     	let perma, vperma, permac, vpermac;
     	const writable_props = [];
@@ -20011,10 +20265,10 @@ var app = (function () {
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('perma' in $$props) $$invalidate(0, perma = $$props.perma);
-    		if ('vperma' in $$props) $$invalidate(1, vperma = $$props.vperma);
-    		if ('permac' in $$props) $$invalidate(4, permac = $$props.permac);
-    		if ('vpermac' in $$props) $$invalidate(5, vpermac = $$props.vpermac);
+    		if ('perma' in $$props) $$invalidate(7, perma = $$props.perma);
+    		if ('vperma' in $$props) $$invalidate(8, vperma = $$props.vperma);
+    		if ('permac' in $$props) $$invalidate(2, permac = $$props.permac);
+    		if ('vpermac' in $$props) $$invalidate(3, vpermac = $$props.vpermac);
     	};
 
     	if ($$props && "$$inject" in $$props) {
@@ -20022,17 +20276,17 @@ var app = (function () {
     	}
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$haspage, $gs, $page, perma, vperma*/ 527) {
+    		if ($$self.$$.dirty & /*$haspage, $gs, $page, perma, vperma*/ 899) {
     			if ($haspage) {
-    				$$invalidate(0, perma = $gs.full($page.val.pageUuid));
-    				$$invalidate(1, vperma = $gs.full($page.val.uuid));
-    				$$invalidate(4, permac = crop(perma));
-    				$$invalidate(5, vpermac = crop(vperma));
+    				$$invalidate(7, perma = $gs.full($page.val.pageUuid));
+    				$$invalidate(8, vperma = $gs.full($page.val.uuid));
+    				$$invalidate(2, permac = crop(perma));
+    				$$invalidate(3, vpermac = crop(vperma));
     			}
     		}
     	};
 
-    	return [perma, vperma, $page, $haspage, permac, vpermac, gs, page, haspage, $gs];
+    	return [$page, $haspage, permac, vpermac, gs, page, haspage, perma, vperma, $gs];
     }
 
     class Titleframe extends SvelteComponentDev {
@@ -37464,7 +37718,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (29:27) <Link space={page.namespace} title={page.title}>
+    // (29:27) <Link global space={page.namespace} title={page.title}>
     function create_default_slot_6(ctx) {
     	let t_value = /*page*/ ctx[8].title + "";
     	let t;
@@ -37488,7 +37742,7 @@ var app = (function () {
     		block,
     		id: create_default_slot_6.name,
     		type: "slot",
-    		source: "(29:27) <Link space={page.namespace} title={page.title}>",
+    		source: "(29:27) <Link global space={page.namespace} title={page.title}>",
     		ctx
     	});
 
@@ -37502,6 +37756,7 @@ var app = (function () {
 
     	link = new Link$1({
     			props: {
+    				global: true,
     				space: /*page*/ ctx[8].namespace,
     				title: /*page*/ ctx[8].title,
     				$$slots: { default: [create_default_slot_6] },
@@ -38188,7 +38443,7 @@ var app = (function () {
 
     const { console: console_1, window: window_1 } = globals;
 
-    // (484:2) {#if $uc.debug}
+    // (488:2) {#if $uc.debug}
     function create_if_block_2(ctx) {
     	let debugger_1;
     	let current;
@@ -38220,14 +38475,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2.name,
     		type: "if",
-    		source: "(484:2) {#if $uc.debug}",
+    		source: "(488:2) {#if $uc.debug}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (494:2) {:else}
+    // (498:2) {:else}
     function create_else_block(ctx) {
     	let r2;
     	let current;
@@ -38260,14 +38515,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(494:2) {:else}",
+    		source: "(498:2) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (486:2) {#if !$loading}
+    // (490:2) {#if !$loading}
     function create_if_block(ctx) {
     	let fb;
     	let current;
@@ -38319,14 +38574,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(486:2) {#if !$loading}",
+    		source: "(490:2) {#if !$loading}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (488:5) {#if !$editing && !$creating && !$hashistory && $loc.special == 'content'}
+    // (492:5) {#if !$editing && !$creating && !$hashistory && $loc.special == 'content'}
     function create_if_block_1(ctx) {
     	let titleframe;
     	let current;
@@ -38358,14 +38613,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(488:5) {#if !$editing && !$creating && !$hashistory && $loc.special == 'content'}",
+    		source: "(492:5) {#if !$editing && !$creating && !$hashistory && $loc.special == 'content'}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (487:3) <FB vert expand c="cpb-content {editmode}">
+    // (491:3) <FB vert expand c="cpb-content {editmode}">
     function create_default_slot_3(ctx) {
     	let t0;
     	let bodyframe;
@@ -38440,14 +38695,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3.name,
     		type: "slot",
-    		source: "(487:3) <FB vert expand c=\\\"cpb-content {editmode}\\\">",
+    		source: "(491:3) <FB vert expand c=\\\"cpb-content {editmode}\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (483:1) <FB vert c="cpb-main">
+    // (487:1) <FB vert c="cpb-main">
     function create_default_slot_2(ctx) {
     	let t0;
     	let headframe;
@@ -38562,14 +38817,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2.name,
     		type: "slot",
-    		source: "(483:1) <FB vert c=\\\"cpb-main\\\">",
+    		source: "(487:1) <FB vert c=\\\"cpb-main\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (498:1) <FB vert c="medium-right">
+    // (502:1) <FB vert c="medium-right">
     function create_default_slot_1(ctx) {
     	let search;
     	let t0;
@@ -38624,14 +38879,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(498:1) <FB vert c=\\\"medium-right\\\">",
+    		source: "(502:1) <FB vert c=\\\"medium-right\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (482:0) <FB center c="cpb-ui">
+    // (486:0) <FB center c="cpb-ui">
     function create_default_slot(ctx) {
     	let fb0;
     	let t;
@@ -38708,7 +38963,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(482:0) <FB center c=\\\"cpb-ui\\\">",
+    		source: "(486:0) <FB center c=\\\"cpb-ui\\\">",
     		ctx
     	});
 
@@ -39264,6 +39519,7 @@ var app = (function () {
     	};
 
     	const linkupdate = links => {
+    		if (!links.length) return;
     		const titles = [...new Set(links)].join('+');
     		grab('missing', titles).then(res => set_store_value(linkmap, $linkmap = res, $linkmap)).catch(e => handle(e));
     	};
@@ -39487,7 +39743,10 @@ var app = (function () {
 
     	$$self.$$.update = () => {
     		if ($$self.$$.dirty[1] & /*$path, $trail*/ 160) {
-    			if ($path != $trail[0]) $trail.unshift($path);
+    			if ($path != $trail[0]) {
+    				$trail.unshift($path);
+    				trail.set($trail);
+    			}
     		}
 
     		if ($$self.$$.dirty[1] & /*$links*/ 64) {

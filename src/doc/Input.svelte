@@ -21,6 +21,17 @@
     input.blur()
     dispatch('blur')
   }
+  export const erase =()=> {
+    value = ''
+  }
+  export const quit =()=> {
+    exit()
+    erase()
+  }
+  const edited =val=> {
+    dispatch('edited', {val})
+  }
+  $: edited(value)
 </script>
 
 <div class="input-wrapper" use:outclick on:outclick={exit}>
@@ -34,7 +45,7 @@
   </svelte:fragment>
   <input
     class="r2-input"
-    bind:this={input} bind:value
+    bind:this={input} bind:value={value}
     on:focus={onfocus} on:blur={onblur}
   />
   {#if focused && $$slots.extra}

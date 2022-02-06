@@ -7,12 +7,12 @@
   import QRCode from 'qrcode'
   export let data
   export let title = null
-  export let href = null
+  export let uuid = null
   export let scale = 3
   export let margin = 0
   export let ver = 1
   export let mask = 7
-  $: if (!data) data = href
+  $: if (!data) data = uuid
   let canvas
   let hidden = true
   const generate =data=> {
@@ -41,8 +41,8 @@
 
 <div class="qrcode" style="width: {size}px; height: {size}px;">
   <div class="qrcanvas" class:hidden={hidden}>
-    {#if href}
-      <Link {href} {title}><canvas bind:this={canvas}></canvas></Link>
+    {#if uuid}
+      <Link {uuid}><canvas bind:this={canvas}></canvas></Link>
     {:else}
       <canvas bind:this={canvas} {title}></canvas>
     {/if}

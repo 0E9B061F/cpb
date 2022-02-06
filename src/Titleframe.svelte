@@ -24,8 +24,8 @@
 
 <FB flip c="title-frame">
 	{#if $haspage}
-		<QR data={vpermac} ver={3} scale={2} href={vperma} title="Version Permalink" />
-		<QR data={permac} ver={3} scale={2} href={perma} title="Page Permalink" />
+		<QR data={vpermac} ver={3} scale={2} uuid={$page.val.uuid} title="Version Permalink" />
+		<QR data={permac} ver={3} scale={2} uuid={$page.val.pageUuid} title="Page Permalink" />
 	  <Doc center w={false}>
 			<Line s="s1">
 				<Lab between txt="AUTHOR">{$page.val.user.handle}</Lab>

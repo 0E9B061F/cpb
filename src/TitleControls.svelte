@@ -14,21 +14,24 @@
 
 	$: showedit = !!$haslogin && !!$haspage && !$page.val.historical && !$editing
 	$: showhead = !!$haspage && $page.val.historical
-	$: showany = !!$haspage || showedit || showhead || !!$editing
+	$: showany = !!$haspage || showedit || showhead || !!$editing || !!$hashistory
 </script>
 
 <FB>
-	{#if $haspage}
-		<Link self cmd="history">HISTORY</Link>
+	{#if !$editing && $haspage}
+		<Link self recmd="history">HISTORY</Link>
 	{/if}
 	{#if showedit}
-	  <Link self cmd="edit">EDIT</Link>
+	  <Link self recmd="edit">EDIT</Link>
 	{/if}
 	{#if showhead}
 	  <Link space={$page.val.namespace} title={$page.val.title}>HEAD</Link>
 	{/if}
 	{#if $editing}
 	  <Link decmd>CANCEL</Link>
+	{/if}
+	{#if $hashistory}
+	  <Link decmd>BACK</Link>
 	{/if}
 	{#if showany}
 		<span class="content-subtitle">&middot;</span>
