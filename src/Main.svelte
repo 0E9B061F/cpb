@@ -10,7 +10,7 @@
 	import R2 from './r2/R2.svelte'
 	import R2Over from './r2/R2Over.svelte'
 	import RecentPages from './RecentPages.svelte'
-	import Search from './Search.svelte'
+	import SearchBar from './SearchBar.svelte'
 
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
@@ -212,6 +212,12 @@
 	}
 	setContext('msg', msg)
 
+	const fullsearch =q=> {
+		return grab('search', q)
+		.catch(e=> handle(e))
+	}
+	setContext('fullsearch', fullsearch)
+
 	const titlesearch =q=> {
 		return grab('titlesearch', q)
 		.catch(e=> handle(e))
@@ -342,7 +348,7 @@
   const parseloc =p=> {
     const loc = {
       namespace: null, title: null, uuid: null,
-      special: null, cmd: null, user: null,
+      special: null, cmd: null, user: null, query: null,
     }
     p = p.split('#')
     if (p[1]) loc.cmd = p[1]
@@ -351,6 +357,7 @@
     p = p.split('/')
     const ns = p[0]
     const t = p[1]
+    const args = p.slice(2)
 		let u
 		console.log(ns, t)
     const hex = '[a-fA-F0-9]'
@@ -368,6 +375,9 @@
         loc.special = 'user'
 			} else if (t == $rc.deftest) {
 				loc.special = 'test'
+      } else if (t == $rc.defsearch) {
+				loc.special = 'search'
+				if (args[0]) loc.query = args[0]
       } else {
         loc.special = 'e404'
       }
@@ -500,7 +510,7 @@
 		{/if}
 	</FB>
 	<FB vert c="medium-right">
-		<Search/>
+		<SearchBar preview titles auto/>
 		<RecentPages count={10}/>
 		<R2 fillh={true}/>
 	</FB>

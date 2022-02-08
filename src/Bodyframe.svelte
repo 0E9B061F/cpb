@@ -6,6 +6,7 @@
   import E404 from './E404.svelte'
   import E500 from './E500.svelte'
   import Content from './Content.svelte'
+  import Search from './Search.svelte'
   import FB from './FB.svelte'
 
   import { getContext } from 'svelte'
@@ -35,6 +36,8 @@
     {:else}
       <E401/>
     {/if}
+  {:else if $loc.special == 'search'}
+    <Search/>
   {:else if $loc.special == 'test'}
     <Test/>
   {:else if $loc.special == 'e404'}

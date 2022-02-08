@@ -35,6 +35,7 @@
 </script>
 
 <div class="input-wrapper" use:outclick on:outclick={exit}>
+<FB>
 <R2Over size={0.4} fillv={true} c="flexinput {focused ? 'focused' : ''}">
   <svelte:fragment slot="inner">
   {#if text && !focused && !value}
@@ -54,4 +55,8 @@
     </FB>
   {/if}
 </R2Over>
+{#if $$slots.buttons}
+  <slot name="buttons"></slot>
+{/if}
+</FB>
 </div>

@@ -10,6 +10,7 @@
   "defregister": "register",
   "defuser": "user",
   "deftest": "test",
+  "defsearch": "search",
   "secret": "oed und leer",
   "fade": 500,
   "homekey": "~"

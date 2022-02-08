@@ -37,6 +37,25 @@ const internal =(e,v)=> {
 }
 const inputerr =v=> resp(5, 'input error', v)
 
+api.get('/search/:query', (req, res)=> {
+  db.version.findAll({
+    where: {
+      nextUuid: null,
+      [Op.or]: [
+        {title: {
+          [Op.like]: `%${req.params.query}%`
+        }},
+        {body: {
+          [Op.like]: `%${req.params.query}%`
+        }},
+      ]
+    },
+    attributes: ['namespace', 'title'],
+  })
+  .then(vers=> res.json(ok(vers)))
+  .catch(e=> res.json(internal(e)))
+})
+
 api.get('/titlesearch/:query', (req, res)=> {
   db.version.findAll({
     where: {

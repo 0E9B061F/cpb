@@ -3,7 +3,6 @@
 	import FB from './FB.svelte'
 	import UUID from './UUID.svelte'
 	import Logo from './Logo.svelte'
-	import Search from './Search.svelte'
 	import Bookmarks from './Bookmarks.svelte'
 	import UserBar from './UserBar.svelte'
 	import TitleControls from './TitleControls.svelte'
