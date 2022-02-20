@@ -10,7 +10,7 @@
   }
 </script>
 
-<FB zero {c}>
+<FB expand zero {c}>
   <FB vert between zero c="r2-col r2-left {fillv ? 'r2-bar' : ''}">
     {#if !fillv}
       <div class="r2-bar r2-vert"></div>

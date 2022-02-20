@@ -28,6 +28,7 @@ const missing =v=> resp(1, 'record not found', v)
 const forbidden =v=> resp(2, 'unauthorized action', v)
 const invalid =v=> resp(3, 'invalid action', v)
 const internal =(e,v)=> {
+  throw e
   console.log(process.env.NODE_ENV)
   if (process.env.NODE_ENV == 'development') {
     return resp(4, `internal error: ${JSON.stringify(e)}`, v)
@@ -37,37 +38,123 @@ const internal =(e,v)=> {
 }
 const inputerr =v=> resp(5, 'input error', v)
 
+const ordef =(v,d)=> {
+  return v ? parseInt(v) : d
+}
+
 api.get('/search/:query', (req, res)=> {
-  db.version.findAll({
-    where: {
-      nextUuid: null,
-      [Op.or]: [
-        {title: {
-          [Op.like]: `%${req.params.query}%`
-        }},
-        {body: {
-          [Op.like]: `%${req.params.query}%`
-        }},
-      ]
-    },
-    attributes: ['namespace', 'title'],
+  const query = req.params.query
+  const pat = `%${query}%`
+  let size = ordef(req.query.sz, 10)
+  if (size < 5) size = 5
+  else if (size > 50) size = 50
+  let page = ordef(req.query.pg, 1)
+  let inf = req.query.inf || 'title,body'
+  inf = inf.split(',')
+  const intitle = inf.indexOf('title') > -1 || false
+  const inbody = inf.indexOf('body') > -1 || false
+  const both = (!intitle && !inbody) || (intitle && inbody)
+  const inhist = req.query.inh || false
+  const where = {}
+  const attr = ['namespace', 'title']
+  if (both) {
+    where[Op.or] = [
+      {title: {[Op.like]: pat}},
+      {body: {[Op.like]: pat}},
+    ]
+    attr.push('body')
+  } else if (intitle) {
+    where.title = {[Op.like]: pat}
+  } else if (inbody) {
+    where.body = {[Op.like]: pat}
+    attr.push('body')
+  } else throw new Error()
+  if (!inhist) where.nextUuid = null
+  db.version.count({where})
+  .then(total=> {
+    const pages = Math.ceil(total / size)
+    if (page > pages) page = pages
+    if (page < 1) page = 1
+    if (total > 0) {
+      db.version.findAll({
+        where,
+        offset: size * (page - 1),
+        limit: size,
+        attributes: attr,
+        raw: true,
+      })
+      .then(items=> {
+        const rx = new RegExp(`(.{0,40}?)(${req.params.query})(.{0,40})`, 'i')
+        res.json(ok({
+          total, page, pages,
+          items: items.map(i=> {
+            if (i.body) {
+              let bm = i.body.match(rx)
+              bm = bm ? bm.slice(1,4) : i.body.slice(0,40)
+              i.body = bm
+            }
+            i.plain = i.title
+            if (both || intitle) {
+              let tm = i.title.match(rx)
+              tm = tm ? tm.slice(1,4) : i.title
+              i.title = tm
+            }
+            return i
+          }),
+        }))})
+    } else {
+      res.json(ok({
+        total, page, pages, items: [],
+      }))
+    }
   })
-  .then(vers=> res.json(ok(vers)))
   .catch(e=> res.json(internal(e)))
 })
 
-api.get('/titlesearch/:query', (req, res)=> {
-  db.version.findAll({
-    where: {
-      nextUuid: null,
-      title: {
-        [Op.like]: `%${req.params.query}%`
+api.get([...bi('/history/:ns/:title'), '/history/:uuid'], (req, res) => {
+  const title = req.params.title || 'Home'
+  const uuid = req.params.uuid ? util.imid(req.params.uuid) : null
+  let size = ordef(req.query.sz, 10)
+  if (size < 5) size = 5
+  else if (size > 50) size = 50
+  let page = ordef(req.query.pg, 1)
+  let a
+  if (uuid) a = [uuid]
+  else a = [req.params.ns, title]
+  util.getnstu(...a)
+  .then(ver=> {
+    if (ver) {
+      const where = {
+        pageUuid: ver.pageUuid.toLowerCase()
       }
-    },
-    attributes: ['namespace', 'title'],
-  })
-  .then(vers=> res.json(ok(vers)))
-  .catch(e=> res.json(internal(e)))
+      db.version.count({where})
+      .then(total=> {
+        const pages = Math.ceil(total / size)
+        if (page > pages) page = pages
+        if (page < 1) page = 1
+        if (total > 0) {
+          db.version.findAll({
+            attributes: ['title', 'vnum', 'uuid'],
+            where,
+            include: {
+              model: db.user,
+              attributes: ['handle']
+            },
+            offset: size * (page - 1),
+            limit: size,
+          })
+          .then(items=> items.map(i=> util.proc(i)))
+          .then(items=> res.json(ok({
+            total, page, pages, size, items,
+          })))
+        } else {
+          res.json(ok({
+            total, page, pages, size, items: [],
+          }))
+        }
+      })
+    } else res.json(missing())
+  }).catch(e=> res.json(internal(e)))
 })
 
 api.get('/uuid/:uuid', (req, res)=> {
@@ -106,34 +193,6 @@ api.get(bi('/recent/:num'), (req, res)=> {
   })
   .then(vers=> res.json(ok(vers)))
   .catch(e=> res.json(internal(e)))
-})
-
-const gethist =u=> {
-  return db.version.findAll({
-    attributes: ['title', 'vnum', 'uuid', 'views'],
-    where: {
-      pageUuid: u.toLowerCase()
-    },
-    include: {
-      model: db.user,
-      attributes: ['handle']
-    },
-  }).then(vers=> vers.map(v=> util.proc(v)))
-}
-
-api.get([...bi('/history/:ns/:title'), '/history/:uuid'], (req, res) => {
-  const title = req.params.title || 'Home'
-  const uuid = req.params.uuid ? util.imid(req.params.uuid) : null
-  let a
-  if (uuid) a = [uuid]
-  else a = [req.params.ns, title]
-  util.getnstu(...a)
-  .then(ver=> {
-    if (ver) {
-      gethist(ver.pageUuid)
-      .then(vers=> res.json(ok(vers)))
-    } else res.json(missing())
-  }).catch(e=> res.json(internal(e)))
 })
 
 api.get('/missing/:titles', (req, res) => {

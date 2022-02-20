@@ -1,4 +1,4 @@
-<script>
+c<script>
   import FP from './FP.svelte'
   import PP from './PP.svelte'
   import FR from './FR.svelte'
@@ -7,10 +7,15 @@
 </script>
 
 <FR lab="loc">
-  <PP lab="space" val={$loc.namespace} />
-  <PP lab="title" val={$loc.title} />
-  <PP lab="uuid" val={$loc.uuid} />
-  <PP lab="special" val={$loc.special} />
-  <PP lab="cmd" val={$loc.cmd} />
-  <PP lab="user" val={$loc.user} />
+  {#each Object.entries($loc) as item}
+    {#if item[0] == 'opt' && Object.entries(item[1]).length}
+      <FR lab="opt">
+      {#each Object.entries(item[1]) as i}
+        <PP lab={i[0]} val={i[1]}/>
+      {/each}
+      </FR>
+    {:else}
+      <PP lab={item[0]} val={item[1]}/>
+    {/if}
+  {/each}
 </FR>

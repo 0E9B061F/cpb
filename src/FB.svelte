@@ -2,6 +2,8 @@
   export let c = []
 
   export let expand = false
+  export let solid = false
+  export let exo = false
   export let vert = false
   export let leaf = false
   export let form = false
@@ -12,6 +14,12 @@
   export let around = false
   export let hide = false
   export let w = null
+  export let spacer = null
+
+  $: if (exo) {
+    expand = true
+    solid = true
+  }
 
   let cf = ''
   let cc
@@ -21,6 +29,7 @@
     if (typeof(cc) == 'string') cc = cc.split(' ')
 
     if (expand) cc.push('fb-expand')
+    if (solid) cc.push('fb-solid')
 
     if (vert) cc.push('fb-vert')
     else cc.push('fb-hori')
@@ -39,6 +48,8 @@
     if (hide) cc.push('hidden')
 
     if (w) cc.push(`w${w}`)
+
+    if (spacer) cc.push(`spacer${spacer}`)
 
     cc.push('flexbox')
 

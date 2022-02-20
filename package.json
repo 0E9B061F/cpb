@@ -6,11 +6,17 @@
     "build": "rollup -c",
     "dev": "env NODE_ENV=development rollup -c -w",
     "app": "node server/app.js",
-    "start": "sirv public --no-clear"
+    "start": "sirv public --no-clear",
+    "dump:dev": "rm -f cpb.dev.sqlite",
+    "mig:dev": "npx sequelize-cli db:migrate",
+    "seed:dev": "npx sequelize-cli db:seed:all",
+    "refresh": "run-s dump:dev mig:dev seed:dev"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
+    "lorem-ipsum": "^2.0.4",
+    "npm-run-all": "^4.1.5",
     "rollup": "^2.3.4",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-livereload": "^2.0.0",

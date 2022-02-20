@@ -1,10 +1,5 @@
-@font-face {
-  font-family: 'CG45';
-  src: url('/CPB/fonts/cg-pixel-4x5.ttf');
-}
-@font-face {
-  font-family: 'CG45m';
-  src: url('/CPB/fonts/cg-pixel-4x5-mono.ttf');
+:root {
+  --gap: 0.3125rem;
 }
 
 html, body {
@@ -95,7 +90,7 @@ canvas {
 
 .cpb-main {
 	width: 1024px;
-	height: calc(100vh - 16px);
+	flex-basis: 1024px;
 }
 
 .footer {
@@ -136,6 +131,7 @@ canvas {
 	font-size: 2rem;
 	line-height: 2rem;
 	font-family: 'Azeret Mono', monospace;
+  font-weight: 800;
 }
 .logofill {
   background-color: #353535;
@@ -167,7 +163,7 @@ canvas {
 }
 
 .head-frame {
-	height: calc(0.75rem + 0.3125rem + 50px);
+	height: calc(0.75rem + var(--gap) + 50px);
 	padding-right: 8px;
 	border-right: 5px solid #353535;
 }
@@ -182,8 +178,8 @@ canvas {
 }
 
 .user-bar {
-  font-size: 1rem;
-  line-height: 1rem;
+  font-size: 0.75rem;
+  line-height: 0.75rem;
 }
 
 
@@ -201,7 +197,10 @@ canvas {
   display: flex;
 }
 .fb-expand {
-  flex: 1;
+  flex-grow: 1;
+}
+.fb-solid {
+  flex-shrink: 0;
 }
 .fb-center {
 	justify-content: center;
@@ -282,6 +281,7 @@ canvas {
 }
 .fp-run {
 	border-radius: 5px;
+  flex-wrap: wrap;
 }
 .fp-table > .fp-pair,
 .fp-table > .fp-run {
@@ -438,6 +438,9 @@ h6 {
 	font-weight: 500;
 	font-size: 1rem;
 	line-height: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .recent-date,
 .recent-user {
@@ -454,7 +457,6 @@ h6 {
 
 .search-bar {
 	position: relative;
-	height: 1.8rem;
 }
 .search-bar .r2-input {
   color: #909090;
@@ -476,6 +478,26 @@ h6 {
 }
 .search-preview-item:first-child {
 	padding-top: 0.3125rem;
+}
+.results-items.fb-grid {
+  gap: 0.625rem;
+}
+.results-row,
+.results-cell  {
+  height: 1rem;
+  line-height: 1rem;
+  font-size: 1rem;
+}
+.results .results-cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.search-results .col1 {
+  width: 30%;
+}
+.search-results .col2 {
+  width: 70%;
 }
 
 
@@ -501,6 +523,35 @@ h6 {
 .nline.input {
   height: 1.82rem;
   line-height: 1.82rem;
+}
+.nline .doc-check {
+  width: 1rem;
+  height: 1rem;
+  padding: 0;
+  margin: 0;
+  border: 4px solid #303030;
+  -moz-appearance:none;
+  -webkit-appearance:none;
+  -o-appearance:none;
+}
+.nline .doc-check:hover {
+  border-width: 5px;
+}
+.nline .doc-check:checked {
+  background-color: #9e9fe2;
+}
+.nline .doc-check:focus {
+  outline: none;
+}
+.nline .doc-check:hover:checked {
+  border-width: 5px;
+}
+.nline .r2-input {
+  height: 1rem;
+}
+.r2-input.single {
+  width: 3rem;
+  text-align: center;
 }
 
 .uitxt.s3txt {
@@ -612,7 +663,6 @@ h6 {
 
 .r2 {
   width: 100%;
-  height: 100%;
   background-color: #f9f9f9;
   border: 1px solid #efefef;
 }
@@ -672,8 +722,12 @@ h6 {
   height: 100%;
   background: none;
   border: 0;
+  padding: 0;
   padding-left: 12px;
   padding-right: 12px;
+}
+.r2-input.centered-input {
+  text-align: center;
 }
 .r2-input:focus {
   outline: none;
@@ -735,13 +789,13 @@ h6 {
 .flexlab {
 }
 .flexlab > input {
-  width: 100%;
 }
 .flexlab-txt {
   font-weight: 600;
   min-width: 3rem;
   text-align: right;
 }
+
 
 .qrblab {
   height: 100%;
@@ -761,9 +815,12 @@ h6 {
 
 
 .special-page {
-  margin-top: 5rem;
+  margin-top: 0.3125rem;
 }
 
+.login-special, .register-special {
+  margin-top: 5rem;
+}
 .login-special .flexdoc {
   position: relative;
   left: -3rem;
@@ -777,4 +834,80 @@ h6 {
 }
 .register-special .flexlab-txt {
   width: 6rem;
+}
+
+.emphatic .emph-center {
+  font-weight: 500;
+  background-color: #fafae0;
+  border-radius: 2px;
+}
+
+
+.pagination-link {
+  width: 1.75rem;
+  height: 2rem;
+}
+.pagination-num {
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1rem;
+}
+.labeled .pagination-num {
+  font-weight: 600;
+}
+.pagination-lab {
+  text-align: center;
+  font-size: 0.625rem;
+  line-height: 0.625rem;
+  color: #353535;
+  font-weight: 200;
+}
+.pagination a:hover {
+  text-decoration: none;
+}
+.pagination a:hover .pagination-num {
+  text-decoration: underline;
+}
+.pagination .pagination-center {
+  gap: 1rem;
+}
+.pagination-inter {
+  width: 0.3125rem;
+  font-size: 1rem;
+  line-height: 1rem;
+  font-weight: 900;
+  color: #707070;
+}
+
+.perma-type {
+  font-size: 0.75rem;
+  line-height: 0.75rem;
+  font-weight: 600;
+  text-align: right;
+}
+
+.in2 {
+  width: 3.8rem;
+}
+
+.spacer1 { width: 0; }
+.spacer2 { width: 0.5rem; }
+.spacer3 { width: 1.0rem; }
+.spacer4 { width: 1.5rem; }
+.spacer5 { width: 2.0rem; }
+
+
+.flexlab-txt {
+  user-select: none;
+}
+
+
+.fd-input label {
+  padding-right: var(--gap);
+  font-weight: 600;
+  user-select: none;
+}
+.fd-input input,
+.fd-input label {
+  cursor: pointer;
 }

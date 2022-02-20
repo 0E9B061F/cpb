@@ -30,8 +30,8 @@
 			<QR data={$session.val.uuid} ver={2} title="Session UUID" scale={2}/>
 		{/if}
     <FB vert zero>
-			<div class="logofill"></div>
 			<Logo/>
+			<div class="logofill"></div>
     </FB>
 		<FB vert between zero>
 			<FB>

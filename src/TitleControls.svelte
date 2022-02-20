@@ -17,6 +17,12 @@
 	$: showany = !!$haspage || showedit || showhead || !!$editing || !!$hashistory
 </script>
 
+<FB vert>
+{#if !!$haspage && $loc.uuid == $page.val.uuid}
+	<span class="perma-type">VERSION PERMA</span>
+{:else if !!$haspage && $loc.uuid == $page.val.pageUuid}
+	<span class="perma-type">PAGE PERMA</span>
+{/if}
 <FB>
 	{#if !$editing && $haspage}
 		<Link self recmd="history">HISTORY</Link>
@@ -49,4 +55,5 @@
 			HEAD
 		{/if}
 	</span>
+</FB>
 </FB>

@@ -11,7 +11,7 @@
   export let scale = 3
   export let margin = 0
   export let ver = 1
-  export let mask = 7
+  export let mask = null
   $: if (!data) data = uuid
   let canvas
   let hidden = true

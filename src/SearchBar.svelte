@@ -1,21 +1,29 @@
 <script>
 	import FB from './FB.svelte'
+	import Doc from './doc/Doc.svelte'
+	import Line from './doc/Line.svelte'
+	import Lab from './doc/Lab.svelte'
 	import Link from './Link.svelte'
 	import Input from './doc/Input.svelte'
+	import Check from './doc/Check.svelte'
+	import Numeric from './doc/Numeric.svelte'
+	import SearchEmph from './SearchEmph.svelte'
 
   import { getContext } from 'svelte'
   const gs = getContext('gs')
   const path = getContext('path')
   const loc = getContext('loc')
   const fullsearch = getContext('fullsearch')
-  const titlesearch = getContext('titlesearch')
   const modifiers = getContext('modifiers')
   const setcontrols = getContext('setcontrols')
 
 	export let query = ''
 	export let preview = false
+	export let options = false
 	export let titles = false
 	export let auto = false
+	export let pnum = 1
+	export let size = 10
 	export let result = []
   let exists = false
 	let focused
@@ -48,8 +56,10 @@
 			result = []
 			timer = null
 		} else {
-			const q = titles ? titlesearch(query) : fullsearch(query)
-			q.then(res=> {
+			const opt = {pg: pnum, sz: size}
+			if (titles) opt.inf = 'title'
+			fullsearch(query, opt)
+			.then(res=> {
 				if (res.err == 0) {
 					result = res.val
 					timer = null
@@ -85,6 +95,8 @@
 	} else {
 		setcontrols()
 	}
+
+	$: if (typeof(pnum) != 'number') pnum = parseInt(pnum)
 </script>
 
 <FB vert zero c="search-bar r2-s4">
@@ -101,11 +113,11 @@
 				<div class="r2-bar r2-hori"></div>
 			</FB>
 			<FB vert c="search-preview-wrapper">
-				{#if result.length}
+				{#if result.items}
 				<FB vert c="search-preview">
-					{#each result as item}
+					{#each result.items as item}
 						<FB leaf c="search-preview-item">
-							<Link space={item.namespace} title={item.title} global>{item.title}</Link>
+							<Link space={item.namespace} title={item.title} global><SearchEmph text={item.title}/></Link>
 						</FB>
 					{/each}
 				</FB>
@@ -148,6 +160,18 @@
 				bind:this={sb}>
 				SEARCH
 			</Link>
+		{/if}</svelte:fragment>
+		<svelte:fragment slot="options">{#if options}
+			<Doc>
+				<Line>
+					<Check lab="TITLES"/>
+					<Check lab="BODY"/>
+					<FB leaf spacer={1}/>
+					<Check lab="HISTORY"/>
+					<FB expand/>
+					<Lab txt="RESULTS"><Numeric double min={5} max={50}/></Lab>
+				</Line>
+			</Doc>
 		{/if}</svelte:fragment>
 	</Input>
 </FB>

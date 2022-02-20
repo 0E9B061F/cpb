@@ -16,6 +16,7 @@
   import { writable } from 'svelte/store'
 
 	import rco from '../lib/rc.js'
+	import util from '../lib/util.js'
 
 
 	let booted = writable(false)
@@ -28,7 +29,7 @@
 	let links = writable([])
 	let linkmap = writable({})
 
-	let path = writable(window.location.pathname + window.location.hash)
+	let path = writable(window.location.pathname + window.location.search + window.location.hash)
 	let loc = writable({})
 
 	let session = writable({})
@@ -102,8 +103,14 @@
   const surl =()=> `${burl()}/${$rc.syskey}`
   const aurl =()=> `${surl()}/${$rc.defapi}`
 	const cmdu =(c, ...a)=> {
-		a = a.length? `/${a.join('/')}` : ''
-		return`${aurl()}/${c}${a}`
+		let o = ''
+		if (a.length) {
+			if (typeof(a[a.length-1]) == 'object') {
+				o = util.mkq(a.pop())
+			}
+			a = `/${a.join('/')}`
+		} else a = ''
+		return`${aurl()}/${c}${a}${o}`
 	}
 
 	const grab =(...a)=> {
@@ -212,17 +219,11 @@
 	}
 	setContext('msg', msg)
 
-	const fullsearch =q=> {
-		return grab('search', q)
+	const fullsearch =(q, o={})=> {
+		return grab('search', q, o)
 		.catch(e=> handle(e))
 	}
 	setContext('fullsearch', fullsearch)
-
-	const titlesearch =q=> {
-		return grab('titlesearch', q)
-		.catch(e=> handle(e))
-	}
-	setContext('titlesearch', titlesearch)
 
 	const getconf =k=> {
 		return $uc[k]
@@ -349,10 +350,18 @@
     const loc = {
       namespace: null, title: null, uuid: null,
       special: null, cmd: null, user: null, query: null,
+			pnum: null, opt: {},
     }
     p = p.split('#')
     if (p[1]) loc.cmd = p[1]
-    p = p[0]
+    p = p[0].split('?')
+		if (p[1]) {
+			loc.opt = util.mask(util.rq('?' + p[1]), {
+				pg: undefined, sz: undefined,
+				inf: undefined, inh: undefined,
+			})
+		}
+		p = p[0]
     if (p[0] == '/') p = p.slice(1)
     p = p.split('/')
     const ns = p[0]
@@ -360,7 +369,6 @@
     const args = p.slice(2)
 		let u
 		console.log(ns, t)
-    const hex = '[a-fA-F0-9]'
 		if (ns.startsWith($rc.homekey)) {
 			loc.special = 'user'
 			u = ns.slice(1)
@@ -378,14 +386,15 @@
       } else if (t == $rc.defsearch) {
 				loc.special = 'search'
 				if (args[0]) loc.query = args[0]
+				if (args[1]) loc.pnum = args[1]
       } else {
         loc.special = 'e404'
       }
     } else {
 			console.log('in content space')
 			loc.special = 'content'
-			if (ns.match(`${hex}{8}-(${hex}{4}-){3}${hex}{12}`)) {
-	      loc.uuid = ns
+			if (util.isuu(ns)) {
+	      loc.uuid = ns.toLowerCase()
 	    } else if (ns == '') {
 	      loc.namespace = $rc.defns
 	      loc.title = $rc.deftitle
@@ -447,7 +456,7 @@
 	const unsetmod =n=> $modifiers[n] = false
 
 	const controls =(m, e)=> {
-		if (m.Control && e.code == 'Backslash') {
+		if (m.Shift && e.code == 'KeyD') {
 			setconf('debug', !getconf('debug'))
 		}
 	}
@@ -488,10 +497,38 @@
 	$: mklut($links)
 	$: launch($path)
 
-	$: editmode = $loc.cmd == 'edit' ? 'edit-mode' : ''
+	$: editmode = !!$editing || !!$creating ? 'edit-mode' : ''
+
+	let doctitle = ''
+	const mktitle =()=> {
+		let t = ['0x2764']
+		let p = []
+		let a = []
+		if ($loc.title) {
+			p.push($loc.namespace.toUpperCase())
+			p.push($loc.title)
+			if ($loc.cmd) {
+				a.push($loc.cmd.toUpperCase())
+			}
+		} else {
+			p.push('SPECIAL')
+			p.push($loc.special)
+			if ($loc.special == 'search' && $loc.query) {
+				a.push(`"${$loc.query}"`)
+			}
+		}
+		p = p.join(' ▸ ')
+		a = a.length ? `(${a.join(' ')})` : ''
+		doctitle = ([...t, p, a]).join(' ')
+	}
+	$: mktitle($loc)
 </script>
 
 <svelte:window on:keydown={keydown} on:keyup={keyup} />
+
+<svelte:head>
+	<title>{doctitle}</title>
+</svelte:head>
 
 <FB center c="cpb-ui">
 	<FB vert c="cpb-main">

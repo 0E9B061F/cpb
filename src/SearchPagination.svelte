@@ -1,0 +1,30 @@
+<script>
+  import Link from './Link.svelte'
+  import FB from './FB.svelte'
+  import PaginLink from './PaginLink.svelte'
+  import SearchInter from './SearchInter.svelte'
+  import SearchWing from './SearchWing.svelte'
+  export let result = null
+  export let width = 5
+
+  $: firstpage = result && result.page <= 1
+  $: lastpage = result && result.page >= result.pages
+  $: prevpage = result && result.page - 1 > 1
+  $: nextpage = result && result.page + 1 < result.pages
+</script>
+
+{#if result}
+  <FB between c="pagination">
+    <PaginLink lab="FIRST" pnum={1} enable={!firstpage}/>
+    <SearchWing {width} neg page={result.page} pages={result.pages}/>
+    <FB c="pagination-center">
+      <PaginLink lab="PREV" pnum={result.page - 1} enable={prevpage}/>
+      <SearchInter cond={prevpage}/>
+      <PaginLink lab="PAGE" pnum={result.page} nolink/>
+      <SearchInter cond={nextpage}/>
+      <PaginLink lab="NEXT" pnum={result.page + 1} enable={nextpage}/>
+    </FB>
+    <SearchWing {width} page={result.page} pages={result.pages}/>
+    <PaginLink lab="LAST" pnum={result.pages} enable={!lastpage}/>
+  </FB>
+{/if}

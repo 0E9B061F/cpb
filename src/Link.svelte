@@ -11,6 +11,8 @@
   const session = getContext('session')
   const loc = getContext('loc')
 
+  import util from '../lib/util.js'
+
   export let space = null
   export let title = null
   export let nst = null
@@ -30,6 +32,8 @@
   export let marked = false
   export let user = false
   export let query = null
+  export let pnum = null
+  export let sz = null
 
   let href
   let ident
@@ -105,6 +109,10 @@
       href = `/CPB/${special}`
       if (special == 'search' && query) {
         href = `${href}/${query}`
+        const opt = {}
+        if (pnum) opt.pg = pnum
+        if (sz) opt.sz = sz
+        href = `${href}${util.mkq(opt)}`
       }
     }
 
@@ -135,13 +143,16 @@
   else if (bounce) trace($trail)
   $: mkhref(
     space, title, uuid, special, cmd,
-    global, nolink, disable, user, query
+    global, nolink, disable, user, query, pnum
   )
   $: mkident(uuid, space, title)
 
   onDestroy(()=> deregister(ident))
 
   $: klass = (!special && !nolink && !global && !!$linkmap.val && !!$linkmap.val[ident]) ? 'missing' : ''
+
+  export let current = !global && $path == href
+  $: current = !global && $path == href
 </script>
 {#if disable}
   <span class="cpblink disabled-link" title="disabled">
@@ -153,7 +164,7 @@
     {#if marked}<LinkMark/>{/if}
     <slot></slot>
   </span>
-{:else if !global && $path == href}
+{:else if current}
   <span class="cpblink current-link" title="you are here">
     {#if marked}<LinkMark/>{/if}
     <slot></slot>
