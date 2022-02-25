@@ -1,5 +1,5 @@
 <script>
-  import Input from './Input.svelte'
+  import Text from './Text.svelte'
   import { getContext } from 'svelte'
   const setcontrols = getContext('setcontrols')
   let input
@@ -37,5 +37,10 @@
 </script>
 
 <div class="numeric-input in{w}">
-<Input center bind:this={input} value={user} on:edited={edited} on:focus={focus} on:blur={blur}/>
+  <Text centertxt
+    bind:this={input} value={user}
+    on:edited={edited} on:focus={focus}
+    on:blur={blur}
+    {lab}
+  />
 </div>

@@ -5,8 +5,12 @@
   export let fillh = false
   let rs, c
   $: {
-    rs = size * 10
-    c = ['r2', `r2-s${rs}`]
+    if (size == 'x') {
+      c = ['r2', `r2-sx`]
+    } else {
+      rs = size * 10
+      c = ['r2', `r2-s${rs}`]
+    }
   }
 </script>
 

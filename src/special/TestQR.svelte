@@ -1,12 +1,12 @@
 <script>
-  import FB from './FB.svelte'
-  import QR from './QR.svelte'
-  import Link from './Link.svelte'
-  import Doc from './doc/Doc.svelte'
-  import Line from './doc/Line.svelte'
-  import Lab from './doc/Lab.svelte'
-  import Input from './doc/Input.svelte'
-  import Reticle from './Reticle.svelte'
+  import FB from '../FB.svelte'
+  import QR from '../QR.svelte'
+  import Link from '../Link.svelte'
+  import Doc from '../doc/Doc.svelte'
+  import Line from '../doc/Line.svelte'
+  import Lab from '../doc/Lab.svelte'
+  import Input from '../doc/Input.svelte'
+  import Reticle from '../Reticle.svelte'
   import { v4 } from 'uuid'
   function rand(min, max) {
     min = Math.ceil(min)

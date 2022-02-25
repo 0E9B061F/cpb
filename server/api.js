@@ -45,16 +45,16 @@ const ordef =(v,d)=> {
 api.get('/search/:query', (req, res)=> {
   const query = req.params.query
   const pat = `%${query}%`
-  let size = ordef(req.query.sz, 10)
-  if (size < 5) size = 5
-  else if (size > 50) size = 50
-  let page = ordef(req.query.pg, 1)
-  let inf = req.query.inf || 'title,body'
-  inf = inf.split(',')
+  let size = ordef(req.query.sz, rc.searchDefaults.sz)
+  if (size < rc.minResults) size = rc.minResults
+  else if (size > rc.maxResults) size = rc.maxResults
+  let page = ordef(req.query.pg, rc.searchDefaults.pg)
+  let inf = req.query.inf || rc.searchDefaults.inf
+  if (typeof(inf) == 'string') inf = inf.split(',')
   const intitle = inf.indexOf('title') > -1 || false
   const inbody = inf.indexOf('body') > -1 || false
   const both = (!intitle && !inbody) || (intitle && inbody)
-  const inhist = req.query.inh || false
+  const inhist = req.query.inh || rc.searchDefaults.inh
   const where = {}
   const attr = ['namespace', 'title']
   if (both) {

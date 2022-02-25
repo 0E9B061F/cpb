@@ -34,6 +34,8 @@
   export let query = null
   export let pnum = null
   export let sz = null
+  export let silent = null
+  export let opt = null
 
   let href
   let ident
@@ -115,7 +117,7 @@
         href = `${href}${util.mkq(opt)}`
       }
     }
-
+    if (opt) href = `${href}${util.mkq(opt)}`
     if (cmd && !decmd) href = `${href}#${cmd}`
   }
 
@@ -131,7 +133,7 @@
 
   export const trigger =()=> clicked()
 
-  $: if (!special && !nolink && !bounce && !self && !decmd && !global) {
+  $: if (!special && !nolink && !bounce && !self && !decmd && !global && !silent) {
     reddable = true
   } else {
     reddable = false
@@ -143,13 +145,15 @@
   else if (bounce) trace($trail)
   $: mkhref(
     space, title, uuid, special, cmd,
-    global, nolink, disable, user, query, pnum
+    global, nolink, disable, user, query, pnum,
+    opt,
   )
   $: mkident(uuid, space, title)
 
   onDestroy(()=> deregister(ident))
 
   $: klass = (!special && !nolink && !global && !!$linkmap.val && !!$linkmap.val[ident]) ? 'missing' : ''
+  $: silc = silent ? 'silent' : ''
 
   export let current = !global && $path == href
   $: current = !global && $path == href
@@ -170,7 +174,7 @@
     <slot></slot>
   </span>
 {:else}
-  <a {href} {title} class="cpblink {klass}" on:click|preventDefault={clicked}>
+  <a {href} {title} class="cpblink {klass} {silc}" on:click|preventDefault={clicked}>
     {#if marked}<LinkMark/>{/if}
     <slot></slot>
   </a>

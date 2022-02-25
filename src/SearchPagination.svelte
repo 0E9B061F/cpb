@@ -7,10 +7,15 @@
   export let result = null
   export let width = 5
 
-  $: firstpage = result && result.page <= 1
-  $: lastpage = result && result.page >= result.pages
-  $: prevpage = result && result.page - 1 > 1
-  $: nextpage = result && result.page + 1 < result.pages
+
+  let firstpage, lastpage, prevpage, nextpage
+  $: if (result) {
+    console.log(result)
+    firstpage = result.page <= 1
+    lastpage = result.page >= result.pages
+    prevpage = result.page - 1 > 1
+    nextpage = result.page + 1 < result.pages
+  }
 </script>
 
 {#if result}

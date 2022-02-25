@@ -1,5 +1,6 @@
 <script>
   import HistoryItem from './HistoryItem.svelte'
+  import SearchPagination from './SearchPagination.svelte'
   import { getContext } from 'svelte'
   const history = getContext('history')
   const hashistory = getContext('hashistory')
@@ -19,8 +20,9 @@
     <th>TITLE</th>
     <th class="grow">UUID</th>
   </tr>
-  {#each $history.val as item}
+  {#each $history.val.items as item}
     <HistoryItem {item} />
   {/each}
   </table>
+  <SearchPagination result={$history.val}/>
 {/if}

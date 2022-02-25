@@ -1,3 +1,9 @@
-<script></script>
+<script>
+  import Link from './Link.svelte'
+  import { getContext } from 'svelte'
+  const rc = getContext('rc')
+</script>
 
-<div class="logo">0x2764</div>
+<Link space="main" title="Home" silent>
+  <div class="logo">{$rc.title}</div>
+</Link>

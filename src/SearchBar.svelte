@@ -10,6 +10,7 @@
 	import SearchEmph from './SearchEmph.svelte'
 
   import { getContext } from 'svelte'
+  const rc = getContext('rc')
   const gs = getContext('gs')
   const path = getContext('path')
   const loc = getContext('loc')
@@ -20,10 +21,7 @@
 	export let query = ''
 	export let preview = false
 	export let options = false
-	export let titles = false
 	export let auto = false
-	export let pnum = 1
-	export let size = 10
 	export let result = []
   let exists = false
 	let focused
@@ -31,6 +29,18 @@
 	let input
 	let gb, sb
 	let fresh = true
+	export let inf = 'title,body'
+	let titleOpt, bodyOpt
+	if (inf) {
+		titleOpt = inf.split(',').indexOf('title') > -1
+		bodyOpt = inf.split(',').indexOf('body') > -1
+	} else {
+		titleOpt = true
+		bodyOpt = true
+	}
+	export let inhOpt = false
+	export let szOpt = 25
+	export let pgOpt = 1
 
 	const controls =(m, e)=> {
 		if (e.key == 'Enter') {
@@ -56,9 +66,7 @@
 			result = []
 			timer = null
 		} else {
-			const opt = {pg: pnum, sz: size}
-			if (titles) opt.inf = 'title'
-			fullsearch(query, opt)
+			fullsearch(query, searchOpt)
 			.then(res=> {
 				if (res.err == 0) {
 					result = res.val
@@ -77,9 +85,6 @@
 		query = e.detail.val
 	}
 
-	$: if (auto) delay(query)
-	else if (fresh && query) search()
-
 	$: if (result.length) {
 		exists = false
 		result.forEach(i=> {
@@ -96,7 +101,24 @@
 		setcontrols()
 	}
 
-	$: if (typeof(pnum) != 'number') pnum = parseInt(pnum)
+	$: if (typeof(pgOpt) != 'number') pgOpt = parseInt(pgOpt)
+
+	let searchOpt = {}
+	const mkopts =()=> {
+		const f = []
+		if (titleOpt) f.push('title')
+		if (bodyOpt) f.push('body')
+		const o = {}
+		if (szOpt != $rc.searchDefaults.sz) o.sz = szOpt
+		if (f.join(',') != $rc.searchDefaults.inf.join(',')) o.inf = f
+		if (inhOpt != $rc.searchDefaults.inh) o.inh = inhOpt
+		if (pgOpt != $rc.searchDefaults.pg) o.pg = pgOpt
+		searchOpt = o
+	}
+	$: mkopts(titleOpt, bodyOpt, szOpt, inhOpt)
+
+	$: if (auto) delay(query)
+	else if (fresh && query) search()
 </script>
 
 <FB vert zero c="search-bar r2-s4">
@@ -157,21 +179,21 @@
 				special="search" {query}
 				disable={!query}
 				marked={!$modifiers.Shift}
-				bind:this={sb}>
+				bind:this={sb}
+				opt={searchOpt}
+				>
 				SEARCH
 			</Link>
 		{/if}</svelte:fragment>
 		<svelte:fragment slot="options">{#if options}
-			<Doc>
-				<Line>
-					<Check lab="TITLES"/>
-					<Check lab="BODY"/>
-					<FB leaf spacer={1}/>
-					<Check lab="HISTORY"/>
-					<FB expand/>
-					<Lab txt="RESULTS"><Numeric double min={5} max={50}/></Lab>
-				</Line>
-			</Doc>
+			<FB line>
+				<Check lab="TITLES" bind:state={titleOpt}/>
+				<Check lab="BODY" bind:state={bodyOpt}/>
+				<FB leaf spacer={1}/>
+				<Check lab="HISTORY" bind:state={inhOpt}/>
+				<FB expand/>
+				<Numeric double min={5} max={50} lab="RESULTS" bind:val={szOpt}/>
+			</FB>
 		{/if}</svelte:fragment>
 	</Input>
 </FB>

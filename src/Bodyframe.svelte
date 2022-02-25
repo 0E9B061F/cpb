@@ -1,7 +1,8 @@
 <script>
   import Login from './Login.svelte'
   import User from './User.svelte'
-  import Test from './Test.svelte'
+  import Test from './special/Test.svelte'
+  import TestForms from './special/TestForms.svelte'
   import E401 from './E401.svelte'
   import E404 from './E404.svelte'
   import E500 from './E500.svelte'
@@ -40,6 +41,8 @@
     <Search/>
   {:else if $loc.special == 'test'}
     <Test/>
+  {:else if $loc.special == 'forms'}
+    <TestForms/>
   {:else if $loc.special == 'e404'}
     <E404/>
   {:else}

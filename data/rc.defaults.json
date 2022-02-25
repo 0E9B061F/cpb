@@ -13,5 +13,18 @@
   "defsearch": "search",
   "secret": "oed und leer",
   "fade": 500,
-  "homekey": "~"
+  "homekey": "~",
+  "title": "CPB",
+  "searchDefaults": {
+    "sz": 25,
+    "inf": ["title", "body"],
+    "inh": false,
+    "pg": 1
+  },
+  "historyDefaults": {
+    "sz": 25,
+    "pg": 1
+  },
+  "minResults": 5,
+  "maxResults": 50
 }

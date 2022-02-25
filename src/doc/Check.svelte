@@ -5,9 +5,10 @@
   export let lab = null
   export let flip = false
   export let state = false
+  export let just = 'c'
 </script>
 
-<FB zero {flip} c="fd-input fd-check">
+<FB zero {flip} c="fd-input fd-check" {just}>
   {#if lab}
     <label for={id}>{lab}</label>
   {/if}

@@ -319,7 +319,10 @@
 			}
 		} else if ($loc.cmd == 'history') {
 			const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
-			after = grab('history', ...a).then(history=> {
+			const o = {}
+			if (!!$loc.opt.pg && $loc.opt.pg != $rc.historyDefaults.pg) o.pg = $loc.opt.pg
+			if (!!$loc.opt.sz && $loc.opt.sz != $rc.historyDefaults.sz) o.sz = $loc.opt.sz
+			after = grab('history', ...a, o).then(history=> {
 				cleardata({history})
 			})
 		} else if ($loc.uuid || $loc.namespace) {
@@ -383,6 +386,8 @@
         loc.special = 'user'
 			} else if (t == $rc.deftest) {
 				loc.special = 'test'
+			} else if (t == 'forms') {
+				loc.special = 'forms'
       } else if (t == $rc.defsearch) {
 				loc.special = 'search'
 				if (args[0]) loc.query = args[0]
@@ -501,7 +506,7 @@
 
 	let doctitle = ''
 	const mktitle =()=> {
-		let t = ['0x2764']
+		let t = [$rc.title]
 		let p = []
 		let a = []
 		if ($loc.title) {
