@@ -31,6 +31,8 @@
   const linkmap = getContext('linkmap')
   const modifiers = getContext('modifiers')
   const contcls = getContext('contcls')
+  const trail = getContext('trail')
+  const scrollinfo = getContext('scrollinfo')
 
   let tab = localStorage.getItem('debugtab') || 'main'
   const go =n=> {
@@ -45,10 +47,11 @@
   <Link nolink does={()=> go('uc')} disable={tab == 'uc'}>UC</Link>
   <Link nolink does={()=> go('links')} disable={tab == 'links'}>LINKS</Link>
   <Link nolink does={()=> go('linkmap')} disable={tab == 'linkmap'}>LINKMAP</Link>
+  <Link nolink does={()=> go('trail')} disable={tab == 'trail'}>TRAIL</Link>
   <Link nolink does={()=> go('page')} disable={tab == 'page'}>PAGE</Link>
 </FB>
 {#if tab == 'main'}
-<FT lab={tab}>
+<FT>
   <PP lab="path" val={$path} />
   <LocRO/>
   <PP lab="creating" val={$creating} />
@@ -64,6 +67,13 @@
     <PP lab="level" val={$message.level} />
     <PP lab="text" val={$message.text} />
   </FR>
+  <FR lab="scrollinfo">
+    <PP lab="ch" val={$scrollinfo.ch} />
+    <PP lab="sh" val={$scrollinfo.sh} />
+    <PP lab="sy" val={$scrollinfo.sy} />
+    <PP lab="scrollable" val={$scrollinfo.scrollable} />
+    <PP lab="scrolled" val={$scrollinfo.scrolled} />
+  </FR>
   <PP lab="loading" t={v=> !v} val={$loading} />
   <PP lab="space" val={$space} />
   <PP lab="title" val={$title} />
@@ -74,19 +84,19 @@
   </FR>
 </FT>
 {:else if tab == 'rc'}
-<FT lab={tab}>
+<FT>
   {#each Object.entries($rc) as conf}
     <PP lab={conf[0]} val={conf[1]} />
   {/each}
 </FT>
 {:else if tab == 'uc'}
-<FT lab={tab}>
+<FT>
   {#each Object.entries($uc) as conf}
     <PP lab={conf[0]} val={conf[1]} />
   {/each}
 </FT>
 {:else if tab == 'links'}
-<FT lab={tab}>
+<FT>
   <PP lab="count" val={$links.length}/>
   {#each $links as link}
     <PP val={link}/>
@@ -98,8 +108,14 @@
     <PP lab={link[0]} val={link[1]}/>
   {/each}
 </FT>
-{:else if tab == 'page'}
+{:else if tab == 'trail'}
 <FT lab={tab}>
+  {#each $trail as p}
+    <PP val={p}/>
+  {/each}
+</FT>
+{:else if tab == 'page'}
+<FT>
   {#if !!$page}
   {#each Object.entries($page) as resp}
     {#if resp[0] == 'val'}

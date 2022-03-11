@@ -19,7 +19,7 @@
     {#if lab}<span class="pagination-lab">{lab}</span>{/if}
   </FB>
 {:else if enable}
-  <Link bind:current={cur} special="search" query={$loc.query} {pnum} sz={$loc.opt.sz}>
+  <Link bind:current={cur} self global opt={{pg: pnum}}>
     <FB vert {flip} c="pagination-link {labelc}">
       <span class="pagination-num">{pnum}</span>
       {#if lab}<span class="pagination-lab">{lab}</span>{/if}

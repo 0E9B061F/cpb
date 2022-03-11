@@ -26,5 +26,6 @@
     "pg": 1
   },
   "minResults": 5,
-  "maxResults": 50
+  "maxResults": 50,
+  "readSpeed": 200
 }

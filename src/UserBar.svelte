@@ -9,15 +9,15 @@
 <div class="user-bar">
   {#if $hassess}
     {#if $session.val.login}
-      <Link special="user">{$session.val.handle}</Link>
+      <Link nst="CPB:user">{$session.val.handle}</Link>
     {:else}
       <span>{$session.val.handle}</span>
     {/if}
   {/if}
   {#if $hassess && $session.val.login}
-    <Link first={logout} global self>LOGOUT</Link>
+    <Link first={logout} global self info="End your session. We'll be sorry to see you go!">LOGOUT</Link>
   {:else}
-    <Link special="login">LOGIN</Link>
-    <Link special="register">REGISTER</Link>
+    <Link nst="CPB:login">LOGIN</Link>
+    <Link nst="CPB:register">REGISTER</Link>
   {/if}
 </div>

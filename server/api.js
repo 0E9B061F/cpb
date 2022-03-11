@@ -142,6 +142,7 @@ api.get([...bi('/history/:ns/:title'), '/history/:uuid'], (req, res) => {
             },
             offset: size * (page - 1),
             limit: size,
+            order: [['vnum', 'DESC']],
           })
           .then(items=> items.map(i=> util.proc(i)))
           .then(items=> res.json(ok({

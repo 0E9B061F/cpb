@@ -30,7 +30,6 @@
     QRCode.toCanvas(canvas, data, opt, display)
   }
   const display =e=> {
-    console.log(`qr code generated: ${!e}`)
     hidden = !!e
     if (e) console.log(e)
   }

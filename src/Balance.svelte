@@ -1,9 +1,9 @@
 <script>
 	import FB from './FB.svelte'
 	import Pipe from './Pipe.svelte'
-	export let left
-	export let right
-	export let center
+	export let left = false
+	export let right = false
+	export let center = false
 	export let expand = false
 	export let vert = false
 	let a = false

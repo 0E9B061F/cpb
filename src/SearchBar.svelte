@@ -17,6 +17,7 @@
   const fullsearch = getContext('fullsearch')
   const modifiers = getContext('modifiers')
   const setcontrols = getContext('setcontrols')
+  const haslogin = getContext('haslogin')
 
 	export let query = ''
 	export let preview = false
@@ -70,6 +71,7 @@
 			.then(res=> {
 				if (res.err == 0) {
 					result = res.val
+					console.log(res)
 					timer = null
 					fresh = false
 				}
@@ -119,6 +121,8 @@
 
 	$: if (auto) delay(query)
 	else if (fresh && query) search()
+
+	$: createin = $loc.namespace && $loc.namespace != $rc.syskey ? $loc.namespace : $rc.defns
 </script>
 
 <FB vert zero c="search-bar r2-s4">
@@ -139,7 +143,7 @@
 				<FB vert c="search-preview">
 					{#each result.items as item}
 						<FB leaf c="search-preview-item">
-							<Link space={item.namespace} title={item.title} global><SearchEmph text={item.title}/></Link>
+							<Link does={quit} space={item.namespace} title={item.plain} nored><SearchEmph text={item.title}/></Link>
 						</FB>
 					{/each}
 				</FB>
@@ -156,16 +160,16 @@
 						</Link>
 				  {:else}
 				    <Link global does={quit}
-							space={$loc.namespace || 'main'}
+							space={createin}
 							title={query}
-							disable={!query}
+							disable={!query || !$haslogin}
 							marked={$modifiers.Shift}
 							bind:this={gb}>
 							CREATE
 						</Link>
 				  {/if}
 					<Link does={quit}
-						special="search" {query}
+						nst="CPB:search" sub={[query]}
 						disable={!query}
 						marked={!$modifiers.Shift}
 						bind:this={sb}>
@@ -176,7 +180,7 @@
 		{/if}</svelte:fragment>
 		<svelte:fragment slot="buttons">{#if !preview}
 			<Link does={quit}
-				special="search" {query}
+				nst="CPB:search" sub={[query]}
 				disable={!query}
 				marked={!$modifiers.Shift}
 				bind:this={sb}

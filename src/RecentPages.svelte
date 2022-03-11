@@ -24,10 +24,15 @@
 </script>
 
 <FB vert c="recent-pages">
+  <FB line="b2" fw={7}>
+    RECENT PAGES
+  </FB>
   {#each recents as page}
     <FB zero vert c="recent-page">
-      <FB c="recent-title"><Link global space={page.namespace} title={page.title}>{page.title}</Link></FB>
-      <FB between>
+      <FB c="recent-title">
+        <Link nored space={page.namespace} title={page.title}>{page.title}</Link>
+      </FB>
+      <FB>
         <FB c="recent-date">{fmt(page.createdAt)}</FB>
         <FB c="recent-user">({page.user.handle})</FB>
       </FB>

@@ -33,7 +33,7 @@
 			<Logo/>
 			<div class="logofill"></div>
     </FB>
-		<FB vert between zero>
+		<FB expand vert between zero>
 			<FB>
       	<div class="title-sub">{$space}</div>
 				<FB vert center>
@@ -42,7 +42,6 @@
 			</FB>
       <div class="title-main">{$title}</div>
     </FB>
-		<FB expand/>
 		<FB vert flip>
 			<TitleControls/>
 		</FB>

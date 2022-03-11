@@ -13,10 +13,10 @@
 </script>
 
 
-{#if $loc.cmd == 'history'}
+{#if $loc.opt.history}
   <History/>
 {:else if $haspage}
-  {#if $loc.cmd == 'edit'}
+  {#if $loc.opt.edit}
     {#if $haslogin}
       <PageForm/>
     {:else}

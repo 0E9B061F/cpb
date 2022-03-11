@@ -10,7 +10,6 @@
 
   let firstpage, lastpage, prevpage, nextpage
   $: if (result) {
-    console.log(result)
     firstpage = result.page <= 1
     lastpage = result.page >= result.pages
     prevpage = result.page - 1 > 1

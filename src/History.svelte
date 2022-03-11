@@ -1,6 +1,7 @@
 <script>
   import HistoryItem from './HistoryItem.svelte'
   import SearchPagination from './SearchPagination.svelte'
+  import FB from './FB.svelte'
   import { getContext } from 'svelte'
   const history = getContext('history')
   const hashistory = getContext('hashistory')
@@ -24,5 +25,6 @@
     <HistoryItem {item} />
   {/each}
   </table>
+  <FB expand/>
   <SearchPagination result={$history.val}/>
 {/if}

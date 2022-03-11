@@ -11,6 +11,8 @@
 	import R2Over from './r2/R2Over.svelte'
 	import RecentPages from './RecentPages.svelte'
 	import SearchBar from './SearchBar.svelte'
+	import TOC from './TOC.svelte'
+	import Contents from './Contents.svelte'
 
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
@@ -30,7 +32,11 @@
 	let linkmap = writable({})
 
 	let path = writable(window.location.pathname + window.location.search + window.location.hash)
+	let stem = writable(window.location.pathname + window.location.search)
+	let hash = writable(window.location.hash)
 	let loc = writable({})
+
+	let fresh = writable(true)
 
 	let session = writable({})
 
@@ -42,15 +48,12 @@
 	let title = writable('')
 
 	let page = writable(null)
+	let tokens = writable(null)
 	let user = writable(null)
 	let history = writable(null)
 	let draft = writable(null)
 
 	let trail = writable([])
-	$: if ($path != $trail[0]) {
-		$trail.unshift($path)
-		$trail = $trail
-	}
 
 	let creating = writable(false)
 	let editing = writable(false)
@@ -63,6 +66,8 @@
 
 	let uc = writable({
 		debug: false,
+		darkmode: false,
+		autodark: true,
 	})
 
   setContext('booted', booted)
@@ -72,6 +77,7 @@
 	setContext('linkmap', linkmap)
 	setContext('path', path)
 	setContext('loc', loc)
+	setContext('fresh', fresh)
 	setContext('session', session)
 	setContext('message', message)
 	setContext('loading', loading)
@@ -79,6 +85,7 @@
 	setContext('space', space)
 	setContext('title', title)
 	setContext('page', page)
+	setContext('tokens', tokens)
 	setContext('user', user)
 	setContext('history', history)
 	setContext('draft', draft)
@@ -134,7 +141,6 @@
       headers: { 'Content-Type': 'application/json' },
 		}).then(res=> res.json())
 		.then(r=> {
-			console.log(r)
 			return r
 		})
 	}
@@ -142,9 +148,14 @@
 	setContext('grab', grab)
 	setContext('post', post)
 
+	const setTokens =t=> {
+		$tokens = t
+	}
+	setContext('setTokens', setTokens)
+
 	const postdraft =()=> {
 		const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
-		const c = $loc.cmd == 'edit' ? 'update' : 'get'
+		const c = $loc.opt.edit ? 'update' : 'get'
 		return post(c, ...a, $draft).then(res=> {
 			$draft = null
 			if (!!$creating) $aod = Date.now()
@@ -180,7 +191,6 @@
 	const register =b=> {
     return post('register', b)
   	.then(res=> {
-			console.log(res)
 			getsession()
 			if (res.err == 0) {
 				msg(`Registered as '${b.handle}'`)
@@ -265,6 +275,7 @@
 	}
 
 	const cleardata =(to={})=> {
+		$tokens = null
 		if (to.user) $user = to.user
 		else if ($user) $user = null
 		if (to.page) $page = to.page
@@ -280,18 +291,18 @@
 		$hasuser = checkresp($user)
 		$haspage = checkresp($page)
 		$hashistory = checkresp($history)
-		console.log(`LAUNCH: Data check - user: ${$hasuser} - page: ${$haspage} - hist: ${$hashistory}`)
 	}
 
 	const loadend =()=> {
 		parsenst()
 		if (!!$page && $page.err == 1) $creating = true
-		else if ($loc.cmd == 'edit') $editing = true
+		else if ($loc.opt.edit) $editing = true
 		if (!$booted) {
 			msg('CPB BOOTED')
 			$booted = true
 		}
 		$loading = false
+		$fresh = false
 	}
 
 	const loadshim =t=> {
@@ -300,24 +311,41 @@
 		else setTimeout(loadend, $rc.fade - d)
 	}
 
+	const preload =p=> {
+		$loc = parseloc(p)
+		if ($loc.load) load()
+		else if ($loc.cmd) {
+			const e = document.getElementById($loc.cmd)
+			if (e) {
+				e.scrollIntoView({
+  				behavior: "smooth",
+  				block: "start",
+  				inline: "nearest"
+				})
+				e.focus({preventScroll: true})
+			}
+		}
+	}
+
 	const load =p=> {
 		const loadstart = Date.now()
-		$loading = true
 		$creating = false
 		$editing = false
-		$loc = parseloc(p)
+		$loading = true
 		cleardata()
 
 		let after = false
-		if ($loc.special == 'user') {
-			let u = $loc.user
-			if (!u && !!$haslogin) u = $session.val.handle
-			if (u) {
-				after = grab('user', u).then(user=> {
-					cleardata({user})
-				})
+		if ($loc.namespace == $rc.syskey) {
+			if ($loc.title == 'user') {
+				let u = $loc.sub[0]
+				if (!u && !!$haslogin) u = $session.val.handle
+				if (u) {
+					after = grab('user', u).then(user=> {
+						cleardata({user})
+					})
+				}
 			}
-		} else if ($loc.cmd == 'history') {
+		} else if ($loc.opt.history) {
 			const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
 			const o = {}
 			if (!!$loc.opt.pg && $loc.opt.pg != $rc.historyDefaults.pg) o.pg = $loc.opt.pg
@@ -325,11 +353,10 @@
 			after = grab('history', ...a, o).then(history=> {
 				cleardata({history})
 			})
-		} else if ($loc.uuid || $loc.namespace) {
+		} else if ($loc.title || $loc.namespace || $loc.uuid) {
 			const a = $loc.uuid ? ['uuid', $loc.uuid] : ['get', $loc.namespace, $loc.title]
 			after = grab(...a).then(page=> {
 				if (page.val) page.val.historical = !!page.val.nextUuid
-				console.log(page)
 				cleardata({page})
 			})
 		}
@@ -342,26 +369,52 @@
 		}
 	}
 
+	let contentscmp
+	const scrolltop =()=> {
+		if (contentscmp) contentscmp.top()
+	}
+	setContext('scrolltop', scrolltop)
+	let scrollinfo = writable({ch: 0, sh: 0, sy: 0, scrollable: false, scrolled: false})
+	setContext('scrollinfo', scrollinfo)
+	const updatescroll =(ch, sh, sy, scrollable, scrolled)=> {
+		$scrollinfo = {ch, sh, sy, scrollable, scrolled}
+	}
+	setContext('updatescroll', updatescroll)
+
+	const reload =()=> {
+		launch($path)
+	}
+	setContext('reload', reload)
+
 	const launch =p=> {
 		console.log('COMMONPLACE BOOK: LAUNCH')
-		console.log(`LAUNCH: ${JSON.stringify($rc)}`)
-		if ($hassess) load($path)
-		else getsession().then(s=> load($path))
+		if ($hassess) preload($path)
+		else getsession().then(s=> preload($path))
 	}
+
+	const drophash =()=> {
+		if ($hash) $gs.goto($stem)
+	}
+	setContext('drophash', drophash)
 
   const parseloc =p=> {
     const loc = {
-      namespace: null, title: null, uuid: null,
-      special: null, cmd: null, user: null, query: null,
-			pnum: null, opt: {},
+      namespace: null, title: null,
+			uuid: null, sub: [],
+			cmd: null, opt: {},
+			load: true,
     }
     p = p.split('#')
-    if (p[1]) loc.cmd = p[1]
+		if (!$fresh && p[0] == $stem) loc.load = false
+		$stem = p[0] || null
+		$hash = p[1] || null
+		loc.cmd = $hash
     p = p[0].split('?')
 		if (p[1]) {
 			loc.opt = util.mask(util.rq('?' + p[1]), {
 				pg: undefined, sz: undefined,
 				inf: undefined, inh: undefined,
+				edit: undefined, history: undefined,
 			})
 		}
 		p = p[0]
@@ -370,34 +423,17 @@
     const ns = p[0]
     const t = p[1]
     const args = p.slice(2)
+		loc.sub = args
 		let u
-		console.log(ns, t)
 		if (ns.startsWith($rc.homekey)) {
-			loc.special = 'user'
+			loc.namespace = $rc.syskey
+			loc.title = 'user'
 			u = ns.slice(1)
-			if (u) loc.user = u
+			if (u) loc.sub = [u]
 		} else if (ns == $rc.syskey) {
-			console.log('in sys space')
-      if (t == $rc.deflogin) {
-        loc.special = 'login'
-      } else if (t == $rc.defregister) {
-        loc.special = 'register'
-      } else if (t == $rc.defuser) {
-        loc.special = 'user'
-			} else if (t == $rc.deftest) {
-				loc.special = 'test'
-			} else if (t == 'forms') {
-				loc.special = 'forms'
-      } else if (t == $rc.defsearch) {
-				loc.special = 'search'
-				if (args[0]) loc.query = args[0]
-				if (args[1]) loc.pnum = args[1]
-      } else {
-        loc.special = 'e404'
-      }
+			loc.namespace = $rc.syskey
+			if (t) loc.title = t
     } else {
-			console.log('in content space')
-			loc.special = 'content'
 			if (util.isuu(ns)) {
 	      loc.uuid = ns.toLowerCase()
 	    } else if (ns == '') {
@@ -463,6 +499,8 @@
 	const controls =(m, e)=> {
 		if (m.Shift && e.code == 'KeyD') {
 			setconf('debug', !getconf('debug'))
+		} else if (m.Shift && e.code == 'KeyR') {
+			reload()
 		}
 	}
 	let controlset = controls
@@ -479,7 +517,7 @@
 
   let gs = writable({
     full: p=> `${burl()}/${p}`,
-    goto: p=> {
+    goto: (p)=> {
       $path = p
       window.history.pushState({}, $path, $path)
     },
@@ -500,9 +538,11 @@
 
 	msg()
 	$: mklut($links)
+	$: if ($path != $trail[0]) {
+		$trail.unshift($path)
+		$trail = $trail
+	}
 	$: launch($path)
-
-	$: editmode = !!$editing || !!$creating ? 'edit-mode' : ''
 
 	let doctitle = ''
 	const mktitle =()=> {
@@ -527,6 +567,8 @@
 		doctitle = ([...t, p, a]).join(' ')
 	}
 	$: mktitle($loc)
+
+	$: darkcls = $uc.darkmode ? 'darkmode' : ''
 </script>
 
 <svelte:window on:keydown={keydown} on:keyup={keyup} />
@@ -535,25 +577,18 @@
 	<title>{doctitle}</title>
 </svelte:head>
 
-<FB center c="cpb-ui">
+<FB center c="cpb-ui {darkcls}">
 	<FB vert c="cpb-main">
 		{#if $uc.debug}<Debugger/>{/if}
 	  <Headframe/>
-		{#if !$loading}
-			<FB vert expand c="cpb-content {editmode}">
-		  	{#if !$editing && !$creating && !$hashistory && $loc.special == 'content'}
-					<Titleframe/>
-				{/if}
-				<Bodyframe/>
-		  	<Footer/>
-			</FB>
-		{:else}
-			<R2/>
-		{/if}
+		<Contents bind:this={contentscmp}/>
 	</FB>
 	<FB vert c="medium-right">
-		<SearchBar preview titles auto/>
+		<FB c="sbwrap">
+			<SearchBar preview auto inf="title" szOpt={5}/>
+		</FB>
+		<TOC/>
+		<FB spacer={3}/>
 		<RecentPages count={10}/>
-		<R2 fillh={true}/>
 	</FB>
 </FB>

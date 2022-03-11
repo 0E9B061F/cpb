@@ -1,12 +1,9 @@
 <script>
   import Link from './Link.svelte'
+  import util from '../lib/util.js'
   export let href = ''
   export let title = undefined
-  console.log(`HREF: ${href}`)
-  if (href[0] == '/') href = href.slice(1)
-  href = href.split('/')
-  if (href.length < 2) href.unshift('main')
-  let nst = href.join('/')
+  let nst = href
 </script>
 
 <Link {nst} {title}><slot></slot></Link>

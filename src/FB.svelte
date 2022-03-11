@@ -89,16 +89,18 @@
 
     cf = cc.join(' ')
   }
+
+  export let element = null
 </script>
 
 {#if vc}
-  <div class="flexbox fb-vert fb-center fb-box fb-norm">
+  <div class="flexbox fb-vert fb-center fb-box fb-norm" bind:this={element}>
     <div class={cf}>
       <slot></slot>
     </div>
   </div>
 {:else}
-  <div class={cf}>
+  <div class={cf} bind:this={element}>
     <slot></slot>
   </div>
 {/if}

@@ -11,7 +11,7 @@
   let pass
   const logw =()=> login({handle, pass})
   const regw =()=> register({handle, email, pass})
-  $: doreg = $loc.special == 'register'
+  $: doreg = $loc.title == 'register'
 </script>
 
 <FB center>

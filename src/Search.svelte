@@ -12,7 +12,7 @@
 <FB vert expand>
 <SearchBar
   bind:result
-  query={$loc.query}
+  query={$loc.sub[0]}
   pgOpt={$loc.opt.pg}
   szOpt={$loc.opt.sz}
   inf={$loc.opt.inf}

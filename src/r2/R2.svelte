@@ -3,15 +3,16 @@
   export let size = 5
   export let fillv = false
   export let fillh = false
-  let rs, c
-  $: {
-    if (size == 'x') {
-      c = ['r2', `r2-sx`]
-    } else {
-      rs = size * 10
-      c = ['r2', `r2-s${rs}`]
-    }
+  export let raise = false
+  let c
+  const mkc =()=> {
+    let mc = ['r2']
+    if (size == 'x') mc.push('r2-sx')
+    else mc.push(`r2-s${size * 10}`)
+    if (raise) mc.push('r2-raised')
+    c = mc
   }
+  $: mkc(size, raise)
 </script>
 
 <FB expand zero {c}>

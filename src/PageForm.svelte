@@ -15,6 +15,8 @@
   $: $draft = {namespace, title, body}
 </script>
 
-<FB vert form expand>
+<FB vert zero form expand c="editor-area">
+  <div class="editor-rule"></div>
   <textarea class="main-editor" bind:value={body}></textarea>
+  <div class="editor-rule bottom-rule"></div>
 </FB>

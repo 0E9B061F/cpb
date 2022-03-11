@@ -27,7 +27,7 @@
 		{#if !!$creating}
 			<Link self global first={postdraft}>CREATE</Link>
 		{:else if !!$editing}
-			<Link self global first={postdraft}>SAVE</Link>
+			<Link self global first={postdraft} opt={{edit: undefined}}>SAVE</Link>
 		{:else if $haspage}
 			<MaybeUUID left uuid={$page.val.uuid} />
 			<MaybeUUID left uuid={$page.val.nextUuid} />
