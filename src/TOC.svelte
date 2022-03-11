@@ -47,13 +47,22 @@
         return this
       }
     }
-    flat() {
+    count() {
+      let c = 0
+      this.tree.forEach(h=> {
+        if (typeof(h) == 'string') c += 1
+        else c += h.count()
+      })
+      return c
+    }
+    flat(limit=null, depth=0) {
       const out = []
+      if (limit !== null && depth > limit) return [this.count()]
       this.tree.forEach(h=> {
         if (typeof(h) == 'string') out.push(h)
         else {
           const z = out.pop()
-          out.push([z, ...h.flat()])
+          out.push([z, ...h.flat(limit, depth+1)])
         }
       })
       return out
@@ -68,8 +77,8 @@
         current = current.add(t)
         console.log(current.depth)
       })
-      headings = out.flat()
-      console.log(out)
+      headings = out.flat(1)
+      console.log(headings)
     } else {
       headings = []
     }

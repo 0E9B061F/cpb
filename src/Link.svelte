@@ -260,16 +260,3 @@
   </a>
 {/if}
 {#if dbg}<span>{href}</span>{/if}
-
-<style>
-  .nolink {
-    cursor: pointer;
-  }
-  .current-link, .disabled-link {
-    font-weight: 600;
-  }
-  .disabled-link {
-    color: #303030;
-    cursor: default;
-  }
-</style>

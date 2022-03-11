@@ -497,9 +497,13 @@
 	const unsetmod =n=> $modifiers[n] = false
 
 	const controls =(m, e)=> {
-		if (m.Shift && e.code == 'KeyD') {
+		if (m.Alt && e.code == 'KeyD') {
 			setconf('debug', !getconf('debug'))
-		} else if (m.Shift && e.code == 'KeyR') {
+		} else if (m.Alt && e.code == 'KeyN') {
+			setconf('darkmode', !getconf('darkmode'))
+		} else if (m.Alt && e.code == 'KeyM') {
+			setconf('autodark', !getconf('autodark'))
+		} else if (m.Alt && e.code == 'KeyR') {
 			reload()
 		}
 	}
@@ -568,7 +572,12 @@
 	}
 	$: mktitle($loc)
 
-	$: darkcls = $uc.darkmode ? 'darkmode' : ''
+	let usedark = writable(false)
+	setContext('usedark', usedark)
+	$: if ($uc.autodark) {
+		$usedark = window.matchMedia('(prefers-color-scheme: dark)').matches
+	} else $usedark = $uc.darkmode
+	$: darkcls = $usedark ? 'darkmode' : ''
 </script>
 
 <svelte:window on:keydown={keydown} on:keyup={keyup} />

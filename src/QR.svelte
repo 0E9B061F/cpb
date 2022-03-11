@@ -3,6 +3,7 @@
   import Reticle from './Reticle.svelte'
   import { getContext } from 'svelte'
   const gs = getContext('gs')
+  const usedark = getContext('usedark')
   import { onMount } from 'svelte'
   import QRCode from 'qrcode'
   export let data
@@ -15,15 +16,19 @@
   $: if (!data) data = uuid
   let canvas
   let hidden = true
+  $: color = !!$usedark ? {
+    dark: '#d0d0d0ff',
+    light: '#25252500'
+  } : {
+    dark: '#353535ff',
+    light: '#ffffff00'
+  }
   const generate =data=> {
     if (typeof(data) == 'string') data = data.toUpperCase()
     const opt = {
       errorCorrectionLevel: 'L',
       margin, scale,
-      color: {
-        dark: '#353535ff',
-        light: '#ffffff00'
-      },
+      color,
     }
     if (mask) opt.maskPattern = mask
     if (ver) opt.version = ver
@@ -35,7 +40,7 @@
   }
   $: size = (17 + (4 * ver)) * scale
   onMount(()=> generate(data))
-  $: if (canvas) generate(data, scale, margin, ver, mask)
+  $: if (canvas) generate(data, scale, margin, ver, mask, $usedark)
 </script>
 
 <div class="qrcode" style="width: {size}px; height: {size}px;">

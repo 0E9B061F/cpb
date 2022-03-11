@@ -12,10 +12,14 @@
     {#if typeof(i) == 'string'}
       <li><Link nored self cmd={$slugger.slug(i)}>{i}</Link></li>
     {:else}
-      <li>
-        <Link nored self cmd={$slugger.slug(i[0])}>{i[0]}</Link>
-        <Treelike items={i.slice(1)}/>
-      </li>
+      {#if typeof(i[1]) == 'number'}
+        <li><Link nored self cmd={$slugger.slug(i[0])}>{i[0]}</Link><span class="toc-plus">+</span></li>
+      {:else}
+        <li>
+          <Link nored self cmd={$slugger.slug(i[0])}>{i[0]}</Link>
+          <Treelike items={i.slice(1)}/>
+        </li>
+      {/if}
     {/if}
   {/each}
 </ol>
