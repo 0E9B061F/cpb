@@ -28,7 +28,7 @@
 
 <FB vert expand {c}>
   {#if $loc.namespace == $rc.syskey}
-    {#if $loc.title == 'login' || $loc.title == 'register'}
+    {#if $loc.title == 'login' || ($loc.title == 'register' && !$rc.singleuser)}
       {#if !$haslogin}
         <Login/>
       {:else}
@@ -48,6 +48,8 @@
       <TestForms/>
     {:else if $loc.title == 'links'}
       <TestLinks/>
+    {:else}
+      <E404/>
     {/if}
   {:else}
     <Content/>

@@ -27,5 +27,6 @@
   },
   "minResults": 5,
   "maxResults": 50,
-  "readSpeed": 200
+  "readSpeed": 200,
+  "singleuser": false
 }

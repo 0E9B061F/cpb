@@ -265,6 +265,14 @@ const needlogout =(req, res, next)=> {
     res.end()
   }
 }
+const notsingleuser =(req, res, next)=> {
+  if (!rc.singleuser) {
+    next()
+  } else {
+    res.json(invalid())
+    res.end()
+  }
+}
 
 api.post(bi('/get/:ns/:title'), [needlogin, (req, res)=> {
   db.page.create({
@@ -330,7 +338,7 @@ api.post('/logout', [needlogin, (req, res)=> {
   res.json(ok())
 }])
 
-api.post('/register', [needlogout, (req, res)=> {
+api.post('/register', [notsingleuser, needlogout, (req, res)=> {
   bcrypt.hash(req.body.pass, saltRounds, (err, hash)=> {
     if (err) {
       res.json(internal(err))

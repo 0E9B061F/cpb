@@ -16,6 +16,13 @@
   --defrost: #909090;
   --hifrost: #252525;
   --lens: #9e9fe2;
+  --brushed: #fcfcfc;
+  --embossed: #f0f0f0;
+  --hilight: #fafae0;
+  --warn: #dead25;
+  --alert: #de2657;
+  --normal: #d6ecef;
+  --normalflair: #90b8c1;
 }
 .darkmode {
   --paper: #252525;
@@ -32,6 +39,13 @@
   --defrost: #d0d0d0;
   --hifrost: #e0e0e0;
   --lens: #efefef;
+  --brushed: #202020;
+  --embossed: #171717;
+  --hilight: #505070;
+  --warn: #dead25;
+  --alert: #de2657;
+  --normal: #6060d0;
+  --normalflair: #90b8c1;
 }
 
 html, body {
@@ -147,6 +161,7 @@ li::marker, li::before {
 .toc-plus {
   font-weight: 200;
   font-size: 0.85rem;
+  user-select: none;
 }
 .sbwrap {
   height: 67px;
@@ -352,8 +367,8 @@ li::marker, li::before {
 }
 .main-editor {
   border: 0;
-  background-color: #fcfcfc;
-  border-left: 1px solid #f0f0f0;
+  background-color: var(--brushed);
+  border-left: 1px solid var(--embossed);
 }
 .main-editor:focus {
   outline: 0;
@@ -362,7 +377,7 @@ li::marker, li::before {
   position: absolute;
   width: calc(100% - 0.625rem);
   height: 1px;
-  background-color: #f0f0f0;
+  background-color: var(--embossed);
 }
 .editor-rule.bottom-rule {
   bottom: 0;
@@ -962,7 +977,7 @@ h6 {
 
 .emphatic .emph-center {
   font-weight: 500;
-  background-color: #fafae0;
+  background-color: var(--hilight);
   border-radius: 2px;
 }
 
@@ -1219,4 +1234,22 @@ h6 {
 }
 .expander.fill {
   background-color: var(--matte);
+}
+
+
+.message {
+  padding-left: 0.3125rem;
+  padding-right: 0.3125rem;
+  font-weight: 500;
+  border: 1px solid var(--matte);
+}
+.level-0 {
+  background-color: var(--normal);
+  border: 1px solid var(--normalflair);
+}
+.level-1 {
+  background-color: var(--warn);
+}
+.level-2 {
+  background-color: var(--alert);
 }

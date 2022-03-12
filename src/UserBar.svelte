@@ -1,6 +1,7 @@
 <script>
   import Link from './Link.svelte'
   import { getContext } from 'svelte'
+  const rc = getContext('rc')
   const session = getContext('session')
   const hassess = getContext('hassess')
   const logout = getContext('logout')
@@ -10,13 +11,13 @@
   {#if $hassess}
     {#if $session.val.login}
       <Link nst="CPB:user">{$session.val.handle}</Link>
-    {:else}
+    {:else if !$rc.singleuser}
       <span>{$session.val.handle}</span>
     {/if}
   {/if}
   {#if $hassess && $session.val.login}
     <Link first={logout} global self info="End your session. We'll be sorry to see you go!">LOGOUT</Link>
-  {:else}
+  {:else if !$rc.singleuser}
     <Link nst="CPB:login">LOGIN</Link>
     <Link nst="CPB:register">REGISTER</Link>
   {/if}
