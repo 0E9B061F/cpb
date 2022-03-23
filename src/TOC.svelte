@@ -2,11 +2,13 @@
   import FB from './FB.svelte'
   import Link from './Link.svelte'
   import Treelike from './Treelike.svelte'
+  import WUIModule from './wideui/WUIModule.svelte'
+  import WUIButton from './wideui/WUIButton.svelte'
   import { marked } from 'marked'
   import { getContext, setContext } from 'svelte'
   import { writable } from 'svelte/store'
   const tokens = getContext('tokens')
-  const haspage = getContext('haspage')
+  const state = getContext('state')
   const path = getContext('path')
   const scrollinfo = getContext('scrollinfo')
   const scrolltop = getContext('scrolltop')
@@ -83,18 +85,22 @@
   $: mkh($tokens)
 </script>
 
-{#if !!$haspage && headings.length}
-<FB vert c="toc">
-<FB>
-<FB line="b2" fw={7}>CONTENTS</FB>
-{#if $scrollinfo.scrollable}
-<FB vert center>
-<FB line="s1" fw={5}>
-  <Link nolink does={gotop} disable={!$scrollinfo.scrolled}>TOP</Link>
-</FB>
-</FB>
-{/if}
-</FB>
-<Treelike items={headings}/>
-</FB>
+{#if $state.content && headings.length}
+  <WUIModule>
+
+    <svelte:fragment slot="title">CONTENTS</svelte:fragment>
+
+    <svelte:fragment slot="controls">
+      {#if $scrollinfo.scrollable}
+        <WUIButton>
+          <Link nolink does={gotop} disable={!$scrollinfo.scrolled}>TOP</Link>
+        </WUIButton>
+      {/if}
+    </svelte:fragment>
+
+    <svelte:fragment slot="body">
+      <Treelike items={headings}/>
+    </svelte:fragment>
+
+  </WUIModule>
 {/if}

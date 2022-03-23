@@ -1,6 +1,7 @@
 <script>
   import FB from './FB.svelte'
   import Link from './Link.svelte'
+  import WUIModule from './wideui/WUIModule.svelte'
   import date from 'date-and-time'
   import { getContext } from 'svelte'
   const grab = getContext('grab')
@@ -23,30 +24,36 @@
     return date.format(d, 'ddd, MMM DD YYYY')
   }
   $: refresh($aod, count)
+  let c = []
+  const mkc =()=> {
+    const cb = ['recent-pages']
+    if (compact) cb.push('recent-compact')
+    c = cb
+  }
+  $: mkc(compact)
 </script>
 
-<FB vert c="recent-pages">
-  {#if title}
-    <FB line="b2" fw={7}>{title}</FB>
-  {/if}
-  {#if compact}
-    <FB>
-    {#each recents as page, i}
-      {#if i > 0}<span>&middot;</span>{/if}
-      <Link nored space={page.namespace} title={page.title} />
-    {/each}
-    </FB>
-  {:else}
-    {#each recents as page}
-      <FB zero vert c="recent-page">
-        <FB c="recent-title">
-          <Link nored space={page.namespace} title={page.title} />
+<WUIModule {c}>
+  <svelte:fragment slot="title">{title}</svelte:fragment>
+  <svelte:fragment slot="body">
+    {#if compact}
+      {#each recents as page, i}
+        <FB line solid c="recent-ci">
+          <span class="light-bullet">&bull; </span><Link nored space={page.namespace} title={page.title} />
         </FB>
-        <FB>
-          <FB c="recent-date">{fmt(page.createdAt)}</FB>
-          <FB c="recent-user">({page.user.handle})</FB>
+      {/each}
+    {:else}
+      {#each recents as page}
+        <FB zero vert c="recent-page">
+          <FB c="recent-title">
+            <Link nored space={page.namespace} title={page.title} />
+          </FB>
+          <FB>
+            <FB c="recent-date">{fmt(page.createdAt)}</FB>
+            <FB c="recent-user">({page.user.handle})</FB>
+          </FB>
         </FB>
-      </FB>
-    {/each}
-  {/if}
-</FB>
+      {/each}
+    {/if}
+  </svelte:fragment>
+</WUIModule>

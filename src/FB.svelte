@@ -24,6 +24,7 @@
   export let lw = false
   export let rel = false
   export let abs = false
+  export let wrap = false
 
   export let vc = false
 
@@ -78,6 +79,7 @@
 
     if (rel) cc.push('fb-rel')
     if (abs) cc.push('fb-abs')
+    if (wrap) cc.push('fb-wrap')
 
     if (line) {
       cc.push('fd-line')
@@ -99,11 +101,11 @@
 </script>
 
 {#if vc}
-  <div class="flexbox fb-vert fb-center fb-box fb-norm" bind:this={element}>
+  <svelte:self vert center bind:element={element}>
     <div class={cf}>
       <slot></slot>
     </div>
-  </div>
+  </svelte:self>
 {:else}
   <div class={cf} bind:this={element}>
     <slot></slot>

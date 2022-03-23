@@ -148,17 +148,19 @@ li::before {
 li::marker, li::before {
   font-weight: 400;
 }
-.toc ol {
+ol.treelike, .treelike ol {
   list-style-position: outside;
   padding-inline-start: 20px;
   margin: 0;
 }
-.toc > ol {
+ol.treelike {
   margin-left: var(--gap);
 }
-.toc li {
+.treelike li {
   font-weight: 500;
-  margin-top: var(--gap);
+}
+.treelike li:not(:first-child) {
+  margin-top: 3px;
 }
 .toc-plus {
   font-weight: 200;
@@ -327,6 +329,9 @@ li::marker, li::before {
 }
 .fb-abs {
   position: absolute;
+}
+.fb-wrap {
+  flex-wrap: wrap;
 }
 
 .fb-start   { justify-content: flex-start; }
@@ -589,6 +594,10 @@ h6 {
 	font-weight: 300;
 }
 
+.recent-ci {
+  overflow: hidden;
+}
+
 .wide-ui {
   height: 100%;
   position: relative;
@@ -598,6 +607,14 @@ h6 {
 }
 .wide-head {
   height: 54px;
+}
+
+.wui-body {
+  margin-left: var(--gap);
+}
+
+.light-bullet {
+  color: var(--halfprint)
 }
 
 .search-bar {
