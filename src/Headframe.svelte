@@ -12,37 +12,35 @@
   const path = getContext('path')
   const session = getContext('session')
   const hassess = getContext('hassess')
-  const space = getContext('space')
-  const title = getContext('title')
+  const state = getContext('state')
+  const ui = getContext('ui')
 </script>
 
 <FB vert c="head-frame">
-	<FB between c="prehead">
-		{#if !!$hassess}<UUID>{$session.val.uuid}</UUID>{/if}
-		<FB>
-		<Messenger/>
+	{#if $ui <= 0}
+	<FB c="prehead">
 		<UserBar/>
-		</FB>
+		<Messenger/>
 	</FB>
+	{/if}
 
   <FB c="head-subframe">
-		{#if $hassess}
-			<QR data={$session.val.uuid} ver={2} title="Session UUID" scale={2}/>
-		{/if}
-    <FB vert zero>
-			<Logo/>
-			<div class="logofill"></div>
-    </FB>
-		<FB expand vert between zero>
+
+		<Logo/>
+
+		<FB expand vert zero end>
 			<FB>
-      	<div class="title-sub">{$space}</div>
+				{#if $state.namespace}
+      		<FB line="s2" fw={6} c="title-sub">{$state.namespace}</FB>
+				{/if}
 				<FB vert center>
-					<span class="ns-sep uitxt s3txt">&#9654;</span>
+      		<FB line="s4" fw={6}>&#9654;</FB>
 				</FB>
 			</FB>
-      <div class="title-main">{$title}</div>
+      <FB line="b3" fw={8} c="title-main">{$state.title}</FB>
     </FB>
-		<FB vert flip>
+
+		<FB vert flip rel>
 			<TitleControls/>
 		</FB>
   </FB>

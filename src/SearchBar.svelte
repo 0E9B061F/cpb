@@ -9,7 +9,8 @@
 	import Numeric from './doc/Numeric.svelte'
 	import SearchEmph from './SearchEmph.svelte'
 
-  import { getContext } from 'svelte'
+  import { getContext, createEventDispatcher } from 'svelte'
+	const dispatch = createEventDispatcher()
   const rc = getContext('rc')
   const gs = getContext('gs')
   const path = getContext('path')
@@ -66,12 +67,13 @@
 		if (!query || query == '') {
 			result = []
 			timer = null
+			dispatch('done')
 		} else {
 			fullsearch(query, searchOpt)
 			.then(res=> {
+				dispatch('done')
 				if (res.err == 0) {
 					result = res.val
-					console.log(res)
 					timer = null
 					fresh = false
 				}

@@ -7,6 +7,8 @@
   const handle = getContext('handle')
   const aod = getContext('aod')
   export let count = null
+  export let compact = false
+  export let title = compact ? 'RECENT' : 'RECENT PAGES'
   let recents = []
   const refresh =()=> {
     const a = ['recent']
@@ -24,18 +26,27 @@
 </script>
 
 <FB vert c="recent-pages">
-  <FB line="b2" fw={7}>
-    RECENT PAGES
-  </FB>
-  {#each recents as page}
-    <FB zero vert c="recent-page">
-      <FB c="recent-title">
-        <Link nored space={page.namespace} title={page.title}>{page.title}</Link>
-      </FB>
-      <FB>
-        <FB c="recent-date">{fmt(page.createdAt)}</FB>
-        <FB c="recent-user">({page.user.handle})</FB>
-      </FB>
+  {#if title}
+    <FB line="b2" fw={7}>{title}</FB>
+  {/if}
+  {#if compact}
+    <FB>
+    {#each recents as page, i}
+      {#if i > 0}<span>&middot;</span>{/if}
+      <Link nored space={page.namespace} title={page.title} />
+    {/each}
     </FB>
-  {/each}
+  {:else}
+    {#each recents as page}
+      <FB zero vert c="recent-page">
+        <FB c="recent-title">
+          <Link nored space={page.namespace} title={page.title} />
+        </FB>
+        <FB>
+          <FB c="recent-date">{fmt(page.createdAt)}</FB>
+          <FB c="recent-user">({page.user.handle})</FB>
+        </FB>
+      </FB>
+    {/each}
+  {/if}
 </FB>

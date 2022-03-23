@@ -33,6 +33,7 @@
   const contcls = getContext('contcls')
   const trail = getContext('trail')
   const scrollinfo = getContext('scrollinfo')
+  const state = getContext('state')
 
   let tab = localStorage.getItem('debugtab') || 'main'
   const go =n=> {
@@ -45,6 +46,7 @@
   <Link nolink does={()=> go('main')} disable={tab == 'main'}>MAIN</Link>
   <Link nolink does={()=> go('rc')} disable={tab == 'rc'}>RC</Link>
   <Link nolink does={()=> go('uc')} disable={tab == 'uc'}>UC</Link>
+  <Link nolink does={()=> go('state')} disable={tab == 'state'}>STATE</Link>
   <Link nolink does={()=> go('links')} disable={tab == 'links'}>LINKS</Link>
   <Link nolink does={()=> go('linkmap')} disable={tab == 'linkmap'}>LINKMAP</Link>
   <Link nolink does={()=> go('trail')} disable={tab == 'trail'}>TRAIL</Link>
@@ -93,6 +95,12 @@
 <FT>
   {#each Object.entries($uc) as conf}
     <PP lab={conf[0]} val={conf[1]} />
+  {/each}
+</FT>
+{:else if tab == 'state'}
+<FT lab={tab}>
+  {#each Object.entries($state) as s}
+    <PP lab={s[0]} val={s[1]}/>
   {/each}
 </FT>
 {:else if tab == 'links'}

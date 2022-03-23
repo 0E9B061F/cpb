@@ -22,6 +22,8 @@
   export let just = false
   export let fw = false
   export let lw = false
+  export let rel = false
+  export let abs = false
 
   export let vc = false
 
@@ -73,6 +75,9 @@
     if (lw) cc.push(`lw${lw}`)
 
     if (spacer) cc.push(`spacer${spacer}`)
+
+    if (rel) cc.push('fb-rel')
+    if (abs) cc.push('fb-abs')
 
     if (line) {
       cc.push('fd-line')

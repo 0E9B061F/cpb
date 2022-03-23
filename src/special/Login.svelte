@@ -1,7 +1,7 @@
 <script>
-  import Link from './Link.svelte'
-  import FB from './FB.svelte'
-  import Text from './doc/Text.svelte'
+  import Link from '../Link.svelte'
+  import FB from '../FB.svelte'
+  import Text from '../doc/Text.svelte'
   import { getContext } from 'svelte'
   const login = getContext('login')
   const register = getContext('register')

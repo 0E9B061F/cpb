@@ -58,6 +58,7 @@
 
   let href
   let ident
+  let text
   let reddable = false
   let scratch = {sub: [], opt: {}}
   let special = false
@@ -202,12 +203,19 @@
   }
 
   const mkident =()=> {
-    if (scratch.uuid) ident = scratch.uuid
-    else if (scratch.title) {
+    if (scratch.uuid) {
+      ident = scratch.uuid
+      text = scratch.uuid
+    } else if (scratch.title) {
       ident = `${scratch.space}:${scratch.title}`
+      text = scratch.title
     } else if (scratch.space) {
       ident = scratch.space
-    } else ident = null
+      text = `#${scratch.space}`
+    } else {
+      ident = null
+      text = 'BUTTON'
+    }
     register(ident)
   }
 
@@ -251,12 +259,20 @@
 {#if disable || nolink || (current && !global)}
   <span class={cls} title={rinfo} on:click={clicked}>
     {#if marked}<LinkMark/>{/if}
-    <slot></slot>
+    {#if $$slots.default}
+      <slot></slot>
+    {:else}
+      {text}
+    {/if}
   </span>
 {:else}
   <a {href} title={rinfo} class={cls} on:click|preventDefault={clicked}>
     {#if marked}<LinkMark/>{/if}
-    <slot></slot>
+    {#if $$slots.default}
+      <slot></slot>
+    {:else}
+      {text}
+    {/if}
   </a>
 {/if}
 {#if dbg}<span>{href}</span>{/if}

@@ -11,6 +11,7 @@
   const scrollinfo = getContext('scrollinfo')
   const scrolltop = getContext('scrolltop')
   const drophash = getContext('drophash')
+  export let limit = null
   let headings = []
   let slugger = writable(new marked.Slugger())
   setContext('slugger', slugger)
@@ -27,13 +28,11 @@
     add(t) {
       if (this.depth === null) this.depth = t.depth
       if (t.depth > this.depth) {
-        console.log(`(${this.depth}) in: ${t.depth}:${t.text}`)
         const sub = new TOCTree(this)
         t.depth = sub.depth
         this.tree.push(sub)
         return sub.add(t)
       } else if (t.depth < this.depth) {
-        console.log(`(${this.depth}) out: ${t.depth}:${t.text}`)
         if (this.parent) {
           return this.parent.add(t)
         } else {
@@ -42,7 +41,6 @@
           return this
         }
       } else {
-        console.log(`(${this.depth}) lvl: ${t.depth}:${t.text}`)
         this.tree.push(t.text)
         return this
       }
@@ -55,19 +53,20 @@
       })
       return c
     }
-    flat(limit=null, depth=0) {
+    flat(lim=null, depth=0) {
       const out = []
-      if (limit !== null && depth > limit) return [this.count()]
+      if (lim !== null && depth > lim) return [this.count()]
       this.tree.forEach(h=> {
         if (typeof(h) == 'string') out.push(h)
         else {
           const z = out.pop()
-          out.push([z, ...h.flat(limit, depth+1)])
+          out.push([z, ...h.flat(lim, depth+1)])
         }
       })
       return out
     }
   }
+  $: rl = limit === null ? null : limit - 1
   const mkh =tkns=> {
     if (tkns && tkns.length) {
       $slugger = new marked.Slugger()
@@ -75,10 +74,8 @@
       let current = out
       tkns.filter(t=> t.type == 'heading').forEach(t=> {
         current = current.add(t)
-        console.log(current.depth)
       })
-      headings = out.flat(1)
-      console.log(headings)
+      headings = out.flat(rl)
     } else {
       headings = []
     }

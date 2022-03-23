@@ -3,6 +3,8 @@
   import PageForm from './PageForm.svelte'
   import Viewer from './Viewer.svelte'
   import E401 from './E401.svelte'
+  import E404 from './E404.svelte'
+  import E500 from './E500.svelte'
   import { getContext } from 'svelte'
   const session = getContext('session')
   const page = getContext('page')
@@ -17,20 +19,12 @@
   <History/>
 {:else if $haspage}
   {#if $loc.opt.edit}
-    {#if $haslogin}
-      <PageForm/>
-    {:else}
-      <E401/>
-    {/if}
+    <PageForm/>
   {:else}
     <Viewer/>
   {/if}
-{:else if !!$page && $page.err == 1}
-  {#if $haslogin}
-    <PageForm/>
-  {:else}
-    <E401/>
-  {/if}
+{:else if !!$page}
+  <PageForm/>
 {:else}
   <p>ERROR</p>
 {/if}

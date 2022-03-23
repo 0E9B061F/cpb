@@ -1,9 +1,9 @@
 <script>
-  import Link from './Link.svelte'
-  import FB from './FB.svelte'
-  import SearchBar from './SearchBar.svelte'
-  import SearchEmph from './SearchEmph.svelte'
-  import SearchPagination from './SearchPagination.svelte'
+  import Link from '../Link.svelte'
+  import FB from '../FB.svelte'
+  import SearchBar from '../SearchBar.svelte'
+  import SearchEmph from '../SearchEmph.svelte'
+  import SearchPagination from '../SearchPagination.svelte'
   import { getContext } from 'svelte'
   const loc = getContext('loc')
   let result

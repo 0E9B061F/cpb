@@ -9,10 +9,21 @@
 	import Footer from './Footer.svelte'
 	import R2 from './r2/R2.svelte'
 	import R2Over from './r2/R2Over.svelte'
-	import RecentPages from './RecentPages.svelte'
-	import SearchBar from './SearchBar.svelte'
-	import TOC from './TOC.svelte'
+	import WideUI from './WideUI.svelte'
 	import Contents from './Contents.svelte'
+
+	import Login from './special/Login.svelte'
+	import User from './special/User.svelte'
+	import Search from './special/Search.svelte'
+	import Test from './special/Test.svelte'
+	import TestForms from './special/TestForms.svelte'
+	import TestLinks from './special/TestLinks.svelte'
+	import E401 from './err/E401.svelte'
+	import E404 from './err/E404.svelte'
+	import E500 from './err/E500.svelte'
+	import History from './History.svelte'
+	import Viewer from './Viewer.svelte'
+	import PageForm from './PageForm.svelte'
 
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
@@ -42,6 +53,7 @@
 
 	let message = writable({})
 	let loading = writable(true)
+	let finished = writable(false)
 	let debug = writable(true)
 
 	let space = writable('')
@@ -81,6 +93,7 @@
 	setContext('session', session)
 	setContext('message', message)
 	setContext('loading', loading)
+	setContext('finished', finished)
 	setContext('debug', debug)
 	setContext('space', space)
 	setContext('title', title)
@@ -122,9 +135,9 @@
 
 	const grab =(...a)=> {
 		const url = cmdu(...a)
-		console.log(`GET ${url}`)
 		return fetch(url).then(res=> res.json())
 		.then(r=> {
+			console.log(`GET ${url}`)
 			console.log(r)
 			return r
 		})
@@ -293,25 +306,263 @@
 		$hashistory = checkresp($history)
 	}
 
+	const errors = {
+		401: E401,
+		404: E404,
+		500: E500,
+	}
+
+	const geterr =n=> {
+		if (errors[n]) return errors[n]
+		else return errors[500]
+	}
+
+	const blankstate =()=> {
+		return {
+			editing: false, creating: false, error: 0,
+			current: false, head: false, old: false, anchor: false,
+			system: false, history: false,
+			pageperma: false, verperma: false,
+			label: 'BLANK', cmp: null,
+			namespace: null, title: null,
+			loading: false, building: false, finished: false,
+			loadstart: 0, loadtime: 0, buildstart: 0, buildtime: 0, finishtime: 0,
+			fadestart: 0, fadetime: 0,
+			editable: false, historical: false, byid: false,
+		}
+	}
+	const sidestate =()=> {
+		return Object.assign({}, $state)
+	}
+
+	let state = writable(blankstate())
+	setContext('state', state)
+
+	class Route {
+		constructor(cmp, cnd=()=>true) {
+			this.cmp = cmp
+			this.cnd = cnd
+		}
+		resolve() {
+			const r = this.cnd()
+			if (typeof(r) == 'number') {
+				return new Resolution(r)
+			} else if (r === true) {
+				return new Resolution(this.cmp)
+			} else {
+				return new Resolution(500)
+			}
+		}
+	}
+
+	class Router {
+		constructor(routes) {
+			this.routes = routes
+		}
+		has(p) {
+			return !!this.routes[p]
+		}
+		nav(p) {
+			if (this.has(p)) return this.routes[p].resolve()
+			else return new Resolution(404)
+		}
+	}
+
+	class Resolution {
+		constructor(cmp) {
+			if (typeof(cmp) == 'number') {
+				this.err = cmp
+				this.cmp = geterr(this.err)
+			} else {
+				this.err = 0
+				this.cmp = cmp
+			}
+		}
+	}
+
+
+	const cpbspace = new Router({
+		login: new Route(Login, ()=> !$haslogin || 401),
+		register: new Route(Login, ()=> {
+			if ($rc.singleuser) return 404
+			else if (!$haslogin) return true
+			else return 401
+		}),
+		user: new Route(User, ()=> !!$haslogin || 401),
+		search: new Route(Search),
+		test: new Route(Test),
+		forms: new Route(TestForms),
+		links: new Route(TestLinks),
+	})
+	setContext('cpbspace', cpbspace)
+
+	const loadstate =()=> {
+		const s = blankstate()
+		s.loading = true
+		s.label = 'LOADING'
+		s.loadstart = Date.now()
+		if ($loc.uuid) s.title = $loc.uuid
+		else {
+			s.namespace = $loc.namespace
+			s.title = $loc.title
+		}
+		$state = s
+	}
+
+	let component = writable(null)
+	setContext('component', component)
+
+	const buildstate =()=> {
+		console.log($hashistory)
+		const s = sidestate()
+		s.loading = false
+		s.loadtime = Date.now() - s.loadstart
+		if ($haspage && $loc.uuid) {
+			if ($loc.uuid == $page.val.pageUuid) s.pageperm = true
+			else if ($loc.uuid == $page.val.uuid) s.verperm = true
+		}
+		if ($hashistory && $loc.opt.history) {
+			s.cmp = History
+			s.history = true
+			s.label = 'HISTORY'
+	  } else if ($haspage && $loc.opt.edit) {
+			if ($page.val.historical) {
+				s.cmp = geterr(401)
+				s.error = 401
+				s.label = 'ERROR'
+			} else {
+				if ($haslogin) {
+					s.cmp = PageForm
+					s.editing = true
+					s.label = 'EDIT'
+				} else {
+					s.cmp = geterr(401)
+					s.error = 401
+					s.label = 'ERROR'
+				}
+			}
+		} else if ($loc.uuid) {
+			if (!$haspage || $page && $page.err) {
+				s.cmp = geterr(404)
+				s.error = 404
+				s.label = 'ERROR'
+			} else {
+				if ($haspage && $loc.uuid == $page.val.pageUuid) {
+					s.cmp = Viewer
+					s.head = true
+					s.label = 'HEAD'
+					s.editable = true
+				} else if ($haspage && $page.val.nextUuid == null) {
+					s.cmp = Viewer
+					s.current = true
+					s.label = 'CURRENT'
+					s.editable = true
+				} else {
+					s.cmp = Viewer
+					s.old = true
+					s.label = 'OLD'
+					s.historical = true
+				}
+				s.byid = true
+				s.content = true
+			}
+		} else if ($page && $page.err == 1) {
+			if ($haslogin) {
+				s.cmp = PageForm
+				s.creating = true
+				s.label = 'NEW'
+			} else {
+				s.cmp = geterr(404)
+				s.error = 404
+				s.label = 'ERROR'
+			}
+		} else if ($haspage) {
+			s.cmp = Viewer
+			s.anchor = true
+			s.label = 'ANCHOR'
+			s.content = true
+			s.editable = true
+		} else if ($loc.namespace == $rc.syskey) {
+			const res = cpbspace.nav($loc.title)
+			if (res.err > 0) {
+				s.label = 'ERROR'
+				s.error = res.err
+				s.cmp = geterr(res.err)
+			} else {
+				s.system = true
+				s.label = 'SYSTEM'
+				s.cmp = res.cmp
+			}
+		} else {
+			s.cmp = geterr(500)
+			s.error = 500
+			s.label = 'ERROR'
+		}
+		if ($haspage) {
+			s.namespace = $page.val.namespace
+			s.title = $page.val.title
+		} else {
+			s.namespace = $loc.namespace
+			s.title = $loc.title
+		}
+		s.building = true
+		s.buildstart = Date.now()
+		$component = s.cmp
+		$state = s
+		$creating = $state.creating
+		$editing = $state.editing
+	}
+
+	const finishstate =()=> {
+		const s = sidestate()
+		const n = Date.now()
+		s.building = false
+		s.buildtime = n - s.buildstart
+		s.fadestart = n
+		$state = s
+	}
+
+	const finalstate =()=> {
+		const s = sidestate()
+		const n = Date.now()
+		s.finishtime = n - s.loadstart
+		s.fadetime = n - s.fadestart
+		s.finished = true
+		$state = s
+	}
+
 	const loadend =()=> {
+		console.log('CPB LOAD END')
 		parsenst()
-		if (!!$page && $page.err == 1) $creating = true
-		else if ($loc.opt.edit) $editing = true
+		buildstate()
 		if (!$booted) {
 			msg('CPB BOOTED')
 			$booted = true
 		}
+		renderstart = Date.now()
 		$loading = false
-		$fresh = false
+		$fresh = false // XXX there's already a 'booted' variable
 	}
 
-	const loadshim =t=> {
-		const d = Date.now() - t
-		if (d >= $rc.fade) loadend()
-		else setTimeout(loadend, $rc.fade - d)
+	const finishinner =()=> {
+		finalstate()
+		$finished = true
+		console.log('FINISHED')
+		rendertime = Date.now() - renderstart
+		msg(`finished: ${loadtime} / ${rendertime}`)
 	}
+
+	const finishload =()=> {
+		console.log('PRE-FINISH')
+		finishstate()
+		const d = Date.now() - $state.loadstart
+		if (d >= $rc.fade) finishinner()
+		else setTimeout(finishinner, $rc.fade - d)
+	}
+	setContext('finishload', finishload)
 
 	const preload =p=> {
+		console.log('CPB PRE-LOAD')
 		$loc = parseloc(p)
 		if ($loc.load) load()
 		else if ($loc.cmd) {
@@ -327,11 +578,19 @@
 		}
 	}
 
+	let loadstart = 0
+	let renderstart = 0
+	let loadtime = 0
+	let rendertime = 0
+
 	const load =p=> {
-		const loadstart = Date.now()
+		console.log('CPB LOAD')
+		loadstart = Date.now()
+		loadstate()
 		$creating = false
 		$editing = false
 		$loading = true
+		$finished = false
 		cleardata()
 
 		let after = false
@@ -350,9 +609,18 @@
 			const o = {}
 			if (!!$loc.opt.pg && $loc.opt.pg != $rc.historyDefaults.pg) o.pg = $loc.opt.pg
 			if (!!$loc.opt.sz && $loc.opt.sz != $rc.historyDefaults.sz) o.sz = $loc.opt.sz
-			after = grab('history', ...a, o).then(history=> {
-				cleardata({history})
-			})
+			if ($loc.title || $loc.namespace || $loc.uuid) {
+				const a2 = $loc.uuid ? ['uuid', $loc.uuid] : ['get', $loc.namespace, $loc.title]
+				after = grab(...a2).then(async page=> {
+					if (page.val) page.val.historical = !!page.val.nextUuid
+					const history = await grab('history', ...a, o)
+					cleardata({page, history})
+				})
+			} else {
+				after = grab('history', ...a, o).then(history=> {
+					cleardata({history})
+				})
+			}
 		} else if ($loc.title || $loc.namespace || $loc.uuid) {
 			const a = $loc.uuid ? ['uuid', $loc.uuid] : ['get', $loc.namespace, $loc.title]
 			after = grab(...a).then(page=> {
@@ -362,10 +630,10 @@
 		}
 		if (after) {
 			after.then(r=> {
-				loadshim(loadstart)
+				loadend()
 			}).catch(e=> handle(e))
 		} else {
-			loadshim(loadstart)
+			loadend()
 		}
 	}
 
@@ -577,27 +845,55 @@
 	$: if ($uc.autodark) {
 		$usedark = window.matchMedia('(prefers-color-scheme: dark)').matches
 	} else $usedark = $uc.darkmode
-	$: darkcls = $usedark ? 'darkmode' : ''
+
+	let c = []
+	const mkc =()=> {
+		const nc = ['cpb-ui']
+		if (!!$usedark) nc.push('darkmode')
+		if (!!$loading) nc.push('cpb-loading')
+		else if (!$finished) nc.push('cpb-rendering')
+		else nc.push('cpb-finished')
+		c = nc
+	}
+	$: mkc($usedark, $loading, $finished)
+
+	let ww = writable(0)
+	let wh = writable(0)
+
+	setContext('ww', ww)
+	setContext('wh', wh)
+
+	const basex = 1024
+	const colx = 300
+	const widex = basex + (2 * colx)
+	const medx = basex + colx
+
+	let ui = writable(2)
+	const mkui =w=> {
+		if (w >= widex) return 2
+		else if (w >= medx) return 1
+		else return 0
+	}
+	$: $ui = mkui($ww)
+	setContext('ui', ui)
 </script>
 
-<svelte:window on:keydown={keydown} on:keyup={keyup} />
+<svelte:window
+	on:keydown={keydown}
+	on:keyup={keyup}
+	bind:innerWidth={$ww}
+	bind:innerHeight={$wh}
+/>
 
 <svelte:head>
 	<title>{doctitle}</title>
 </svelte:head>
 
-<FB center c="cpb-ui {darkcls}">
+<FB center {c}>
 	<FB vert c="cpb-main">
 		{#if $uc.debug}<Debugger/>{/if}
 	  <Headframe/>
 		<Contents bind:this={contentscmp}/>
 	</FB>
-	<FB vert c="medium-right">
-		<FB c="sbwrap">
-			<SearchBar preview auto inf="title" szOpt={5}/>
-		</FB>
-		<TOC/>
-		<FB spacer={3}/>
-		<RecentPages count={10}/>
-	</FB>
+	<WideUI/>
 </FB>

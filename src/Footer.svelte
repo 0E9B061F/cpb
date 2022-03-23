@@ -9,11 +9,12 @@
   const editing = getContext('editing')
   const creating = getContext('creating')
   const postdraft = getContext('postdraft')
+  const state = getContext('state')
 </script>
 
 <FB c="footer">
   <FB vert>
-		{#if !$editing && $haspage}
+		{#if $state.content}
 			<MaybeUUID right uuid={$page.val.pageUuid} />
 			<MaybeUUID right uuid={$page.val.prevUuid} />
 		{:else}
@@ -24,11 +25,11 @@
     <div class="heartmark">&#x2764;</div>
   </FB>
   <FB vert>
-		{#if !!$creating}
+		{#if $state.creating}
 			<Link self global first={postdraft}>CREATE</Link>
-		{:else if !!$editing}
+		{:else if $state.editing}
 			<Link self global first={postdraft} opt={{edit: undefined}}>SAVE</Link>
-		{:else if $haspage}
+		{:else if $state.content}
 			<MaybeUUID left uuid={$page.val.uuid} />
 			<MaybeUUID left uuid={$page.val.nextUuid} />
 		{/if}
