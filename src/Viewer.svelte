@@ -28,6 +28,9 @@
 
 {#if $haspage}
   <div class="rendered" bind:this={body}>
+    <div class="infobar">
+      foo
+    </div>
     <SvelteMarkdown source={$page.val.body} {renderers} on:parsed={onparse} />
   </div>
   <p>vnum: {$page.val.vnum}</p>

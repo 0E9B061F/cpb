@@ -27,6 +27,7 @@
   export let wrap = false
 
   export let vc = false
+  export let ve = false
 
   $: if (exo) {
     expand = true
@@ -100,8 +101,8 @@
   export let element = null
 </script>
 
-{#if vc}
-  <svelte:self vert center bind:element={element}>
+{#if vc || ve}
+  <svelte:self vert center={vc} end={ve} bind:element={element}>
     <div class={cf}>
       <slot></slot>
     </div>

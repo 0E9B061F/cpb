@@ -1,7 +1,7 @@
 <script>
-  import FB from './FB.svelte'
-  import Link from './Link.svelte'
-  import WUIModule from './wideui/WUIModule.svelte'
+  import FB from '../FB.svelte'
+  import Link from '../Link.svelte'
+  import WUIModule from './WUIModule.svelte'
   import date from 'date-and-time'
   import { getContext } from 'svelte'
   const grab = getContext('grab')

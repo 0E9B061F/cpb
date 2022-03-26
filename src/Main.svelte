@@ -853,9 +853,10 @@
 		if (!!$loading) nc.push('cpb-loading')
 		else if (!$finished) nc.push('cpb-rendering')
 		else nc.push('cpb-finished')
+		nc.push(`${$uiname}-ui`)
 		c = nc
 	}
-	$: mkc($usedark, $loading, $finished)
+
 
 	let ww = writable(0)
 	let wh = writable(0)
@@ -869,13 +870,26 @@
 	const medx = basex + colx
 
 	let ui = writable(2)
+	let uiname = writable('base')
 	const mkui =w=> {
 		if (w >= widex) return 2
 		else if (w >= medx) return 1
 		else return 0
 	}
+	const uin = {
+		[-1]: 'mobile',
+		[+0]: 'base',
+		[+1]: 'medium',
+		[+2]: 'wide',
+	}
+	const mkuin =n=> {
+		return uin[n] || 'base'
+	}
 	$: $ui = mkui($ww)
+	$: $uiname = mkuin($ui)
 	setContext('ui', ui)
+	setContext('uiname', uiname)
+	$: mkc($usedark, $loading, $finished, $uiname)
 </script>
 
 <svelte:window

@@ -1,9 +1,9 @@
 <script>
-  import FB from './FB.svelte'
-  import Link from './Link.svelte'
-  import Treelike from './Treelike.svelte'
-  import WUIModule from './wideui/WUIModule.svelte'
-  import WUIButton from './wideui/WUIButton.svelte'
+  import FB from '../FB.svelte'
+  import Link from '../Link.svelte'
+  import Treelike from '../util/Treelike.svelte'
+  import WUIModule from './WUIModule.svelte'
+  import WUIButton from './WUIButton.svelte'
   import { marked } from 'marked'
   import { getContext, setContext } from 'svelte'
   import { writable } from 'svelte/store'
@@ -15,8 +15,7 @@
   const drophash = getContext('drophash')
   export let limit = null
   let headings = []
-  let slugger = writable(new marked.Slugger())
-  setContext('slugger', slugger)
+  let slugger = new marked.Slugger()
   const gotop =()=> {
     drophash()
     scrolltop()
@@ -71,7 +70,7 @@
   $: rl = limit === null ? null : limit - 1
   const mkh =tkns=> {
     if (tkns && tkns.length) {
-      $slugger = new marked.Slugger()
+      slugger = new marked.Slugger()
       const out = new TOCTree()
       let current = out
       tkns.filter(t=> t.type == 'heading').forEach(t=> {
@@ -99,7 +98,18 @@
     </svelte:fragment>
 
     <svelte:fragment slot="body">
-      <Treelike items={headings}/>
+      <Treelike items={headings} let:item={item}>
+        {#if typeof(item) == 'string'}
+          <Link nored self cmd={slugger.slug(item)}>{item}</Link>
+        {:else}
+          {#if typeof(item[1]) == 'number'}
+            <Link nored self cmd={slugger.slug(item[0])}>{item[0]}</Link>
+            <span class="toc-plus">+</span>
+          {:else}
+            <Link nored self cmd={slugger.slug(item[0])}>{item[0]}</Link>
+          {/if}
+        {/if}
+      </Treelike>
     </svelte:fragment>
 
   </WUIModule>

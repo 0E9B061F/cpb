@@ -7,6 +7,7 @@
 	import UserBar from './UserBar.svelte'
 	import TitleControls from './TitleControls.svelte'
 	import Messenger from './Messenger.svelte'
+	import SearchBar from './SearchBar.svelte'
   import { getContext } from 'svelte'
   const gs = getContext('gs')
   const path = getContext('path')
@@ -16,14 +17,30 @@
   const ui = getContext('ui')
 </script>
 
-<FB vert c="head-frame">
-	{#if $ui <= 0}
-	<FB c="prehead">
+<FB vert={$ui > 0} c="head-frame">
+{#if $ui <= 0}
+	<FB vert between>
 		<UserBar/>
-		<Messenger/>
+		<Logo/>
 	</FB>
-	{/if}
-
+	<FB expand vert zero>
+		<FB between expand>
+			<FB ve>
+				{#if $state.namespace}
+      		<FB line="s2" fw={6} c="title-sub">{$state.namespace}</FB>
+				{/if}
+      	<FB vc line="s4" fw={6}>&#9654;</FB>
+			</FB>
+			<SearchBar preview auto inf="title" szOpt={5}/>
+		</FB>
+		<FB between>
+			<FB line="b3" fw={8} c="title-main">{$state.title}</FB>
+			<FB vert end>
+				<TitleControls/>
+			</FB>
+		</FB>
+	</FB>
+{:else}
   <FB c="head-subframe">
 
 		<Logo/>
@@ -40,14 +57,10 @@
       <FB line="b3" fw={8} c="title-main">{$state.title}</FB>
     </FB>
 
-		<FB vert flip rel>
+		<FB vert end rel>
 			<TitleControls/>
 		</FB>
-  </FB>
-</FB>
 
-<style>
-  .suuid {
-    text-align: right;
-  }
-</style>
+  </FB>
+{/if}
+</FB>
