@@ -8,9 +8,10 @@
 	import Bodyframe from './Bodyframe.svelte'
 	import Footer from './Footer.svelte'
 	import R2 from './r2/R2.svelte'
-	import R2Over from './r2/R2Over.svelte'
+	import R2Hider from './r2/R2Hider.svelte'
 	import WideUI from './WideUI.svelte'
 	import Contents from './Contents.svelte'
+	import LoadingScreen from './LoadingScreen.svelte'
 
 	import Login from './special/Login.svelte'
 	import User from './special/User.svelte'
@@ -535,13 +536,15 @@
 		console.log('CPB LOAD END')
 		parsenst()
 		buildstate()
-		if (!$booted) {
-			msg('CPB BOOTED')
-			$booted = true
-		}
 		renderstart = Date.now()
 		$loading = false
 		$fresh = false // XXX there's already a 'booted' variable
+	}
+
+	const endboot =()=> {
+		msg('CPB BOOTED')
+		console.log('CPB BOOTED')
+		$booted = true
 	}
 
 	const finishinner =()=> {
@@ -549,6 +552,15 @@
 		$finished = true
 		console.log('FINISHED')
 		rendertime = Date.now() - renderstart
+		if (!$booted) {
+			if ($state.finishtime < $rc.fadein) {
+				console.log('FADING')
+				setTimeout(endboot, $rc.fadein - $state.finishtime)
+			} else {
+				console.log(`NOT FADING ${$state.finishtime} (${rc.fadein})`)
+				endboot()
+			}
+		}
 		msg(`finished: ${loadtime} / ${rendertime}`)
 	}
 
@@ -849,7 +861,6 @@
 	let c = []
 	const mkc =()=> {
 		const nc = ['cpb-ui']
-		if (!!$usedark) nc.push('darkmode')
 		if (!!$loading) nc.push('cpb-loading')
 		else if (!$finished) nc.push('cpb-rendering')
 		else nc.push('cpb-finished')
@@ -890,6 +901,9 @@
 	setContext('ui', ui)
 	setContext('uiname', uiname)
 	$: mkc($usedark, $loading, $finished, $uiname)
+
+	let ready = false
+	setTimeout(()=> ready = true, 2500)
 </script>
 
 <svelte:window
@@ -903,11 +917,18 @@
 	<title>{doctitle}</title>
 </svelte:head>
 
-<FB center {c}>
-	<FB vert c="cpb-main">
+<div class="cpb-shell" class:darkmode={$usedark}>
+<FB center {c} rel>
+	<R2Hider hide hyper>
+		<svelte:fragment slot="inner">
+			<LoadingScreen/>
+		</svelte:fragment>
+	</R2Hider>
+	<FB vert c="cpb-main" ghost={!$booted}>
 		{#if $uc.debug}<Debugger/>{/if}
-	  <Headframe/>
+		<Headframe/>
 		<Contents bind:this={contentscmp}/>
 	</FB>
-	<WideUI/>
+	<WideUI ghost={!$booted}/>
 </FB>
+</div>

@@ -1,6 +1,7 @@
 <script>
   import Link from './Link.svelte'
-  import Reticle from './Reticle.svelte'
+  import FB from './FB.svelte'
+  import R2Hider from './r2/R2Hider.svelte'
   import { getContext } from 'svelte'
   const gs = getContext('gs')
   const usedark = getContext('usedark')
@@ -43,7 +44,17 @@
   $: if (canvas) generate(data, scale, margin, ver, mask, $usedark)
 </script>
 
-<div class="qrcode" style="width: {size}px; height: {size}px;">
+<FB c="qrcode" rel style={{width: `${size}px`, height: `${size}px`}}>
+  <R2Hider hide={hidden} size={0.5}>
+    <div slot="inner">
+      <span class="uitxt s1txt w5txt">ERR</span>
+      {#if size > 65}
+        <span class="uitxt s3txt">FAILED TO GENERATE QR CODE</span>
+      {:else if size > 50}
+        <span class="uitxt s3txt">QR CODE FAILED</span>
+      {/if}
+    </div>
+  </R2Hider>
   <div class="qrcanvas" class:hidden={hidden}>
     {#if uuid}
       <Link {uuid}><canvas bind:this={canvas}></canvas></Link>
@@ -51,14 +62,4 @@
       <canvas bind:this={canvas} {title}></canvas>
     {/if}
   </div>
-  <div class="qrdefault" class:hidden={!hidden}>
-    <Reticle size={1}>
-      <span class="uitxt s1txt w5txt">ERR</span>
-      {#if size > 65}
-        <span class="uitxt s3txt">FAILED TO GENERATE QR CODE</span>
-      {:else if size > 50}
-        <span class="uitxt s3txt">QR CODE FAILED</span>
-      {/if}
-    </Reticle>
-  </div>
-</div>
+</FB>

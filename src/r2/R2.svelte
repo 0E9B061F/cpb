@@ -4,13 +4,15 @@
   export let fillv = false
   export let fillh = false
   export let raise = false
+  export let hyper = false
   export let abs = false
   let c
   const mkc =()=> {
     let mc = ['r2']
     if (size == 'x') mc.push('r2-sx')
     else mc.push(`r2-s${size * 10}`)
-    if (raise) mc.push('r2-raised')
+    if (hyper) mc.push('r2-hyper')
+    else if (raise) mc.push('r2-raised')
     if (abs) mc.push('r2-abs')
     c = mc
   }

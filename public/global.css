@@ -58,7 +58,6 @@ html, body {
 }
 
 body {
-  background-color: var(--paper);
 	color: var(--print);
 	margin: 0;
 	box-sizing: border-box;
@@ -174,10 +173,14 @@ ol.treelike {
 }
 
 
-
+.cpb-shell {
+  height: 100%;
+  padding: 5px;
+  background-color: var(--paper);
+  box-sizing: border-box;
+}
 .cpb-ui {
-	padding: var(--gap);
-	height: 100vh;
+	height: 100%;
   width: 100%;
   background-color: var(--paper);
   color: var(--print);
@@ -883,7 +886,10 @@ h6 {
 .r2-s50 .r2-vert { height: 55px; }
 
 .r2-raised {
-  z-index: 1000;
+  z-index: 10;
+}
+.r2-hyper {
+  z-index: 20;
 }
 .r2-abs {
   position: absolute;
@@ -1300,4 +1306,101 @@ h6 {
 }
 .level-2 {
   background-color: var(--alert);
+}
+
+.blackbox {
+  border: 5px solid var(--matte);
+}
+.blackcell {
+  padding: 5px;
+}
+.blackcell:not(:first-child) {
+  border-top: 5px solid var(--matte);
+}
+.blackcell.head {
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-right: 0;
+}
+.blackfill {
+  background-color: var(--matte);
+}
+.blackline {
+  height: 100%;
+}
+
+.hexagram {
+  --hg-base: 5px;
+  --hg-h: calc(var(--hg-base) * 9);
+  --hg-lnh: var(--hg-base);
+  --hg-gap: calc(var(--hg-base) * 0.6);
+  --hg-mini: calc(var(--hg-base) * 0.4);
+  --hg-nano: calc(var(--hg-base) * 0.2);
+  --hg-bleed: calc((var(--hg-gap) + var(--hg-lnh)) * 2);
+  height: var(--hg-h);
+  aspect-ratio: 0.92;
+}
+.hexagram.ordered {
+  border: var(--hg-lnh) solid var(--matte);
+  padding: var(--hg-gap);
+  height: calc(var(--hg-h) + var(--hg-bleed));
+}
+.hexagram.order-3 {
+  border: var(--hg-lnh) solid var(--matte);
+  padding: var(--hg-nano);
+  height: calc(var(--hg-h) + var(--hg-bleed) + (var(--hg-mini) * 2) + (var(--hg-nano) * 2));
+}
+.hexagram .hg-outline {
+  padding: var(--hg-gap);
+  border: var(--hg-mini) solid var(--matte);
+}
+.hg-b1 {
+  --hg-base: 10px;
+}
+.hexline {
+  height: var(--hg-lnh);
+}
+.hexline:not(:first-child) {
+  margin-top: var(--hg-gap);
+}
+.hexline .seg {
+  height: 100%;
+  background-color: var(--matte);
+}
+.hexline .seg.wing {
+  width: 38%;
+}
+.hg-marker {
+  bottom: -20px;
+  font-weight: 900;
+  width: 100%;
+}
+.hg-b1 .hg-marker {
+  font-size: 1.5rem;
+}
+.order-2 .hg-marker {
+  bottom: -24px;
+  width: calc(100% - (var(--hg-gap) * 2));
+}
+.order-3 .hg-marker {
+  bottom: -38px;
+  width: calc(100% - (var(--hg-mini) * 2));
+}
+
+.hg-top .hg-marker {
+  top: -20px;
+}
+.hg-top.order-2 .hg-marker {
+  top: -24px;
+}
+.hg-top.order-3 .hg-marker {
+  top: -38px;
+}
+
+.invis {
+  visibility: hidden;
+}
+
+.loading-screen {
+  padding: 10%;
 }

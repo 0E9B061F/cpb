@@ -10,9 +10,11 @@
   import UserBar from './UserBar.svelte'
   import Messenger from './Messenger.svelte'
   import { getContext } from 'svelte'
+
   const state = getContext('state')
   const ui = getContext('ui')
 
+  export let ghost = false
 
   let bookmarks = [
     'Home', 'foo', 'bar', 'CPB:test', 'CPB:forms',
@@ -21,7 +23,7 @@
 </script>
 
 {#if $ui > 0}
-<FB vert c="wide-ui">
+<FB vert c="wide-ui" {ghost}>
 
   <FB c="wide-head">
     <FB vert c="wide-col wide-col1">

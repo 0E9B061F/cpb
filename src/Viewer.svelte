@@ -1,20 +1,32 @@
 <script>
   import Link from './Link.svelte'
   import LinkShim from './LinkShim.svelte'
+  import CPBLinkShim from './CPBLinkShim.svelte'
+  import { marked } from 'marked'
   import { convert } from 'html-to-text'
   import { getContext } from 'svelte'
+  import extensions from '../lib/wmd.js'
   const rc = getContext('rc')
   const haspage = getContext('haspage')
   const page = getContext('page')
   const setTokens = getContext('setTokens')
   import SvelteMarkdown from 'svelte-markdown'
 
-  const renderers = { link: LinkShim }
+  console.log(`!!!!!!!!!!!!!!!!! ${extensions}`)
+
+  marked.use({extensions})
+  const options = marked.defaults
+
+  const renderers = {
+    link: LinkShim,
+    cpblink: CPBLinkShim,
+  }
   let body
   let wc = 0
   let readTime = ''
 
   function onparse(e) {
+    console.log(e.detail.tokens)
     setTokens(e.detail.tokens)
     const txt = convert(body.innerHTML)
     wc = txt.trim().split(/\s+/).length
@@ -31,7 +43,7 @@
     <div class="infobar">
       foo
     </div>
-    <SvelteMarkdown source={$page.val.body} {renderers} on:parsed={onparse} />
+    <SvelteMarkdown source={$page.val.body} {renderers} {options} on:parsed={onparse} />
   </div>
   <p>vnum: {$page.val.vnum}</p>
   <p>wc: {wc}</p>

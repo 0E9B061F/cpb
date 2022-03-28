@@ -13,6 +13,7 @@
   "defsearch": "search",
   "secret": "oed und leer",
   "fade": 500,
+  "fadein": 2500,
   "homekey": "~",
   "title": "CPB",
   "searchDefaults": {

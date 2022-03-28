@@ -13,6 +13,7 @@
   export let between = false
   export let around = false
   export let hide = false
+  export let ghost = false
   export let w = null
   export let wr = null
   export let spacer = null
@@ -29,6 +30,10 @@
   export let vc = false
   export let ve = false
 
+  export let style = {}
+
+  $: css = Object.entries(style).map(p=> `${p[0]}: ${p[1]};`).join('')
+
   $: if (exo) {
     expand = true
     solid = true
@@ -41,7 +46,7 @@
     cc = c
     if (typeof(cc) == 'string') cc = cc.split(' ')
 
-    if (expand) cc.push('fb-expand')
+    if (expand && !(vc || ve)) cc.push('fb-expand')
     if (solid) cc.push('fb-solid')
 
     if (vert) cc.push('fb-vert')
@@ -70,6 +75,7 @@
     }
 
     if (hide) cc.push('hidden')
+    if (ghost) cc.push('ghost')
 
     if (w) cc.push(`w${w}`)
     if (wr) cc.push(`wr${wr}`)
@@ -102,13 +108,13 @@
 </script>
 
 {#if vc || ve}
-  <svelte:self vert center={vc} end={ve} bind:element={element}>
+  <svelte:self {expand} vert center={vc} end={ve} bind:element={element} style={css}>
     <div class={cf}>
       <slot></slot>
     </div>
   </svelte:self>
 {:else}
-  <div class={cf} bind:this={element}>
+  <div class={cf} bind:this={element} style={css}>
     <slot></slot>
   </div>
 {/if}
