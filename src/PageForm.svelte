@@ -17,6 +17,6 @@
 
 <FB vert zero form expand c="editor-area">
   <div class="editor-rule"></div>
-  <textarea class="main-editor" bind:value={body}></textarea>
+  <textarea class="main-editor" bind:value={body} spellcheck="false"></textarea>
   <div class="editor-rule bottom-rule"></div>
 </FB>
