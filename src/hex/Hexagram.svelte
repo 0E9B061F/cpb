@@ -11,6 +11,7 @@
   export let type = null
   export let top = false
   export let dummy = false
+  export let nohex = false
 
   let hexn = writable(state)
   setContext('hexn', hexn)
@@ -64,8 +65,19 @@
     <Hexline mask={0b100000}/>
   {/if}
   {#if type}
-    <FB abs center={order < 3} around={order > 2} c="hg-marker">
+    <FB title abs center={order < 3} around={order > 2} c="hg-marker">
       {type}
+    </FB>
+  {/if}
+  {#if nohex}
+    <FB abs c="hg-label">
+      <FB expand vert center c="hg-label-inner">
+        <FB center>
+          <FB vert center c="hg-label-center">
+            <FB center line="b2" reverse>無</FB>
+          </FB>
+        </FB>
+      </FB>
     </FB>
   {/if}
 </FB>

@@ -26,6 +26,9 @@
   export let rel = false
   export let abs = false
   export let wrap = false
+  export let title = false
+  export let mono = false
+  export let reverse = false
 
   export let vc = false
   export let ve = false
@@ -98,6 +101,10 @@
       cc.push('gr')
       cc.push(`gr${grid}`)
     }
+
+    if (title) cc.push('fb-title')
+    if (mono) cc.push('fb-mono')
+    if (reverse) cc.push('fb-reverse')
 
     cc.push('flexbox')
 

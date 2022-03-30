@@ -919,7 +919,7 @@
 
 <div class="cpb-shell" class:darkmode={$usedark}>
 <FB center {c} rel>
-	<R2Hider hide hyper>
+	<R2Hider hide={!$booted} hyper>
 		<svelte:fragment slot="inner">
 			<LoadingScreen/>
 		</svelte:fragment>
