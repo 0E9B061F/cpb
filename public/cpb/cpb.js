@@ -735,7 +735,6 @@ var app = (function () {
     var defuser = "user";
     var deftest = "test";
     var defsearch = "search";
-    var secret$1 = "oed und leer";
     var fade$1 = 500;
     var fadein = 2500;
     var homekey = "~";
@@ -770,7 +769,6 @@ var app = (function () {
     	defuser: defuser,
     	deftest: deftest,
     	defsearch: defsearch,
-    	secret: secret$1,
     	fade: fade$1,
     	fadein: fadein,
     	homekey: homekey,
@@ -783,12 +781,10 @@ var app = (function () {
     	singleuser: singleuser$1
     };
 
-    var secret = "Et j'ai deux fois vainqueur traverse l'Acheron";
     var fade = 500;
     var title = "0x2764";
     var singleuser = false;
     var user = {
-    	secret: secret,
     	fade: fade,
     	title: title,
     	singleuser: singleuser

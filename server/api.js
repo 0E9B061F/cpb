@@ -1,6 +1,6 @@
 'use strict'
 
-const rc = require('../lib/rc.js')
+const rc = require('./rc.js')
 
 const api = require('express').Router()
 const { Op } = require('sequelize')
