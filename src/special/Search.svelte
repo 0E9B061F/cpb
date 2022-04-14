@@ -33,7 +33,7 @@
             {#if item.namespace != 'main'}
               <span class="ns-header">({item.namespace})</span>
             {/if}
-            <Link space={item.namespace} title={item.plain}>
+            <Link space={item.namespace} title={item.plain} nored>
               <SearchEmph text={item.title}/>
             </Link>
           </div>

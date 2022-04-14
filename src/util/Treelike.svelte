@@ -29,7 +29,7 @@
 <List {ordered} {root} {depth}>
   {#each items as item}
     <li>
-      {#if Array.isArray(item)}
+      {#if Array.isArray(item) && typeof(item[1]) != 'number'}
         <slot item={item[0]}></slot>
         <svelte:self items={item.slice(1)} let:item={i}>
           <slot item={i}></slot>

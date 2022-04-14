@@ -29,6 +29,7 @@
   export let title = false
   export let mono = false
   export let reverse = false
+  export let flex = false
 
   export let vc = false
   export let ve = false
@@ -51,6 +52,7 @@
 
     if (expand && !(vc || ve)) cc.push('fb-expand')
     if (solid) cc.push('fb-solid')
+    if (flex) cc.push('fb-flex')
 
     if (vert) cc.push('fb-vert')
     else cc.push('fb-hori')

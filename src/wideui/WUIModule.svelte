@@ -15,7 +15,7 @@
 
   <FB c="wui-head">
     {#if $$slots.title}
-      <FB line="b2" fw={7} c="wui-title">
+      <FB title line="n" fw={7} c="wui-title">
         <slot name="title"></slot>
       </FB>
     {/if}

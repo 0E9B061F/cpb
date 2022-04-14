@@ -13,6 +13,7 @@
   export let center = false
   export let lab = ''
   export let flip = false
+  export let useExtra = true
   let input
   const onfocus =()=> {
     focused = true
@@ -61,7 +62,7 @@
           on:focus={onfocus} on:blur={onblur}
         />
       </FB>
-      {#if focused && $$slots.extra}
+      {#if focused && $$slots.extra && useExtra}
         <FB leaf c="input-dropdown" slot="extra">
           <slot name="extra"></slot>
         </FB>
@@ -72,9 +73,7 @@
     {/if}
   </FB>
   {#if $$slots.options}
-    <div class="input-options">
-      <slot name="options"></slot>
-    </div>
+    <slot name="options"></slot>
   {/if}
 </FB>
 </div>

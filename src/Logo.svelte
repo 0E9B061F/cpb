@@ -1,9 +1,10 @@
 <script>
   import Link from './Link.svelte'
+  import FB from './FB.svelte'
   import { getContext } from 'svelte'
   const rc = getContext('rc')
 </script>
 
 <Link space="main" title="Home" silent>
-  <div class="logo">{$rc.title}</div>
+  <FB title c="logo">{$rc.title}</FB>
 </Link>

@@ -2,24 +2,19 @@
   import FB from '../FB.svelte'
   import Link from '../Link.svelte'
   import Treelike from '../util/Treelike.svelte'
-  import WUIModule from './WUIModule.svelte'
-  import WUIButton from './WUIButton.svelte'
+
   import { marked } from 'marked'
   import { getContext, setContext } from 'svelte'
   import { writable } from 'svelte/store'
+
   const tokens = getContext('tokens')
   const state = getContext('state')
   const path = getContext('path')
-  const scrollinfo = getContext('scrollinfo')
-  const scrolltop = getContext('scrolltop')
-  const drophash = getContext('drophash')
+
   export let limit = null
   let headings = []
   let slugger = new marked.Slugger()
-  const gotop =()=> {
-    drophash()
-    scrolltop()
-  }
+
   class TOCTree {
     constructor(p=null) {
       this.parent = p
@@ -67,7 +62,7 @@
       return out
     }
   }
-  $: rl = limit === null ? null : limit - 1
+
   const mkh =tkns=> {
     if (tkns && tkns.length) {
       slugger = new marked.Slugger()
@@ -80,37 +75,24 @@
     } else {
       headings = []
     }
+    console.log(headings)
   }
+
+  $: rl = limit === null ? null : limit - 1
   $: mkh($tokens)
 </script>
 
-{#if $state.content && headings.length}
-  <WUIModule>
-
-    <svelte:fragment slot="title">CONTENTS</svelte:fragment>
-
-    <svelte:fragment slot="controls">
-      {#if $scrollinfo.scrollable}
-        <WUIButton>
-          <Link nolink does={gotop} disable={!$scrollinfo.scrolled}>TOP</Link>
-        </WUIButton>
-      {/if}
-    </svelte:fragment>
-
-    <svelte:fragment slot="body">
-      <Treelike items={headings} let:item={item}>
-        {#if typeof(item) == 'string'}
-          <Link nored self cmd={slugger.slug(item)}>{item}</Link>
-        {:else}
-          {#if typeof(item[1]) == 'number'}
-            <Link nored self cmd={slugger.slug(item[0])}>{item[0]}</Link>
-            <span class="toc-plus">+</span>
-          {:else}
-            <Link nored self cmd={slugger.slug(item[0])}>{item[0]}</Link>
-          {/if}
-        {/if}
-      </Treelike>
-    </svelte:fragment>
-
-  </WUIModule>
+{#if headings.length}
+  <Treelike items={headings} let:item={item}>
+    {#if typeof(item) == 'string'}
+      <Link nored self cmd={slugger.slug(item)}>{item}</Link>
+    {:else}
+      <Link nored self cmd={slugger.slug(item[0])}>{item[0]}</Link>
+      <span class="toc-plus">+</span>
+    {/if}
+  </Treelike>
+{:else}
+  <div class="toc-message">
+    <slot>NONE</slot>
+  </div>
 {/if}

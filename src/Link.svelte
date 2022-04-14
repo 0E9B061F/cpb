@@ -64,6 +64,7 @@
   let special = false
   let cls = ''
   let rinfo = ''
+  let registered
 
   export let addr = href
 
@@ -84,17 +85,24 @@
     else nav()
   }
 
-  const register =id=> {
-    if (reddable) {
-      if (!id) throw new Error(`broke link: ${href} ${space} ${title}`)
-      $links = [...$links, id]
+  const register =()=> {
+    if ((!reddable && registered) || (!ident && registered)) deregister()
+    else {
+      if (reddable && registered != ident) {
+        if (registered) {
+          deregister(registered)
+        }
+        registered = ident
+        $links = [...$links, ident]
+      }
     }
   }
-  const deregister =id=> {
-    if (!id) return
-    const n = $links.indexOf(id)
+  const deregister =()=> {
+    if (!registered) return
+    const n = $links.indexOf(registered)
     if (n < 0) return
     $links.splice(n, 1)
+    registered = null
     $links = $links
   }
 
@@ -249,11 +257,11 @@
     reddable = true
   } else {
     reddable = false
-    deregister(ident)
   }
+  $: register(ident, reddable)
   $: mkcls(reddable, silent, disable, nolink, current, !!$linkmap.val && !!$linkmap.val[ident])
 
-  onDestroy(()=> deregister(ident))
+  onDestroy(()=> deregister())
 </script>
 
 {#if disable || nolink || (current && !global)}

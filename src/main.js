@@ -7,4 +7,3 @@ const app = new Main({
 })
 
 export default app
-

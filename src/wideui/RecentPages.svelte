@@ -1,6 +1,7 @@
 <script>
   import FB from '../FB.svelte'
   import Link from '../Link.svelte'
+  import Wrapper from '../util/Wrapper.svelte'
   import WUIModule from './WUIModule.svelte'
   import date from 'date-and-time'
   import { getContext } from 'svelte'
@@ -37,18 +38,16 @@
   <svelte:fragment slot="title">{title}</svelte:fragment>
   <svelte:fragment slot="body">
     {#if compact}
-      {#each recents as page, i}
-        <FB line solid c="recent-ci">
-          <span class="light-bullet">&bull; </span><Link nored space={page.namespace} title={page.title} />
-        </FB>
-      {/each}
+      <Wrapper items={recents} line="s1" lines={3} let:item={page}>
+        <Link nored space={page.namespace} title={page.title}/>
+      </Wrapper>
     {:else}
       {#each recents as page}
         <FB zero vert c="recent-page">
           <FB c="recent-title">
             <Link nored space={page.namespace} title={page.title} />
           </FB>
-          <FB>
+          <FB c="recent-extra">
             <FB c="recent-date">{fmt(page.createdAt)}</FB>
             <FB c="recent-user">({page.user.handle})</FB>
           </FB>

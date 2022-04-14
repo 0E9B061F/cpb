@@ -24,10 +24,17 @@ const getnstu =(namespace, title)=> {
     }
   }
   return db.version.findOne({where,
-    include: {
-      model: db.user,
-      attributes: ['handle'],
-    },
+    include: [
+      { model: db.user,
+        attributes: ['handle'],
+      },
+      { model: db.page,
+        attributes: ['createdAt', 'views'],
+        include: { model: db.user,
+          attributes: ['handle'],
+        }
+      },
+    ],
   }).then(page=> {
     if (page) return proc(page)
     else false

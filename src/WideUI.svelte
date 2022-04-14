@@ -1,8 +1,9 @@
 <script>
   import FB from './FB.svelte'
-  import TOC from './wideui/TOC.svelte'
+  import WUITOC from './wideui/WUITOC.svelte'
   import RecentPages from './wideui/RecentPages.svelte'
   import SearchBar from './SearchBar.svelte'
+  import Text from './doc/Text.svelte'
   import Visibility from './Visibility.svelte'
   import R2Hider from './r2/R2Hider.svelte'
   import Navigator from './wideui/Navigator.svelte'
@@ -22,27 +23,17 @@
   ]
 </script>
 
-{#if $ui > 0}
+{#if $ui >= 2}
 <FB vert c="wide-ui" {ghost}>
 
-  <FB c="wide-head">
-    <FB vert c="wide-col wide-col1">
-      <FB c="sbwrap">
-        <SearchBar preview auto inf="title" szOpt={5}/>
-      </FB>
-      <FB expand end c="prehead">
-        <Messenger/>
-        <UserBar/>
-      </FB>
+  <FB vert zero c="wide-head">
+    <UserBar mini/>
+    <FB c="sbwrap">
+      <SearchBar preview auto inf="title" szOpt={5}/>
     </FB>
-
-    {#if $ui > 1}
-      <FB vert c="wide-col wide-col2">
-      </FB>
-    {/if}
   </FB>
 
-  {#if $ui > 1}
+  {#if $ui >= 3}
     <FB c="wide-menu">
       <Bookmarks items={bookmarks} limit={null}/>
     </FB>
@@ -51,17 +42,19 @@
 
   <FB c="wide-body">
     <R2Hider hide={!$state.finished}>
-    <FB vert c="wide-col wide-col1">
-      {#if $ui < 2}<Navigator/>{/if}
-      <TOC/>
-    </FB>
 
-    {#if $ui > 1}
-      <FB vert c="wide-col wide-col2">
-        <RecentPages compact count={5}/>
+      <FB vert c="wide-col wide-col1">
+        {#if $ui <= 2}<Navigator/>{/if}
+        <WUITOC/>
       </FB>
-    {/if}
-  </R2Hider>
+
+      {#if $ui >= 3}
+        <FB vert c="wide-col wide-col2">
+          <RecentPages count={10}/>
+        </FB>
+      {/if}
+
+    </R2Hider>
   </FB>
 
 </FB>

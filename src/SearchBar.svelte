@@ -133,18 +133,15 @@
 		bind:focused={focused}
 		on:edited={edited}
 		value={query}
+		useExtra={preview}
 		text="SEARCH"
 	>
 		<svelte:fragment slot="extra">{#if preview}
-			<FB between zero c="r2-row r2-top">
-				<div class="r2-bar r2-hori"></div>
-				<div class="r2-bar r2-hori"></div>
-			</FB>
 			<FB vert c="search-preview-wrapper">
 				{#if result.items}
 				<FB vert c="search-preview">
 					{#each result.items as item}
-						<FB leaf c="search-preview-item">
+						<FB leaf line c="search-preview-item">
 							<Link does={quit} space={item.namespace} title={item.plain} nored><SearchEmph text={item.title}/></Link>
 						</FB>
 					{/each}

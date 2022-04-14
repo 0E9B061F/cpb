@@ -18,7 +18,7 @@
   let canvas
   let hidden = true
   $: color = !!$usedark ? {
-    dark: '#d0d0d0ff',
+    dark: '#909090ff',
     light: '#25252500'
   } : {
     dark: '#353535ff',
@@ -57,7 +57,7 @@
   </R2Hider>
   <div class="qrcanvas" class:hidden={hidden}>
     {#if uuid}
-      <Link {uuid}><canvas bind:this={canvas}></canvas></Link>
+      <Link nored {uuid}><canvas bind:this={canvas}></canvas></Link>
     {:else}
       <canvas bind:this={canvas} {title}></canvas>
     {/if}

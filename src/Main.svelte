@@ -173,12 +173,12 @@
 		return post(c, ...a, $draft).then(res=> {
 			$draft = null
 			if (!!$creating) $aod = Date.now()
-			msg(`Created '${$gs.tag()}'`)
+			hold(`Created '${$gs.tag()}'`)
 		}).catch(e=> handle(e))
 	}
 	const postuser =b=> {
 		post('register', b).then(res=> {
-			msg(`Created user '${b.handle}'`)
+			hold(`Created user '${b.handle}'`)
 		}).catch(e=> handle(e))
 	}
 
@@ -192,12 +192,12 @@
 			setsession(res)
 			if (res.err == 0) {
 				if (start != $session.val.handle) {
-					msg(`Logged in as '${$session.val.handle}'`)
+					hold(`Logged in as '${$session.val.handle}'`)
 				}
 				return true
 			} else {
-				if (res.err == 5) msg(res.val.join('\n'))
-				else msg(`Sorry, an error occurred.`)
+				if (res.err == 5) hold(res.val.join('\n'))
+				else hold(`Sorry, an error occurred.`)
 				return false
 			}
     }).catch(e=> handle(e))
@@ -207,13 +207,13 @@
   	.then(res=> {
 			getsession()
 			if (res.err == 0) {
-				msg(`Registered as '${b.handle}'`)
+				hold(`Registered as '${b.handle}'`)
 				return true
 			} else {
 				if (res.err == 5) {
-					msg(res.val.join('\n'))
+					hold(res.val.join('\n'))
 				} else {
-					msg(`Sorry, an error occurred.`)
+					hold(`Sorry, an error occurred.`)
 				}
 				return false
 			}
@@ -223,7 +223,7 @@
     return post('logout', {})
 		.then(r=> {
 			getsession().then(s=> {
-				if ($hassess) msg(`Logged out`)
+				if ($hassess) hold(`Logged out`)
 			})
     })
   }
@@ -232,14 +232,44 @@
 	setContext('register', register)
 	setContext('logout', logout)
 
+	const fortune = [
+		"a healthy air stinks of stupidity",
+		"burning burning burning burning",
+		"because it is my heart",
+		"these fragments i have shored against my ruins",
+		"where days are numbered",
+		"devised by some ancient dread",
+	]
+
+	let heldmsg = null
+
+	const unhold =(...args)=> {
+		if (heldmsg) {
+			print(...heldmsg)
+			heldmsg = null
+		} else {
+			print(...args)
+		}
+	}
 	const unmsg =()=> {
-		$message = { text: '', level: 0 }
+		print(util.sample(fortune), 'z', 0)
 	}
 	let msgt
-	const msg =(text='', level=0)=> {
-		$message = { text, level }
+	const mkmsg =(text='', level=0, time=3000)=> {
+		return { text, level, time }
+	}
+	const hold =(...args)=> {
+		heldmsg = args
+	}
+	const msg =(...args)=> {
+		if (!$finished) hold(...args)
+		else print(...args)
+	}
+	const print =(...args)=> {
+		$message = mkmsg(...args)
+		console.log(`MESSAGE: ${$message.text}`)
 		if (msgt) clearTimeout(msgt)
-		msgt = setTimeout(unmsg, 5000)
+		if ($message.time) msgt = setTimeout(unmsg, $message.time)
 	}
 	setContext('msg', msg)
 
@@ -323,7 +353,7 @@
 			editing: false, creating: false, error: 0,
 			current: false, head: false, old: false, anchor: false,
 			system: false, history: false,
-			pageperma: false, verperma: false,
+			pageperm: false, verperm: false,
 			label: 'BLANK', cmp: null,
 			namespace: null, title: null,
 			loading: false, building: false, finished: false,
@@ -561,7 +591,7 @@
 				endboot()
 			}
 		}
-		msg(`finished: ${loadtime} / ${rendertime}`)
+		unhold('FINISHED', 0, 2000)
 	}
 
 	const finishload =()=> {
@@ -587,6 +617,8 @@
 				})
 				e.focus({preventScroll: true})
 			}
+		} else {
+			unhold('FINISHED', 0, 2000)
 		}
 	}
 
@@ -668,6 +700,7 @@
 
 	const launch =p=> {
 		console.log('COMMONPLACE BOOK: LAUNCH')
+		print('LOADING', 0, 0)
 		if ($hassess) preload($path)
 		else getsession().then(s=> preload($path))
 	}
@@ -864,7 +897,7 @@
 		if (!!$loading) nc.push('cpb-loading')
 		else if (!$finished) nc.push('cpb-rendering')
 		else nc.push('cpb-finished')
-		nc.push(`${$uiname}-ui`)
+		nc.push(`${$uiname}-mode`)
 		c = nc
 	}
 
@@ -875,32 +908,62 @@
 	setContext('ww', ww)
 	setContext('wh', wh)
 
-	const basex = 1024
-	const colx = 300
-	const widex = basex + (2 * colx)
-	const medx = basex + colx
+	let style
+	let measures = {}
+	const setcss =block=> {
+		if (!style) return
+		const conf = {}
+		block(conf)
+		Object.keys(conf).forEach(k=> {
+			style.sheet.rules[0].style.setProperty(`--${k}`, `${conf[k]}px`)
+		})
+		return conf
+	}
+	$: if (style) {
+		measures = setcss(c=> {
+			c.basex = 1024
+			c.wuicolx = 200
+			c.pxgap = 5
+			c.basemin = c.basex - (2 * c.pxgap)
+			c.basereal = c.basex + (2 * c.pxgap)
+			c.medx = c.basereal + c.wuicolx + c.pxgap
+			c.widex = c.medx + c.wuicolx
+			c.mainmax = 1200
+			c.medw = c.wuicolx
+			c.widew = (c.wuicolx * 2) + c.pxgap
+		})
+	}
 
 	let ui = writable(2)
 	let uiname = writable('base')
 	const mkui =w=> {
-		if (w >= widex) return 2
-		else if (w >= medx) return 1
+		if (w >= measures.widex) return 3
+		else if (w >= measures.medx) return 2
+		else if (w >= measures.basereal) return 1
 		else return 0
 	}
 	const uin = {
 		[-1]: 'mobile',
-		[+0]: 'base',
-		[+1]: 'medium',
-		[+2]: 'wide',
+		[+0]: 'base-min',
+		[+1]: 'base',
+		[+2]: 'medium',
+		[+3]: 'wide',
 	}
 	const mkuin =n=> {
 		return uin[n] || 'base'
 	}
-	$: $ui = mkui($ww)
+	$: $ui = mkui($ww, measures)
 	$: $uiname = mkuin($ui)
 	setContext('ui', ui)
 	setContext('uiname', uiname)
 	$: mkc($usedark, $loading, $finished, $uiname)
+
+	const pageinfo = writable({})
+	setContext('pageinfo', pageinfo)
+	const setPageinfo =(wc, time, links)=> {
+		$pageinfo = { wc, time, links }
+	}
+	setContext('setPageinfo', setPageinfo)
 
 	let ready = false
 	setTimeout(()=> ready = true, 2500)
@@ -915,6 +978,10 @@
 
 <svelte:head>
 	<title>{doctitle}</title>
+	<style bind:this={style}>
+		:root {
+		}
+	</style>
 </svelte:head>
 
 <div class="cpb-shell" class:darkmode={$usedark}>
@@ -924,7 +991,7 @@
 			<LoadingScreen/>
 		</svelte:fragment>
 	</R2Hider>
-	<FB vert c="cpb-main" ghost={!$booted}>
+	<FB vert c="cpb-main" ghost={!$booted} flex={$ui >= 3}>
 		{#if $uc.debug}<Debugger/>{/if}
 		<Headframe/>
 		<Contents bind:this={contentscmp}/>

@@ -67,9 +67,6 @@
 <R2Hider hide={!$state.finished}>
 <div class="watermargin" bind:this={waterm}></div>
 {#if !$loading}
-  {#if !$editing && !$creating && !$hashistory && $loc.namespace != $rc.syskey}
-    <Titleframe/>
-  {/if}
   <Bodyframe/>
   <Footer/>
 {/if}

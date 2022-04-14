@@ -5,7 +5,17 @@
   import Check from '../doc/Check.svelte'
   import Text from '../doc/Text.svelte'
   import Numeric from '../doc/Numeric.svelte'
+  import Table from '../util/Table.svelte'
   const sizes = ['s3', 's2', 's1', 'n', 'b1', 'b2', 'b3']
+  const data = {
+    author: "Gideon",
+    views: 30959694,
+    version: 858,
+    foo: 'bar',
+    baz: 'bat',
+    date: '03-18-1987',
+    era: 'third',
+  }
 </script>
 
 <FB vert>
@@ -167,4 +177,5 @@
       </FB>
   </FB>
 </FB>
+<Table {data} line="s3"/>
 </FB>

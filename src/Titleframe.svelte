@@ -1,16 +1,15 @@
 <script>
 	import FB from './FB.svelte'
 	import QR from './QR.svelte'
+	import ContentControls from './ContentControls.svelte'
+	import Tabulate from './util/Tabulate.svelte'
 
-	import Doc from './doc/Doc.svelte'
-	import Line from './doc/Line.svelte'
-	import Lab from './doc/Lab.svelte'
-	import Input from './doc/Input.svelte'
-
+	import date from 'date-and-time'
   import { getContext } from 'svelte'
   const gs = getContext('gs')
   const page = getContext('page')
   const haspage = getContext('haspage')
+  const pageinfo = getContext('pageinfo')
 
   const crop =u=> u.match(/.*?\/\/(.*)/)[1]
 	let perma, vperma, permac, vpermac
@@ -20,23 +19,32 @@
 		permac = crop(perma)
 		vpermac = crop(vperma)
 	}
+	const fmtdate =s=> {
+		const d = new Date(s)
+		return date.format(d, 'MM-DD-YYYY')
+	}
+	$: data = $haspage ? {
+		author: $page.val.user.handle,
+		version: $page.val.vnum,
+		creator: $page.val.page.user.handle,
+		words: $pageinfo.wc,
+		time: $pageinfo.time,
+		views: $page.val.views,
+		created: fmtdate($page.val.page.createdAt),
+		edited: fmtdate($page.val.createdAt),
+		links: $pageinfo.links,
+	} : {}
 </script>
 
-<FB c="title-frame">
+<FB vert c="title-frame">
 	{#if $haspage}
-		<QR data={vpermac} ver={3} scale={2} uuid={$page.val.uuid} title="Version Permalink" />
-	  <Doc center w={false}>
-			<Line s="s1">
-				<Lab between txt="AUTHOR">{$page.val.user.handle}</Lab>
-			</Line>
-			<Line s="s1">
-				<Lab between txt="VERSION">{$page.val.vnum}</Lab>
-			</Line>
-			<Line s="s1">
-				<Lab between txt="VIEWS">{$page.val.views}</Lab>
-			</Line>
-	  </Doc>
-		<FB expand/>
-		<QR data={permac} ver={3} scale={2} uuid={$page.val.pageUuid} title="Page Permalink" />
+		<ContentControls/>
+		<FB>
+			<QR data={vpermac} ver={3} scale={2} uuid={$page.val.uuid} title="Version Permalink" />
+			<FB expand vert center>
+		  	<Tabulate {data} line="s1"/>
+			</FB>
+			<QR data={permac} ver={3} scale={2} uuid={$page.val.pageUuid} title="Page Permalink" />
+		</FB>
 	{/if}
 </FB>

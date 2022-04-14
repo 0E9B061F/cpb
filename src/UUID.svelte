@@ -4,7 +4,7 @@
 </script>
 
 {#if link}
-  <span class="uuid"><Link uuid={link}>{link}</Link></span>
+  <span class="uuid"><Link nored uuid={link}>{link}</Link></span>
 {:else}
   <span class="uuid"><slot></slot></span>
 {/if}

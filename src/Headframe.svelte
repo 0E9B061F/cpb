@@ -1,6 +1,8 @@
 <script>
 	import QR from './QR.svelte'
+	import Link from './Link.svelte'
 	import FB from './FB.svelte'
+	import Strike from './util/Strike.svelte'
 	import UUID from './UUID.svelte'
 	import Logo from './Logo.svelte'
 	import Bookmarks from './Bookmarks.svelte'
@@ -8,6 +10,7 @@
 	import TitleControls from './TitleControls.svelte'
 	import Messenger from './Messenger.svelte'
 	import SearchBar from './SearchBar.svelte'
+	import Separated from './util/Separated.svelte'
   import { getContext } from 'svelte'
   const gs = getContext('gs')
   const path = getContext('path')
@@ -15,52 +18,60 @@
   const hassess = getContext('hassess')
   const state = getContext('state')
   const ui = getContext('ui')
+
+	let bookmarks = [
+    'Home', 'foo', 'bar', 'CPB:test', 'CPB:forms',
+    'CPB:user', 'CPB:login', 'scop:uli', 'foo:bar', 'foo:baz',
+  ]
 </script>
 
-<FB vert={$ui > 0} c="head-frame">
-{#if $ui <= 0}
-	<FB vert between>
-		<UserBar/>
-		<Logo/>
-	</FB>
-	<FB expand vert zero>
-		<FB between expand>
-			<FB ve>
-				{#if $state.namespace}
-      		<FB line="s2" fw={6} c="title-sub">{$state.namespace}</FB>
-				{/if}
-      	<FB vc line="s4" fw={6}>&#9654;</FB>
-			</FB>
-			<SearchBar preview auto inf="title" szOpt={5}/>
-		</FB>
-		<FB between>
-			<FB line="b3" fw={8} c="title-main">{$state.title}</FB>
-			<FB vert end>
-				<TitleControls/>
-			</FB>
-		</FB>
-	</FB>
-{:else}
-  <FB c="head-subframe">
+<FB vert c="head-frame">
 
-		<Logo/>
+	{#if $ui <= 1}
+		<FB>
+			<Separated line="s2" fw={6} items={bookmarks} let:item={item}>
+				<Link nst={item}/>
+			</Separated>
+			<FB expand/>
+			<FB line="s2" fw={7}>RECENT</FB>
+			<Separated line="s2" fw={6} items={bookmarks} let:item={item}>
+				<Link nst={item}/>
+			</Separated>
+		</FB>
+	{/if}
 
-		<FB expand vert zero end>
-			<FB>
-				{#if $state.namespace}
-      		<FB line="s2" fw={6} c="title-sub">{$state.namespace}</FB>
-				{/if}
+	<FB>
+		{#if $ui <= 1}
+			<FB vert zero>
+				<Logo/>
+				<UserBar mini generic/>
+			</FB>
+		{:else}
+			<Logo/>
+		{/if}
+
+		<FB expand vert zero>
+			<FB expand c={$ui <= 1 ? "base-head-upper" : ''}>
+				<FB ve>
+					{#if $state.namespace}
+	      		<FB title line="s2" fw={6} c="title-sub">{$state.namespace}</FB>
+					{/if}
+	      	<FB vc line="s4" fw={6}>&#9654;</FB>
+				</FB>
+				<FB expand/>
 				<FB vert center>
-      		<FB line="s4" fw={6}>&#9654;</FB>
+					<FB line="s2"><Messenger/></FB>
+				</FB>
+				{#if $ui <= 1}<SearchBar preview auto inf="title" szOpt={5}/>{/if}
+			</FB>
+
+			<FB between>
+				<FB title line="b3" fw={8} c="title-main">{$state.title}</FB>
+				<FB vert end>
+					<TitleControls/>
 				</FB>
 			</FB>
-      <FB line="b3" fw={8} c="title-main">{$state.title}</FB>
-    </FB>
-
-		<FB vert end rel>
-			<TitleControls/>
 		</FB>
+	</FB>
 
-  </FB>
-{/if}
 </FB>

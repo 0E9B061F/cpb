@@ -4,6 +4,7 @@
 	import R2Hider from './r2/R2Hider.svelte'
   import { getContext } from 'svelte'
   const loading = getContext('loading')
+  const finished = getContext('finished')
   const session = getContext('session')
 	const hassess = getContext('hassess')
 	const haslogin = getContext('haslogin')
@@ -18,14 +19,8 @@
 	$: showany = $state.content || $state.editable || $state.historical || $state.editing  || $state.history
 </script>
 
-<R2Hider hide={$loading} size={0.3}>
 <FB vert zero>
-	{#if !!$haspage && $loc.uuid == $page.val.uuid}
-		<FB end line="s2" dw={7} c="perma-type">VERSION PERMA</FB>
-	{:else if !!$haspage && $loc.uuid == $page.val.pageUuid}
-		<FB end line="s2" dw={7} c="perma-type">PAGE PERMA</FB>
-	{/if}
-	<FB line>
+	<FB line title>
 		{#if $state.content}
 			<Link self opt={{history:true}}>HISTORY</Link>
 		{/if}
@@ -49,4 +44,3 @@
 		</span>
 	</FB>
 </FB>
-</R2Hider>
