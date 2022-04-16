@@ -1,10 +1,36 @@
-:root {
+body {
   /* measures */
   --basex: 1024px;
   --wuicolx: 250px;
   --gap: 0.3125rem;
   --dblgap: calc(2 * var(--gap));
   --pxgap: 5px;
+
+  --xs4: 0.52rem;
+  --xs3: 0.625rem;
+  --xs2: 0.75rem;
+  --xs1: 0.875rem;
+  --xn: 1rem;
+  --xb1: 1.1rem;
+  --xb2: 1.17rem;
+  --xb3: 1.25rem;
+  --xb4: 1.6rem;
+  --xb5: 2.4rem;
+  --xb6: 3.8rem;
+
+  --lnscale: 0.9;
+
+  --xs4f: calc(var(--xs4) * var(--lnscale));
+  --xs3f: calc(var(--xs3) * var(--lnscale));
+  --xs2f: calc(var(--xs2) * var(--lnscale));
+  --xs1f: calc(var(--xs1) * var(--lnscale));
+  --xnf: calc(var(--xn) * var(--lnscale));
+  --xb1f: calc(var(--xb1) * var(--lnscale));
+  --xb2f: calc(var(--xb2) * var(--lnscale));
+  --xb3f: calc(var(--xb3) * var(--lnscale));
+  --xb4f: calc(var(--xb4) * var(--lnscale));
+  --xb5f: calc(var(--xb5) * var(--lnscale));
+  --xb6f: calc(var(--xb6) * var(--lnscale));
 
 
   /* color definitions */
@@ -106,14 +132,14 @@ a, .nolink, a:visited {
   color: var(--cc-link);
 	text-decoration: none;
 }
-a.missing {
+.cpblink.missing {
   color: var(--cc-missing);
 }
 
-a:hover, .nolink:hover {
+.cpblink:hover .cpblink-text {
 	text-decoration: underline;
 }
-.disabled-link:hover {
+.cpblink.disabled-link:hover .cpblink-text {
   text-decoration: none;
 }
 
@@ -175,21 +201,22 @@ pre {
 }
 
 ol {
-  counter-reset: section;
-  list-style-type: none;
+
 }
-li::before {
+.treelike li::before {
   counter-increment: section;
   content: counters(section, ".") " ";
   margin-left: -20px;
 }
-li::marker, li::before {
+.treelike li::marker, .treelike li::before {
   font-weight: 400;
 }
 ol.treelike, .treelike ol {
   list-style-position: outside;
   padding-inline-start: 20px;
   margin: 0;
+  counter-reset: section;
+  list-style-type: none;
 }
 ol.treelike {
   margin-left: var(--gap);
@@ -226,6 +253,12 @@ ol.treelike {
   height: 1.25rem;
 }
 
+.txtmark {
+  font-size: var(--xs4f);
+  vertical-align: super;
+  user-select: none;
+  font-weight: 400;
+}
 
 .cpb-shell {
   height: 100%;
@@ -329,7 +362,7 @@ ol.treelike {
 .cpblink .mark {
 	position: absolute;
 	top: 0;
-	left: 0;
+	right: -6px;
 	height: 6px;
 	width: 6px;
 	fill: none;
@@ -658,6 +691,9 @@ h6 {
 	margin-top: 1.7798373876248836rem;
 }
 
+.rendered {
+  line-height: 1.5;
+}
 
 .rendered h1,
 .rendered h2,
@@ -672,10 +708,25 @@ h6 {
 	margin-top: 1rem;
 	margin-bottom: 0;
 	font-size: 1.1rem;
-	line-height: 1.2rem;
 }
 .rendered > h1:nth-child(3) {
   margin-top: 0;
+}
+
+.rendered .quotation {
+  margin: 2rem auto 2rem auto;
+  max-width: 400px;
+}
+.rendered .quotation blockquote {
+  margin: 0;
+  font-style: italic;
+  font-size: var(--xnf);
+}
+.rendered .quotation figcaption {
+  margin-top: var(--gap);
+  text-align: right;
+  font-size: var(--xs2f);
+  padding-right: 10%;
 }
 
 .infobar {
@@ -1248,33 +1299,6 @@ h6 {
   overflow: hidden;
   flex-wrap: nowrap;
 }
-:root {
-  --xs4: 0.52rem;
-  --xs3: 0.625rem;
-  --xs2: 0.75rem;
-  --xs1: 0.875rem;
-  --xn: 1rem;
-  --xb1: 1.1rem;
-  --xb2: 1.17rem;
-  --xb3: 1.25rem;
-  --xb4: 1.6rem;
-  --xb5: 2.4rem;
-  --xb6: 3.8rem;
-
-  --lnscale: 0.9;
-
-  --xs4f: calc(var(--xs4) * var(--lnscale));
-  --xs3f: calc(var(--xs3) * var(--lnscale));
-  --xs2f: calc(var(--xs2) * var(--lnscale));
-  --xs1f: calc(var(--xs1) * var(--lnscale));
-  --xnf: calc(var(--xn) * var(--lnscale));
-  --xb1f: calc(var(--xb1) * var(--lnscale));
-  --xb2f: calc(var(--xb2) * var(--lnscale));
-  --xb3f: calc(var(--xb3) * var(--lnscale));
-  --xb4f: calc(var(--xb4) * var(--lnscale));
-  --xb5f: calc(var(--xb5) * var(--lnscale));
-  --xb6f: calc(var(--xb6) * var(--lnscale));
-}
 .fd-line.ln-s4 {
   height: var(--xs4);
   line-height: var(--xs4);
@@ -1429,10 +1453,10 @@ h6 {
 .level-0 {
 }
 .level-1 {
-  background-color: var(--warn);
+  color: var(--warn);
 }
 .level-2 {
-  background-color: var(--alert);
+  color: var(--alert);
 }
 
 .blackbox {

@@ -1,6 +1,6 @@
 <script>
 	import QR from './QR.svelte'
-	import Link from './Link.svelte'
+	import Link from './link/Link.svelte'
 	import FB from './FB.svelte'
 	import Strike from './util/Strike.svelte'
 	import UUID from './UUID.svelte'

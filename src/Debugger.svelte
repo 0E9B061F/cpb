@@ -4,7 +4,7 @@
   import PP from './PP.svelte'
   import FR from './FR.svelte'
   import FT from './FT.svelte'
-  import Link from './Link.svelte'
+  import Link from './link/Link.svelte'
   import LocRO from './LocRO.svelte'
   import SessRO from './SessRO.svelte'
   import RespRO from './RespRO.svelte'

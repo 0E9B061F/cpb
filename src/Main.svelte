@@ -1,5 +1,5 @@
 <script>
-	import Link from './Link.svelte'
+	import Link from './link/Link.svelte'
 	import FB from './FB.svelte'
 
 	import Debugger from './Debugger.svelte'
@@ -196,8 +196,8 @@
 				}
 				return true
 			} else {
-				if (res.err == 5) hold(res.val.join('\n'))
-				else hold(`Sorry, an error occurred.`)
+				if (res.err == 5) err(res.val.join('\n'))
+				else err(`Sorry, an error occurred.`)
 				return false
 			}
     }).catch(e=> handle(e))
@@ -243,30 +243,53 @@
 
 	let heldmsg = null
 
-	const unhold =(...args)=> {
+	const unhold =(conf={})=> {
 		if (heldmsg) {
-			print(...heldmsg)
+			print(heldmsg)
 			heldmsg = null
 		} else {
-			print(...args)
+			print(conf)
 		}
 	}
 	const unmsg =()=> {
-		print(util.sample(fortune), 'z', 0)
+		print({
+			text: util.sample(fortune),
+			level: 'z',
+			time: 0,
+		})
 	}
 	let msgt
-	const mkmsg =(text='', level=0, time=3000)=> {
-		return { text, level, time }
+	const mkmsg =(conf={})=> {
+		return Object.assign({
+			text: '',
+			level: 0,
+			time: 3000,
+		}, conf)
 	}
-	const hold =(...args)=> {
-		heldmsg = args
+	const hold =(conf={})=> {
+		heldmsg = conf
 	}
-	const msg =(...args)=> {
-		if (!$finished) hold(...args)
-		else print(...args)
+	const send =(conf={})=> {
+		if (!$finished) hold(conf)
+		else print(conf)
 	}
-	const print =(...args)=> {
-		$message = mkmsg(...args)
+	const msg =text=> {
+		send({ text,
+			level: 0, time: 3000
+		})
+	}
+	const wrn =text=> {
+		send({ text,
+			level: 1, time: 5000
+		})
+	}
+	const err =text=> {
+		send({ text,
+			level: 2, time: 0
+		})
+	}
+	const print =(conf={})=> {
+		$message = mkmsg(conf)
 		console.log(`MESSAGE: ${$message.text}`)
 		if (msgt) clearTimeout(msgt)
 		if ($message.time) msgt = setTimeout(unmsg, $message.time)
@@ -591,7 +614,11 @@
 				endboot()
 			}
 		}
-		unhold('FINISHED', 0, 2000)
+		unhold({
+			text: 'FINISHED',
+			level: 0,
+			time: 2000
+		})
 	}
 
 	const finishload =()=> {
@@ -700,7 +727,7 @@
 
 	const launch =p=> {
 		console.log('COMMONPLACE BOOK: LAUNCH')
-		print('LOADING', 0, 0)
+		print({text: 'LOADING', time: 0, level: 0})
 		if ($hassess) preload($path)
 		else getsession().then(s=> preload($path))
 	}

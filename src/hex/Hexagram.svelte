@@ -46,23 +46,24 @@
 </script>
 
 <FB c={cls} vert zero solid rel>
-  {#if dummy}
-  {:else if order == 3}
-    <FB c="hg-outline" vert zero solid>
+  {#if !dummy}
+    {#if order == 3}
+      <FB c="hg-outline" vert zero solid>
+        <Hexline mask={0b000001}/>
+        <Hexline mask={0b000010}/>
+        <Hexline mask={0b000100}/>
+        <Hexline mask={0b001000}/>
+        <Hexline mask={0b010000}/>
+        <Hexline mask={0b100000}/>
+      </FB>
+    {:else}
       <Hexline mask={0b000001}/>
       <Hexline mask={0b000010}/>
       <Hexline mask={0b000100}/>
       <Hexline mask={0b001000}/>
       <Hexline mask={0b010000}/>
       <Hexline mask={0b100000}/>
-    </FB>
-  {:else}
-    <Hexline mask={0b000001}/>
-    <Hexline mask={0b000010}/>
-    <Hexline mask={0b000100}/>
-    <Hexline mask={0b001000}/>
-    <Hexline mask={0b010000}/>
-    <Hexline mask={0b100000}/>
+    {/if}
   {/if}
   {#if type}
     <FB title abs center={order < 3} around={order > 2} c="hg-marker">

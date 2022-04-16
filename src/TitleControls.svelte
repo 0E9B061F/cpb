@@ -1,6 +1,6 @@
 <script>
 	import FB from './FB.svelte'
-	import Link from './Link.svelte'
+	import Link from './link/Link.svelte'
 	import R2Hider from './r2/R2Hider.svelte'
   import { getContext } from 'svelte'
   const loading = getContext('loading')

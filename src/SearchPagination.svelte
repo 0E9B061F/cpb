@@ -1,5 +1,5 @@
 <script>
-  import Link from './Link.svelte'
+  import Link from './link/Link.svelte'
   import FB from './FB.svelte'
   import PaginLink from './PaginLink.svelte'
   import SearchInter from './SearchInter.svelte'

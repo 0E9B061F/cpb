@@ -13,7 +13,7 @@
   const loc = getContext('loc')
   const reload = getContext('reload')
 
-  import util from '../lib/util.js'
+  import util from '../../lib/util.js'
 
   // Home
   // main:Home
@@ -51,10 +51,13 @@
   export let silent = null
 
   export let marked = false
+  export let txtmark = false
   export let c = []
   export let current = false
   export let info = null
   export let dbg = false
+
+  export let external = false
 
   let href
   let ident
@@ -148,7 +151,10 @@
   }
 
   const mkhref =()=> {
-    if (bounce) {
+    if (external) {
+      href = external
+      return
+    } else if (bounce) {
       href = trace()
       return
     }
@@ -233,6 +239,7 @@
     if (silent) cc.push('silent')
     if (disable) cc.push('disabled-link')
     if (nolink) cc.push('nolink')
+    if (external) cc.push('external')
     if (!global && current) cc.push('current-link')
     cls = cc.join(' ')
   }
@@ -253,7 +260,7 @@
     )
   }
   $: current = $path == href
-  $: if (!special && !nolink && !bounce && !self && !global && !silent && !current && !nored) {
+  $: if (!special && !nolink && !bounce && !self && !global && !silent && !current && !nored && !external) {
     reddable = true
   } else {
     reddable = false
@@ -265,22 +272,9 @@
 </script>
 
 {#if disable || nolink || (current && !global)}
-  <span class={cls} title={rinfo} on:click={clicked}>
-    {#if marked}<LinkMark/>{/if}
-    {#if $$slots.default}
-      <slot></slot>
-    {:else}
-      {text}
-    {/if}
-  </span>
+  <span class={cls} title={rinfo} on:click={clicked}>{#if marked}<LinkMark/>{/if}<span class="cpblink-text"><slot>{text}</slot></span>{#if txtmark}<span class="txtmark">{txtmark}</span>{/if}</span>
+{:else if external}
+  <a {href} title={rinfo} class={cls}>{#if marked}<LinkMark/>{/if}<span class="cpblink-text"><slot>{text}</slot></span>{#if txtmark}<span class="txtmark">{txtmark}</span>{/if}</a>
 {:else}
-  <a {href} title={rinfo} class={cls} on:click|preventDefault={clicked}>
-    {#if marked}<LinkMark/>{/if}
-    {#if $$slots.default}
-      <slot></slot>
-    {:else}
-      {text}
-    {/if}
-  </a>
+  <a {href} title={rinfo} class={cls} on:click|preventDefault={clicked}>{#if marked}<LinkMark/>{/if}<span class="cpblink-text"><slot>{text}</slot></span>{#if txtmark}<span class="txtmark">{txtmark}</span>{/if}</a>
 {/if}
-{#if dbg}<span>{href}</span>{/if}

@@ -1,7 +1,7 @@
 <script>
   import FB from '../FB.svelte'
   import QR from '../QR.svelte'
-  import Link from '../Link.svelte'
+  import Link from '../link/Link.svelte'
   import Doc from '../doc/Doc.svelte'
   import Line from '../doc/Line.svelte'
   import Lab from '../doc/Lab.svelte'

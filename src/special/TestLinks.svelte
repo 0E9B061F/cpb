@@ -1,6 +1,6 @@
 <script>
   import FB from '../FB.svelte'
-  import Link from '../Link.svelte'
+  import Link from '../link/Link.svelte'
   let h1
   let h2
   let h3

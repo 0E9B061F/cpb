@@ -1,5 +1,5 @@
 <script>
-  import Link from '../Link.svelte'
+  import Link from '../link/Link.svelte'
   import { getContext } from 'svelte'
   const scrollinfo = getContext('scrollinfo')
   const scrolltop = getContext('scrolltop')

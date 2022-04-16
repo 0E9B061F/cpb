@@ -3,7 +3,7 @@
 	import Doc from './doc/Doc.svelte'
 	import Line from './doc/Line.svelte'
 	import Lab from './doc/Lab.svelte'
-	import Link from './Link.svelte'
+	import Link from './link/Link.svelte'
 	import Input from './doc/Input.svelte'
 	import Check from './doc/Check.svelte'
 	import Numeric from './doc/Numeric.svelte'

@@ -1,6 +1,6 @@
 <script>
   import FB from './FB.svelte'
-  import Link from './Link.svelte'
+  import Link from './link/Link.svelte'
   import Separated from './util/Separated.svelte'
   import { getContext } from 'svelte'
   const haslogin = getContext('haslogin')

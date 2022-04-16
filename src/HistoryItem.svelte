@@ -1,5 +1,5 @@
 <script>
-  import Link from './Link.svelte'
+  import Link from './link/Link.svelte'
   import UUID from './UUID.svelte'
   import Balance from './Balance.svelte'
   import { getContext } from 'svelte'

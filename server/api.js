@@ -320,16 +320,21 @@ api.post('/login', [needlogout, (req, res)=> {
     where: { handle: req.body.handle },
     include: [db.config],
   }).then(u=> {
-    bcrypt.compare(req.body.pass, u.key)
-    .then(valid=> {
-      if (valid) {
-        req.session.cpb = util.mklogin(u)
-        res.json(ok(util.exportsess(req.session)))
-      } else {
-        res.json(inputerr(['Bad credentials. Failed to login.']))
-        res.end()
-      }
-    })
+    if (!u) {
+      res.json(inputerr(['Bad credentials. Failed to login.']))
+      res.end()
+    } else {
+      bcrypt.compare(req.body.pass, u.key)
+      .then(valid=> {
+        if (valid) {
+          req.session.cpb = util.mklogin(u)
+          res.json(ok(util.exportsess(req.session)))
+        } else {
+          res.json(inputerr(['Bad credentials. Failed to login.']))
+          res.end()
+        }
+      })
+    }
   }).catch(e=> res.json(internal(e)))
 }])
 

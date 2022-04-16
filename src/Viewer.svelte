@@ -1,9 +1,14 @@
 <script>
-  import Link from './Link.svelte'
-  import LinkShim from './LinkShim.svelte'
-  import CPBLinkShim from './CPBLinkShim.svelte'
+  import Link from './link/Link.svelte'
+  import LinkShim from './rendered/LinkShim.svelte'
+  import CPBLinkShim from './rendered/CPBLinkShim.svelte'
+  import WikiLink from './rendered/WikiLink.svelte'
+  import BibleLink from './rendered/BibleLink.svelte'
+  import Quotation from './rendered/Quotation.svelte'
+  import ExternalLink from './rendered/ExternalLink.svelte'
   import ContentControls from './ContentControls.svelte'
   import Infobar from './infobar/Infobar.svelte'
+  import Dash from './rendered/Dash.svelte'
   import { marked } from 'marked'
   import { convert } from 'html-to-text'
   import { getContext } from 'svelte'
@@ -21,6 +26,11 @@
   const renderers = {
     link: LinkShim,
     cpblink: CPBLinkShim,
+    extlink: ExternalLink,
+    wikilink: WikiLink,
+    biblelink: BibleLink,
+    dash: Dash,
+    quotation: Quotation,
   }
   let body
   let wc = 0

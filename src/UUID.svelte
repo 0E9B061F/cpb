@@ -1,5 +1,5 @@
 <script>
-  import Link from './Link.svelte'
+  import Link from './link/Link.svelte'
   export let link = false
 </script>
 

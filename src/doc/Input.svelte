@@ -8,7 +8,6 @@
 	const dispatch = createEventDispatcher()
   export let value = ''
   export let text = ''
-  export let mini = false
   export let focused = false
   export let center = false
   export let lab = ''

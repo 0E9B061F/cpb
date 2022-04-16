@@ -1,6 +1,6 @@
 <script>
 	import FB from './FB.svelte'
-	import Link from './Link.svelte'
+	import Link from './link/Link.svelte'
 	import Pipe from './Pipe.svelte'
 	import MaybeUUID from './MaybeUUID.svelte'
   import { getContext } from 'svelte'

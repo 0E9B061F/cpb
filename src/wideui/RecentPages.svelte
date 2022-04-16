@@ -1,6 +1,6 @@
 <script>
   import FB from '../FB.svelte'
-  import Link from '../Link.svelte'
+  import Link from '../link/Link.svelte'
   import Wrapper from '../util/Wrapper.svelte'
   import WUIModule from './WUIModule.svelte'
   import date from 'date-and-time'

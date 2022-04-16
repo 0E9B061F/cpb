@@ -1,7 +1,7 @@
 <script>
   import FB from './FB.svelte'
   import R2 from './r2/R2.svelte'
-  import Link from './Link.svelte'
+  import Link from './link/Link.svelte'
   import { getContext } from 'svelte'
   const loc = getContext('loc')
   export let pnum
