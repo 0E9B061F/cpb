@@ -56,7 +56,7 @@
 					{#if $state.namespace}
 	      		<FB title line="s2" fw={6} c="title-sub">{$state.namespace}</FB>
 					{/if}
-	      	<FB vc line="s4" fw={6}>&#9654;</FB>
+	      	<FB vc line="s4" fw={9}>:</FB>
 				</FB>
 				<FB expand/>
 				<FB vert center>

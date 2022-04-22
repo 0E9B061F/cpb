@@ -40,8 +40,7 @@
   } : {}
 </script>
 
-<FB c="infobar" vert>
-
+<FB c="infobar infotop" vert>
   <FB center line="s1" c="blacktag">
     TYPE: <span class="blackval">
       {#if $state.head || $state.anchor}
@@ -64,9 +63,10 @@
     <QR data={vpermac} ver={3} scale={2} uuid={$page.val.uuid} title="Version Permalink" />
     <QR data={permac} ver={3} scale={2} uuid={$page.val.pageUuid} title="Page Permalink" />
   </FB>
-
-  {#if $ui <= 1}
-    <InfoTOC/>
-  {/if}
-
 </FB>
+<div class="content-start"></div>
+{#if $ui <= 1}
+  <FB c="infobar" vert>
+    <InfoTOC/>
+  </FB>
+{/if}

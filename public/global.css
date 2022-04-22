@@ -139,6 +139,7 @@ a, .nolink, a:visited {
 .cpblink:hover .cpblink-text {
 	text-decoration: underline;
 }
+.cpblink.current-link:hover .cpblink-text,
 .cpblink.disabled-link:hover .cpblink-text {
   text-decoration: none;
 }
@@ -185,6 +186,12 @@ button:focus {
 	border-color: #666;
 }
 
+code {
+  background-color: var(--metal);
+  padding: 1px;
+  border: 1px solid var(--rubber);
+}
+
 canvas {
   image-rendering: optimizeSpeed;             /* Older versions of FF          */
   image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
@@ -197,7 +204,7 @@ canvas {
 
 pre {
   margin: 0;
-  font-family: 'Azeret Mono', monospace;
+  font-family: Hack, 'Azeret Mono', monospace;
 }
 
 ol {
@@ -254,10 +261,11 @@ ol.treelike {
 }
 
 .txtmark {
-  font-size: var(--xs4f);
+  font-size: 0.5em;
   vertical-align: super;
   user-select: none;
   font-weight: 400;
+  font-family: Hack, 'Azeret Mono', monospace;
 }
 
 .cpb-shell {
@@ -291,7 +299,11 @@ ol.treelike {
 }
 
 .footer {
-	/* height: 2.375rem; */
+	margin-top: 5rem;
+}
+.foot-label {
+  font-size: 0.6em;
+  font-weight: 700;
 }
 
 .cpb-content {
@@ -353,7 +365,7 @@ ol.treelike {
 
 .uuid {
   text-transform: uppercase;
-  font-family: 'Azeret Mono', monospace;
+  font-family: Hack, 'Azeret Mono', monospace;
 }
 
 .cpblink {
@@ -496,7 +508,7 @@ ol.treelike {
   color: var(--title);
 }
 .fb-mono {
-  font-family: 'Azeret Mono', monospace;
+  font-family: Hack, 'Azeret Mono', monospace;
 }
 .fb-reverse {
   color: var(--paper);
@@ -520,6 +532,7 @@ ol.treelike {
   border: 0;
   background-color: var(--brushed);
   border-left: 1px solid var(--embossed);
+  font-family: Hack, "Azeret Mono", monospace;
 }
 .main-editor:focus {
   outline: 0;
@@ -557,7 +570,7 @@ ol.treelike {
 .fp-table {
 	background-color: var(--plaster);
 	padding: 4px;
-	font-family: 'Azeret Mono', monospace;
+	font-family: Hack, 'Azeret Mono', monospace;
 	border-radius: 5px;
 	font-size: 0.85rem;
 	flex-wrap: wrap;
@@ -634,8 +647,12 @@ ol.treelike {
 .history-items {
 	width: 100%;
 }
+.history-item, .history-item td {
+  height: 1rem;
+  white-space: nowrap;
+}
 .history-item .history-num {
-	font-family: 'Azeret Mono', monospace;
+	font-family: Hack, 'Azeret Mono', monospace;
 	text-align: right;
 	padding-right: 0.6rem;
 }
@@ -694,7 +711,15 @@ h6 {
 .rendered {
   line-height: 1.5;
 }
+.rendered .content-start {
+  float: left;
+  clear: right;
+}
 
+.rendered h1 {
+  border-bottom: 1px solid var(--rubber);
+  padding-bottom: 7.5px;
+}
 .rendered h1,
 .rendered h2,
 .rendered h3,
@@ -703,6 +728,7 @@ h6 {
 .rendered h6 {
 	margin-bottom: 0;
   color: var(--title);
+  clear: left;
 }
 .rendered p {
 	margin-top: 1rem;
@@ -713,11 +739,15 @@ h6 {
   margin-top: 0;
 }
 
+.rendered > .bodyblock {
+  margin-top: 1rem;
+}
+
 .rendered .quotation {
   margin: 2rem auto 2rem auto;
-  max-width: 400px;
+  max-width: 500px;
 }
-.rendered .quotation blockquote {
+.rendered .quotation blockquote p {
   margin: 0;
   font-style: italic;
   font-size: var(--xnf);
@@ -729,13 +759,69 @@ h6 {
   padding-right: 10%;
 }
 
+.rendered figure {
+  margin-top: 2rem;
+}
+.rendered figure.right {
+  float: right;
+}
+
+.rendered .bibliography {
+  gap: 2rem;
+}
+
+.rendered .pgp-key {
+  font-size: var(--xs2f);
+  line-height: 1.1;
+}
+.rendered .pgp-header {
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+}
+
+.rendered .smallcaps {
+  font-variant: small-caps;
+}
+.rendered .title {
+  font-weight: 900;
+}
+.rendered .alert {
+  color: var(--red);
+}
+
+.figcontent {
+  position: relative;
+  border-right: 1px solid var(--rubber);
+  border-left: 1px solid var(--rubber);
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+.figcontrols {
+  position: absolute;
+  visibility: hidden;
+  user-select: none;
+  right: 0;
+  top: 0;
+}
+.figcontent:hover .figcontrols {
+  visibility: visible;
+}
+.figcontrols .cpblink {
+  padding: 5px;
+}
+
 .infobar {
   float: right;
-  max-width: 250px;
-  margin-left: 1rem;
-  margin-bottom: 1rem;
-  margin-top: var(--gap);
-  clear: both;
+  width: calc(150px + 1rem);
+  padding-left: 1rem;
+  padding-bottom: 1rem;
+  padding-top: var(--gap);
+  clear: right;
+  background-color: var(--paper);
+}
+.infobar.infotop {
+  padding-bottom: 0;
 }
 
 
@@ -1158,7 +1244,7 @@ h6 {
 }
 
 .ns-sep {
-  font-family: 'Azeret Mono', monospace;
+  font-family: Hack, 'Azeret Mono', monospace;
 }
 
 

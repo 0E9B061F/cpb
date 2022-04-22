@@ -55,7 +55,10 @@
   export let c = []
   export let current = false
   export let info = null
-  export let dbg = false
+
+  export let decmd = false
+  export let deopt = false
+  export let strip = false
 
   export let external = false
 
@@ -111,16 +114,16 @@
 
   // foo
   // main:foo
-  // main:
+  // main
+  const nstreg = /^(?:(?<space>[^:]+):)?(?<title>[^#]+)?(?:#(?<cmd>.+))?/
+
   const parsenst =()=> {
     if (nst) {
-      const nt = nst.split(':')
-      if (nt.length > 1) {
-        scratch.space = nt[0]
-        if (nt[1]) scratch.title = nt[1]
-      } else {
-        scratch.space = $rc.defns
-        scratch.title = nt[0]
+      const m = nst.match(nstreg)
+      if (m) {
+        scratch.space = m.groups.space || $rc.defns
+        scratch.title = m.groups.title || $rc.deftitle
+        scratch.cmd = m.groups.cmd
       }
     }
   }
@@ -148,6 +151,8 @@
     }
     if (cmd) scratch.cmd = cmd
     if (opt) scratch.opt = Object.assign({}, scratch.opt, opt)
+    if (decmd | strip) scratch.cmd = null
+    if (deopt | strip) scratch.opt = {}
   }
 
   const mkhref =()=> {
@@ -196,7 +201,7 @@
       rinfo = util.tag(scratch.space)
     } else {
       href = `/`
-      rinfo = rc.title
+      rinfo = $rc.title
     }
     if (scratch.space == $rc.syskey) href = ([href, ...scratch.sub]).join('/')
     if (scratch.opt) {
@@ -208,6 +213,8 @@
     }
     if (scratch.cmd) href = `${href}#${scratch.cmd}`
 
+    href = href.replace(/ /g, '_')
+
     current = $path == href
 
     if (info) rinfo = info
@@ -216,20 +223,40 @@
     addr = href
   }
 
+  const parsecmd =c=> {
+    return c.split('-').map(x=> x[0].toUpperCase()+x.slice(1)).join(' ')
+  }
+
   const mkident =()=> {
-    if (scratch.uuid) {
+    if (nolink) {
+      ident = null
+      text = 'BUTTON'
+    } else if (scratch.uuid) {
       ident = scratch.uuid
       text = scratch.uuid
     } else if (scratch.title) {
       ident = `${scratch.space}:${scratch.title}`
-      text = scratch.title
+      if ($loc.namespace != scratch.space) {
+        text = `${scratch.space}:${scratch.title}`
+      } else {
+        text = `${scratch.title}`
+      }
     } else if (scratch.space) {
       ident = scratch.space
-      text = `#${scratch.space}`
+      text = `${scratch.space}::`
     } else {
-      ident = null
-      text = 'BUTTON'
+      ident = `${$rc.defns}:${$rc.deftitle}`
+      if ($loc.namespace != $rc.defns) {
+        text = `${$rc.defns}:${$rc.deftitle}`
+      } else {
+        text = `${$rc.deftitle}`
+      }
     }
+    if (scratch.cmd) {
+      const c = parsecmd(scratch.cmd)
+      text += ` § ${c}`
+    }
+    console.log(text)
     register(ident)
   }
 

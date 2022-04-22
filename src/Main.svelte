@@ -232,7 +232,7 @@
 	setContext('register', register)
 	setContext('logout', logout)
 
-	const fortune = [
+	const fortunes = [
 		"a healthy air stinks of stupidity",
 		"burning burning burning burning",
 		"because it is my heart",
@@ -240,6 +240,23 @@
 		"where days are numbered",
 		"devised by some ancient dread",
 	]
+	let fortunebin = [...fortunes]
+	let lastfortune = null
+
+	const fortune =()=> {
+		if (!fortunebin.length) {
+			fortunebin = [...fortunes]
+			if (lastfortune) {
+				const n = fortunebin.indexOf(lastfortune)
+				fortunebin.splice(n, 1)
+			}
+		}
+		const s = util.sample(fortunebin)
+		const n = fortunebin.indexOf(s)
+    fortunebin.splice(n, 1)
+		lastfortune = s
+		return s
+	}
 
 	let heldmsg = null
 
@@ -253,7 +270,7 @@
 	}
 	const unmsg =()=> {
 		print({
-			text: util.sample(fortune),
+			text: fortune(),
 			level: 'z',
 			time: 0,
 		})
@@ -761,7 +778,7 @@
     if (p[0] == '/') p = p.slice(1)
     p = p.split('/')
     const ns = p[0]
-    const t = p[1]
+    const t = p[1]?.replace(/_/g, ' ')
     const args = p.slice(2)
 		loc.sub = args
 		let u

@@ -4,14 +4,19 @@
   import CPBLinkShim from './rendered/CPBLinkShim.svelte'
   import WikiLink from './rendered/WikiLink.svelte'
   import BibleLink from './rendered/BibleLink.svelte'
-  import Quotation from './rendered/Quotation.svelte'
+  import Figure from './rendered/Figure.svelte'
+  import Attribution from './rendered/Attribution.svelte'
   import ExternalLink from './rendered/ExternalLink.svelte'
+  import Block from './rendered/Block.svelte'
+  import Decorated from './rendered/Decorated.svelte'
+  import PGPKey from './rendered/PGPKey.svelte'
   import ContentControls from './ContentControls.svelte'
   import Infobar from './infobar/Infobar.svelte'
   import Dash from './rendered/Dash.svelte'
   import { marked } from 'marked'
   import { convert } from 'html-to-text'
-  import { getContext } from 'svelte'
+  import { getContext, setContext } from 'svelte'
+  import { writable } from 'svelte/store'
   import extensions from '../lib/wmd.js'
   const rc = getContext('rc')
   const haspage = getContext('haspage')
@@ -19,6 +24,9 @@
   const setTokens = getContext('setTokens')
   const setPageinfo = getContext('setPageinfo')
   import SvelteMarkdown from 'svelte-markdown'
+
+  const citations = writable({})
+  setContext('citations', citations)
 
   marked.use({extensions})
   const options = marked.defaults
@@ -30,7 +38,12 @@
     wikilink: WikiLink,
     biblelink: BibleLink,
     dash: Dash,
-    quotation: Quotation,
+    figure: Figure,
+    attribution: Attribution,
+    block: Block,
+    decorated: Decorated,
+    multidec: Decorated,
+    pgpkey: PGPKey,
   }
   let body
   let wc = 0
