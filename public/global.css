@@ -307,7 +307,6 @@ ol.treelike {
 }
 
 .footer {
-	margin-top: 5rem;
 }
 .foot-label {
   font-size: 0.6em;
@@ -718,6 +717,7 @@ h6 {
 
 .rendered {
   line-height: 1.5;
+  margin-bottom: 5rem;
 }
 .rendered .content-start {
   float: left;
