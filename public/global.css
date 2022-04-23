@@ -144,6 +144,14 @@ a, .nolink, a:visited {
   text-decoration: none;
 }
 
+.rendered .cpblink .cpblink-text {
+  text-decoration: underline;
+  text-decoration-color: #eaebff;
+}
+.rendered .cpblink.missing .cpblink-text {
+  text-decoration-color: #ffdadf;
+}
+
 th {
 	text-align: left;
 }
