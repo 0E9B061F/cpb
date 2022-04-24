@@ -38,8 +38,9 @@ const internal =(e,v)=> {
 }
 const inputerr =v=> resp(5, 'input error', v)
 
-const ordef =(v,d)=> {
-  return v ? parseInt(v) : d
+const ordef =(v, d)=> {
+  const o = parseInt(v)
+  return Number.isNaN(o) ? d : o
 }
 
 api.get('/search/:query', (req, res)=> {
