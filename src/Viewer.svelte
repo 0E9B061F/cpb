@@ -20,6 +20,7 @@
   import extensions from '../lib/wmd.js'
   const rc = getContext('rc')
   const haspage = getContext('haspage')
+  const haslogin = getContext('haslogin')
   const page = getContext('page')
   const setTokens = getContext('setTokens')
   const setPageinfo = getContext('setPageinfo')
@@ -77,7 +78,7 @@
 
 {#if $haspage}
   <div class="rendered" bind:this={body}>
-    <ContentControls/>
+    {#if $haslogin}<ContentControls/>{/if}
     <Infobar/>
     <SvelteMarkdown source={$page.val.body} {renderers} {options} on:parsed={onparse} />
   </div>
