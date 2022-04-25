@@ -345,42 +345,60 @@ api.post('/logout', [needlogin, (req, res)=> {
 }])
 
 api.post('/register', [notsingleuser, needlogout, (req, res)=> {
-  bcrypt.hash(req.body.pass, saltRounds, (err, hash)=> {
-    if (err) {
-      res.json(internal(err))
-      res.end()
-    } else {
-      db.user.create({
-        handle: req.body.handle,
-        email: req.body.email,
-        key: hash,
-        config: {},
-      }, {
-        include: [{
-          association: db.user.Config,
-        }]
-      })
-      .then(u=> {
-        console.log(`created user ${u}`)
-        req.session.cpb = util.mklogin(u)
-        res.json(ok())
-      })
-      .catch(e=> {
-        console.log(e)
-        if (e.name == "SequelizeUniqueConstraintError") {
-          const m = []
-          e.errors.forEach(e=> {
-            if (e.path == 'handle') m.push(`The username '${req.body.handle}' is already in use.`)
-            if (e.path == 'email') m.push(`The email '${req.body.email}' is already in use.`)
-          })
-          res.json(inputerr(m))
-        } else {
-          res.json(internal(e))
-        }
-        console.log(`failed to create user: ${e}`)
-      })
-    }
-  })
+  if (!req.body.pass || req.body.pass.length < 9) {
+    res.json(inputerr(['Invalid password.']))
+    res.end()
+  } else {
+    bcrypt.hash(req.body.pass, saltRounds, (err, hash)=> {
+      if (err) {
+        res.json(internal(err))
+        res.end()
+      } else {
+        db.user.create({
+          handle: req.body.handle,
+          email: req.body.email,
+          key: hash,
+          config: {},
+        }, {
+          include: [{
+            association: db.user.Config,
+          }]
+        })
+        .then(u=> {
+          console.log(`created user ${u}`)
+          req.session.cpb = util.mklogin(u)
+          res.json(ok())
+        })
+        .catch(e=> {
+          console.log(e)
+          console.log(e.name)
+          if (e.name == "SequelizeUniqueConstraintError") {
+            const m = []
+            e.errors.forEach(e=> {
+              if (e.path == 'handle') m.push(`The username '${req.body.handle}' is already in use.`)
+              if (e.path == 'email') m.push(`The email '${req.body.email}' is already in use.`)
+            })
+            res.json(inputerr(m))
+            res.end()
+          } else if (e.name == "SequelizeValidationError") {
+            const m = []
+            e.errors.forEach(e=> {
+              if (e.path == 'handle') m.push(`Invalid handle.`)
+              if (e.path == 'email') m.push(`Invalid email.`)
+              if (e.path == 'key') m.push(`Invalid password.`)
+            })
+            res.json(inputerr(m.filter((v, i, a) => a.indexOf(v) === i)))
+            res.end()
+          } else {
+            console.log('KAPUT')
+            res.json(internal(e))
+            res.end()
+          }
+          console.log(`failed to create user: ${e}`)
+        })
+      }
+    })
+  }
 }])
 
 api.get('/session', (req, res)=> {

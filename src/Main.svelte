@@ -148,13 +148,14 @@
 	const post =(...a)=> {
 		const body = a.pop()
 		const url = cmdu(...a)
-		console.log(`POST ${url}`)
 		return fetch(url, {
 			method: 'POST',
 			body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' },
 		}).then(res=> res.json())
 		.then(r=> {
+			console.log(`POST ${url}`)
+			console.log(r)
 			return r
 		})
 	}
@@ -211,7 +212,7 @@
 				return true
 			} else {
 				if (res.err == 5) {
-					hold(res.val.join('\n'))
+					err(res.val.join('\n'))
 				} else {
 					hold(`Sorry, an error occurred.`)
 				}

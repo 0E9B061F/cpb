@@ -6830,7 +6830,7 @@ var app = (function () {
     }
 
     // (137:4) {:else}
-    function create_else_block_1$5(ctx) {
+    function create_else_block_1$6(ctx) {
     	let pp;
     	let current;
 
@@ -6872,7 +6872,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_else_block_1$5.name,
+    		id: create_else_block_1$6.name,
     		type: "else",
     		source: "(137:4) {:else}",
     		ctx
@@ -7167,7 +7167,7 @@ var app = (function () {
     	let if_block;
     	let if_block_anchor;
     	let current;
-    	const if_block_creators = [create_if_block_9, create_else_block_1$5];
+    	const if_block_creators = [create_if_block_9, create_else_block_1$6];
     	const if_blocks = [];
 
     	function select_block_type_1(ctx, dirty) {
@@ -17899,7 +17899,7 @@ var app = (function () {
     }
 
     // (28:2) {:else}
-    function create_else_block_1$4(ctx) {
+    function create_else_block_1$5(ctx) {
     	let current;
     	const default_slot_template = /*#slots*/ ctx[8].default;
     	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[9], null);
@@ -17947,7 +17947,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_else_block_1$4.name,
+    		id: create_else_block_1$5.name,
     		type: "else",
     		source: "(28:2) {:else}",
     		ctx
@@ -18121,7 +18121,7 @@ var app = (function () {
     	let if_block2_anchor;
     	let current;
     	let if_block0 = /*a*/ ctx[2] && create_if_block_3$b(ctx);
-    	const if_block_creators = [create_if_block_1$p, create_else_block_1$4];
+    	const if_block_creators = [create_if_block_1$p, create_else_block_1$5];
     	const if_blocks = [];
 
     	function select_block_type(ctx, dirty) {
@@ -28887,7 +28887,7 @@ var app = (function () {
     const file$O = "src/Footer.svelte";
 
     // (26:2) {:else}
-    function create_else_block$g(ctx) {
+    function create_else_block_1$4(ctx) {
     	let fb;
     	let current;
 
@@ -28925,7 +28925,7 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_else_block$g.name,
+    		id: create_else_block_1$4.name,
     		type: "else",
     		source: "(26:2) {:else}",
     		ctx
@@ -29236,7 +29236,7 @@ var app = (function () {
     	let if_block;
     	let if_block_anchor;
     	let current;
-    	const if_block_creators = [create_if_block_4$3, create_else_block$g];
+    	const if_block_creators = [create_if_block_4$3, create_else_block_1$4];
     	const if_blocks = [];
 
     	function select_block_type(ctx, dirty) {
@@ -29334,6 +29334,54 @@ var app = (function () {
     		id: create_default_slot_10$5.name,
     		type: "slot",
     		source: "(30:2) <FB expand vert center>",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (53:2) {:else}
+    function create_else_block$g(ctx) {
+    	let fb;
+    	let current;
+
+    	fb = new FB({
+    			props: {
+    				c: "foot-controls",
+    				expand: true,
+    				end: true
+    			},
+    			$$inline: true
+    		});
+
+    	const block = {
+    		c: function create() {
+    			create_component(fb.$$.fragment);
+    		},
+    		m: function mount(target, anchor) {
+    			mount_component(fb, target, anchor);
+    			current = true;
+    		},
+    		p: noop,
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(fb.$$.fragment, local);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(fb.$$.fragment, local);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			destroy_component(fb, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block$g.name,
+    		type: "else",
+    		source: "(53:2) {:else}",
     		ctx
     	});
 
@@ -30025,29 +30073,25 @@ var app = (function () {
     	let if_block;
     	let if_block_anchor;
     	let current;
-    	const if_block_creators = [create_if_block$v, create_if_block_3$7];
+    	const if_block_creators = [create_if_block$v, create_if_block_3$7, create_else_block$g];
     	const if_blocks = [];
 
     	function select_block_type_1(ctx, dirty) {
     		if (/*$state*/ ctx[0].creating || /*$state*/ ctx[0].editing) return 0;
     		if (/*$state*/ ctx[0].content) return 1;
-    		return -1;
+    		return 2;
     	}
 
-    	if (~(current_block_type_index = select_block_type_1(ctx))) {
-    		if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-    	}
+    	current_block_type_index = select_block_type_1(ctx);
+    	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
 
     	const block = {
     		c: function create() {
-    			if (if_block) if_block.c();
+    			if_block.c();
     			if_block_anchor = empty$1();
     		},
     		m: function mount(target, anchor) {
-    			if (~current_block_type_index) {
-    				if_blocks[current_block_type_index].m(target, anchor);
-    			}
-
+    			if_blocks[current_block_type_index].m(target, anchor);
     			insert_dev(target, if_block_anchor, anchor);
     			current = true;
     		},
@@ -30056,35 +30100,26 @@ var app = (function () {
     			current_block_type_index = select_block_type_1(ctx);
 
     			if (current_block_type_index === previous_block_index) {
-    				if (~current_block_type_index) {
-    					if_blocks[current_block_type_index].p(ctx, dirty);
-    				}
+    				if_blocks[current_block_type_index].p(ctx, dirty);
     			} else {
-    				if (if_block) {
-    					group_outros();
+    				group_outros();
 
-    					transition_out(if_blocks[previous_block_index], 1, 1, () => {
-    						if_blocks[previous_block_index] = null;
-    					});
+    				transition_out(if_blocks[previous_block_index], 1, 1, () => {
+    					if_blocks[previous_block_index] = null;
+    				});
 
-    					check_outros();
-    				}
+    				check_outros();
+    				if_block = if_blocks[current_block_type_index];
 
-    				if (~current_block_type_index) {
-    					if_block = if_blocks[current_block_type_index];
-
-    					if (!if_block) {
-    						if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
-    						if_block.c();
-    					} else {
-    						if_block.p(ctx, dirty);
-    					}
-
-    					transition_in(if_block, 1);
-    					if_block.m(if_block_anchor.parentNode, if_block_anchor);
+    				if (!if_block) {
+    					if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    					if_block.c();
     				} else {
-    					if_block = null;
+    					if_block.p(ctx, dirty);
     				}
+
+    				transition_in(if_block, 1);
+    				if_block.m(if_block_anchor.parentNode, if_block_anchor);
     			}
     		},
     		i: function intro(local) {
@@ -30097,10 +30132,7 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (~current_block_type_index) {
-    				if_blocks[current_block_type_index].d(detaching);
-    			}
-
+    			if_blocks[current_block_type_index].d(detaching);
     			if (detaching) detach_dev(if_block_anchor);
     		}
     	};
@@ -82759,7 +82791,7 @@ var app = (function () {
     const { Object: Object_1, console: console_1, document: document_1, window: window_1 } = globals;
     const file = "src/Main.svelte";
 
-    // (1035:2) <svelte:fragment slot="inner">
+    // (1036:2) <svelte:fragment slot="inner">
     function create_inner_slot(ctx) {
     	let loadingscreen;
     	let current;
@@ -82791,14 +82823,14 @@ var app = (function () {
     		block,
     		id: create_inner_slot.name,
     		type: "slot",
-    		source: "(1035:2) <svelte:fragment slot=\\\"inner\\\">",
+    		source: "(1036:2) <svelte:fragment slot=\\\"inner\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1040:2) {#if $uc.debug}
+    // (1041:2) {#if $uc.debug}
     function create_if_block(ctx) {
     	let debugger_1;
     	let current;
@@ -82830,14 +82862,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(1040:2) {#if $uc.debug}",
+    		source: "(1041:2) {#if $uc.debug}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1039:1) <FB vert c="cpb-main" ghost={!$booted} flex={$ui >= 3}>
+    // (1040:1) <FB vert c="cpb-main" ghost={!$booted} flex={$ui >= 3}>
     function create_default_slot_1(ctx) {
     	let t0;
     	let headframe;
@@ -82918,14 +82950,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(1039:1) <FB vert c=\\\"cpb-main\\\" ghost={!$booted} flex={$ui >= 3}>",
+    		source: "(1040:1) <FB vert c=\\\"cpb-main\\\" ghost={!$booted} flex={$ui >= 3}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1033:0) <FB center {c} rel>
+    // (1034:0) <FB center {c} rel>
     function create_default_slot(ctx) {
     	let r2hider;
     	let t0;
@@ -83025,7 +83057,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(1033:0) <FB center {c} rel>",
+    		source: "(1034:0) <FB center {c} rel>",
     		ctx
     	});
 
@@ -83062,10 +83094,10 @@ var app = (function () {
     			t1 = space();
     			div = element("div");
     			create_component(fb.$$.fragment);
-    			add_location(style_1, file, 1025, 1, 23016);
+    			add_location(style_1, file, 1026, 1, 23034);
     			attr_dev(div, "class", "cpb-shell");
     			toggle_class(div, "darkmode", /*$usedark*/ ctx[2]);
-    			add_location(div, file, 1031, 0, 23082);
+    			add_location(div, file, 1032, 0, 23100);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -83347,13 +83379,14 @@ var app = (function () {
     	const post = (...a) => {
     		const body = a.pop();
     		const url = cmdu(...a);
-    		console.log(`POST ${url}`);
 
     		return fetch(url, {
     			method: 'POST',
     			body: JSON.stringify(body),
     			headers: { 'Content-Type': 'application/json' }
     		}).then(res => res.json()).then(r => {
+    			console.log(`POST ${url}`);
+    			console.log(r);
     			return r;
     		});
     	};
@@ -83415,7 +83448,7 @@ var app = (function () {
     				return true;
     			} else {
     				if (res.err == 5) {
-    					hold(res.val.join('\n'));
+    					err(res.val.join('\n'));
     				} else {
     					hold(`Sorry, an error occurred.`);
     				}
