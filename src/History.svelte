@@ -27,6 +27,4 @@
   </table>
   <FB expand/>
   <SearchPagination result={$history.val}/>
-
-
 {/if}

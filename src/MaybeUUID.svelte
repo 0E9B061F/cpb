@@ -1,6 +1,6 @@
 <script>
   import UUID from './UUID.svelte'
-  import Balance from './Balance.svelte'
+  import Strike from './util/Strike.svelte'
   import { isuu } from '../lib/util.js'
   export let left = false
   export let right = false
@@ -11,5 +11,7 @@
 {#if valid}
   <UUID link={uuid}/>
 {:else}
-  <Balance {left} {right}><UUID>{uuid}</UUID></Balance>
+  {#if right}<Strike/>{/if}
+  <UUID>{uuid}</UUID>
+  {#if left}<Strike/>{/if}
 {/if}

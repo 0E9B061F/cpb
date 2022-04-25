@@ -239,6 +239,7 @@
 		"these fragments i have shored against my ruins",
 		"where days are numbered",
 		"devised by some ancient dread",
+		"when found, make a note of",
 	]
 	let fortunebin = [...fortunes]
 	let lastfortune = null
@@ -911,10 +912,10 @@
 		let p = []
 		let a = []
 		if ($loc.title) {
-			p.push($loc.namespace.toUpperCase())
+			p.push(`(${$loc.namespace.toUpperCase()})`)
 			p.push($loc.title)
 			if ($loc.cmd) {
-				a.push($loc.cmd.toUpperCase())
+				a.push(util.dedash($loc.cmd))
 			}
 		} else {
 			p.push('SPECIAL')
@@ -923,8 +924,8 @@
 				a.push(`"${$loc.query}"`)
 			}
 		}
-		p = p.join(' ▸ ')
-		a = a.length ? `(${a.join(' ')})` : ''
+		p = p.join(' ')
+		a = a.length ? `§ ${a.join(' ')}` : ''
 		doctitle = ([...t, p, a]).join(' ')
 	}
 	$: mktitle($loc)

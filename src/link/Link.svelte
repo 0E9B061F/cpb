@@ -1,5 +1,6 @@
 <script>
   import LinkMark from './LinkMark.svelte'
+  import util from '../../lib/util.js'
   import { getContext, onDestroy } from 'svelte'
   const gs = getContext('gs')
   const rc = getContext('rc')
@@ -12,8 +13,6 @@
   const session = getContext('session')
   const loc = getContext('loc')
   const reload = getContext('reload')
-
-  import util from '../../lib/util.js'
 
   // Home
   // main:Home
@@ -224,7 +223,7 @@
   }
 
   const parsecmd =c=> {
-    return c.split('-').map(x=> x[0].toUpperCase()+x.slice(1)).join(' ')
+    return util.dedash(c)
   }
 
   const mkident =()=> {
@@ -267,11 +266,14 @@
     if (disable) cc.push('disabled-link')
     if (nolink) cc.push('nolink')
     if (external) cc.push('external')
+    if (selfanchor) cc.push('selfanchor')
     if (!global && current) cc.push('current-link')
     cls = cc.join(' ')
   }
 
   export const trigger =()=> clicked()
+
+  $: selfanchor = self && cmd
 
   $: if (self) {
     mkhref(
@@ -286,14 +288,14 @@
       bounce, nst,
     )
   }
-  $: current = $path == href
+  $: current = ($path == href && !selfanchor)
   $: if (!special && !nolink && !bounce && !self && !global && !silent && !current && !nored && !external) {
     reddable = true
   } else {
     reddable = false
   }
   $: register(ident, reddable)
-  $: mkcls(reddable, silent, disable, nolink, current, !!$linkmap.val && !!$linkmap.val[ident])
+  $: mkcls(reddable, silent, disable, nolink, current, selfanchor, !!$linkmap.val && !!$linkmap.val[ident])
 
   onDestroy(()=> deregister())
 </script>

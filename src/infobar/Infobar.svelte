@@ -59,14 +59,15 @@
 
   <Tabulate {data} line="s1" rows={9} usew={10}/>
 
-  <FB c="qrcodes" around>
-    <QR data={vpermac} ver={3} scale={2} uuid={$page.val.uuid} title="Version Permalink" />
-    <QR data={permac} ver={3} scale={2} uuid={$page.val.pageUuid} title="Page Permalink" />
-  </FB>
+
 </FB>
 <div class="content-start"></div>
-{#if $ui <= 1}
   <FB c="infobar" vert>
+    <FB c="qrcodes" around>
+      <QR data={vpermac} ver={3} scale={2} uuid={$page.val.uuid} title="Version Permalink" />
+      <QR data={permac} ver={3} scale={2} uuid={$page.val.pageUuid} title="Page Permalink" />
+    </FB>
+    {#if $ui <= 1}
     <InfoTOC/>
+    {/if}
   </FB>
-{/if}
