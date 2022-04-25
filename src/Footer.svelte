@@ -13,7 +13,7 @@
 </script>
 
 <FB c="footer">
-  <FB vert>
+  <FB vert center>
 		{#if $state.content}
 			<FB>
 				<MaybeUUID right uuid={$page.val.pageUuid}/>
@@ -24,17 +24,23 @@
 				<FB vert center><span class="foot-label">PREV</span></FB>
 			</FB>
 		{:else}
-			<Pipe expand/>
+			<FB c="foot-controls" expand end/>
 		{/if}
   </FB>
   <FB expand vert center>
     <div class="heartmark">&#x2764;</div>
   </FB>
-  <FB vert>
-		{#if $state.creating}
-			<Link self global first={postdraft}>CREATE</Link>
-		{:else if $state.editing}
-			<Link self global first={postdraft} opt={{edit: undefined}}>SAVE</Link>
+  <FB vert center>
+		{#if $state.creating || $state.editing}
+			<FB c="foot-controls" expand end>
+				<FB vert center>
+					{#if $state.creating}
+						<Link self global first={postdraft}>CREATE</Link>
+					{:else if $state.editing}
+						<Link self global first={postdraft} opt={{edit: undefined}}>SAVE</Link>
+					{/if}
+				</FB>
+			</FB>
 		{:else if $state.content}
 			<FB>
 				<FB vert center><span class="foot-label">VERS</span></FB>
