@@ -50,6 +50,8 @@
 				<FB vert center><span class="foot-label">NEXT</span></FB>
 				<MaybeUUID left uuid={$page.val.nextUuid}/>
 			</FB>
+		{:else}
+			<FB c="foot-controls" expand end/>
 		{/if}
   </FB>
 </FB>
