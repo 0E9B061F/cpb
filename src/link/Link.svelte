@@ -85,7 +85,6 @@
     else goto(href)
   }
   const clicked =()=> {
-    console.log(current)
     if (disable || (current && !global)) return
     if (cond) cond().then(r=> { if (r) nav() })
     else nav()
@@ -256,7 +255,6 @@
       const c = parsecmd(scratch.cmd)
       text += ` § ${c}`
     }
-    console.log(text)
     register(ident)
   }
 

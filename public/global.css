@@ -171,6 +171,10 @@ a, .nolink, a:visited {
 .rendered .cpblink.selfanchor .cpblink-text {
   text-decoration-style: wavy;
 }
+.rendered .cpblink.current-link .cpblink-text,
+.rendered .cpblink.disabled-link .cpblink-text {
+  text-decoration: none;
+}
 
 th {
 	text-align: left;

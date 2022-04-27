@@ -633,6 +633,11 @@
 				endboot()
 			}
 		}
+		if ($loc.cmd) {
+			scrollto($loc.cmd)
+		} else {
+			scrolltop(false)
+		}
 		unhold({
 			text: 'FINISHED',
 			level: 0,
@@ -649,22 +654,30 @@
 	}
 	setContext('finishload', finishload)
 
+	const scrollto =(id, smooth)=> {
+		const e = document.getElementById(id)
+		if (e) {
+			console.log('scrolling')
+			if (smooth) {
+				e.scrollIntoView({
+					behavior: "smooth",
+				})
+			} else {
+				e.scrollIntoView()
+			}
+			e.focus({preventScroll: true})
+		}
+	}
+
 	const preload =p=> {
 		console.log('CPB PRE-LOAD')
 		$loc = parseloc(p)
 		if ($loc.load) load()
 		else if ($loc.cmd) {
-			const e = document.getElementById($loc.cmd)
-			if (e) {
-				e.scrollIntoView({
-  				behavior: "smooth",
-  				block: "start",
-  				inline: "nearest"
-				})
-				e.focus({preventScroll: true})
-			}
+			scrollto($loc.cmd)
 		} else {
 			unhold('FINISHED', 0, 2000)
+			scrolltop(false)
 		}
 	}
 
@@ -729,8 +742,8 @@
 	}
 
 	let contentscmp
-	const scrolltop =()=> {
-		if (contentscmp) contentscmp.top()
+	const scrolltop =(smooth=true)=> {
+		if (contentscmp) contentscmp.top(smooth)
 	}
 	setContext('scrolltop', scrolltop)
 	let scrollinfo = writable({ch: 0, sh: 0, sy: 0, scrollable: false, scrolled: false})
@@ -842,7 +855,8 @@
   }
 
 	const onpop =e=> {
-    $path = window.location.pathname
+    $path = window.location.pathname + window.location.search + window.location.hash
+		launch($path)
   }
 
 

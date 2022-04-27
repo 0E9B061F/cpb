@@ -75,7 +75,6 @@
     } else {
       headings = []
     }
-    console.log(headings)
   }
 
   $: rl = limit === null ? null : limit - 1

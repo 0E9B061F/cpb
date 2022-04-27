@@ -24,8 +24,16 @@
   let sy = 0
   export let scrollable = false
   let scrolled = false
-  export const top =()=> {
-    if (element) element.scrollTo({top: 0, behavior: 'smooth'})
+  export const top =(smooth=true)=> {
+    if (element) {
+      if (smooth) {
+        console.log('SLOW SCROLL')
+        element.scrollTo({top: 0, behavior: 'smooth'})
+      } else {
+        console.log('INSTASCROLL')
+        element.scrollTo({top: 0, behavior: 'instant'})
+      }
+    }
   }
   const calcscroll =()=> {
     if (element) {

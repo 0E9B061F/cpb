@@ -7,7 +7,7 @@
 
   const gotop =()=> {
     drophash()
-    scrolltop()
+    scrolltop(false)
   }
 </script>
 

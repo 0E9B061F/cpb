@@ -61,7 +61,6 @@
 
   function onparse(e) {
     links = 0
-    console.log(e.detail.tokens)
     setTokens(e.detail.tokens)
     const txt = convert(body.innerHTML)
     wc = txt.trim().split(/\s+/).length
@@ -73,7 +72,6 @@
     setPageinfo(wc, readTime, links)
   }
   import { onMount } from 'svelte'
-  onMount(()=> console.log('bar'))
 </script>
 
 {#if $haspage}

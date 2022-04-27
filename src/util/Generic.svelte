@@ -4,8 +4,6 @@
 	export let cmp
   afterUpdate(()=> {
     if (cmp) {
-      console.log('baz!!!')
-      console.log(cmp)
       finishload()
     }
   })
