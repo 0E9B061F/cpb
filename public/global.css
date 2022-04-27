@@ -32,6 +32,10 @@ body {
   --xb5f: calc(var(--xb5) * var(--lnscale));
   --xb6f: calc(var(--xb6) * var(--lnscale));
 
+  /* fonts */
+  --cpbsans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  --mono-body: Hack, 'Azeret Mono', monospace;
+  --mono-title: 'Azeret Mono', Hack, monospace;
 
   /* color definitions */
   --blue: #6e7fd2;
@@ -84,6 +88,8 @@ body {
   --current: #000000;
   /* hexagrams */
   --hgc-line: #000000;
+  --hgc-o2: #151515;
+  --hgc-o3: #252525;
 }
 .darkmode {
   /* dark mode */
@@ -135,7 +141,7 @@ body {
 	color: var(--print);
 	margin: 0;
 	box-sizing: border-box;
-	font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-family: var(--cpbsans);
 }
 
 a, .nolink, a:visited {
@@ -237,7 +243,7 @@ canvas {
 
 pre {
   margin: 0;
-  font-family: Hack, 'Azeret Mono', monospace;
+  font-family: var(--mono-body);
 }
 
 ol {
@@ -298,7 +304,7 @@ ol.treelike {
   vertical-align: super;
   user-select: none;
   font-weight: 400;
-  font-family: Hack, 'Azeret Mono', monospace;
+  font-family: var(--mono-body);
 }
 
 .cpb-shell {
@@ -388,7 +394,7 @@ ol.treelike {
 .logo {
 	font-size: 2rem;
 	line-height: 2rem;
-	font-family: 'Azeret Mono', monospace;
+	font-family: var(--mono-title);
   font-weight: 800;
 }
 .logofill {
@@ -402,7 +408,7 @@ ol.treelike {
 
 .uuid {
   text-transform: uppercase;
-  font-family: Hack, 'Azeret Mono', monospace;
+  font-family: var(--mono-body);
 }
 
 .cpblink {
@@ -545,7 +551,10 @@ ol.treelike {
   color: var(--title);
 }
 .fb-mono {
-  font-family: Hack, 'Azeret Mono', monospace;
+  font-family: var(--mono-body);
+}
+.fb-title.fb-mono {
+  font-family: var(--mono-title);
 }
 .fb-reverse {
   color: var(--paper);
@@ -569,7 +578,7 @@ ol.treelike {
   border: 0;
   background-color: var(--brushed);
   border-left: 1px solid var(--embossed);
-  font-family: Hack, "Azeret Mono", monospace;
+  font-family: var(--mono-body);
 }
 .main-editor:focus {
   outline: 0;
@@ -607,7 +616,7 @@ ol.treelike {
 .fp-table {
 	background-color: var(--plaster);
 	padding: 4px;
-	font-family: Hack, 'Azeret Mono', monospace;
+	font-family: var(--mono-body);
 	border-radius: 5px;
 	font-size: 0.85rem;
 	flex-wrap: wrap;
@@ -689,7 +698,7 @@ ol.treelike {
   white-space: nowrap;
 }
 .history-item .history-num {
-	font-family: Hack, 'Azeret Mono', monospace;
+	font-family: var(--mono-body);
 	text-align: right;
 	padding-right: 0.6rem;
 }
@@ -1282,7 +1291,7 @@ h6 {
 }
 
 .ns-sep {
-  font-family: Hack, 'Azeret Mono', monospace;
+  font-family: var(--mono-body);
 }
 
 
@@ -1630,6 +1639,9 @@ h6 {
   aspect-ratio: var(--hg-ratio);
   background-color: var(--metal);
 }
+.hexagram.hg-dummy {
+  background: none;
+}
 .hexagram.ordered {
   border: var(--hg-lnh) solid var(--hgc-o2);
   padding: var(--hg-gap);
@@ -1703,7 +1715,7 @@ h6 {
 .hg-label-center {
   background-color: var(--hgc-line);
   height: calc((var(--hg-lnh) * 4) + (var(--hg-gap) * 3));
-  width: 100%;
+  width: calc(100% - 1px);
 }
 
 .invis {

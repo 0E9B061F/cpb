@@ -37,6 +37,7 @@
     const c = ['hexagram',`order-${order}`]
     if (big) c.push('hg-b1')
     if (top) c.push('hg-top')
+    if (dummy) c.push('hg-dummy')
     if (order > 1) c.push('ordered')
     cls = c.join(' ')
   }

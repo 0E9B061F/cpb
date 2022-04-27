@@ -466,6 +466,7 @@
 		test: new Route(Test),
 		forms: new Route(TestForms),
 		links: new Route(TestLinks),
+		loading: new Route(LoadingScreen),
 	})
 	setContext('cpbspace', cpbspace)
 
