@@ -24,7 +24,7 @@ body {
   --xs3f: calc(var(--xs3) * var(--lnscale));
   --xs2f: calc(var(--xs2) * var(--lnscale));
   --xs1f: calc(var(--xs1) * var(--lnscale));
-  --xnf: calc(var(--xn) * var(--lnscale));
+  --xnf:  calc(var(--xn)  * var(--lnscale));
   --xb1f: calc(var(--xb1) * var(--lnscale));
   --xb2f: calc(var(--xb2) * var(--lnscale));
   --xb3f: calc(var(--xb3) * var(--lnscale));

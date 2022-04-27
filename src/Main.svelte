@@ -208,13 +208,13 @@
   	.then(res=> {
 			getsession()
 			if (res.err == 0) {
-				hold(`Registered as '${b.handle}'`)
+				msg(`Registered as '${b.handle}'`)
 				return true
 			} else {
 				if (res.err == 5) {
 					err(res.val.join('\n'))
 				} else {
-					hold(`Sorry, an error occurred.`)
+					err(`Sorry, an error occurred.`)
 				}
 				return false
 			}
@@ -224,7 +224,7 @@
     return post('logout', {})
 		.then(r=> {
 			getsession().then(s=> {
-				if ($hassess) hold(`Logged out`)
+				if ($hassess) msg(`Logged out`)
 			})
     })
   }
@@ -675,6 +675,7 @@
 
 	const load =p=> {
 		console.log('CPB LOAD')
+		print({text: 'LOADING', time: 0, level: 0})
 		loadstart = Date.now()
 		loadstate()
 		$creating = false
@@ -746,7 +747,6 @@
 
 	const launch =p=> {
 		console.log('COMMONPLACE BOOK: LAUNCH')
-		print({text: 'LOADING', time: 0, level: 0})
 		if ($hassess) preload($path)
 		else getsession().then(s=> preload($path))
 	}
@@ -881,8 +881,12 @@
   let gs = writable({
     full: p=> `${burl()}/${p}`,
     goto: (p)=> {
+			console.log(`GOTO ${p}`)
+			if (p != $path) {
+				window.history.pushState({}, p, p)
+			}
       $path = p
-      window.history.pushState({}, $path, $path)
+			launch($path)
     },
     bounce: (d='/')=> {
       $path = trail[1] ? trail[1] : d
@@ -905,7 +909,7 @@
 		$trail.unshift($path)
 		$trail = $trail
 	}
-	$: launch($path)
+	launch($path)
 
 	let doctitle = ''
 	const mktitle =()=> {

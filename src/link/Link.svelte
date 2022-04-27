@@ -76,7 +76,7 @@
   const goto =p=> {
     if (does) does()
     if (!nolink) {
-      if (!current) $gs.goto(href)
+      if (!current || global) $gs.goto(href)
       else reload()
     }
   }
@@ -85,6 +85,7 @@
     else goto(href)
   }
   const clicked =()=> {
+    console.log(current)
     if (disable || (current && !global)) return
     if (cond) cond().then(r=> { if (r) nav() })
     else nav()
@@ -288,7 +289,7 @@
       bounce, nst,
     )
   }
-  $: current = ($path == href && !selfanchor)
+  $: current = (!selfanchor && $path == href)
   $: if (!special && !nolink && !bounce && !self && !global && !silent && !current && !nored && !external) {
     reddable = true
   } else {
