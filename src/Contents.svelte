@@ -1,6 +1,7 @@
 <script>
   import FB from './FB.svelte'
   import R2 from './r2/R2.svelte'
+  import Hexagram from './hex/Hexagram.svelte'
   import R2Hider from './r2/R2Hider.svelte'
   import Titleframe from './Titleframe.svelte'
   import Bodyframe from './Bodyframe.svelte'
@@ -73,6 +74,13 @@
 
 <FB vert expand c="cpb-content {editmode}" bind:element={element}>
 <R2Hider hide={!$state.finished}>
+  <svelte:fragment slot="inner">
+    <FB expand vert center>
+      <FB center>
+        <Hexagram rand={1000}/>
+      </FB>
+    </FB>
+  </svelte:fragment>
 <div class="watermargin" bind:this={waterm}></div>
 {#if !$loading}
   <Bodyframe/>

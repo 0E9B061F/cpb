@@ -4,7 +4,7 @@
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
 
-  export let state = 0b000000
+  export let state = null
   export let rand = false
   export let big = false
   export let order = 1
@@ -13,6 +13,13 @@
   export let dummy = false
   export let nohex = false
 
+  const rint =(min, max)=> Math.random() * (max - min) + min
+  const randomize =()=> state = rint(0b000000, 0b111111)
+
+  if (state === null) {
+    randomize()
+  }
+
   let hexn = writable(state)
   setContext('hexn', hexn)
 
@@ -20,8 +27,7 @@
   let cls = ''
 
   $: $hexn = state
-  const rint =(min, max)=> Math.random() * (max - min) + min
-  const randomize =()=> state = rint(0b000000, 0b111111)
+
   const clrtimer =()=> {
     if (timer) clearTimeout(timer)
   }
