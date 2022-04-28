@@ -28,5 +28,6 @@
   "minResults": 5,
   "maxResults": 50,
   "readSpeed": 200,
-  "singleuser": false
+  "singleuser": false,
+  "bootwait": 1209600000
 }

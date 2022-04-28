@@ -32,11 +32,12 @@
 	import rco from '../lib/rc.js'
 	import util from '../lib/util.js'
 
+	let lastboot = localStorage.getItem('lastboot') || 0
 
-	let booted = writable(false)
 	let lut
 
   let rc = writable(rco)
+	let booted = writable(Date.now() - lastboot < $rc.bootwait)
 
 	let aod = writable(0)
 
@@ -618,6 +619,7 @@
 		msg('CPB BOOTED')
 		console.log('CPB BOOTED')
 		$booted = true
+		localStorage.setItem('lastboot', Date.now())
 	}
 
 	const finishinner =()=> {

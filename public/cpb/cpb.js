@@ -756,6 +756,7 @@ var app = (function () {
     var maxResults = 50;
     var readSpeed = 200;
     var singleuser$1 = false;
+    var bootwait = 1209600000;
     var defaults$1 = {
     	syskey: syskey,
     	proto: proto$2,
@@ -778,7 +779,8 @@ var app = (function () {
     	minResults: minResults,
     	maxResults: maxResults,
     	readSpeed: readSpeed,
-    	singleuser: singleuser$1
+    	singleuser: singleuser$1,
+    	bootwait: bootwait
     };
 
     var fade = 500;
@@ -83019,7 +83021,7 @@ var app = (function () {
     const { Object: Object_1, console: console_1, document: document_1, window: window_1 } = globals;
     const file = "src/Main.svelte";
 
-    // (1055:2) <svelte:fragment slot="inner">
+    // (1057:2) <svelte:fragment slot="inner">
     function create_inner_slot(ctx) {
     	let loadingscreen;
     	let current;
@@ -83051,14 +83053,14 @@ var app = (function () {
     		block,
     		id: create_inner_slot.name,
     		type: "slot",
-    		source: "(1055:2) <svelte:fragment slot=\\\"inner\\\">",
+    		source: "(1057:2) <svelte:fragment slot=\\\"inner\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1060:2) {#if $uc.debug}
+    // (1062:2) {#if $uc.debug}
     function create_if_block(ctx) {
     	let debugger_1;
     	let current;
@@ -83090,14 +83092,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(1060:2) {#if $uc.debug}",
+    		source: "(1062:2) {#if $uc.debug}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1059:1) <FB vert c="cpb-main" ghost={!$booted} flex={$ui >= 3}>
+    // (1061:1) <FB vert c="cpb-main" ghost={!$booted} flex={$ui >= 3}>
     function create_default_slot_1(ctx) {
     	let t0;
     	let headframe;
@@ -83178,14 +83180,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(1059:1) <FB vert c=\\\"cpb-main\\\" ghost={!$booted} flex={$ui >= 3}>",
+    		source: "(1061:1) <FB vert c=\\\"cpb-main\\\" ghost={!$booted} flex={$ui >= 3}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1053:0) <FB center {c} rel>
+    // (1055:0) <FB center {c} rel>
     function create_default_slot(ctx) {
     	let r2hider;
     	let t0;
@@ -83241,7 +83243,7 @@ var app = (function () {
     			const r2hider_changes = {};
     			if (dirty[0] & /*$booted*/ 256) r2hider_changes.hide = !/*$booted*/ ctx[8];
 
-    			if (dirty[5] & /*$$scope*/ 16777216) {
+    			if (dirty[5] & /*$$scope*/ 33554432) {
     				r2hider_changes.$$scope = { dirty, ctx };
     			}
 
@@ -83250,7 +83252,7 @@ var app = (function () {
     			if (dirty[0] & /*$booted*/ 256) fb_changes.ghost = !/*$booted*/ ctx[8];
     			if (dirty[0] & /*$ui*/ 8) fb_changes.flex = /*$ui*/ ctx[3] >= 3;
 
-    			if (dirty[0] & /*contentscmp, $uc*/ 96 | dirty[5] & /*$$scope*/ 16777216) {
+    			if (dirty[0] & /*contentscmp, $uc*/ 96 | dirty[5] & /*$$scope*/ 33554432) {
     				fb_changes.$$scope = { dirty, ctx };
     			}
 
@@ -83285,7 +83287,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(1053:0) <FB center {c} rel>",
+    		source: "(1055:0) <FB center {c} rel>",
     		ctx
     	});
 
@@ -83322,10 +83324,10 @@ var app = (function () {
     			t1 = space();
     			div = element("div");
     			create_component(fb.$$.fragment);
-    			add_location(style_1, file, 1045, 1, 23390);
+    			add_location(style_1, file, 1047, 1, 23522);
     			attr_dev(div, "class", "cpb-shell");
     			toggle_class(div, "darkmode", /*$usedark*/ ctx[2]);
-    			add_location(div, file, 1051, 0, 23456);
+    			add_location(div, file, 1053, 0, 23588);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -83356,7 +83358,7 @@ var app = (function () {
     			const fb_changes = {};
     			if (dirty[0] & /*c*/ 1) fb_changes.c = /*c*/ ctx[0];
 
-    			if (dirty[0] & /*$booted, $ui, contentscmp, $uc*/ 360 | dirty[5] & /*$$scope*/ 16777216) {
+    			if (dirty[0] & /*$booted, $ui, contentscmp, $uc*/ 360 | dirty[5] & /*$$scope*/ 33554432) {
     				fb_changes.$$scope = { dirty, ctx };
     			}
 
@@ -83441,13 +83443,14 @@ var app = (function () {
     	let $wh;
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Main', slots, []);
-    	let booted = writable(false);
-    	validate_store(booted, 'booted');
-    	component_subscribe($$self, booted, value => $$invalidate(8, $booted = value));
+    	let lastboot = localStorage.getItem('lastboot') || 0;
     	let lut;
     	let rc$1 = writable(rc);
     	validate_store(rc$1, 'rc');
     	component_subscribe($$self, rc$1, value => $$invalidate(75, $rc = value));
+    	let booted = writable(Date.now() - lastboot < $rc.bootwait);
+    	validate_store(booted, 'booted');
+    	component_subscribe($$self, booted, value => $$invalidate(8, $booted = value));
     	let aod = writable(0);
     	validate_store(aod, 'aod');
     	component_subscribe($$self, aod, value => $$invalidate(100, $aod = value));
@@ -84106,6 +84109,7 @@ var app = (function () {
     		msg('CPB BOOTED');
     		console.log('CPB BOOTED');
     		set_store_value(booted, $booted = true, $booted);
+    		localStorage.setItem('lastboot', Date.now());
     	};
 
     	const finishinner = () => {
@@ -84599,9 +84603,10 @@ var app = (function () {
     		writable,
     		rco: rc,
     		util,
-    		booted,
+    		lastboot,
     		lut,
     		rc: rc$1,
+    		booted,
     		aod,
     		links,
     		linkmap,
@@ -84778,9 +84783,10 @@ var app = (function () {
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ('booted' in $$props) $$invalidate(10, booted = $$props.booted);
+    		if ('lastboot' in $$props) lastboot = $$props.lastboot;
     		if ('lut' in $$props) lut = $$props.lut;
-    		if ('rc' in $$props) $$invalidate(11, rc$1 = $$props.rc);
+    		if ('rc' in $$props) $$invalidate(10, rc$1 = $$props.rc);
+    		if ('booted' in $$props) $$invalidate(11, booted = $$props.booted);
     		if ('aod' in $$props) $$invalidate(12, aod = $$props.aod);
     		if ('links' in $$props) $$invalidate(13, links = $$props.links);
     		if ('linkmap' in $$props) $$invalidate(14, linkmap = $$props.linkmap);
@@ -84903,8 +84909,8 @@ var app = (function () {
     		doctitle,
     		$booted,
     		$wh,
-    		booted,
     		rc$1,
+    		booted,
     		aod,
     		links,
     		linkmap,
