@@ -29,5 +29,6 @@
   "maxResults": 50,
   "readSpeed": 200,
   "singleuser": false,
-  "bootwait": 1209600000
+  "bootwait": 1209600000,
+  "bookmarks": []
 }

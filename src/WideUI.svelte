@@ -16,11 +16,6 @@
   const ui = getContext('ui')
 
   export let ghost = false
-
-  let bookmarks = [
-    'Home', 'foo', 'bar', 'CPB:test', 'CPB:forms',
-    'CPB:user', 'CPB:login', 'scop:uli', 'foo:bar', 'foo:baz',
-  ]
 </script>
 
 {#if $ui >= 2}
@@ -35,7 +30,7 @@
 
   {#if $ui >= 3}
     <FB c="wide-menu">
-      <Bookmarks items={bookmarks} limit={null}/>
+      <Bookmarks limit={null}/>
     </FB>
     <FB spacer={1}/>
   {/if}

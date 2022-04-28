@@ -18,26 +18,15 @@
   const hassess = getContext('hassess')
   const state = getContext('state')
   const ui = getContext('ui')
-
-	let bookmarks = [
-    'Home', 'foo', 'bar', 'CPB:test', 'CPB:forms',
-    'CPB:user', 'CPB:login', 'scop:uli', 'foo:bar', 'foo:baz',
-  ]
+  const rc = getContext('rc')
 </script>
 
 <FB vert c="head-frame">
 
 	{#if $ui <= 1}
-		<FB>
-			<Separated line="s2" fw={6} items={bookmarks} let:item={item}>
-				<Link nst={item}/>
-			</Separated>
-			<FB expand/>
-			<FB line="s2" fw={7}>RECENT</FB>
-			<Separated line="s2" fw={6} items={bookmarks} let:item={item}>
-				<Link nst={item}/>
-			</Separated>
-		</FB>
+		<Separated line="s2" fw={6} items={$rc.bookmarks} let:item={item}>
+			<Link nst={item}/>
+		</Separated>
 	{/if}
 
 	<FB>
