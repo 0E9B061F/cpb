@@ -526,12 +526,16 @@
 					s.cmp = Viewer
 					s.head = true
 					s.label = 'HEAD'
-					s.editable = true
+					if ($haslogin) {
+						s.editable = true
+					}
 				} else if ($haspage && $page.val.nextUuid == null) {
 					s.cmp = Viewer
 					s.current = true
 					s.label = 'CURRENT'
-					s.editable = true
+					if ($haslogin) {
+						s.editable = true
+					}
 				} else {
 					s.cmp = Viewer
 					s.old = true
@@ -556,7 +560,9 @@
 			s.anchor = true
 			s.label = 'ANCHOR'
 			s.content = true
-			s.editable = true
+			if ($haslogin) {
+				s.editable = true
+			}
 		} else if ($loc.namespace == $rc.syskey) {
 			const res = cpbspace.nav($loc.title)
 			if (res.err > 0) {
@@ -1049,6 +1055,15 @@
 		:root {
 		}
 	</style>
+	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+	<link rel="manifest" href="/site.webmanifest">
+	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="apple-mobile-web-app-title" content="0x2764">
+	<meta name="application-name" content="0x2764">
+	<meta name="msapplication-TileColor" content="#2d89ef">
+	<meta name="theme-color" content="#ffffff">
 </svelte:head>
 
 <div class="cpb-shell" class:darkmode={$usedark}>
