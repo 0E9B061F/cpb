@@ -128,7 +128,8 @@
   }
 
   const trace =()=> {
-    return $trail[1] || bounce || '/'
+    const p = typeof(bounce) == 'string' ? bounce : false
+    return $trail[1] || p || '/'
   }
   const follow =()=> {
     scratch.space = $loc.namespace

@@ -779,6 +779,7 @@
 	setContext('drophash', drophash)
 
   const parseloc =p=> {
+		console.log(p)
     const loc = {
       namespace: null, title: null,
 			uuid: null, sub: [],

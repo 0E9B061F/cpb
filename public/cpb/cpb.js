@@ -907,7 +907,7 @@ var app = (function () {
     const { Object: Object_1$6 } = globals;
     const file$14 = "src/link/Link.svelte";
 
-    // (306:0) {:else}
+    // (307:0) {:else}
     function create_else_block$u(ctx) {
     	let a;
     	let span;
@@ -928,11 +928,11 @@ var app = (function () {
     			if (default_slot_or_fallback) default_slot_or_fallback.c();
     			if (if_block1) if_block1.c();
     			attr_dev(span, "class", "cpblink-text");
-    			add_location(span, file$14, 306, 100, 8041);
+    			add_location(span, file$14, 307, 100, 8094);
     			attr_dev(a, "href", /*href*/ ctx[7]);
     			attr_dev(a, "title", /*rinfo*/ ctx[10]);
     			attr_dev(a, "class", /*cls*/ ctx[9]);
-    			add_location(a, file$14, 306, 2, 7943);
+    			add_location(a, file$14, 307, 2, 7996);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, a, anchor);
@@ -1042,14 +1042,14 @@ var app = (function () {
     		block,
     		id: create_else_block$u.name,
     		type: "else",
-    		source: "(306:0) {:else}",
+    		source: "(307:0) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (304:19) 
+    // (305:19) 
     function create_if_block_3$h(ctx) {
     	let a;
     	let span;
@@ -1068,11 +1068,11 @@ var app = (function () {
     			if (default_slot_or_fallback) default_slot_or_fallback.c();
     			if (if_block1) if_block1.c();
     			attr_dev(span, "class", "cpblink-text");
-    			add_location(span, file$14, 304, 66, 7819);
+    			add_location(span, file$14, 305, 66, 7872);
     			attr_dev(a, "href", /*href*/ ctx[7]);
     			attr_dev(a, "title", /*rinfo*/ ctx[10]);
     			attr_dev(a, "class", /*cls*/ ctx[9]);
-    			add_location(a, file$14, 304, 2, 7755);
+    			add_location(a, file$14, 305, 2, 7808);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, a, anchor);
@@ -1175,14 +1175,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3$h.name,
     		type: "if",
-    		source: "(304:19) ",
+    		source: "(305:19) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (302:0) {#if disable || nolink || (current && !global)}
+    // (303:0) {#if disable || nolink || (current && !global)}
     function create_if_block$_(ctx) {
     	let span1;
     	let span0;
@@ -1203,10 +1203,10 @@ var app = (function () {
     			if (default_slot_or_fallback) default_slot_or_fallback.c();
     			if (if_block1) if_block1.c();
     			attr_dev(span0, "class", "cpblink-text");
-    			add_location(span0, file$14, 302, 81, 7616);
+    			add_location(span0, file$14, 303, 81, 7669);
     			attr_dev(span1, "class", /*cls*/ ctx[9]);
     			attr_dev(span1, "title", /*rinfo*/ ctx[10]);
-    			add_location(span1, file$14, 302, 2, 7537);
+    			add_location(span1, file$14, 303, 2, 7590);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span1, anchor);
@@ -1312,14 +1312,14 @@ var app = (function () {
     		block,
     		id: create_if_block$_.name,
     		type: "if",
-    		source: "(302:0) {#if disable || nolink || (current && !global)}",
+    		source: "(303:0) {#if disable || nolink || (current && !global)}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (307:72) {#if marked}
+    // (308:72) {#if marked}
     function create_if_block_7$2(ctx) {
     	let linkmark;
     	let current;
@@ -1351,14 +1351,14 @@ var app = (function () {
     		block,
     		id: create_if_block_7$2.name,
     		type: "if",
-    		source: "(307:72) {#if marked}",
+    		source: "(308:72) {#if marked}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (307:133) {text}
+    // (308:133) {text}
     function fallback_block_2(ctx) {
     	let t;
 
@@ -1381,14 +1381,14 @@ var app = (function () {
     		block,
     		id: fallback_block_2.name,
     		type: "fallback",
-    		source: "(307:133) {text}",
+    		source: "(308:133) {text}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (307:153) {#if txtmark}
+    // (308:153) {#if txtmark}
     function create_if_block_6$2(ctx) {
     	let span;
     	let t;
@@ -1398,7 +1398,7 @@ var app = (function () {
     			span = element("span");
     			t = text(/*txtmark*/ ctx[5]);
     			attr_dev(span, "class", "txtmark");
-    			add_location(span, file$14, 306, 166, 8107);
+    			add_location(span, file$14, 307, 166, 8160);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -1416,14 +1416,14 @@ var app = (function () {
     		block,
     		id: create_if_block_6$2.name,
     		type: "if",
-    		source: "(307:153) {#if txtmark}",
+    		source: "(308:153) {#if txtmark}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (305:38) {#if marked}
+    // (306:38) {#if marked}
     function create_if_block_5$5(ctx) {
     	let linkmark;
     	let current;
@@ -1455,14 +1455,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5$5.name,
     		type: "if",
-    		source: "(305:38) {#if marked}",
+    		source: "(306:38) {#if marked}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (305:99) {text}
+    // (306:99) {text}
     function fallback_block_1(ctx) {
     	let t;
 
@@ -1485,14 +1485,14 @@ var app = (function () {
     		block,
     		id: fallback_block_1.name,
     		type: "fallback",
-    		source: "(305:99) {text}",
+    		source: "(306:99) {text}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (305:119) {#if txtmark}
+    // (306:119) {#if txtmark}
     function create_if_block_4$a(ctx) {
     	let span;
     	let t;
@@ -1502,7 +1502,7 @@ var app = (function () {
     			span = element("span");
     			t = text(/*txtmark*/ ctx[5]);
     			attr_dev(span, "class", "txtmark");
-    			add_location(span, file$14, 304, 132, 7885);
+    			add_location(span, file$14, 305, 132, 7938);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -1520,14 +1520,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4$a.name,
     		type: "if",
-    		source: "(305:119) {#if txtmark}",
+    		source: "(306:119) {#if txtmark}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (303:53) {#if marked}
+    // (304:53) {#if marked}
     function create_if_block_2$n(ctx) {
     	let linkmark;
     	let current;
@@ -1559,14 +1559,14 @@ var app = (function () {
     		block,
     		id: create_if_block_2$n.name,
     		type: "if",
-    		source: "(303:53) {#if marked}",
+    		source: "(304:53) {#if marked}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (303:114) {text}
+    // (304:114) {text}
     function fallback_block$2(ctx) {
     	let t;
 
@@ -1589,14 +1589,14 @@ var app = (function () {
     		block,
     		id: fallback_block$2.name,
     		type: "fallback",
-    		source: "(303:114) {text}",
+    		source: "(304:114) {text}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (303:134) {#if txtmark}
+    // (304:134) {#if txtmark}
     function create_if_block_1$y(ctx) {
     	let span;
     	let t;
@@ -1606,7 +1606,7 @@ var app = (function () {
     			span = element("span");
     			t = text(/*txtmark*/ ctx[5]);
     			attr_dev(span, "class", "txtmark");
-    			add_location(span, file$14, 302, 147, 7682);
+    			add_location(span, file$14, 303, 147, 7735);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -1624,7 +1624,7 @@ var app = (function () {
     		block,
     		id: create_if_block_1$y.name,
     		type: "if",
-    		source: "(303:134) {#if txtmark}",
+    		source: "(304:134) {#if txtmark}",
     		ctx
     	});
 
@@ -1850,7 +1850,8 @@ var app = (function () {
     	};
 
     	const trace = () => {
-    		return $trail[1] || bounce || '/';
+    		const p = typeof bounce == 'string' ? bounce : false;
+    		return $trail[1] || p || '/';
     	};
 
     	const follow = () => {
@@ -15338,7 +15339,7 @@ var app = (function () {
     /* src/UserBar.svelte generated by Svelte v3.44.3 */
     const file$Y = "src/UserBar.svelte";
 
-    // (16:2) {:else}
+    // (17:2) {:else}
     function create_else_block$n(ctx) {
     	let t0;
     	let t1;
@@ -15346,13 +15347,13 @@ var app = (function () {
     	let if_block2;
     	let if_block2_anchor;
     	let current;
-    	let if_block0 = /*$hassess*/ ctx[2] && create_if_block_5$3(ctx);
-    	let if_block1 = /*mini*/ ctx[0] && /*$hassess*/ ctx[2] && /*$session*/ ctx[3].val.login && create_if_block_4$7(ctx);
+    	let if_block0 = /*$hassess*/ ctx[3] && create_if_block_5$3(ctx);
+    	let if_block1 = /*mini*/ ctx[0] && /*$hassess*/ ctx[3] && /*$session*/ ctx[4].val.login && create_if_block_4$7(ctx);
     	const if_block_creators = [create_if_block_1$s, create_if_block_2$i];
     	const if_blocks = [];
 
     	function select_block_type_3(ctx, dirty) {
-    		if (/*$hassess*/ ctx[2] && /*$session*/ ctx[3].val.login) return 0;
+    		if (/*$hassess*/ ctx[3] && /*$session*/ ctx[4].val.login) return 0;
     		if (!/*$rc*/ ctx[1].singleuser) return 1;
     		return -1;
     	}
@@ -15384,11 +15385,11 @@ var app = (function () {
     			current = true;
     		},
     		p: function update(ctx, dirty) {
-    			if (/*$hassess*/ ctx[2]) {
+    			if (/*$hassess*/ ctx[3]) {
     				if (if_block0) {
     					if_block0.p(ctx, dirty);
 
-    					if (dirty & /*$hassess*/ 4) {
+    					if (dirty & /*$hassess*/ 8) {
     						transition_in(if_block0, 1);
     					}
     				} else {
@@ -15407,9 +15408,9 @@ var app = (function () {
     				check_outros();
     			}
 
-    			if (/*mini*/ ctx[0] && /*$hassess*/ ctx[2] && /*$session*/ ctx[3].val.login) {
+    			if (/*mini*/ ctx[0] && /*$hassess*/ ctx[3] && /*$session*/ ctx[4].val.login) {
     				if (if_block1) {
-    					if (dirty & /*mini, $hassess, $session*/ 13) {
+    					if (dirty & /*mini, $hassess, $session*/ 25) {
     						transition_in(if_block1, 1);
     					}
     				} else {
@@ -15494,14 +15495,14 @@ var app = (function () {
     		block,
     		id: create_else_block$n.name,
     		type: "else",
-    		source: "(16:2) {:else}",
+    		source: "(17:2) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (14:2) {#if $rc.singleuser}
+    // (15:2) {#if $rc.singleuser && !$haslogin}
     function create_if_block$N(ctx) {
     	let fb;
     	let current;
@@ -15538,14 +15539,14 @@ var app = (function () {
     		block,
     		id: create_if_block$N.name,
     		type: "if",
-    		source: "(14:2) {#if $rc.singleuser}",
+    		source: "(15:2) {#if $rc.singleuser && !$haslogin}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (17:4) {#if $hassess}
+    // (18:4) {#if $hassess}
     function create_if_block_5$3(ctx) {
     	let current_block_type_index;
     	let if_block;
@@ -15555,7 +15556,7 @@ var app = (function () {
     	const if_blocks = [];
 
     	function select_block_type_1(ctx, dirty) {
-    		if (/*$session*/ ctx[3].val.login) return 0;
+    		if (/*$session*/ ctx[4].val.login) return 0;
     		if (!/*$rc*/ ctx[1].singleuser) return 1;
     		return -1;
     	}
@@ -15635,14 +15636,14 @@ var app = (function () {
     		block,
     		id: create_if_block_5$3.name,
     		type: "if",
-    		source: "(17:4) {#if $hassess}",
+    		source: "(18:4) {#if $hassess}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (26:32) 
+    // (27:32) 
     function create_if_block_8(ctx) {
     	let if_block_anchor;
     	let if_block = !/*mini*/ ctx[0] && create_if_block_9(ctx);
@@ -15682,14 +15683,14 @@ var app = (function () {
     		block,
     		id: create_if_block_8.name,
     		type: "if",
-    		source: "(26:32) ",
+    		source: "(27:32) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (18:6) {#if $session.val.login}
+    // (19:6) {#if $session.val.login}
     function create_if_block_6(ctx) {
     	let link;
     	let current;
@@ -15714,7 +15715,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const link_changes = {};
 
-    			if (dirty & /*$$scope, mini, $session*/ 265) {
+    			if (dirty & /*$$scope, mini, $session*/ 1041) {
     				link_changes.$$scope = { dirty, ctx };
     			}
 
@@ -15738,31 +15739,31 @@ var app = (function () {
     		block,
     		id: create_if_block_6.name,
     		type: "if",
-    		source: "(18:6) {#if $session.val.login}",
+    		source: "(19:6) {#if $session.val.login}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (27:8) {#if !mini}
+    // (28:8) {#if !mini}
     function create_if_block_9(ctx) {
     	let span;
-    	let t_value = /*$session*/ ctx[3].val.handle + "";
+    	let t_value = /*$session*/ ctx[4].val.handle + "";
     	let t;
 
     	const block = {
     		c: function create() {
     			span = element("span");
     			t = text(t_value);
-    			add_location(span, file$Y, 26, 19, 652);
+    			add_location(span, file$Y, 27, 19, 708);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
     			append_dev(span, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$session*/ 8 && t_value !== (t_value = /*$session*/ ctx[3].val.handle + "")) set_data_dev(t, t_value);
+    			if (dirty & /*$session*/ 16 && t_value !== (t_value = /*$session*/ ctx[4].val.handle + "")) set_data_dev(t, t_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(span);
@@ -15773,16 +15774,16 @@ var app = (function () {
     		block,
     		id: create_if_block_9.name,
     		type: "if",
-    		source: "(27:8) {#if !mini}",
+    		source: "(28:8) {#if !mini}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (22:10) {:else}
+    // (23:10) {:else}
     function create_else_block_1$6(ctx) {
-    	let t_value = /*$session*/ ctx[3].val.handle + "";
+    	let t_value = /*$session*/ ctx[4].val.handle + "";
     	let t;
 
     	const block = {
@@ -15793,7 +15794,7 @@ var app = (function () {
     			insert_dev(target, t, anchor);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*$session*/ 8 && t_value !== (t_value = /*$session*/ ctx[3].val.handle + "")) set_data_dev(t, t_value);
+    			if (dirty & /*$session*/ 16 && t_value !== (t_value = /*$session*/ ctx[4].val.handle + "")) set_data_dev(t, t_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(t);
@@ -15804,14 +15805,14 @@ var app = (function () {
     		block,
     		id: create_else_block_1$6.name,
     		type: "else",
-    		source: "(22:10) {:else}",
+    		source: "(23:10) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (20:10) {#if mini}
+    // (21:10) {#if mini}
     function create_if_block_7(ctx) {
     	let t;
 
@@ -15832,14 +15833,14 @@ var app = (function () {
     		block,
     		id: create_if_block_7.name,
     		type: "if",
-    		source: "(20:10) {#if mini}",
+    		source: "(21:10) {#if mini}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (19:8) <Link nst="CPB:user">
+    // (20:8) <Link nst="CPB:user">
     function create_default_slot_4$i(ctx) {
     	let if_block_anchor;
 
@@ -15883,14 +15884,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_4$i.name,
     		type: "slot",
-    		source: "(19:8) <Link nst=\\\"CPB:user\\\">",
+    		source: "(20:8) <Link nst=\\\"CPB:user\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (31:4) {#if mini && $hassess && $session.val.login}
+    // (32:4) {#if mini && $hassess && $session.val.login}
     function create_if_block_4$7(ctx) {
     	let fb;
     	let current;
@@ -15926,14 +15927,14 @@ var app = (function () {
     		block,
     		id: create_if_block_4$7.name,
     		type: "if",
-    		source: "(31:4) {#if mini && $hassess && $session.val.login}",
+    		source: "(32:4) {#if mini && $hassess && $session.val.login}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (35:30) 
+    // (36:30) 
     function create_if_block_2$i(ctx) {
     	let link0;
     	let t0;
@@ -15950,7 +15951,7 @@ var app = (function () {
     			$$inline: true
     		});
 
-    	let if_block = /*mini*/ ctx[0] && /*$hassess*/ ctx[2] && !/*$session*/ ctx[3].val.login && create_if_block_3$d(ctx);
+    	let if_block = /*mini*/ ctx[0] && /*$hassess*/ ctx[3] && !/*$session*/ ctx[4].val.login && create_if_block_3$d(ctx);
 
     	link1 = new Link$1({
     			props: {
@@ -15980,15 +15981,15 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const link0_changes = {};
 
-    			if (dirty & /*$$scope*/ 256) {
+    			if (dirty & /*$$scope*/ 1024) {
     				link0_changes.$$scope = { dirty, ctx };
     			}
 
     			link0.$set(link0_changes);
 
-    			if (/*mini*/ ctx[0] && /*$hassess*/ ctx[2] && !/*$session*/ ctx[3].val.login) {
+    			if (/*mini*/ ctx[0] && /*$hassess*/ ctx[3] && !/*$session*/ ctx[4].val.login) {
     				if (if_block) {
-    					if (dirty & /*mini, $hassess, $session*/ 13) {
+    					if (dirty & /*mini, $hassess, $session*/ 25) {
     						transition_in(if_block, 1);
     					}
     				} else {
@@ -16009,7 +16010,7 @@ var app = (function () {
 
     			const link1_changes = {};
 
-    			if (dirty & /*$$scope*/ 256) {
+    			if (dirty & /*$$scope*/ 1024) {
     				link1_changes.$$scope = { dirty, ctx };
     			}
 
@@ -16041,21 +16042,21 @@ var app = (function () {
     		block,
     		id: create_if_block_2$i.name,
     		type: "if",
-    		source: "(35:30) ",
+    		source: "(36:30) ",
     		ctx
     	});
 
     	return block;
     }
 
-    // (33:4) {#if $hassess && $session.val.login}
+    // (34:4) {#if $hassess && $session.val.login}
     function create_if_block_1$s(ctx) {
     	let link;
     	let current;
 
     	link = new Link$1({
     			props: {
-    				first: /*logout*/ ctx[7],
+    				first: /*logout*/ ctx[9],
     				global: true,
     				self: true,
     				info: "End your session. We'll be sorry to see you go!",
@@ -16076,7 +16077,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const link_changes = {};
 
-    			if (dirty & /*$$scope*/ 256) {
+    			if (dirty & /*$$scope*/ 1024) {
     				link_changes.$$scope = { dirty, ctx };
     			}
 
@@ -16100,14 +16101,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1$s.name,
     		type: "if",
-    		source: "(33:4) {#if $hassess && $session.val.login}",
+    		source: "(34:4) {#if $hassess && $session.val.login}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (36:6) <Link nst="CPB:login">
+    // (37:6) <Link nst="CPB:login">
     function create_default_slot_3$m(ctx) {
     	let t;
 
@@ -16127,14 +16128,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3$m.name,
     		type: "slot",
-    		source: "(36:6) <Link nst=\\\"CPB:login\\\">",
+    		source: "(37:6) <Link nst=\\\"CPB:login\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (37:6) {#if mini && $hassess && !$session.val.login}
+    // (38:6) {#if mini && $hassess && !$session.val.login}
     function create_if_block_3$d(ctx) {
     	let fb;
     	let current;
@@ -16170,14 +16171,14 @@ var app = (function () {
     		block,
     		id: create_if_block_3$d.name,
     		type: "if",
-    		source: "(37:6) {#if mini && $hassess && !$session.val.login}",
+    		source: "(38:6) {#if mini && $hassess && !$session.val.login}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (38:6) <Link nst="CPB:register">
+    // (39:6) <Link nst="CPB:register">
     function create_default_slot_2$v(ctx) {
     	let t;
 
@@ -16197,14 +16198,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2$v.name,
     		type: "slot",
-    		source: "(38:6) <Link nst=\\\"CPB:register\\\">",
+    		source: "(39:6) <Link nst=\\\"CPB:register\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (34:6) <Link first={logout} global self info="End your session. We'll be sorry to see you go!">
+    // (35:6) <Link first={logout} global self info="End your session. We'll be sorry to see you go!">
     function create_default_slot_1$B(ctx) {
     	let t;
 
@@ -16224,14 +16225,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$B.name,
     		type: "slot",
-    		source: "(34:6) <Link first={logout} global self info=\\\"End your session. We'll be sorry to see you go!\\\">",
+    		source: "(35:6) <Link first={logout} global self info=\\\"End your session. We'll be sorry to see you go!\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (13:0) <FB c="user-bar" fw={7} line="s2">
+    // (14:0) <FB c="user-bar" fw={7} line="s2">
     function create_default_slot$_(ctx) {
     	let current_block_type_index;
     	let if_block;
@@ -16241,7 +16242,7 @@ var app = (function () {
     	const if_blocks = [];
 
     	function select_block_type(ctx, dirty) {
-    		if (/*$rc*/ ctx[1].singleuser) return 0;
+    		if (/*$rc*/ ctx[1].singleuser && !/*$haslogin*/ ctx[2]) return 0;
     		return 1;
     	}
 
@@ -16304,7 +16305,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$_.name,
     		type: "slot",
-    		source: "(13:0) <FB c=\\\"user-bar\\\" fw={7} line=\\\"s2\\\">",
+    		source: "(14:0) <FB c=\\\"user-bar\\\" fw={7} line=\\\"s2\\\">",
     		ctx
     	});
 
@@ -16340,7 +16341,7 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			const fb_changes = {};
 
-    			if (dirty & /*$$scope, $rc, $hassess, $session, mini*/ 271) {
+    			if (dirty & /*$$scope, $rc, $haslogin, $hassess, $session, mini*/ 1055) {
     				fb_changes.$$scope = { dirty, ctx };
     			}
 
@@ -16373,6 +16374,7 @@ var app = (function () {
 
     function instance$1G($$self, $$props, $$invalidate) {
     	let $rc;
+    	let $haslogin;
     	let $hassess;
     	let $session;
     	let { $$slots: slots = {}, $$scope } = $$props;
@@ -16382,10 +16384,13 @@ var app = (function () {
     	component_subscribe($$self, rc, value => $$invalidate(1, $rc = value));
     	const session = getContext('session');
     	validate_store(session, 'session');
-    	component_subscribe($$self, session, value => $$invalidate(3, $session = value));
+    	component_subscribe($$self, session, value => $$invalidate(4, $session = value));
     	const hassess = getContext('hassess');
     	validate_store(hassess, 'hassess');
-    	component_subscribe($$self, hassess, value => $$invalidate(2, $hassess = value));
+    	component_subscribe($$self, hassess, value => $$invalidate(3, $hassess = value));
+    	const haslogin = getContext('haslogin');
+    	validate_store(haslogin, 'haslogin');
+    	component_subscribe($$self, haslogin, value => $$invalidate(2, $haslogin = value));
     	const logout = getContext('logout');
     	let { mini = false } = $$props;
     	const writable_props = ['mini'];
@@ -16405,9 +16410,11 @@ var app = (function () {
     		rc,
     		session,
     		hassess,
+    		haslogin,
     		logout,
     		mini,
     		$rc,
+    		$haslogin,
     		$hassess,
     		$session
     	});
@@ -16420,7 +16427,18 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [mini, $rc, $hassess, $session, rc, session, hassess, logout];
+    	return [
+    		mini,
+    		$rc,
+    		$haslogin,
+    		$hassess,
+    		$session,
+    		rc,
+    		session,
+    		hassess,
+    		haslogin,
+    		logout
+    	];
     }
 
     class UserBar extends SvelteComponentDev {
@@ -82866,7 +82884,7 @@ var app = (function () {
     const { Object: Object_1, console: console_1, document: document_1, window: window_1 } = globals;
     const file = "src/Main.svelte";
 
-    // (1072:2) <svelte:fragment slot="inner">
+    // (1073:2) <svelte:fragment slot="inner">
     function create_inner_slot(ctx) {
     	let loadingscreen;
     	let current;
@@ -82898,14 +82916,14 @@ var app = (function () {
     		block,
     		id: create_inner_slot.name,
     		type: "slot",
-    		source: "(1072:2) <svelte:fragment slot=\\\"inner\\\">",
+    		source: "(1073:2) <svelte:fragment slot=\\\"inner\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1077:2) {#if $uc.debug}
+    // (1078:2) {#if $uc.debug}
     function create_if_block(ctx) {
     	let debugger_1;
     	let current;
@@ -82937,14 +82955,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(1077:2) {#if $uc.debug}",
+    		source: "(1078:2) {#if $uc.debug}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1076:1) <FB vert c="cpb-main" ghost={!$booted} flex={$ui >= 3}>
+    // (1077:1) <FB vert c="cpb-main" ghost={!$booted} flex={$ui >= 3}>
     function create_default_slot_1(ctx) {
     	let t0;
     	let headframe;
@@ -83025,14 +83043,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(1076:1) <FB vert c=\\\"cpb-main\\\" ghost={!$booted} flex={$ui >= 3}>",
+    		source: "(1077:1) <FB vert c=\\\"cpb-main\\\" ghost={!$booted} flex={$ui >= 3}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1070:0) <FB center {c} rel>
+    // (1071:0) <FB center {c} rel>
     function create_default_slot(ctx) {
     	let r2hider;
     	let t0;
@@ -83132,7 +83150,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(1070:0) <FB center {c} rel>",
+    		source: "(1071:0) <FB center {c} rel>",
     		ctx
     	});
 
@@ -83187,43 +83205,43 @@ var app = (function () {
     			t1 = space();
     			div = element("div");
     			create_component(fb.$$.fragment);
-    			add_location(style_1, file, 1053, 1, 23608);
+    			add_location(style_1, file, 1054, 1, 23625);
     			attr_dev(link0, "rel", "apple-touch-icon");
     			attr_dev(link0, "sizes", "180x180");
     			attr_dev(link0, "href", "/apple-touch-icon.png");
-    			add_location(link0, file, 1057, 1, 23659);
+    			add_location(link0, file, 1058, 1, 23676);
     			attr_dev(link1, "rel", "icon");
     			attr_dev(link1, "type", "image/png");
     			attr_dev(link1, "sizes", "32x32");
     			attr_dev(link1, "href", "/favicon-32x32.png");
-    			add_location(link1, file, 1058, 1, 23735);
+    			add_location(link1, file, 1059, 1, 23752);
     			attr_dev(link2, "rel", "icon");
     			attr_dev(link2, "type", "image/png");
     			attr_dev(link2, "sizes", "16x16");
     			attr_dev(link2, "href", "/favicon-16x16.png");
-    			add_location(link2, file, 1059, 1, 23811);
+    			add_location(link2, file, 1060, 1, 23828);
     			attr_dev(link3, "rel", "manifest");
     			attr_dev(link3, "href", "/site.webmanifest");
-    			add_location(link3, file, 1060, 1, 23887);
+    			add_location(link3, file, 1061, 1, 23904);
     			attr_dev(link4, "rel", "mask-icon");
     			attr_dev(link4, "href", "/safari-pinned-tab.svg");
     			attr_dev(link4, "color", "#5bbad5");
-    			add_location(link4, file, 1061, 1, 23935);
+    			add_location(link4, file, 1062, 1, 23952);
     			attr_dev(meta0, "name", "apple-mobile-web-app-title");
     			attr_dev(meta0, "content", "0x2764");
-    			add_location(meta0, file, 1062, 1, 24005);
+    			add_location(meta0, file, 1063, 1, 24022);
     			attr_dev(meta1, "name", "application-name");
     			attr_dev(meta1, "content", "0x2764");
-    			add_location(meta1, file, 1063, 1, 24064);
+    			add_location(meta1, file, 1064, 1, 24081);
     			attr_dev(meta2, "name", "msapplication-TileColor");
     			attr_dev(meta2, "content", "#2d89ef");
-    			add_location(meta2, file, 1064, 1, 24113);
+    			add_location(meta2, file, 1065, 1, 24130);
     			attr_dev(meta3, "name", "theme-color");
     			attr_dev(meta3, "content", "#ffffff");
-    			add_location(meta3, file, 1065, 1, 24170);
+    			add_location(meta3, file, 1066, 1, 24187);
     			attr_dev(div, "class", "cpb-shell");
     			toggle_class(div, "darkmode", /*$usedark*/ ctx[2]);
-    			add_location(div, file, 1068, 0, 24230);
+    			add_location(div, file, 1069, 0, 24247);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -84210,6 +84228,8 @@ var app = (function () {
     	setContext('drophash', drophash);
 
     	const parseloc = p => {
+    		console.log(p);
+
     		const loc = {
     			namespace: null,
     			title: null,

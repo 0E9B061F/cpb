@@ -5,13 +5,14 @@
   const rc = getContext('rc')
   const session = getContext('session')
   const hassess = getContext('hassess')
+  const haslogin = getContext('haslogin')
   const logout = getContext('logout')
 
   export let mini = false
 </script>
 
 <FB c="user-bar" fw={7} line="s2">
-  {#if $rc.singleuser}
+  {#if $rc.singleuser && !$haslogin}
     <FB expand c="fill"/>
   {:else}
     {#if $hassess}
