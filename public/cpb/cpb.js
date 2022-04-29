@@ -82866,7 +82866,7 @@ var app = (function () {
     const { Object: Object_1, console: console_1, document: document_1, window: window_1 } = globals;
     const file = "src/Main.svelte";
 
-    // (1057:2) <svelte:fragment slot="inner">
+    // (1072:2) <svelte:fragment slot="inner">
     function create_inner_slot(ctx) {
     	let loadingscreen;
     	let current;
@@ -82898,14 +82898,14 @@ var app = (function () {
     		block,
     		id: create_inner_slot.name,
     		type: "slot",
-    		source: "(1057:2) <svelte:fragment slot=\\\"inner\\\">",
+    		source: "(1072:2) <svelte:fragment slot=\\\"inner\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1062:2) {#if $uc.debug}
+    // (1077:2) {#if $uc.debug}
     function create_if_block(ctx) {
     	let debugger_1;
     	let current;
@@ -82937,14 +82937,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(1062:2) {#if $uc.debug}",
+    		source: "(1077:2) {#if $uc.debug}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1061:1) <FB vert c="cpb-main" ghost={!$booted} flex={$ui >= 3}>
+    // (1076:1) <FB vert c="cpb-main" ghost={!$booted} flex={$ui >= 3}>
     function create_default_slot_1(ctx) {
     	let t0;
     	let headframe;
@@ -83025,14 +83025,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(1061:1) <FB vert c=\\\"cpb-main\\\" ghost={!$booted} flex={$ui >= 3}>",
+    		source: "(1076:1) <FB vert c=\\\"cpb-main\\\" ghost={!$booted} flex={$ui >= 3}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (1055:0) <FB center {c} rel>
+    // (1070:0) <FB center {c} rel>
     function create_default_slot(ctx) {
     	let r2hider;
     	let t0;
@@ -83132,7 +83132,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(1055:0) <FB center {c} rel>",
+    		source: "(1070:0) <FB center {c} rel>",
     		ctx
     	});
 
@@ -83142,6 +83142,15 @@ var app = (function () {
     function create_fragment(ctx) {
     	let title_value;
     	let style_1;
+    	let link0;
+    	let link1;
+    	let link2;
+    	let link3;
+    	let link4;
+    	let meta0;
+    	let meta1;
+    	let meta2;
+    	let meta3;
     	let t1;
     	let div;
     	let fb;
@@ -83165,14 +83174,56 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			style_1 = element("style");
-    			style_1.textContent = ":root {\n\t\t}";
+    			style_1.textContent = ":root {\n\t\t}\n\t";
+    			link0 = element("link");
+    			link1 = element("link");
+    			link2 = element("link");
+    			link3 = element("link");
+    			link4 = element("link");
+    			meta0 = element("meta");
+    			meta1 = element("meta");
+    			meta2 = element("meta");
+    			meta3 = element("meta");
     			t1 = space();
     			div = element("div");
     			create_component(fb.$$.fragment);
-    			add_location(style_1, file, 1047, 1, 23522);
+    			add_location(style_1, file, 1053, 1, 23608);
+    			attr_dev(link0, "rel", "apple-touch-icon");
+    			attr_dev(link0, "sizes", "180x180");
+    			attr_dev(link0, "href", "/apple-touch-icon.png");
+    			add_location(link0, file, 1057, 1, 23659);
+    			attr_dev(link1, "rel", "icon");
+    			attr_dev(link1, "type", "image/png");
+    			attr_dev(link1, "sizes", "32x32");
+    			attr_dev(link1, "href", "/favicon-32x32.png");
+    			add_location(link1, file, 1058, 1, 23735);
+    			attr_dev(link2, "rel", "icon");
+    			attr_dev(link2, "type", "image/png");
+    			attr_dev(link2, "sizes", "16x16");
+    			attr_dev(link2, "href", "/favicon-16x16.png");
+    			add_location(link2, file, 1059, 1, 23811);
+    			attr_dev(link3, "rel", "manifest");
+    			attr_dev(link3, "href", "/site.webmanifest");
+    			add_location(link3, file, 1060, 1, 23887);
+    			attr_dev(link4, "rel", "mask-icon");
+    			attr_dev(link4, "href", "/safari-pinned-tab.svg");
+    			attr_dev(link4, "color", "#5bbad5");
+    			add_location(link4, file, 1061, 1, 23935);
+    			attr_dev(meta0, "name", "apple-mobile-web-app-title");
+    			attr_dev(meta0, "content", "0x2764");
+    			add_location(meta0, file, 1062, 1, 24005);
+    			attr_dev(meta1, "name", "application-name");
+    			attr_dev(meta1, "content", "0x2764");
+    			add_location(meta1, file, 1063, 1, 24064);
+    			attr_dev(meta2, "name", "msapplication-TileColor");
+    			attr_dev(meta2, "content", "#2d89ef");
+    			add_location(meta2, file, 1064, 1, 24113);
+    			attr_dev(meta3, "name", "theme-color");
+    			attr_dev(meta3, "content", "#ffffff");
+    			add_location(meta3, file, 1065, 1, 24170);
     			attr_dev(div, "class", "cpb-shell");
     			toggle_class(div, "darkmode", /*$usedark*/ ctx[2]);
-    			add_location(div, file, 1053, 0, 23588);
+    			add_location(div, file, 1068, 0, 24230);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -83180,6 +83231,15 @@ var app = (function () {
     		m: function mount(target, anchor) {
     			append_dev(document_1.head, style_1);
     			/*style_1_binding*/ ctx[62](style_1);
+    			append_dev(document_1.head, link0);
+    			append_dev(document_1.head, link1);
+    			append_dev(document_1.head, link2);
+    			append_dev(document_1.head, link3);
+    			append_dev(document_1.head, link4);
+    			append_dev(document_1.head, meta0);
+    			append_dev(document_1.head, meta1);
+    			append_dev(document_1.head, meta2);
+    			append_dev(document_1.head, meta3);
     			insert_dev(target, t1, anchor);
     			insert_dev(target, div, anchor);
     			mount_component(fb, div, null);
@@ -83225,6 +83285,15 @@ var app = (function () {
     		d: function destroy(detaching) {
     			detach_dev(style_1);
     			/*style_1_binding*/ ctx[62](null);
+    			detach_dev(link0);
+    			detach_dev(link1);
+    			detach_dev(link2);
+    			detach_dev(link3);
+    			detach_dev(link4);
+    			detach_dev(meta0);
+    			detach_dev(meta1);
+    			detach_dev(meta2);
+    			detach_dev(meta3);
     			if (detaching) detach_dev(t1);
     			if (detaching) detach_dev(div);
     			destroy_component(fb);
@@ -83857,12 +83926,18 @@ var app = (function () {
     					s.cmp = Viewer;
     					s.head = true;
     					s.label = 'HEAD';
-    					s.editable = true;
+
+    					if ($haslogin) {
+    						s.editable = true;
+    					}
     				} else if ($haspage && $page.val.nextUuid == null) {
     					s.cmp = Viewer;
     					s.current = true;
     					s.label = 'CURRENT';
-    					s.editable = true;
+
+    					if ($haslogin) {
+    						s.editable = true;
+    					}
     				} else {
     					s.cmp = Viewer;
     					s.old = true;
@@ -83888,7 +83963,10 @@ var app = (function () {
     			s.anchor = true;
     			s.label = 'ANCHOR';
     			s.content = true;
-    			s.editable = true;
+
+    			if ($haslogin) {
+    				s.editable = true;
+    			}
     		} else if ($loc.namespace == $rc.syskey) {
     			const res = cpbspace.nav($loc.title);
 
