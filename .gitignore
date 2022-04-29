@@ -1,4 +1,8 @@
 /node_modules/
 /public/build/
-
-.DS_Store
+rc.json
+rc.server.json
+cpb.dev.sqlite
+public/cpb.js
+public/cpb.js.map
+notes/

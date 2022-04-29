@@ -35,7 +35,7 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		file: 'public/cpb/cpb.js'
+		file: 'public/cpb.js'
 	},
 	plugins: [
 		svelte({
