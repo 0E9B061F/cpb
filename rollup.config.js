@@ -5,8 +5,11 @@ import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
+import replace from '@rollup/plugin-replace'
+import vinfo from './lib/mkversion.js'
 
 const production = !process.env.ROLLUP_WATCH;
+
 
 function serve() {
 	let server;
@@ -38,6 +41,20 @@ export default {
 		file: 'public/cpb.js'
 	},
 	plugins: [
+		replace({
+			__CPB_NAME: JSON.stringify('Commonplace Book'),
+			__CPB_SHORT: JSON.stringify('CPB'),
+      __CPB_ENV: JSON.stringify(production ? 'production' : 'development'),
+      __CPB_DATE: () => JSON.stringify(new Date()),
+      __CPB_VERSION: JSON.stringify(vinfo.version),
+      __CPB_RELEASE: JSON.stringify(vinfo.release),
+			__CPB_HASH: JSON.stringify(vinfo.hash),
+      __CPB_SERIES: JSON.stringify(vinfo.series),
+      __CPB_REMAINDER: JSON.stringify(vinfo.remainder),
+      __CPB_MAJOR: JSON.stringify(vinfo.major),
+      __CPB_MINOR: JSON.stringify(vinfo.minor),
+      __CPB_PATCH: JSON.stringify(vinfo.patch),
+    }),
 		svelte({
 			compilerOptions: {
 				// enable run-time checks when not in production

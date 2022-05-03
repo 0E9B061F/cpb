@@ -1,0 +1,40 @@
+[
+  {
+    "name": "FABERGE",
+    "minor": []
+  },
+  {
+    "name": "COLOSSUS",
+    "minor": [
+      "HULKING",
+      "ANCIENT",
+      "BRASS",
+      "CLOCKWORK",
+      "RELICT",
+      "STRIDING",
+      "REVENANT",
+      "TRIUMPHANT",
+      "BURNING",
+      "PRINCELY",
+      "ORACULAR",
+      "NEW",
+      "THIRTEENTH"
+    ]
+  },
+  {
+    "name": "CROWN",
+    "minor": [
+      "WHALEBONE",
+      "BLACKSTONE",
+      "FILIGRANE",
+      "GRAVEN",
+      "LORDLY",
+      "FULIGIN",
+      "BLOCKADE",
+      "CIVIC",
+      "SIEGE",
+      "OBSIDIONAL",
+      "MURAL"
+    ]
+  }
+]

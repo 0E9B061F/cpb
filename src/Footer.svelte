@@ -3,6 +3,7 @@
 	import Link from './link/Link.svelte'
 	import Pipe from './Pipe.svelte'
 	import MaybeUUID from './MaybeUUID.svelte'
+	import Version from './util/Version.svelte'
   import { getContext } from 'svelte'
   const page = getContext('page')
   const haspage = getContext('haspage')
@@ -10,6 +11,7 @@
   const creating = getContext('creating')
   const postdraft = getContext('postdraft')
   const state = getContext('state')
+  const rc = getContext('rc')
 </script>
 
 <FB c="footer">
@@ -29,6 +31,8 @@
   </FB>
   <FB expand vert center>
     <div class="heartmark">&#x2764;</div>
+		<FB center line="s2"><span><span class="textmark">{$rc.title}</span> powered by <Version name/></span></FB>
+		<FB center line="s3"><Version version series date/></FB>
   </FB>
   <FB vert center>
 		{#if $state.creating || $state.editing}
@@ -54,4 +58,5 @@
 			<FB c="foot-controls" expand end/>
 		{/if}
   </FB>
+
 </FB>

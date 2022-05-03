@@ -405,6 +405,19 @@ ol.treelike {
   margin-right: 2px;
   height: 100%;
 }
+.textmark {
+  font-family: var(--mono-title);
+  font-weight: 600;
+}
+.cpb-name {
+  font-weight: 600;
+}
+.cpb-version {
+  font-family: var(--mono-body);
+}
+.cpb-series {
+  font-weight: 500;
+}
 
 .uuid {
   text-transform: uppercase;
