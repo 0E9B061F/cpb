@@ -3,6 +3,7 @@
   "proto": "http",
   "domain": "localhost",
   "port": 3000,
+  "via": null,
   "defns": "main",
   "defapi": "api",
   "deftitle": "Home",

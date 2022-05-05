@@ -121,7 +121,7 @@
 	}
 	setContext('handle', handle)
 
-	const burl =()=> `${$rc.proto}://${$rc.domain}${$rc.port ? ':'+$rc.port : ''}`
+	const burl =()=> `${$rc.proto}://${$rc.domain}${$rc.via ? ':'+$rc.via : ''}`
   const surl =()=> `${burl()}/${$rc.syskey}`
   const aurl =()=> `${surl()}/${$rc.defapi}`
 	const cmdu =(c, ...a)=> {
