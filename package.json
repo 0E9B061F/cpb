@@ -9,7 +9,7 @@
     "start": "sirv public --no-clear",
     "dump:dev": "rm -f cpb.dev.sqlite",
     "mig:dev": "npx sequelize-cli db:migrate",
-    "seed:dev": "npx sequelize-cli db:seed:all",
+    "seed:dev": "npx sequelize-cli db:seed --seed 20220126035836-root-user --seed 20220126035855-default-page",
     "refresh": "run-s dump:dev mig:dev seed:dev"
   },
   "devDependencies": {

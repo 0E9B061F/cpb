@@ -1,0 +1,184 @@
+**WMD** is *"wiki markdown"*, a variant of markdown designed for wiki systems.
+It is heavily inspired by [w/H:WT|wikitext as used on Wikipedia].
+Because **WMD** is built on [e/github.com/markedjs/marked|marked],
+any [e/github.com/markedjs/marked/discussions/1202|peculiarities] of marked are
+shared by **WMD**. This document describes the syntax and alterations to
+markdown which are particular to **WMD**.
+
+# Markdown
+
+All of the usual syntax of markdown is present except for the typical
+link syntax (i.e., `[LABEL](URL)`), which has been removed. **WMD** uses a
+variant link syntax derived from wikitext and
+[[#links | described further below.]]
+
+# Decorators
+
+While markdown aims to be a system for writing text, leaving structure to HTML,
+**WMD** aims to be more broad. As such, it provides syntax for generic
+markup, both inline and for blocks. These are called *decorators*.
+
+## Inline decorator
+
+The inline decorator consists of single square brackets followed immiedietly by
+single curly brackets. The content to be marked-up is placed in the square
+brackets, commands follow in curly brackets. Multiple commands may be strung
+together. As follows:
+
+* `[TEXT]{CMD}`
+* `[TEXT]{CMD}{CMD}{CMD}`
+
+### Class declarations
+
+Content can be assigned classes:
+
+* `[ERROR: do not look back]{.alert}` -> [ERROR: do not look back]{.alert}
+* `[el desdichado]{.title.smallcaps}` -> [el desdichado]{.smallcaps.title}
+
+### Citations
+
+Citations are created with the inline decorator.
+
+## Block decorator
+
+* {{
+    > foo!
+  }}{.invert}
+
+# Data System
+
+## Type declaration
+
+* `>TYPE tank`
+* `>TYPE game`
+
+## Data block
+
+```
+>DATA
+  key1: value
+  key2: value
+<DATA
+```
+
+# Typography
+
+## Dashes
+
+* `--` -> --
+  * (two hyphens become the [w/en dash])
+* `---` -> ---
+  * (three hyphens become the [w/em dash])
+
+# Links
+
+## Internal links
+
+Internal links are like those used in MediaWiki's Wikitext.
+
+* In the simple form, internal links are double square brackets containing an
+  [[docs:NST|]]:
+  * `[[Home]]` -> [[Home]]
+  * `[[docs:WMD]]` -> [[docs:WMD]]
+  * `[[A70FD463-6DD5-4661-BC6B-C2EFFFE21B27]]`
+* Display text can be given with the pipe character:
+  * `[[Home|go home]]` -> [[Home|go home]]
+  * `[[docs:WMD | this document]]` -> [[docs:WMD | this document]]
+    * **NB**: whitespace around the pipe is trimmed
+
+### Home link
+
+A home link creates a link to the site root, with the site's configured name
+as the link text:
+
+* `[[]]` -> [[]]
+
+### Self link
+
+A link to the current document can be created like so:
+
+* `[[@]]` -> [[@]]
+
+Because this link will always be a *current link*, it won't be clickable.
+This is useful for referencing the page title within the article itself in
+such a way that the title will be updated automatically if the page is moved.
+
+### Anchor links
+
+To link to an anchor, simply append the hash and anchor ID to the page title:
+
+* `[[Web Index#private-communities]]` -> [[Web Index#private-communities]]
+* To link to an anchor within the current page, leave out the title:
+  * `[[#decorators]]` -> [[#decorators]]
+
+## External links
+
+### Decorated links
+
+All external links take the form of single square brackets opened with a `TAG`,
+like so:
+
+* `[TAG/link text]`
+* `[TAG/link text | link label]`
+
+The `TAG` identifies the type of link, which determinds how `link text` will
+be processed to form the linked URL. The pipe and `link label` work the same
+as with internal links.
+
+### Generic
+
+* `[e/example.com]` -> [e/example.com]
+* `[e/www.gutenberg.org | read a book!]` -> [e/www.gutenberg.org | read a book!]
+* `[e/www.gutenberg.org|]` -> [e/www.gutenberg.org|]
+
+### Wikipedia
+
+**WMD** has built-in syntax for linking Wikipedia articles:
+
+* `[w/Samurai]` -> [w/Samurai]
+* `[w/Sascha Schneider]` -> [w/Sascha Schneider]
+* `[w/Francis Bacon (artist)|]` -> [w/Francis Bacon (artist)|]
+
+### Bible Passages
+
+**WMD** has built-in syntax for linking to bible passages.
+
+* `[b/Psalm 50:21]` -> [b/Psalm 50:21]
+
+[e/biblegateway.com] is currently used for these links. The link text is passed
+as a query.
+
+**NB**: the [[#pipe-tricks|pipe trick]] has no effect on these links.
+
+## Pipe tricks
+
+**WMD** supports the pipe trick, [w/H:PT|as used in wikitext.] The pipe trick
+works with all links except [[#bible-passages|bible links]], for which
+[[The Editor|the developer]] could not think of any purpose.
+
+* `[[Dowagiac, Michigan|]]` -> [[Dowagiac, Michigan|]]
+* `[[Francis Bacon (artist)|]]` -> [[Francis Bacon (artist)|]]
+* `[w/Dowagiac, Michigan|]` -> [w/Dowagiac, Michigan|]
+* `[e/calendar.google.com|]` -> [e/calendar.google.com|]
+* `[[docs:WMD|]]` -> [[docs:WMD|]]
+* `[[majestic:Ia Manta (prophet)|]]` -> [[majestic:Ia Manta (prophet)|]]
+
+# Miscellaneous
+
+## PGP Key Blocks
+
+ASCII PGP key blocks are recognized and will be specially formatted in a figure.
+No special syntax is used, simply paste the key block with its headers into the
+document. Example:
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+mQGNBGJcgR4BDAC3dBnkfk4S+/qniti9y5jrI5i9KVr8d65D5nggLSk3Zw6l4Bn/
+ryWjkxGdseuvrf9LesxCspJrnFho59uE6tRPQqaU5QWQrdxhY/aoN/L+HF1FL1Ak
+ThPaOZSv/qlK+nF+/f+wtjl+zycNcz5ap9hIHStU9vJpdbvKWSyFJhAdDYN/Sf/S
+...
+5df5btYfR8l6sIVrw5uP+LNf8LI0jyYqVwkZb2v2hEJgkppBnl/NOo6sZ60aYlVj
+VpI4PnM3ziPBLHIL+7DFTkUh4THWvw69kodFAyL4qHCFm13/m/11cob8ucLBYVFX
+HtQt4iPMdg==
+=L8/t
+-----END PGP PUBLIC KEY BLOCK-----
