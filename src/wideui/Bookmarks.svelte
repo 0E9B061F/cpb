@@ -14,13 +14,15 @@
   }
 </script>
 
-<WUIModule>
-  <svelte:fragment slot="title">
-    BOOKMARKS
-  </svelte:fragment>
-  <svelte:fragment slot="body">
-    <Wrapper items={marks} line="s1" lines={3} let:item={nst}>
-      <Link {nst}/>
-    </Wrapper>
-  </svelte:fragment>
-</WUIModule>
+{#if marks.length}
+  <WUIModule>
+    <svelte:fragment slot="title">
+      BOOKMARKS
+    </svelte:fragment>
+    <svelte:fragment slot="body">
+      <Wrapper items={marks} line="s1" lines={3} let:item={nst}>
+        <Link {nst}/>
+      </Wrapper>
+    </svelte:fragment>
+  </WUIModule>
+{/if}

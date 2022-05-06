@@ -24,9 +24,14 @@
 <FB vert c="head-frame">
 
 	{#if $ui <= 1}
-		<Separated line="s2" fw={6} items={$rc.bookmarks} let:item={item}>
-			<Link nst={item}/>
-		</Separated>
+		<FB line="s2">
+			{#if $rc.bookmarks.length}
+				<Separated line="s2" fw={6} items={$rc.bookmarks} let:item={item}>
+					<Link nst={item}/>
+				</Separated>
+			{/if}
+			<FB line="s2" c="fill" expand/>
+		</FB>
 	{/if}
 
 	<FB>
