@@ -8,7 +8,7 @@ if (!process.env.CPBROOTPW ||
     !process.env.CPBMAIL ||
     !process.env.CPBPW ||
     !process.env.CPBROOTMAIL) {
-  throw new Error('please supply credentials')
+  throw new Error('please supply credentials (CPBROOTPW, CPBROOTMAIL, CPBUSER, CPBMAIL, CPBPW)')
 }
 
 const time = new Date()
