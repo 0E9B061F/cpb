@@ -3,35 +3,45 @@
 const bcrypt = require('bcrypt')
 const { v4 } = require ('uuid')
 
+if (!process.env.CPBROOTPW ||
+    !process.env.CPBUSER ||
+    !process.env.CPBMAIL ||
+    !process.env.CPBPW ||
+    !process.env.CPBROOTMAIL) {
+  throw new Error('please supply credentials')
+}
+
+const time = new Date()
+
+const mkuser = async (qi, name, mail, pw)=> {
+  console.log(`creating ${name}`)
+  const cid = v4()
+  await qi.bulkInsert('Configs', [{
+    uuid: cid,
+    createdAt: time,
+    updatedAt: time,
+  }])
+  const key = await bcrypt.hash(pw, 10)
+  return qi.bulkInsert('Users', [{
+    uuid: v4(),
+    handle: name,
+    email: mail,
+    key,
+    configUuid: cid,
+    createdAt: time,
+    updatedAt: time,
+    lastseen: time,
+  }])
+}
+
 module.exports = {
   async up (queryInterface, Sequelize) {
-    const x = await queryInterface.bulkInsert('Configs', [{
-      uuid: v4(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    }])
-    console.log(x)
-    let config = await queryInterface.sequelize.query(
-      `SELECT uuid from CONFIGS;`
-    )
-    config = config[0][0]
-    console.log(config)
-    const key = await bcrypt.hash('axiom', 10)
-    console.log(key)
-    return queryInterface.bulkInsert('Users', [{
-      uuid: v4(),
-      handle: 'root',
-      email: 'owner@fakedomain.com',
-      key,
-      configUuid: config.uuid,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      lastseen: new Date(),
-    }])
+    await mkuser(queryInterface, 'root', process.env.CPBROOTMAIL, process.env.CPBROOTPW)
+    return mkuser(queryInterface, process.env.CPBUSER, process.env.CPBMAIL, process.env.CPBPW)
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.bulkDelete('Users', null, {})
+    await queryInterface.bulkDelete('Users', null, {})
     return queryInterface.bulkDelete('Configs', null, {})
   }
 }
