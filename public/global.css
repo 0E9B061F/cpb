@@ -37,6 +37,20 @@ body {
   --mono-body: Hack, 'Azeret Mono', monospace;
   --mono-title: 'Azeret Mono', Hack, monospace;
 
+  /* images */
+  --ddc-light: url("/CPB/images/ddc-light.png");
+  --ddc-dark: url("/CPB/images/ddc-dark.png");
+  --ddd-light: url("/CPB/images/ddd-light.png");
+  --ddd-dark: url("/CPB/images/ddd-dark.png");
+  --dde-light: url("/CPB/images/dde-light.png");
+  --dde-dark: url("/CPB/images/dde-dark.png");
+  --brick-light: url("/CPB/images/brick-light.png");
+  --brick-dark: url("/CPB/images/brick-dark.png");
+  --ddc: var(--ddc-light);
+  --ddd: var(--ddd-light);
+  --dde: var(--dde-light);
+  --brick: var(--brick-light);
+
   /* color definitions */
   --blue: #6e7fd2;
   --red: #de2657;
@@ -92,6 +106,10 @@ body {
   --hgc-o3: #252525;
 }
 .darkmode {
+  --ddc: var(--ddc-dark);
+  --ddd: var(--ddd-dark);
+  --dde: var(--dde-dark);
+  --brick: var(--brick-dark);
   /* dark mode */
   --code-fg: var(--barelygreen);
   --paper: #252525;
