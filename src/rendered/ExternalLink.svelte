@@ -18,12 +18,7 @@
       }
       if (!url.hostname) return d
       else {
-        const match = url.hostname.match(/^(?:www\.)?(?<txt>[^.]+)/)
-        if (match && match.groups.txt) {
-          return match.groups.txt
-        } else {
-          return d
-        }
+        return url.hostname.split('.').slice(-2).join('.')
       }
     } else {
       return d
