@@ -1,11 +1,10 @@
 <script>
-  import FB from '../FB.svelte'
-  import Strike from '../util/Strike.svelte'
   import { getContext } from 'svelte'
-  import { key } from '../context'
+  const key = {}
   export let depth
   export let raw
   export let text
+  export let tokens
   const { slug, getOptions } = getContext(key)
   const options = getOptions()
   $: id = options.headerIds
@@ -14,10 +13,7 @@
 </script>
 
 {#if depth === 1}
-  <FB c='headstrike'>
-    <h1 {id}><slot></slot></h1>
-    <Strike/>
-  </FB>
+  <h1 {id}><slot></slot></h1>
 {:else if depth === 2}
   <h2 {id}><slot></slot></h2>
 {:else if depth === 3}

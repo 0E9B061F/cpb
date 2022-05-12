@@ -17,7 +17,7 @@
   import { convert } from 'html-to-text'
   import { getContext, setContext } from 'svelte'
   import { writable } from 'svelte/store'
-  import extensions from '../lib/wmd.js'
+  import wmd from '../lib/wmd.js'
   const rc = getContext('rc')
   const haspage = getContext('haspage')
   const haslogin = getContext('haslogin')
@@ -29,9 +29,10 @@
   const citations = writable({})
   setContext('citations', citations)
 
-  marked.use({extensions})
+  marked.use({extensions: wmd.extensions})
   const options = marked.defaults
-
+  options.walkTokens = wmd.walkTokens
+  
   const renderers = {
     link: LinkShim,
     cpblink: CPBLinkShim,
