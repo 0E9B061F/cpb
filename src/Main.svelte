@@ -31,6 +31,7 @@
 
 	import rco from '../lib/rc.js'
 	import util from '../lib/util.js'
+	import { Fortune } from '../lib/fortune.mjs'
 
 	let lastboot = localStorage.getItem('lastboot') || 0
 
@@ -234,7 +235,7 @@
 	setContext('register', register)
 	setContext('logout', logout)
 
-	const fortunes = [
+	const fortunes = new Fortune([
 		"a healthy air stinks of stupidity",
 		"burning burning burning burning",
 		"because it is my heart",
@@ -242,24 +243,9 @@
 		"where days are numbered",
 		"devised by some ancient dread",
 		"when found, make a note of",
-	]
-	let fortunebin = [...fortunes]
-	let lastfortune = null
+	])
 
-	const fortune =()=> {
-		if (!fortunebin.length) {
-			fortunebin = [...fortunes]
-			if (lastfortune) {
-				const n = fortunebin.indexOf(lastfortune)
-				fortunebin.splice(n, 1)
-			}
-		}
-		const s = util.sample(fortunebin)
-		const n = fortunebin.indexOf(s)
-    fortunebin.splice(n, 1)
-		lastfortune = s
-		return s
-	}
+	const fortune =()=> fortunes.get()
 
 	let heldmsg = null
 
@@ -995,10 +981,11 @@
 	}
 	$: if (style) {
 		measures = setcss(c=> {
-			c.basex = 1024
 			c.wuicolx = 200
 			c.pxgap = 5
-			c.basemin = c.basex - (2 * c.pxgap)
+			c.margin = 30
+			c.basex = 1024 + c.margin + c.pxgap
+			c.basemin = c.basex - (3 * c.pxgap) - c.margin
 			c.basereal = c.basex + (2 * c.pxgap)
 			c.medx = c.basereal + c.wuicolx + c.pxgap
 			c.widex = c.medx + c.wuicolx
@@ -1038,6 +1025,13 @@
 		$pageinfo = { wc, time, links }
 	}
 	setContext('setPageinfo', setPageinfo)
+
+	const blockInfo = writable({})
+	setContext('blockInfo', blockInfo)
+	const setBlockInfo =blocks=> {
+		$blockInfo = blocks
+	}
+	setContext('setBlockInfo', setBlockInfo)
 
 	let ready = false
 	setTimeout(()=> ready = true, 2500)

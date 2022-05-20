@@ -62,12 +62,12 @@
 
 </FB>
 <div class="content-start"></div>
-  <FB c="infobar" vert>
-    <FB c="qrcodes" around>
-      <QR data={vpermac} ver={3} scale={2} uuid={$page.val.uuid} title="Version Permalink" />
-      <QR data={permac} ver={3} scale={2} uuid={$page.val.pageUuid} title="Page Permalink" />
-    </FB>
-    {#if $ui <= 1}
-    <InfoTOC/>
-    {/if}
+<FB c="infobar" vert>
+  <FB c="qrcodes" around>
+    <QR data={vpermac} ver={3} scale={2} uuid={$page.val.uuid} title="Version Permalink" />
+    <QR data={permac} ver={3} scale={2} uuid={$page.val.pageUuid} title="Page Permalink" />
   </FB>
+  {#if $ui <= 1}
+  <InfoTOC/>
+  {/if}
+</FB>

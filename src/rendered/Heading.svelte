@@ -1,29 +1,48 @@
 <script>
+  import FB from '../FB.svelte'
+  import Link from '../link/Link.svelte'
+  import TopButton from '../util/TopButton.svelte'
+
   import { getContext } from 'svelte'
-  const key = {}
+
+  const loc = getContext('loc')
+  const slugger = getContext('slugger')
+
   export let depth
   export let raw
   export let text
-  export let tokens
-  const { slug, getOptions } = getContext(key)
-  const options = getOptions()
-  $: id = options.headerIds
-    ? options.headerPrefix + slug(text)
-    : undefined
+
+  $: id = slugger.slug(text)
+  $: anchored = $loc.cmd == id
 </script>
 
-{#if depth === 1}
-  <h1 {id}><slot></slot></h1>
-{:else if depth === 2}
-  <h2 {id}><slot></slot></h2>
-{:else if depth === 3}
-  <h3 {id}><slot></slot></h3>
-{:else if depth === 4}
-  <h4 {id}><slot></slot></h4>
-{:else if depth === 5}
-  <h5 {id}><slot></slot></h5>
-{:else if depth === 6}
-  <h6 {id}><slot></slot></h6>
-{:else}
-  {raw}
-{/if}
+<FB tag="h{depth}" {id} c="cpb-heading" rel>
+  <FB c="heading-pre system">
+    {#if anchored}
+      <span class="anchor-mark">
+        <Link self decmd global silent>🖝</Link>
+      </span>
+    {:else}
+      <FB expand vert center c="anchor-link hidable">
+        <Link self cmd={id} global>LINK</Link>
+      </FB>
+    {/if}
+  </FB>
+  <span class="heading-text">
+    <slot></slot>
+  </span>
+  <FB vert end c="heading-left hidable system">
+    <FB line="s1">
+      /
+      <!--
+      <Link nolink global>EDIT</Link>
+      <Link nolink global>SOLO</Link>
+      <Link nolink global>PARENT</Link>
+      -->
+      <TopButton/>
+    </FB>
+  </FB>
+  <FB tag="span" expand/>
+  <FB vert end c="heading-right hidable system">
+  </FB>
+</FB>

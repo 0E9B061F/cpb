@@ -11,14 +11,23 @@
 	import Messenger from './Messenger.svelte'
 	import SearchBar from './SearchBar.svelte'
 	import Separated from './util/Separated.svelte'
+
   import { getContext } from 'svelte'
+	import { Fortune } from '../lib/fortune.mjs'
+
   const gs = getContext('gs')
   const path = getContext('path')
+  const loc = getContext('loc')
   const session = getContext('session')
   const hassess = getContext('hassess')
   const state = getContext('state')
   const ui = getContext('ui')
   const rc = getContext('rc')
+
+	const ideograms = new Fortune([
+		'𐃐', '𐂂', '𐃥', '𐂅', '𐂐', '𐁃', '𐁙', '𐁉', '𐚁',
+	])
+	$: ideogram = ideograms.get($loc)
 </script>
 
 <FB vert c="head-frame">
@@ -37,10 +46,15 @@
 	<FB>
 		{#if $ui <= 1}
 			<FB vert zero>
+				<FB expand c="logobase fill"></FB>
+				<div class="logocorner fill">{ideogram}</div>
+			</FB>
+			<FB vert zero>
 				<Logo/>
 				<UserBar mini generic/>
 			</FB>
 		{:else}
+			<div class="logocorner fill">{ideogram}</div>
 			<Logo/>
 		{/if}
 

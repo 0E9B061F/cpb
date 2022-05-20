@@ -1,4 +1,5 @@
 <script>
+  export let id = null
   export let c = []
 
   export let expand = false
@@ -30,6 +31,8 @@
   export let mono = false
   export let reverse = false
   export let flex = false
+
+  export let tag = 'div'
 
   export let vc = false
   export let ve = false
@@ -118,12 +121,12 @@
 
 {#if vc || ve}
   <svelte:self {expand} vert center={vc} end={ve} bind:element={element} style={css}>
-    <div class={cf}>
+    <svelte:element this={tag} class={cf} {id}>
       <slot></slot>
-    </div>
+    </svelte:element>
   </svelte:self>
 {:else}
-  <div class={cf} bind:this={element} style={css}>
+  <svelte:element this={tag} class={cf} bind:this={element} style={css} {id}>
     <slot></slot>
-  </div>
+  </svelte:element>
 {/if}

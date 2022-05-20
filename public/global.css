@@ -1,10 +1,7 @@
 body {
   /* measures */
-  --basex: 1024px;
-  --wuicolx: 250px;
   --gap: 0.3125rem;
   --dblgap: calc(2 * var(--gap));
-  --pxgap: 5px;
 
   --xs4: 0.52rem;
   --xs3: 0.625rem;
@@ -181,6 +178,9 @@ a, .nolink, a:visited {
 .rendered .cpblink .cpblink-text {
   text-decoration: underline;
   text-decoration-color: var(--cc-link-deco);
+}
+.rendered .system .cpblink .cpblink-text {
+  text-decoration: none;
 }
 .rendered .cpblink.missing .cpblink-text {
   text-decoration-color: var(--cc-missing-deco);
@@ -401,6 +401,23 @@ ol.treelike {
   width: 100%;
 }
 
+.hardmargin {
+  width: var(--margin);
+  flex: 0 0 auto;
+  margin-bottom: 5rem;
+}
+.hardmargin .marker {
+  position: absolute;
+  font-size: 1.93rem;
+  line-height: 1rem;
+  height: 1rem;
+  width: 30px;
+}
+.hardmargin .marker.thinmark {
+  height: 1px;
+  background-color: var(--matte);
+}
+
 .user-bar {
 	font-size: 1rem;
 	line-height: 1rem;
@@ -408,7 +425,15 @@ ol.treelike {
 .ubmini.fill {
   height: 50%;
 }
-
+.logobase,
+.logocorner {
+  width: 30px;
+}
+.logocorner {
+  height: 30px;
+  font-size: 2rem;
+  text-align: right;
+}
 .logo {
 	font-size: 2rem;
 	line-height: 2rem;
@@ -476,9 +501,11 @@ ol.treelike {
 
 .wide-mode, .medium-mode {
   --headheight: 2rem;
+  --logoheight: 2rem;
 }
 .base-mode {
   --headheight: calc(3.5rem + var(--gap));
+  --logoheight: 2.75rem;
 }
 .base-head-upper, .base-head-upper input {
   height: 1.5rem;
@@ -788,6 +815,7 @@ h6 {
 .rendered {
   line-height: 1.5;
   margin-bottom: 5rem;
+  flex: 1 1 auto;
 }
 .rendered .content-start {
   float: left;
@@ -796,7 +824,7 @@ h6 {
 
 .rendered h1 {
   border-bottom: 1px solid var(--rubber);
-  padding-bottom: 7.5px;
+  padding-bottom: var(--pxgap);
 }
 .rendered h1,
 .rendered h2,
@@ -808,6 +836,31 @@ h6 {
   color: var(--title);
   clear: left;
 }
+
+.cpb-heading .hidable {
+  visibility: hidden;
+}
+.cpb-heading:hover .hidable {
+  visibility: visible;
+}
+
+.heading-pre {
+  width: 30px;
+  position: absolute;
+  left: -35px;
+  height: 100%;
+  font-weight: 400;
+  font-size: 1.6rem;
+  user-select: none;
+}
+.anchor-link {
+  font-size: 0.75rem;
+}
+.heading-left,
+.heading-right {
+  user-select: none;
+}
+
 .rendered p {
 	margin-top: 1rem;
 	margin-bottom: 0;
@@ -1604,6 +1657,7 @@ h6 {
 
 .fill {
   background-color: var(--matte);
+  color: var(--paper);
 }
 
 
