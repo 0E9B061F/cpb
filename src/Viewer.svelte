@@ -16,7 +16,7 @@
   import Infobar from './infobar/Infobar.svelte'
   import Dash from './rendered/Dash.svelte'
   import Heading from './rendered/Heading.svelte'
-  import Section from './rendered/Section.svelte'
+  //import Section from './rendered/Section.svelte'
   import SvelteMarkdown from 'svelte-markdown'
   import { marked } from 'marked'
   import { convert } from 'html-to-text'
@@ -56,7 +56,7 @@
     multidec: Decorated,
     pgpkey: PGPKey,
     heading: Heading,
-    section: Section,
+    // section: Section,
   }
   let body
   let wc = 0
