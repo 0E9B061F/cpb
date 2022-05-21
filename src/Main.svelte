@@ -12,6 +12,7 @@
 	import WideUI from './WideUI.svelte'
 	import Contents from './Contents.svelte'
 	import LoadingScreen from './LoadingScreen.svelte'
+	import SEO from './util/SEO.svelte'
 
 	import Login from './special/Login.svelte'
 	import User from './special/User.svelte'
@@ -46,6 +47,7 @@
 	let linkmap = writable({})
 
 	let path = writable(window.location.pathname + window.location.search + window.location.hash)
+	let canonical = writable(`${$rc.proto}://${$rc.domain}/${$path}`)
 	let stem = writable(window.location.pathname + window.location.search)
 	let hash = writable(window.location.hash)
 	let loc = writable({})
@@ -61,6 +63,11 @@
 
 	let space = writable('')
 	let title = writable('')
+
+	let doctitle = writable({
+		long: '',
+		short: '',
+	})
 
 	let page = writable(null)
 	let tokens = writable(null)
@@ -91,6 +98,7 @@
 	setContext('links', links)
 	setContext('linkmap', linkmap)
 	setContext('path', path)
+	setContext('canonical', canonical)
 	setContext('loc', loc)
 	setContext('fresh', fresh)
 	setContext('session', session)
@@ -100,6 +108,7 @@
 	setContext('debug', debug)
 	setContext('space', space)
 	setContext('title', title)
+	setContext('doctitle', doctitle)
 	setContext('page', page)
 	setContext('tokens', tokens)
 	setContext('user', user)
@@ -125,6 +134,20 @@
 	const burl =()=> `${$rc.proto}://${$rc.domain}${$rc.via ? ':'+$rc.via : ''}`
   const surl =()=> `${burl()}/${$rc.syskey}`
   const aurl =()=> `${surl()}/${$rc.defapi}`
+  const iurl =name=> `${surl()}/images/${name}`
+
+	setContext('iurl', iurl)
+
+	const mkurl =(conf={})=> {
+		if (typeof(conf) == 'string') conf = { path: conf }
+		conf = Object.assign({
+			path: window.location.pathname,
+			search: window.location.search,
+			hash: window.location.hash,
+		}, conf)
+		return `${burl()}/${conf.path}${conf.search}${conf.hash}`
+	}
+
 	const cmdu =(c, ...a)=> {
 		let o = ''
 		if (a.length) {
@@ -921,29 +944,29 @@
 	}
 	launch($path)
 
-	let doctitle = ''
 	const mktitle =()=> {
-		let t = [$rc.title]
-		let p = []
-		let a = []
-		if ($loc.title) {
-			p.push(`(${$loc.namespace.toUpperCase()})`)
-			p.push($loc.title)
-			if ($loc.cmd) {
-				a.push(util.dedash($loc.cmd))
-			}
+		let long, short
+		if (!$finished) {
+			long = short = `${$rc.title} LOADING`
+		} else if ($loc.uuid) {
+			short = $loc.uuid.toUpperCase()
+			if ($space && $title) short += ` / ${$space}:${$title}`
+			if ($state.history) short += ' (HISTORY)'
+			else if ($state.editing) short += ' (EDIT)'
+			if ($loc.cmd) short += ` § ${util.dedash($loc.cmd)}`
+			long = `${short} < ${$rc.title}`
 		} else {
-			p.push('SPECIAL')
-			p.push($loc.special)
-			if ($loc.special == 'search' && $loc.query) {
-				a.push(`"${$loc.query}"`)
-			}
+			short = $loc.title
+			if ($loc.cmd) short += ` § ${util.dedash($loc.cmd)}`
+			if ($state.history) short += ' (HISTORY)'
+			else if ($state.editing) short += ' (EDIT)'
+			long = short
+			if ($loc.namespace != $rc.defns) long += ` < ${$loc.namespace.toUpperCase()}`
+			long += ` < ${$rc.title}`
 		}
-		p = p.join(' ')
-		a = a.length ? `§ ${a.join(' ')}` : ''
-		doctitle = ([...t, p, a]).join(' ')
+		$doctitle = { long, short }
 	}
-	$: mktitle($loc)
+	$: mktitle($loc, $finished, $space, $title)
 
 	let usedark = writable(false)
 	setContext('usedark', usedark)
@@ -1033,6 +1056,16 @@
 	}
 	setContext('setBlockInfo', setBlockInfo)
 
+	const canonicalize =()=> {
+		if ($state.content && $haspage) {
+			$canonical = mkurl($page.val.uuid.toUpperCase())
+		} else {
+			$canonical = mkurl()
+		}
+	}
+
+	$: canonicalize($loc, $finished)
+
 	let ready = false
 	setTimeout(()=> ready = true, 2500)
 </script>
@@ -1045,7 +1078,7 @@
 />
 
 <svelte:head>
-	<title>{doctitle}</title>
+	<title>{$doctitle.long}</title>
 	<style bind:this={style}>
 		:root {
 		}
@@ -1059,6 +1092,7 @@
 	<meta name="application-name" content="0x2764">
 	<meta name="msapplication-TileColor" content="#2d89ef">
 	<meta name="theme-color" content="#ffffff">
+	<SEO/>
 </svelte:head>
 
 <div class="cpb-shell" class:darkmode={$usedark}>

@@ -72,7 +72,7 @@
   } else if (iobserver) iobserver.disconnect()
 </script>
 
-<FB vert expand c="cpb-content {editmode}" bind:element={element}>
+<FB vert expand c="cpb-content {editmode}" bind:element={element} on:scroll={()=> console.log('foo')}>
 <R2Hider hide={!$state.finished}>
   <svelte:fragment slot="inner">
     <FB expand vert center>
