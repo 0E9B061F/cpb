@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /CPB/api/
+Disallow: /CPB/login/
+Disallow: /CPB/register/
+Disallow: /CPB/search/
+
+Sitemap: https://0x2764.com/sitemap.xml

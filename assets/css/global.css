@@ -54,6 +54,8 @@ body {
   --yellow: #dead25;
   --whitegold: #edefd7;
   --offgold: #ebebc2;
+  --subgold: #cfcfaf;
+  --sootgold: #4b4131;
   --dustblue: #505070;
   --sunyellow: #fafae0;
   --cyanmist: #d6ecef;
@@ -61,7 +63,6 @@ body {
   --barelygreen: #a9afa9;
   --microblue: #e1e2fe;
   --microred: #fed1d2;
-  --sootgold: #4b4131;
 
 
   /* light mode */
@@ -111,12 +112,12 @@ body {
   --code-fg: var(--barelygreen);
   --paper: #252525;
   --print: #d1d1d1;
-  --cc-link: #dfdfae;
+  --cc-link: var(--blue);
   --cc-missing: var(--red);
   --cc-link-deco: var(--sootgold);
   --cc-missing-deco: var(--sootgold);
-  --matte: #454545;
-  --antimatte: var(--offgold);
+  --matte: var(--subgold);
+  --antimatte: var(--paper);
   --metal: #202020;
   --rubber: #181818;
   --rough: #1e1e1e;

@@ -6,6 +6,7 @@
   "via": null,
   "defns": "main",
   "defapi": "api",
+  "defdata": "data",
   "deftitle": "Home",
   "deflogin": "login",
   "defregister": "register",

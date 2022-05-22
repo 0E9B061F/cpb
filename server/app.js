@@ -47,7 +47,7 @@ app.use(express.json())
 app.use(cors())
 
 app.use('/CPB/api', api)
-app.use('/CPB', compress, assets)
+app.use('/CPB/data', compress, assets)
 app.use(compress, html);
 
 (async ()=> {

@@ -1,9 +1,7 @@
-/node_modules/
-/public/build/
+node_modules/
 rc.json
 rc.server.json
 cpb.dev.sqlite
-public/cpb.js
-public/cpb.js.map
-public/cpb.css
+assets/build/
 notes/
+public/sitemap*

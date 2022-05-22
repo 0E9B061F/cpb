@@ -131,10 +131,20 @@
 	}
 	setContext('handle', handle)
 
+	const spath = `/${$rc.syskey}`
+	const apath = `${spath}/${$rc.defapi}`
+	const dpath = `${spath}/${$rc.defdata}`
+
 	const burl =()=> `${$rc.proto}://${$rc.domain}${$rc.via ? ':'+$rc.via : ''}`
-  const surl =()=> `${burl()}/${$rc.syskey}`
-  const aurl =()=> `${surl()}/${$rc.defapi}`
-  const iurl =name=> `${surl()}/images/${name}`
+  const surl =()=> `${burl()}${spath}`
+  const aurl =()=> `${burl()}${apath}`
+	const durl =()=> `${burl()}${dpath}`
+
+	const asset =name=> `${dpath}/${name}`
+	const icon =name=> asset(`icons/${name}`)
+	const asseturl =name=> `${burl()}${asset(name)}`
+	const iurl =name=> asset(`images/${name}`)
+
 
 	setContext('iurl', iurl)
 
@@ -161,9 +171,9 @@
 
 	const grab =(...a)=> {
 		const url = cmdu(...a)
+		console.log(`GET ${url}`)
 		return fetch(url).then(res=> res.json())
 		.then(r=> {
-			console.log(`GET ${url}`)
 			console.log(r)
 			return r
 		})
@@ -1083,13 +1093,14 @@
 		:root {
 		}
 	</style>
-	<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-	<link rel="manifest" href="/site.webmanifest">
-	<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
-	<meta name="apple-mobile-web-app-title" content="0x2764">
-	<meta name="application-name" content="0x2764">
+	<meta name="msapplication-config" content={asset('conf/browserconfig.xml')} />
+	<link rel="apple-touch-icon" sizes="180x180" href={icon('apple-touch-icon.png')}>
+	<link rel="icon" type="image/png" sizes="32x32" href={icon('favicon-32x32.png')}>
+	<link rel="icon" type="image/png" sizes="16x16" href={icon('favicon-16x16.png')}>
+	<link rel="mask-icon" href={icon('safari-pinned-tab.svg')} color="#5bbad5">
+	<link rel="manifest" href={asset('conf/site.webmanifest')}>
+	<meta name="apple-mobile-web-app-title" content={$rc.title}>
+	<meta name="application-name" content={$rc.title}>
 	<meta name="msapplication-TileColor" content="#2d89ef">
 	<meta name="theme-color" content="#ffffff">
 	<SEO/>

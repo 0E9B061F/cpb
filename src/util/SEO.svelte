@@ -15,7 +15,7 @@
   const ver = __CPB_REMAINDER ? `${__CPB_VERSION}.${__CPB_RELEASE}` : __CPB_VERSION
 </script>
 
-<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="robots" content="index, follow">
 <meta name="generator" content="{__CPB_NAME} {ver} '{__CPB_SERIES}'">
 <meta name="application-name" content={$rc.title}>
 
