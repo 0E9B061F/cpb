@@ -39,7 +39,6 @@
   }
 
   const complete =()=> {
-    console.log('COMPLETE')
     dispatch('complete')
   }
 

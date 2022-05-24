@@ -5,6 +5,7 @@
   const id = v4()
   import { createEventDispatcher } from 'svelte'
 	const dispatch = createEventDispatcher()
+
   export let value = ''
   export let text = ''
   export let focused = false
@@ -12,7 +13,12 @@
   export let lab = ''
   export let flip = false
   export let center = true
+  export let required = false
+
+  export let type = "text"
+
   let input
+
   const onfocus =()=> {
     focused = true
     dispatch('focus')
@@ -20,6 +26,9 @@
   }
   const onblur =()=> {
     exit()
+  }
+  const update =e=> {
+    value = e.target.value
   }
   export const exit =()=> {
     focused = false
@@ -51,10 +60,12 @@
       </FB>
     {/if}
     </svelte:fragment>
-      <input {id} type="text" class="r2-input doc-text"
-        class:centered-input={centertxt}
-        bind:this={input} bind:value={value}
-        on:focus={onfocus} on:blur={onblur}
-      />
+    <input {id} {type} class="r2-input doc-text"
+      {required}
+      class:centered-input={centertxt}
+      bind:this={input} {value}
+      on:focus={onfocus} on:blur={onblur}
+      on:input={update}
+    />
   </R2Over>
 </FB>

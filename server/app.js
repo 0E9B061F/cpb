@@ -53,6 +53,6 @@ app.use(compress, html);
 (async ()=> {
   await db.sequelize.sync()
   app.listen(rc.port, ()=> {
-    console.log(`Example app listening at http://localhost:${rc.port}`)
+    console.log(`Commonplace Book listening on ${rc.port}`)
   })
 })()

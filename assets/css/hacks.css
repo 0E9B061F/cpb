@@ -1,0 +1,8 @@
+/* lord forgive me for what i am about to do */
+
+/* chrome styles autofilled forms in such a way that's hard to avoid. we need
+   our inputs to be transparent. this ugly hack ensures that they will be. */
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
+}

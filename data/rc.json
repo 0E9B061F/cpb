@@ -32,5 +32,8 @@
   "readSpeed": 200,
   "singleuser": false,
   "bootwait": 1209600000,
-  "bookmarks": []
+  "bookmarks": [],
+  "sidebar": {
+    "onRight": true
+  }
 }

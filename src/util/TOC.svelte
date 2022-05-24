@@ -85,7 +85,6 @@
   }
 
   const mkh =tkns=> {
-    console.log(tkns)
     if (tkns && tkns.length) {
       slugger = new marked.Slugger()
       const out = new TOCTree()

@@ -35,16 +35,18 @@ function serve() {
 export default {
 	input: 'src/main.js',
 	output: {
-		sourcemap: true,
+		sourcemap: !production,
 		format: 'iife',
 		name: 'app',
-		file: 'assets/build/cpb.js'
+		file: 'assets/build/cpb.js',
 	},
 	plugins: [
 		replace({
 			__CPB_NAME: JSON.stringify('Commonplace Book'),
 			__CPB_SHORT: JSON.stringify('CPB'),
       __CPB_ENV: JSON.stringify(production ? 'production' : 'development'),
+      __CPB_DEVEL: JSON.stringify(!production),
+      __CPB_PROD: JSON.stringify(production),
       __CPB_DATE: () => JSON.stringify(new Date()),
       __CPB_VERSION: JSON.stringify(vinfo.version),
       __CPB_RELEASE: JSON.stringify(vinfo.release),
@@ -83,7 +85,6 @@ export default {
 
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
-		!production && livereload('public'),
 		!production && livereload('assets/data/css'),
 
 		// If we're building for production (npm run build

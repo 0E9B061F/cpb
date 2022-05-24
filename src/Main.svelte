@@ -169,13 +169,29 @@
 		return`${aurl()}/${c}${a}${o}`
 	}
 
+	const dbg =m=> {
+		if (__CPB_DEVEL) {
+			if (typeof(m) != 'string') {
+				console.log(m)
+			} else {
+				console.log(`(DBG) ${m}`)
+			}
+		}
+	}
+
 	const grab =(...a)=> {
 		const url = cmdu(...a)
-		console.log(`GET ${url}`)
-		return fetch(url).then(res=> res.json())
+		return fetch(url)
+		.then(res=> res.json())
 		.then(r=> {
-			console.log(r)
+			dbg(`GET ${url}`)
+			dbg(r)
 			return r
+		})
+		.catch(e=> {
+			dbg(`GET ${url}`)
+			dbg(e)
+			return ({err: 6, msg: 'NETWORK ERROR'})
 		})
 	}
 
@@ -187,11 +203,17 @@
 			method: 'POST',
 			body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' },
-		}).then(res=> res.json())
+		})
+		.then(res=> res.json())
 		.then(r=> {
-			console.log(`POST ${url}`)
-			console.log(r)
+			dbg(`POST ${url}`)
+			dbg(r)
 			return r
+		})
+		.catch(e=> {
+			dbg(`POST ${url}`)
+			dbg(e)
+			return ({err: 6, msg: 'NETWORK ERROR'})
 		})
 	}
 
@@ -329,7 +351,7 @@
 	}
 	const print =(conf={})=> {
 		$message = mkmsg(conf)
-		console.log(`MESSAGE: ${$message.text}`)
+		dbg(`MESSAGE: ${$message.text}`)
 		if (msgt) clearTimeout(msgt)
 		if ($message.time) msgt = setTimeout(unmsg, $message.time)
 	}
@@ -507,7 +529,6 @@
 	setContext('component', component)
 
 	const buildstate =()=> {
-		console.log($hashistory)
 		const s = sidestate()
 		s.loading = false
 		s.loadtime = Date.now() - s.loadstart
@@ -654,10 +675,10 @@
 		rendertime = Date.now() - renderstart
 		if (!$booted) {
 			if ($state.finishtime < $rc.fadein) {
-				console.log('FADING')
+				dbg('FADING')
 				setTimeout(endboot, $rc.fadein - $state.finishtime)
 			} else {
-				console.log(`NOT FADING ${$state.finishtime} (${rc.fadein})`)
+				dbg(`NOT FADING ${$state.finishtime} (${rc.fadein})`)
 				endboot()
 			}
 		}
@@ -685,7 +706,7 @@
 	const scrollto =(id, smooth)=> {
 		const e = document.getElementById(id)
 		if (e) {
-			console.log('scrolling')
+			dbg('SCROLLING')
 			if (smooth) {
 				e.scrollIntoView({
 					behavior: "smooth",
@@ -798,7 +819,6 @@
 	setContext('drophash', drophash)
 
   const parseloc =p=> {
-		console.log(p)
     const loc = {
       namespace: null, title: null,
 			uuid: null, sub: [],
@@ -924,7 +944,7 @@
   let gs = writable({
     full: p=> `${burl()}/${p}`,
     goto: (p)=> {
-			console.log(`GOTO ${p}`)
+			dbg(`GOTO ${p}`)
 			if (p != $path) {
 				window.history.pushState({}, p, p)
 			}
@@ -1113,11 +1133,12 @@
 			<LoadingScreen/>
 		</svelte:fragment>
 	</R2Hider>
+	{#if !$rc.sidebar.onRight}<WideUI ghost={!$booted}/>{/if}
 	<FB vert c="cpb-main" ghost={!$booted} flex={$ui >= 3}>
 		{#if $uc.debug}<Debugger/>{/if}
 		<Headframe/>
 		<Contents bind:this={contentscmp}/>
 	</FB>
-	<WideUI ghost={!$booted}/>
+	{#if $rc.sidebar.onRight}<WideUI ghost={!$booted}/>{/if}
 </FB>
 </div>

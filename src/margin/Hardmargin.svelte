@@ -18,12 +18,10 @@
   const mkmarkers =()=> {
     const cmd = $loc.cmd
     const m = []
-    console.log(`cmd: ${cmd}`)
     if (cmd && $blockInfo[cmd]) {
       m.push(new MarginMark($blockInfo[cmd], 'manicule'))
     }
     markers = m
-    console.log(markers, $blockInfo)
   }
 
   // $: if ($finished) mkmarkers($loc.cmd)

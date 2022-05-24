@@ -14,6 +14,7 @@
 
   const state = getContext('state')
   const ui = getContext('ui')
+  const rc = getContext('rc')
 
   export let ghost = false
 </script>
@@ -35,7 +36,7 @@
     <FB spacer={1}/>
   {/if}
 
-  <FB c="wide-body">
+  <FB flip={!$rc.sidebar.onRight} c="wide-body">
     <R2Hider hide={!$state.finished}>
 
       <FB vert c="wide-col wide-col1">

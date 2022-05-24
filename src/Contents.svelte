@@ -28,10 +28,8 @@
   export const top =(smooth=true)=> {
     if (element) {
       if (smooth) {
-        console.log('SLOW SCROLL')
         element.scrollTo({top: 0, behavior: 'smooth'})
       } else {
-        console.log('INSTASCROLL')
         element.scrollTo({top: 0, behavior: 'instant'})
       }
     }
@@ -72,7 +70,7 @@
   } else if (iobserver) iobserver.disconnect()
 </script>
 
-<FB vert expand c="cpb-content {editmode}" bind:element={element} on:scroll={()=> console.log('foo')}>
+<FB vert expand c="cpb-content {editmode}" bind:element={element}>
 <R2Hider hide={!$state.finished}>
   <svelte:fragment slot="inner">
     <FB expand vert center>

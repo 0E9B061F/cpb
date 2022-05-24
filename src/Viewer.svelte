@@ -95,11 +95,10 @@
 
   afterUpdate(async ()=> {
     await tick()
-    body.querySelectorAll('.cpb-heading').forEach(b=> {
+    body?.querySelectorAll('.cpb-heading').forEach(b=> {
       blocks[b.id] = new BlockInfo(b)
     })
     setBlockInfo(blocks)
-    console.log(blocks)
   })
 </script>
 
