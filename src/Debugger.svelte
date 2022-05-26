@@ -10,6 +10,7 @@
   import RespRO from './RespRO.svelte'
   import { getContext } from 'svelte'
   const path = getContext('path')
+  const stem = getContext('stem')
   const hassess = getContext('hassess')
   const haslogin = getContext('haslogin')
   const haspage = getContext('haspage')
@@ -55,6 +56,7 @@
 {#if tab == 'main'}
 <FT>
   <PP lab="path" val={$path} />
+  <PP lab="stem" val={$stem} />
   <LocRO/>
   <PP lab="creating" val={$creating} />
   <PP lab="editing" val={$editing} />

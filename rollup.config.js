@@ -10,7 +10,6 @@ import vinfo from './lib/mkversion.js'
 
 const production = !process.env.ROLLUP_WATCH;
 
-
 function serve() {
 	let server;
 

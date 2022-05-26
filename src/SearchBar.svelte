@@ -168,7 +168,7 @@
 						</Link>
 				  {/if}
 					<Link does={quit}
-						nst="CPB:search" sub={[query]}
+						nst="{$rc.syskey}:{$rc.defsearch}" sub={[query]}
 						disable={!query}
 						marked={!$modifiers.Shift}
 						bind:this={sb}>
@@ -179,7 +179,7 @@
 		{/if}</svelte:fragment>
 		<svelte:fragment slot="buttons">{#if !preview}
 			<Link does={quit}
-				nst="CPB:search" sub={[query]}
+				nst="{$rc.syskey}:{$rc.defsearch}" sub={[query]}
 				disable={!query}
 				marked={!$modifiers.Shift}
 				bind:this={sb}

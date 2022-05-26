@@ -5,3 +5,4 @@ cpb.dev.sqlite
 assets/build/
 notes/
 public/sitemap*
+public/index.html

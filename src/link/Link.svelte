@@ -1,11 +1,13 @@
 <script>
   import LinkMark from './LinkMark.svelte'
   import util from '../../lib/util.js'
+  import CPB from '../../lib/cpb.js'
   import { getContext, onDestroy } from 'svelte'
   const gs = getContext('gs')
   const rc = getContext('rc')
   const trail = getContext('trail')
   const path = getContext('path')
+  const stem = getContext('stem')
   const links = getContext('links')
   const linkmap = getContext('linkmap')
   const loading = getContext('loading')
@@ -111,18 +113,17 @@
     $links = $links
   }
 
-  // foo
-  // main:foo
-  // main
-  const nstreg = /^(?:(?<space>[^:]+):)?(?<title>[^#]+)?(?:#(?<cmd>.+))?/
-
   const parsenst =()=> {
     if (nst) {
-      const m = nst.match(nstreg)
-      if (m) {
-        scratch.space = m.groups.space || $rc.defns
-        scratch.title = m.groups.title || $rc.deftitle
-        scratch.cmd = m.groups.cmd
+      const m = CPB.NSTU.parse(nst)
+      console.log(m)
+      if (m.valid) {
+        scratch.uuid = m.uuid
+        scratch.space = m.namespace || $rc.defns
+        scratch.title = m.head?.raw
+        scratch.sub = m.tail
+        scratch.opt = m.opts
+        scratch.cmd = m.hash
       }
     }
   }
@@ -172,11 +173,13 @@
 
     if (scratch.space == $rc.syskey) special = true
 
+    const shortenable = scratch.title ? CPB.Title.parse(scratch.title).shortenable : false
+
     if (nolink) href = null
     else if (scratch.uuid) {
       const u = scratch.uuid.toUpperCase()
       href = `/${u}`
-      rinfo = u
+      rinfo = `ITEM: ${u}`
     } else if (scratch.space == $rc.syskey && scratch.title == 'user') {
       rinfo = `User:`
       if (scratch.sub[0]) {
@@ -194,11 +197,20 @@
       }
     } else if (scratch.title) {
       const sp = scratch.space || $rc.defns
-      href = `/${sp}/${scratch.title}`
-      rinfo = util.tag(sp, scratch.title)
+      if (sp == $rc.defns && shortenable) {
+        href = `/${scratch.title}`
+      } else {
+        href = `/${sp}:${scratch.title}`
+      }
+      rinfo = shortenable ? scratch.title : `${scratch.space}:${scratch.title}`
     } else if (scratch.space) {
       href = `/${scratch.space}`
-      rinfo = util.tag(scratch.space)
+      if (scratch.space[0] == '~') {
+        const disp = scratch.space == '~' ? 'you' : scratch.space.slice(1)
+        rinfo = `USER: ${disp}`
+      } else {
+        rinfo = `INDEX: ${scratch.space}`
+      }
     } else {
       href = `/`
       rinfo = $rc.title
@@ -215,7 +227,7 @@
 
     href = href.replace(/ /g, '_')
 
-    current = $path == href
+    current = $stem == href.split('#')[0]
 
     if (info) rinfo = info
     if (current && !global) rinfo = `${rinfo} (current)`
@@ -243,7 +255,11 @@
       }
     } else if (scratch.space) {
       ident = scratch.space
-      text = `${scratch.space}::`
+      if (scratch.space[0] == '~') {
+        text = scratch.space
+      } else {
+        text = `${scratch.space}:`
+      }
     } else {
       ident = `${$rc.defns}:${$rc.deftitle}`
       if ($loc.namespace != $rc.defns) {
@@ -288,7 +304,7 @@
       bounce, nst,
     )
   }
-  $: current = (!selfanchor && $path == href)
+  $: current = (!selfanchor && $stem == href.split('#')[0])
   $: if (!special && !nolink && !bounce && !self && !global && !silent && !current && !nored && !external) {
     reddable = true
   } else {

@@ -46,11 +46,24 @@
 	let links = writable([])
 	let linkmap = writable({})
 
-	let path = writable(window.location.pathname + window.location.search + window.location.hash)
-	let canonical = writable(`${$rc.proto}://${$rc.domain}/${$path}`)
-	let stem = writable(window.location.pathname + window.location.search)
+	let oldstem = writable(null)
+	let root = writable(window.location.pathname)
 	let hash = writable(window.location.hash)
+	let search = writable(window.location.search)
+	let stem = writable($root + $search)
+	let path = writable($stem + $hash)
+	let canonical = writable(`${$rc.proto}://${$rc.domain}/${$path}`)
 	let loc = writable({})
+
+	const setpaths =()=> {
+		$oldstem = $stem
+		$root = window.location.pathname
+		$search = window.location.search
+		$hash = window.location.hash
+		$stem = $root + $search
+		$path = $stem + $hash
+	}
+
 
 	let fresh = writable(true)
 
@@ -98,6 +111,7 @@
 	setContext('links', links)
 	setContext('linkmap', linkmap)
 	setContext('path', path)
+	setContext('stem', stem)
 	setContext('canonical', canonical)
 	setContext('loc', loc)
 	setContext('fresh', fresh)
@@ -705,6 +719,7 @@
 
 	const scrollto =(id, smooth)=> {
 		const e = document.getElementById(id)
+		console.log(e)
 		if (e) {
 			dbg('SCROLLING')
 			if (smooth) {
@@ -723,8 +738,10 @@
 		$loc = parseloc(p)
 		if ($loc.load) load()
 		else if ($loc.cmd) {
+			dbg(`SCROLLING TO ${$loc.cmd}`)
 			scrollto($loc.cmd)
 		} else {
+			dbg('NO LOAD')
 			unhold('FINISHED', 0, 2000)
 			scrolltop(false)
 		}
@@ -818,32 +835,30 @@
 	}
 	setContext('drophash', drophash)
 
-  const parseloc =p=> {
+  const parseloc =()=> {
     const loc = {
       namespace: null, title: null,
 			uuid: null, sub: [],
 			cmd: null, opt: {},
 			load: true,
     }
-    p = p.split('#')
-		if (!$fresh && p[0] == $stem) loc.load = false
-		$stem = p[0] || null
-		$hash = p[1] || null
-		loc.cmd = $hash
-    p = p[0].split('?')
-		if (p[1]) {
-			loc.opt = util.mask(util.rq('?' + p[1]), {
+		if (!$fresh && $stem == $oldstem) loc.load = false
+		loc.cmd = $hash?.slice(1) || null
+		if ($search) {
+			loc.opt = util.mask(util.rq($search), {
 				pg: undefined, sz: undefined,
 				inf: undefined, inh: undefined,
 				edit: undefined, history: undefined,
 			})
 		}
-		p = p[0]
-    if (p[0] == '/') p = p.slice(1)
+		// docs::WMD
+		// docs:WMD
+    let p = $root[0] == '/' ? $root.slice(1) : $root
     p = p.split('/')
-    const ns = p[0]
-    const t = p[1]?.replace(/_/g, ' ')
-    const args = p.slice(2)
+    const nst = p[0].match(/^(?:(?<ns>[a-z][a-z0-9.]*?):)?(?<title>.+)?/)
+		const ns = nst.groups.ns || $rc.defns
+		const t = nst.groups.title || $rc.deftitle
+    const args = p.slice(1)
 		loc.sub = args
 		let u
 		if (ns.startsWith($rc.homekey)) {
@@ -904,7 +919,7 @@
   }
 
 	const onpop =e=> {
-    $path = window.location.pathname + window.location.search + window.location.hash
+		setpaths()
 		launch($path)
   }
 
@@ -948,12 +963,14 @@
 			if (p != $path) {
 				window.history.pushState({}, p, p)
 			}
-      $path = p
+      setpaths()
 			launch($path)
     },
     bounce: (d='/')=> {
-      $path = trail[1] ? trail[1] : d
-      window.history.pushState({}, $path, $path)
+      const p = trail[1] ? trail[1] : d
+      window.history.pushState({}, p, p)
+			setpaths()
+			launch($path)
     },
     tag: ()=> {
       return `${$loc.namespace}:${$loc.title}`
@@ -1036,6 +1053,7 @@
 		measures = setcss(c=> {
 			c.wuicolx = 200
 			c.pxgap = 5
+			c.subgap = 3
 			c.margin = 30
 			c.basex = 1024 + c.margin + c.pxgap
 			c.basemin = c.basex - (3 * c.pxgap) - c.margin

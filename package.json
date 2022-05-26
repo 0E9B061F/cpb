@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rollup -c",
-    "postbuild": "node server/mksitemap.js",
+    "postbuild": "node server/build.js",
     "dev": "env NODE_ENV=development rollup -c -w",
     "app": "node server/app.js",
     "dump:dev": "rm -f cpb.dev.sqlite",
@@ -13,7 +13,7 @@
     "refresh": "run-s dump:dev mig:dev seed:dev"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@rollup/plugin-replace": "^4.0.0",
     "lorem-ipsum": "^2.0.4",
@@ -41,6 +41,7 @@
     "i-ching": "^0.3.5",
     "js-cookie": "^3.0.1",
     "marked": "^4.0.12",
+    "mustache": "^4.2.0",
     "qrcode": "^1.5.0",
     "sequelize": "^6.12.5",
     "sirv": "^2.0.0",

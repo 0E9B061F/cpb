@@ -56,4 +56,4 @@ const generate = async ()=> {
   })
 }
 
-generate()
+module.exports = generate

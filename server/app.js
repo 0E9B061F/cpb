@@ -46,8 +46,8 @@ app.use((req, res, next)=> {
 app.use(express.json())
 app.use(cors())
 
-app.use('/CPB/api', api)
-app.use('/CPB/data', compress, assets)
+app.use(`/${rc.syskey}/api`, api)
+app.use(`/${rc.syskey}/data`, compress, assets)
 app.use(compress, html);
 
 (async ()=> {

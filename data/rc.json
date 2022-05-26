@@ -1,5 +1,5 @@
 {
-  "syskey": "CPB",
+  "syskey": "sys",
   "proto": "http",
   "domain": "localhost",
   "port": 3000,
