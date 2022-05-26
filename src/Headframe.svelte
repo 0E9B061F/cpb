@@ -61,10 +61,9 @@
 		<FB expand vert zero>
 			<FB expand c={$ui <= 1 ? "base-head-upper" : ''}>
 				<FB ve>
-					{#if $state.namespace}
-	      		<FB title line="s2" fw={6} c="title-sub">{$state.namespace}</FB>
+					{#if !$state.uuid && $state.namespace && $state.title}
+	      		<FB title line="s2" fw={6} c="title-sub">{$state.namespace}:</FB>
 					{/if}
-	      	<FB vc line="s4" fw={9}>:</FB>
 				</FB>
 				<FB expand/>
 				<FB vert center>
@@ -74,7 +73,13 @@
 			</FB>
 
 			<FB between>
-				<FB title line="b3" fw={8} c="title-main">{$state.title}</FB>
+				<FB title line="b3" fw={8} c="title-main">
+					{#if $state.uuid}
+						<UUID>{$state.uuid}</UUID>
+					{:else}
+						{$state.title || $state.namespace}
+					{/if}
+				</FB>
 				<FB vert end>
 					<TitleControls/>
 				</FB>

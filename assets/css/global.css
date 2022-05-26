@@ -370,8 +370,11 @@ ol.treelike {
 .footer {
 }
 .foot-label {
-  font-size: 0.6em;
+  font-size: 0.6rem;
   font-weight: 700;
+}
+.footer .uuid {
+  font-size: 0.85rem
 }
 .foot-controls {
   width: 300px;
@@ -833,6 +836,16 @@ h6 {
 .rendered .content-start {
   float: left;
   clear: right;
+}
+
+.rendered .mountinfo {
+  min-height: 30px;
+}
+.rendered .mountinfo .notabene {
+  height: 30px;
+  width: 30px;
+  left: -35px;
+  font-size: 1.2rem;
 }
 
 .rendered h1 {

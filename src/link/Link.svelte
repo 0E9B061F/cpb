@@ -38,6 +38,8 @@
   export let sub = null
   export let opt = null
 
+  export let system = null
+
   export let self = false
   export let bounce = false
 
@@ -67,13 +69,22 @@
   let ident
   let text
   let reddable = false
-  let scratch = {sub: [], opt: {}}
+  let scratch = {sub: [], opt: {}, shortenable: false}
   let special = false
   let cls = ''
   let rinfo = ''
   let registered
+  let nstu
+  let index = false
+  let userpage = false
+  let homepage = false
 
   export let addr = href
+
+  if (system) {
+    space = $rc.syskey
+    title = system
+  }
 
   const goto =p=> {
     if (does) does()
@@ -115,15 +126,15 @@
 
   const parsenst =()=> {
     if (nst) {
-      const m = CPB.NSTU.parse(nst)
-      console.log(m)
-      if (m.valid) {
-        scratch.uuid = m.uuid
-        scratch.space = m.namespace || $rc.defns
-        scratch.title = m.head?.raw
-        scratch.sub = m.tail
-        scratch.opt = m.opts
-        scratch.cmd = m.hash
+      scratch.nstu = CPB.NSTU.parse(nst)
+      if (scratch.nstu.valid) {
+        scratch.uuid = scratch.nstu.uuid
+        scratch.space = scratch.nstu.namespace
+        scratch.title = scratch.nstu.title
+        scratch.sub = scratch.nstu.tail
+        scratch.opt = scratch.nstu.opts
+        scratch.cmd = scratch.nstu.hash
+        scratch.shortenable = scratch.nstu.shortenable
       }
     }
   }
@@ -164,52 +175,59 @@
       href = trace()
       return
     }
-    scratch = {sub: [], opt: {}}
+    scratch = {sub: [], opt: {}, shortenable: false}
     special = false
     if (self) follow()
     preload()
     parsenst()
-    mkident()
+
+    if (!scratch.nstu) {
+      scratch.nstu = new CPB.NSTU({
+        namespace: scratch.space,
+        title: scratch.title,
+        tail: scratch.sub,
+        hash: scratch.cmd,
+        opts: scratch.opt,
+        uuid: scratch.uuid,
+      })
+      scratch.shortenable = scratch.nstu.shortenable
+    }
+    nstu = scratch.nstu
 
     if (scratch.space == $rc.syskey) special = true
+    if (scratch.space && !scratch.title) {
+      if (nstu.userspace) userpage = true
+      else index = true
+    }
+    if (!scratch.space && !scratch.title && !scratch.uuid) {
+      homepage = true
+    }
 
-    const shortenable = scratch.title ? CPB.Title.parse(scratch.title).shortenable : false
+    special = special || index || homepage || userpage
+
+    mkident()
 
     if (nolink) href = null
     else if (scratch.uuid) {
       const u = scratch.uuid.toUpperCase()
       href = `/${u}`
       rinfo = `ITEM: ${u}`
-    } else if (scratch.space == $rc.syskey && scratch.title == 'user') {
-      rinfo = `User:`
-      if (scratch.sub[0]) {
-        href = `/~${scratch.sub[0]}`
-        rinfo = `${rinfo} ${scratch.sub[0]}`
-        if (!!$haslogin && scratch.sub[0] == $session.val.handle) {
-          rinfo = `${rinfo} (you)`
-        }
-      } else if (!!$haslogin) {
-        href = `/~${$session.val.handle}`
-        rinfo = `${rinfo} ${$session.val.handle} (you)`
-      } else {
-        href = '/~'
-        rinfo = `${rinfo} you`
-      }
     } else if (scratch.title) {
       const sp = scratch.space || $rc.defns
-      if (sp == $rc.defns && shortenable) {
+      if (sp == $rc.defns && scratch.shortenable) {
         href = `/${scratch.title}`
       } else {
         href = `/${sp}:${scratch.title}`
       }
-      rinfo = shortenable ? scratch.title : `${scratch.space}:${scratch.title}`
+      rinfo = scratch.shortenable ? scratch.title : `${scratch.space}:${scratch.title}`
     } else if (scratch.space) {
-      href = `/${scratch.space}`
       if (scratch.space[0] == '~') {
         const disp = scratch.space == '~' ? 'you' : scratch.space.slice(1)
         rinfo = `USER: ${disp}`
+        href = `/${scratch.space}`
       } else {
         rinfo = `INDEX: ${scratch.space}`
+        href = `/${scratch.space}:`
       }
     } else {
       href = `/`
@@ -227,7 +245,7 @@
 
     href = href.replace(/ /g, '_')
 
-    current = $stem == href.split('#')[0]
+    current = $loc.same && scratch.nstu.same($loc)
 
     if (info) rinfo = info
     if (current && !global) rinfo = `${rinfo} (current)`
@@ -240,7 +258,16 @@
   }
 
   const mkident =()=> {
-    if (nolink) {
+    if (userpage) {
+      ident = null
+      text = scratch.space
+    } else if (index) {
+      ident = null
+      text = `${scratch.space}:`
+    } else if (homepage) {
+      ident = null
+      text = $rc.title
+    } else if (nolink) {
       ident = null
       text = 'BUTTON'
     } else if (scratch.uuid) {
@@ -301,10 +328,10 @@
     mkhref(
       space, title, uuid, cmd, sub, opt,
       self, global, nolink, disable, sub,
-      bounce, nst,
+      bounce, nst
     )
   }
-  $: current = (!selfanchor && $stem == href.split('#')[0])
+  $: current = $loc && $loc.same && nstu && nstu.same($loc)
   $: if (!special && !nolink && !bounce && !self && !global && !silent && !current && !nored && !external) {
     reddable = true
   } else {

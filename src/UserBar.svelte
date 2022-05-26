@@ -17,7 +17,7 @@
   {:else}
     {#if $hassess}
       {#if $session.val.login}
-        <Link nst="CPB:user">
+        <Link nst="~{$session.val.handle}">
           {#if mini}
             USER
           {:else}
@@ -34,9 +34,9 @@
     {#if $hassess && $session.val.login}
       <Link first={logout} global self info="End your session. We'll be sorry to see you go!">LOGOUT</Link>
     {:else if !$rc.singleuser}
-      <Link nst="CPB:login">LOGIN</Link>
+      <Link system="login">LOGIN</Link>
       {#if mini && $hassess && !$session.val.login}<FB vc expand c="ubmini fill"/>{/if}
-      <Link nst="CPB:register">REGISTER</Link>
+      <Link system="register">REGISTER</Link>
     {/if}
   {/if}
 </FB>

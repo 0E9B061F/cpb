@@ -232,7 +232,7 @@ api.get('/missing/:titles', (req, res) => {
 
 api.get(bi('/get/:ns/:title'), (req, res) => {
   const title = req.params.title || 'Home'
-  util.getnstu(req.params.ns, title)
+  util.getnstu(req.params.ns, title.replace(/_/g, ' '))
   .then(page=> {
     if (page) res.json(ok(page))
     else res.json(missing({namespace: req.params.ns, title}))

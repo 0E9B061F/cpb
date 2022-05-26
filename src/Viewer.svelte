@@ -25,6 +25,7 @@
   import wmd from '../lib/wmd.js'
 
   const rc = getContext('rc')
+  const state = getContext('state')
   const haspage = getContext('haspage')
   const haslogin = getContext('haslogin')
   const page = getContext('page')
@@ -108,6 +109,20 @@
     <div class="rendered" bind:this={body}>
       {#if $haslogin}<ContentControls/>{/if}
       <Infobar/>
+      {#if $state.uuid}
+        <FB rel c="mountinfo">
+          <FB fw={9} center abs c="notabene">
+            <FB vert center>NB</FB>
+          </FB>
+          {#if $state.old}
+            <FB vc line="n">was</FB>
+            <FB vc title line="b3" fw={6}>{$state.namespace}:{$state.title}</FB>
+          {:else}
+            <FB vc line="n">mounted at</FB>
+            <FB vc title line="b3" fw={6}><Link space={$state.namespace} title={$state.title}/></FB>
+          {/if}
+        </FB>
+      {/if}
       <SvelteMarkdown source={$page.val.body} {renderers} {options} on:parsed={onparse} />
     </div>
   </FB>

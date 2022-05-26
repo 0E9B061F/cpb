@@ -16,6 +16,7 @@
 
 	import Login from './special/Login.svelte'
 	import User from './special/User.svelte'
+	import Index from './special/Index.svelte'
 	import Search from './special/Search.svelte'
 	import Test from './special/Test.svelte'
 	import TestForms from './special/TestForms.svelte'
@@ -32,6 +33,7 @@
 
 	import rco from '../lib/rc.js'
 	import util from '../lib/util.js'
+	import CPB from '../lib/cpb.js'
 	import { Fortune } from '../lib/fortune.mjs'
 
 	let lastboot = localStorage.getItem('lastboot') || 0
@@ -53,6 +55,11 @@
 	let stem = writable($root + $search)
 	let path = writable($stem + $hash)
 	let canonical = writable(`${$rc.proto}://${$rc.domain}/${$path}`)
+	const parseloc =()=> {
+    const l = CPB.Location.parse($path)
+		l.compare($loc)
+    return l
+  }
 	let loc = writable({})
 
 	const setpaths =()=> {
@@ -450,7 +457,7 @@
 		return {
 			editing: false, creating: false, error: 0,
 			current: false, head: false, old: false, anchor: false,
-			system: false, history: false,
+			system: false, history: false, user: false,
 			pageperm: false, verperm: false,
 			label: 'BLANK', cmp: null,
 			namespace: null, title: null,
@@ -517,7 +524,6 @@
 			else if (!$haslogin) return true
 			else return 401
 		}),
-		user: new Route(User, ()=> !!$haslogin || 401),
 		search: new Route(Search),
 		test: new Route(Test),
 		forms: new Route(TestForms),
@@ -547,10 +553,20 @@
 		s.loading = false
 		s.loadtime = Date.now() - s.loadstart
 		if ($haspage && $loc.uuid) {
-			if ($loc.uuid == $page.val.pageUuid) s.pageperm = true
-			else if ($loc.uuid == $page.val.uuid) s.verperm = true
+			if ($loc.uuid.toLowerCase() == $page.val.pageUuid) s.pageperm = true
+			else if ($loc.uuid.toLowerCase() == $page.val.uuid) s.verperm = true
 		}
-		if ($hashistory && $loc.opt.history) {
+		if ($loc.namespace && !$loc.title) {
+			if ($loc.userspace) {
+				s.cmp = User
+				s.user = true
+				s.label = 'USER'
+			} else {
+				s.cmp = Index
+				s.index = true
+				s.label = 'INDEX'
+			}
+		} else if ($hashistory && $loc.opt.history) {
 			s.cmp = History
 			s.history = true
 			s.label = 'HISTORY'
@@ -638,8 +654,9 @@
 			s.title = $page.val.title
 		} else {
 			s.namespace = $loc.namespace
-			s.title = $loc.title
+			s.title = $loc.titlestr
 		}
+		s.uuid = $loc.uuid
 		s.building = true
 		s.buildstart = Date.now()
 		$component = s.cmp
@@ -736,6 +753,10 @@
 	const preload =p=> {
 		console.log('CPB PRE-LOAD')
 		$loc = parseloc(p)
+		if (`/${$loc.normal}` != $path) {
+			window.history.replaceState({}, $loc.normal, $loc.normal)
+			setpaths()
+		}
 		if ($loc.load) load()
 		else if ($loc.cmd) {
 			dbg(`SCROLLING TO ${$loc.cmd}`)
@@ -763,16 +784,18 @@
 		$finished = false
 		cleardata()
 
+		console.log($loc)
+
 		let after = false
-		if ($loc.namespace == $rc.syskey) {
-			if ($loc.title == 'user') {
-				let u = $loc.sub[0]
-				if (!u && !!$haslogin) u = $session.val.handle
-				if (u) {
-					after = grab('user', u).then(user=> {
-						cleardata({user})
-					})
-				}
+		if ($loc.namespace == $rc.syskey && cpbspace.has($loc.title)) {
+			after = false
+		} else if ($loc.userspace) {
+			let u = $loc.namespace.slice(1)
+			if (!u && $haslogin) u = $session.val.handle
+			if (u) {
+				after = grab('user', u).then(user=> {
+					cleardata({user})
+				})
 			}
 		} else if ($loc.opt.history) {
 			const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
@@ -792,7 +815,7 @@
 				})
 			}
 		} else if ($loc.title || $loc.namespace || $loc.uuid) {
-			const a = $loc.uuid ? ['uuid', $loc.uuid] : ['get', $loc.namespace, $loc.title]
+			const a = $loc.uuid ? ['uuid', $loc.uuid.toLowerCase()] : ['get', $loc.namespace, $loc.title]
 			after = grab(...a).then(page=> {
 				if (page.val) page.val.historical = !!page.val.nextUuid
 				cleardata({page})
@@ -835,56 +858,7 @@
 	}
 	setContext('drophash', drophash)
 
-  const parseloc =()=> {
-    const loc = {
-      namespace: null, title: null,
-			uuid: null, sub: [],
-			cmd: null, opt: {},
-			load: true,
-    }
-		if (!$fresh && $stem == $oldstem) loc.load = false
-		loc.cmd = $hash?.slice(1) || null
-		if ($search) {
-			loc.opt = util.mask(util.rq($search), {
-				pg: undefined, sz: undefined,
-				inf: undefined, inh: undefined,
-				edit: undefined, history: undefined,
-			})
-		}
-		// docs::WMD
-		// docs:WMD
-    let p = $root[0] == '/' ? $root.slice(1) : $root
-    p = p.split('/')
-    const nst = p[0].match(/^(?:(?<ns>[a-z][a-z0-9.]*?):)?(?<title>.+)?/)
-		const ns = nst.groups.ns || $rc.defns
-		const t = nst.groups.title || $rc.deftitle
-    const args = p.slice(1)
-		loc.sub = args
-		let u
-		if (ns.startsWith($rc.homekey)) {
-			loc.namespace = $rc.syskey
-			loc.title = 'user'
-			u = ns.slice(1)
-			if (u) loc.sub = [u]
-		} else if (ns == $rc.syskey) {
-			loc.namespace = $rc.syskey
-			if (t) loc.title = t
-    } else {
-			if (util.isuu(ns)) {
-	      loc.uuid = ns.toLowerCase()
-	    } else if (ns == '') {
-	      loc.namespace = $rc.defns
-	      loc.title = $rc.deftitle
-	    } else if (!t) {
-	      loc.namespace = ns
-	      loc.title = $rc.deftitle
-	    } else {
-	      loc.namespace = ns
-	      loc.title = t
-	    }
-		}
-    return loc
-  }
+
 
 	const parsenst =()=> {
 		let ns, t
