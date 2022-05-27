@@ -1,6 +1,7 @@
 const fs = require('fs')
 const rc = require('./rc.js')
 const db = require('./models')
+const CPB = require('../lib/cpb.js')
 
 const mkname =ns=> `sitemap-${ns}.xml`
 
@@ -45,8 +46,11 @@ const generate = async ()=> {
   const maps = {}
   all.forEach(r=> {
     if (!maps[r.namespace]) maps[r.namespace] = []
+    const nstu = new CPB.NSTU({
+      namespace: r.namespace, title: r.title,
+    })
     maps[r.namespace].push({
-      loc: `${base}/${r.namespace}/${r.title}`.replace(/ /g, '_'),
+      loc: `${base}/${nstu.normal}`,
       modified: r.createdAt.toISOString(),
     })
   })

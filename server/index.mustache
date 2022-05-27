@@ -1,19 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset='utf-8'>
-  <meta name="generator" content="{{vinfo.name}} {{vinfo.fullver}} '{{vinfo.series}}'">
+	<meta charset="utf-8">
+  <meta name="generator" content="{{{vinfo.name}}} {{{vinfo.fullver}}} '{{{vinfo.series}}}'">
 
   <meta name="robots" content="index, follow">
-	<meta name='viewport' content='width=device-width,initial-scale=1'>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <meta name="application-name" content="{{rc.title}}">
+  <meta name="application-name" content="{{{rc.title}}}">
+	<meta property="og:site_name" content="{{{rc.title}}}">
+	<meta name="apple-mobile-web-app-title" content="{{{rc.title}}}">
 
+	<meta name="msapplication-config" content="{{{bconf}}}">
+	<link rel="apple-touch-icon" sizes="180x180" href="{{{appleicon}}}">
+	<link rel="icon" type="image/png" sizes="32x32" href="{{{fav32}}}">
+	<link rel="icon" type="image/png" sizes="16x16" href="{{{fav16}}}">
+	<link rel="mask-icon" href="{{{safari}}}" color="#5bbad5">
+	<link rel="manifest" href="{{{manifest}}}">
 
-	<link rel='stylesheet' href='/{{rc.syskey}}/data/css/global.css'>
-	<link rel='stylesheet' href='/{{rc.syskey}}/data/build/cpb.css'>
+	<meta name="msapplication-TileColor" content="#2d89ef">
+	<meta name="theme-color" content="#ffffff">
 
-	<script defer src='/{{rc.syskey}}/data/build/cpb.js'></script>
+	<meta property="og:image" content={{{ogimage}}} />
+	<meta property="og:image:alt" content="A logo featuring a pixelated heart and '0x2764' typeset in a bold monospace font." />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:type" content="image/png" />
+
+	<link rel="stylesheet" href="{{{globalcss}}}">
+	<link rel="stylesheet" href="{{{cpbcss}}}">
+
+	<script defer src="{{{cpbjs}}}"></script>
 
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

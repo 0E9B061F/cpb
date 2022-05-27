@@ -3,6 +3,9 @@ rc.json
 rc.server.json
 cpb.dev.sqlite
 assets/build/
+assets/conf/browserconfig.xml
+assets/conf/site.webmanifest
 notes/
 public/sitemap*
 public/index.html
+public/robots.txt

@@ -17,6 +17,7 @@
 	import Login from './special/Login.svelte'
 	import User from './special/User.svelte'
 	import Index from './special/Index.svelte'
+	import Homepage from './special/Homepage.svelte'
 	import Search from './special/Search.svelte'
 	import Test from './special/Test.svelte'
 	import TestForms from './special/TestForms.svelte'
@@ -187,7 +188,7 @@
 			}
 			a = `/${a.join('/')}`
 		} else a = ''
-		return`${aurl()}/${c}${a}${o}`
+		return CPB.rc.api(c, a, o).rel
 	}
 
 	const dbg =m=> {
@@ -556,7 +557,11 @@
 			if ($loc.uuid.toLowerCase() == $page.val.pageUuid) s.pageperm = true
 			else if ($loc.uuid.toLowerCase() == $page.val.uuid) s.verperm = true
 		}
-		if ($loc.namespace && !$loc.title) {
+		if (!$loc.uuid && !$loc.namespace) {
+			s.cmp = Homepage
+			s.home = true
+			s.label = 'HOME'
+		} else if ($loc.namespace && !$loc.title) {
 			if ($loc.userspace) {
 				s.cmp = User
 				s.user = true
@@ -652,9 +657,11 @@
 		if ($haspage) {
 			s.namespace = $page.val.namespace
 			s.title = $page.val.title
-		} else {
+		} else if ($loc.namespace || $loc.title) {
 			s.namespace = $loc.namespace
 			s.title = $loc.titlestr
+		} else {
+			s.title = 'INDEX'
 		}
 		s.uuid = $loc.uuid
 		s.building = true
@@ -753,8 +760,9 @@
 	const preload =p=> {
 		console.log('CPB PRE-LOAD')
 		$loc = parseloc(p)
-		if (`/${$loc.normal}` != $path) {
-			window.history.replaceState({}, $loc.normal, $loc.normal)
+		if ($loc.rel != $path) {
+			console.log($path)
+			window.history.replaceState({}, $loc.rel, $loc.rel)
 			setpaths()
 		}
 		if ($loc.load) load()
@@ -873,7 +881,7 @@
 			t = $loc.title || ''
 		} else {
 			ns = 'SPECIAL'
-			t = $loc.special.toUpperCase()
+			t = 'HOMEPAGE'
 		}
 		$space = ns
 		$title = t
@@ -976,7 +984,7 @@
 			else if ($state.editing) short += ' (EDIT)'
 			if ($loc.cmd) short += ` § ${util.dedash($loc.cmd)}`
 			long = `${short} < ${$rc.title}`
-		} else {
+		} else if ($loc.namespace) {
 			short = $loc.title
 			if ($loc.cmd) short += ` § ${util.dedash($loc.cmd)}`
 			if ($state.history) short += ' (HISTORY)'
@@ -984,6 +992,8 @@
 			long = short
 			if ($loc.namespace != $rc.defns) long += ` < ${$loc.namespace.toUpperCase()}`
 			long += ` < ${$rc.title}`
+		} else {
+			long = short = $rc.title
 		}
 		$doctitle = { long, short }
 	}
@@ -1105,16 +1115,6 @@
 		:root {
 		}
 	</style>
-	<meta name="msapplication-config" content={asset('conf/browserconfig.xml')} />
-	<link rel="apple-touch-icon" sizes="180x180" href={icon('apple-touch-icon.png')}>
-	<link rel="icon" type="image/png" sizes="32x32" href={icon('favicon-32x32.png')}>
-	<link rel="icon" type="image/png" sizes="16x16" href={icon('favicon-16x16.png')}>
-	<link rel="mask-icon" href={icon('safari-pinned-tab.svg')} color="#5bbad5">
-	<link rel="manifest" href={asset('conf/site.webmanifest')}>
-	<meta name="apple-mobile-web-app-title" content={$rc.title}>
-	<meta name="application-name" content={$rc.title}>
-	<meta name="msapplication-TileColor" content="#2d89ef">
-	<meta name="theme-color" content="#ffffff">
 	<SEO/>
 </svelte:head>
 

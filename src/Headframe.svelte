@@ -20,6 +20,7 @@
   const loc = getContext('loc')
   const session = getContext('session')
   const hassess = getContext('hassess')
+  const haspage = getContext('haspage')
   const state = getContext('state')
   const ui = getContext('ui')
   const rc = getContext('rc')
@@ -61,7 +62,7 @@
 		<FB expand vert zero>
 			<FB expand c={$ui <= 1 ? "base-head-upper" : ''}>
 				<FB ve>
-					{#if !$state.uuid && $state.namespace && $state.title}
+					{#if !$state.uuid && $state.namespace && $state.title && !($state.namespace == $rc.syskey && !$haspage)}
 	      		<FB title line="s2" fw={6} c="title-sub">{$state.namespace}:</FB>
 					{/if}
 				</FB>
@@ -76,6 +77,8 @@
 				<FB title line="b3" fw={8} c="title-main">
 					{#if $state.uuid}
 						<UUID>{$state.uuid}</UUID>
+					{:else if $state.namespace == $rc.syskey && !$haspage}
+						<div class="system-title">{$state.title}</div>
 					{:else}
 						{$state.title || $state.namespace}
 					{/if}

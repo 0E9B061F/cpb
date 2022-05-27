@@ -18,15 +18,8 @@
 
 <link rel="canonical" href={$canonical} />
 
-<meta property="og:site_name" content={$rc.title} />
 <meta property="og:title" content={$doctitle.short} />
 <meta property="og:url" content={$canonical} />
-
-<meta property="og:image" content={iurl('og-default.png')} />
-<meta property="og:image:alt" content="A logo featuring a pixelated heart and '0x2764' typeset in a bold monospace font." />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:type" content="image/png" />
 
 <meta property="og:type" content={type} />
 

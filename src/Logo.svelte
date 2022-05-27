@@ -5,6 +5,6 @@
   const rc = getContext('rc')
 </script>
 
-<Link space="main" title="Home" silent>
+<Link silent>
   <FB title c="logo">{$rc.title}</FB>
 </Link>

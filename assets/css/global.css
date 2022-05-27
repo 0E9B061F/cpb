@@ -536,6 +536,9 @@ ol.treelike {
 	padding-right: 8px;
 	border-right: var(--pxgap) solid var(--matte);
 }
+.system-title {
+  text-transform: uppercase;
+}
 
 .prehead {
   font-size: 0.75rem;

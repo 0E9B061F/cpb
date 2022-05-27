@@ -275,10 +275,10 @@
       text = scratch.uuid
     } else if (scratch.title) {
       ident = `${scratch.space}:${scratch.title}`
-      if ($loc.namespace != scratch.space) {
-        text = `${scratch.space}:${scratch.title}`
-      } else {
+      if (($loc.namespace && $loc.namespace == scratch.space) || (!$loc.namespace && scratch.space == $rc.defns)) {
         text = `${scratch.title}`
+      } else {
+        text = `${scratch.space}:${scratch.title}`
       }
     } else if (scratch.space) {
       ident = scratch.space
