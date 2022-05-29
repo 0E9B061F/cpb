@@ -19,6 +19,7 @@
   export let wr = null
   export let spacer = null
   export let line = false
+  export let para = false
   export let grid = false
   export let end = false
   export let just = false
@@ -99,6 +100,10 @@
     if (line) {
       cc.push('fd-line')
       const n = typeof(line) != 'string' ? 'n' : line
+      cc.push(`ln-${n}`)
+    } else if (para) {
+      cc.push('fd-para')
+      const n = typeof(para) != 'string' ? 'n' : para
       cc.push(`ln-${n}`)
     }
 

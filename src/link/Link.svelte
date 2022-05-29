@@ -39,6 +39,7 @@
   export let opt = null
 
   export let system = null
+  export let user = null
 
   export let self = false
   export let bounce = false
@@ -59,6 +60,7 @@
   export let current = false
   export let info = null
 
+  export let overload = false
   export let decmd = false
   export let deopt = false
   export let strip = false
@@ -84,6 +86,10 @@
   if (system) {
     space = $rc.syskey
     title = system
+  }
+  if (user) {
+    space = `~${user}`
+    title = null
   }
 
   const goto =p=> {
@@ -148,8 +154,10 @@
     scratch.title = $loc.title
     scratch.uuid = $loc.uuid
     scratch.sub = $loc.sub
-    scratch.cmd = $loc.cmd
-    scratch.opt = $loc.opt
+    if (!overload) {
+      scratch.cmd = $loc.cmd
+      scratch.opt = $loc.opt
+    }
   }
 
   const preload =()=> {

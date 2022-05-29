@@ -157,6 +157,10 @@ body {
   --hgc-o3: #e0e1a9;
 }
 
+.warning-filter {
+  --matte: var(--red);
+}
+
 html, body {
 	position: relative;
 	width: 100%;
@@ -193,6 +197,9 @@ a, .nolink, a:visited {
 }
 .rendered .system .cpblink .cpblink-text {
   text-decoration: none;
+}
+.rendered .system .cpblink:hover .cpblink-text {
+  text-decoration: underline;
 }
 .rendered .cpblink.missing .cpblink-text {
   text-decoration-color: var(--cc-missing-deco);
@@ -840,6 +847,14 @@ h6 {
   float: left;
   clear: right;
 }
+.rendered .highlighted {
+  background-color: #eaeaff;
+  padding: 2px 0;
+}
+.rendered .highlight-2 {
+  background-color: #ffeaea;
+}
+
 
 .rendered .mountinfo {
   min-height: 30px;
@@ -982,6 +997,10 @@ h6 {
 }
 .infobar.infotop {
   padding-bottom: 0;
+}
+
+.infobar .new-highlight {
+  --matte: var(--red);
 }
 
 
@@ -1544,64 +1563,90 @@ h6 {
 .fd-text input {
 }
 
+.fd-para {
+
+}
+.ln-s4 {
+  line-height: var(--xs4);
+  font-size: var(--xs4f);
+}
+.ln-s3 {
+  line-height: var(--xs3);
+  font-size: var(--xs3f);
+}
+.ln-s2 {
+  line-height: var(--xs2);
+  font-size: var(--xs2f);
+}
+.ln-s1 {
+  line-height: var(--xs1);
+  font-size: var(--xs1f);
+}
+.ln-n {
+  line-height: var(--xn);
+  font-size: var(--xnf);
+}
+.ln-b1 {
+  line-height: var(--xb1);
+  font-size: var(--xb1f);
+}
+.ln-b2 {
+  line-height: var(--xb2);
+  font-size: var(--xb2f);
+}
+.ln-b3 {
+  line-height: var(--xb3);
+  font-size: var(--xb3f);
+}
+.ln-b4 {
+  line-height: var(--xb4);
+  font-size: var(--xb4f);
+}
+.ln-b5 {
+  line-height: var(--xb5);
+  font-size: var(--xb5f);
+}
+.ln-b6 {
+  line-height: var(--xb6);
+  font-size: var(--xb6f);
+}
+
 .fd-line {
   overflow: hidden;
   flex-wrap: nowrap;
 }
 .fd-line.ln-s4 {
   height: var(--xs4);
-  line-height: var(--xs4);
-  font-size: var(--xs4f);
 }
 .fd-line.ln-s3 {
   height: var(--xs3);
-  line-height: var(--xs3);
-  font-size: var(--xs3f);
 }
 .fd-line.ln-s2 {
   height: var(--xs2);
-  line-height: var(--xs2);
-  font-size: var(--xs2f);
 }
 .fd-line.ln-s1 {
   height: var(--xs1);
-  line-height: var(--xs1);
-  font-size: var(--xs1f);
 }
 .fd-line.ln-n {
   height: var(--xn);
-  line-height: var(--xn);
-  font-size: var(--xnf);
 }
 .fd-line.ln-b1 {
   height: var(--xb1);
-  line-height: var(--xb1);
-  font-size: var(--xb1f);
 }
 .fd-line.ln-b2 {
   height: var(--xb2);
-  line-height: var(--xb2);
-  font-size: var(--xb2f);
 }
 .fd-line.ln-b3 {
   height: var(--xb3);
-  line-height: var(--xb3);
-  font-size: var(--xb3f);
 }
 .fd-line.ln-b4 {
   height: var(--xb4);
-  line-height: var(--xb4);
-  font-size: var(--xb4f);
 }
 .fd-line.ln-b5 {
   height: var(--xb5);
-  line-height: var(--xb5);
-  font-size: var(--xb5f);
 }
 .fd-line.ln-b6 {
   height: var(--xb6);
-  line-height: var(--xb6);
-  font-size: var(--xb6f);
 }
 
 .fd-line .r2-sx .r2-hori { width: 3px; }
@@ -1892,8 +1937,16 @@ h6 {
 }
 
 .content-controls {
-  text-transform: uppercase;
   float: right;
+}
+.content-controls .tabs {
+  text-transform: uppercase;
+}
+.content-controls.open {
+  float: none;
+}
+.control-module {
+  width: 250px;
 }
 
 .wrapper {

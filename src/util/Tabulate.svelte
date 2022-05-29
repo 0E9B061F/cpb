@@ -1,6 +1,7 @@
 <script>
   import FB from '../FB.svelte'
   import Strike from './Strike.svelte'
+  import Link from '../link/Link.svelte'
   export let data = {}
   export let rows = 3
   export let line = 'n'
@@ -34,7 +35,13 @@
           {#if pair}
             <FB c="cpbtab-key">{pair[0]}</FB>
             <Strike/>
-            <FB c="cpbtab-val">{pair[1]}</FB>
+            <FB c="cpbtab-val">
+              {#if typeof(pair[1]) == 'object'}
+                <Link space={pair[1].space} title={pair[1].title}>{pair[1].label}</Link>
+              {:else}
+                {pair[1]}
+              {/if}
+            </FB>
           {:else}
             <Strike/>
           {/if}

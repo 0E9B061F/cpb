@@ -22,19 +22,19 @@
 <FB vert zero>
 	<FB line title>
 		{#if $state.content}
-			<Link self opt={{history:true}}>HISTORY</Link>
+			<Link self overload opt={{history:true}}>HISTORY</Link>
 		{/if}
 		{#if $state.editable}
-		  <Link self opt={{edit:true}}>EDIT</Link>
+		  <Link self overload opt={{edit:true}}>EDIT</Link>
 		{/if}
 		{#if $state.byid}
 		  <Link space={$page.val.namespace} title={$page.val.title}>ANCHOR</Link>
 		{/if}
 		{#if $state.editing}
-		  <Link self opt={{edit:undefined}}>CANCEL</Link>
+		  <Link self global overload opt={{edit:undefined}}>CANCEL</Link>
 		{/if}
 		{#if $state.history}
-		  <Link self opt={{history:undefined}}>BACK</Link>
+		  <Link self global overload opt={{history:undefined}}>BACK</Link>
 		{/if}
 		{#if showany}
 			<span class="content-subtitle">&middot;</span>

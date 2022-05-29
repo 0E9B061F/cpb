@@ -2,6 +2,7 @@
   import FB from '../FB.svelte'
   import InfoTOC from './InfoTOC.svelte'
   import Tabulate from '../util/Tabulate.svelte'
+  import HighlightControls from '../HighlightControls.svelte'
   import QR from '../QR.svelte'
   import { getContext } from 'svelte'
   import date from 'date-and-time'
@@ -33,14 +34,14 @@
     links: $pageinfo.links,
     views: $page.val.views,
     version: $page.val.vnum,
-    editor: $page.val.user.handle,
-    creator: $page.val.page.user.handle,
+    editor: {space: `~${$page.val.user.handle}`, label: $page.val.user.handle},
+    creator: {space: `~${$page.val.page.user.handle}`, label: $page.val.page.user.handle},
     created: fmtdate($page.val.page.createdAt),
     edited: fmtdate($page.val.createdAt),
   } : {}
 </script>
 
-<FB c="infobar infotop" vert>
+<FB c="infobar infotop system" vert>
   <FB center line="s1" c="blacktag">
     TYPE: <span class="blackval">
       {#if $state.head || $state.anchor}
@@ -62,12 +63,13 @@
 
 </FB>
 <div class="content-start"></div>
-<FB c="infobar" vert>
+<FB c="infobar system" vert>
   <FB c="qrcodes" around>
     <QR data={vpermac} ver={3} scale={2} uuid={$page.val.uuid} title="Version Permalink" />
     <QR data={permac} ver={3} scale={2} uuid={$page.val.pageUuid} title="Page Permalink" />
   </FB>
+  <HighlightControls/>
   {#if $ui <= 1}
-  <InfoTOC/>
+    <InfoTOC/>
   {/if}
 </FB>

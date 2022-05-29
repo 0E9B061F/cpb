@@ -1,5 +1,14 @@
 'use strict'
 
+// sys:api/nst/avail/docs:WMD
+// sys:api/nst/get/Home
+// sys:api/nst/delete/main:draft_1
+
+// sys:api/uuid/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+
+// sys:api/page/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+// sys:api/user/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+
 const rc = require('./rc.js')
 
 const api = require('express').Router()
@@ -202,7 +211,7 @@ api.get('/missing/:titles', (req, res) => {
   req.params.titles.split('+').map(t=> {
     if (isuu(t)) {
       t = util.imid(t)
-      titles[t] = {[Op.or]: [{pageUuid: t, nextUuid: null}, {uuid: t}]}
+      titles[t.toUpperCase()] = {[Op.or]: [{pageUuid: t, nextUuid: null}, {uuid: t}]}
     } else {
       const t2 = t.split(':')
       const namespace = t2[0] || 'main'

@@ -200,6 +200,7 @@
 			}
 		}
 	}
+	setContext('dbg', dbg)
 
 	const grab =(...a)=> {
 		const url = cmdu(...a)
@@ -766,13 +767,13 @@
 			setpaths()
 		}
 		if ($loc.load) load()
-		else if ($loc.cmd) {
+		else if ($loc.scroll && $loc.hash) {
 			dbg(`SCROLLING TO ${$loc.cmd}`)
-			scrollto($loc.cmd)
+			scrollto($loc.hash)
 		} else {
 			dbg('NO LOAD')
 			unhold('FINISHED', 0, 2000)
-			scrolltop(false)
+			//scrolltop(false)
 		}
 	}
 
@@ -915,7 +916,11 @@
 	const setmod =n=> $modifiers[n] = true
 	const unsetmod =n=> $modifiers[n] = false
 
+	const universals =(m, e)=> {
+		// controls places here will not be overridden
+	}
 	const controls =(m, e)=> {
+		// controls here may be overriddenn
 		if (m.Alt && e.code == 'KeyD') {
 			setconf('debug', !getconf('debug'))
 		} else if (m.Alt && e.code == 'KeyN') {
@@ -926,17 +931,28 @@
 			reload()
 		}
 	}
-	let controlset = controls
-	const setcontrols =c=> controlset = c ? c : controls
+	let controlset = [controls]
+	const ctrl =c=> {
+		if (!Array.isArray(c)) c = [c]
+		return [universals, ...c]
+	}
+	const setcontrols =(...c)=> controlset = ctrl(c.length ? c : controls)
+	const addcontrols =(...c)=> controlset = [...c, ...controlset]
+	const rmcontrols =(...c)=> {
+		controlset = controlset.filter(x=> c.indexOf(x) < 0)
+	}
+	const callctrl =(m,e)=> controlset.forEach(c=> c(m,e))
 
 	const keydown =e=> {
 		if ($modifiers.hasOwnProperty(e.key)) setmod(e.key)
-		else controlset($modifiers, e)
+		else callctrl($modifiers, e)
 	}
 	const keyup =e=> {
 		if ($modifiers.hasOwnProperty(e.key)) unsetmod(e.key)
 	}
 	setContext('setcontrols', setcontrols)
+	setContext('addcontrols', addcontrols)
+	setContext('rmcontrols', rmcontrols)
 
   let gs = writable({
     full: p=> `${burl()}/${p}`,

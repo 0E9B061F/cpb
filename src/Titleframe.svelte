@@ -1,7 +1,7 @@
 <script>
 	import FB from './FB.svelte'
 	import QR from './QR.svelte'
-	import ContentControls from './ContentControls.svelte'
+	import ContentControls from './contentctrl/ContentControls.svelte'
 	import Tabulate from './util/Tabulate.svelte'
 
 	import date from 'date-and-time'

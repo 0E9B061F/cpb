@@ -12,7 +12,7 @@
   import Block from './rendered/Block.svelte'
   import Decorated from './rendered/Decorated.svelte'
   import PGPKey from './rendered/PGPKey.svelte'
-  import ContentControls from './ContentControls.svelte'
+  import ContentControls from './contentctrl/ContentControls.svelte'
   import Infobar from './infobar/Infobar.svelte'
   import Dash from './rendered/Dash.svelte'
   import Heading from './rendered/Heading.svelte'
@@ -23,8 +23,10 @@
   import { getContext, setContext, onMount, afterUpdate, tick } from 'svelte'
   import { writable } from 'svelte/store'
   import wmd from '../lib/wmd.js'
+  import highlight from '../lib/highlight.js'
 
   const rc = getContext('rc')
+  const loc = getContext('loc')
   const state = getContext('state')
   const haspage = getContext('haspage')
   const haslogin = getContext('haslogin')
@@ -101,6 +103,33 @@
     })
     setBlockInfo(blocks)
   })
+
+  const parseq =hl=> {
+    return hl.split('+').map(x=> x.replace(/_+/g, ' '))
+  }
+
+  let highlights = []
+  const purge =()=> {
+    highlights.forEach(hl=> {
+      const p = hl.parentNode
+      hl.replaceWith(...hl.childNodes)
+      p.normalize()
+    })
+    highlights = []
+  }
+
+  let shl
+
+  $: if (body) {
+    if ($loc.opts.hl != shl) {
+      shl = $loc.opts.hl
+      purge()
+      if (shl) {
+        const hls = parseq(shl)
+        highlights = highlight(body, ...hls)
+      }
+    }
+  }
 </script>
 
 {#if $haspage}

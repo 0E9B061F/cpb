@@ -3,8 +3,11 @@
   import FB from '../FB.svelte'
   import { v4 } from 'uuid'
   const id = v4()
-  import { createEventDispatcher } from 'svelte'
+  import { createEventDispatcher, getContext, onDestroy } from 'svelte'
 	const dispatch = createEventDispatcher()
+
+  const addcontrols = getContext('addcontrols')
+  const rmcontrols = getContext('rmcontrols')
 
   export let value = ''
   export let text = ''
@@ -14,17 +17,30 @@
   export let flip = false
   export let center = true
   export let required = false
+  export let autoselect = true
+  export let grabfocus = false
+  export let bluronenter = false
 
   export let type = "text"
 
   let input
 
+  const onenter =()=> {
+    dispatch('enter', {val: value})
+    exit()
+  }
+
+  const controls =(m,e)=> {
+    if (e.code == 'Enter') onenter()
+    else if (e.code == 'Escape') exit()
+  }
+
   const onfocus =()=> {
-    focused = true
-    dispatch('focus')
-    if (input) input.select()
+    addcontrols(controls)
+    focus()
   }
   const onblur =()=> {
+    rmcontrols(controls)
     exit()
   }
   const update =e=> {
@@ -42,10 +58,22 @@
     exit()
     erase()
   }
+  export const focus =()=> {
+    focused = true
+    input.focus()
+    if (autoselect && input) input.select()
+    dispatch('focus')
+  }
   const edited =val=> {
     dispatch('edited', {val})
   }
+
+  onDestroy(()=> {
+    rmcontrols(controls)
+  })
+
   $: edited(value)
+  $: if (input && grabfocus) focus()
 </script>
 
 <FB zero {flip} c="fd-input fd-text" {center}>

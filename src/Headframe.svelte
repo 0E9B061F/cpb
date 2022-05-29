@@ -26,7 +26,8 @@
   const rc = getContext('rc')
 
 	const ideograms = new Fortune([
-		'𐃐', '𐂂', '𐃥', '𐂅', '𐂐', '𐁃', '𐁙', '𐁉', '𐚁',
+		'𐃐', '𐂂', '𐃥', '𐂅',
+		'𐂐',  '𐁃', '𐁙', '𐁉',
 	])
 	$: ideogram = ideograms.get($loc)
 </script>
@@ -63,7 +64,9 @@
 			<FB expand c={$ui <= 1 ? "base-head-upper" : ''}>
 				<FB ve>
 					{#if !$state.uuid && $state.namespace && $state.title && !($state.namespace == $rc.syskey && !$haspage)}
-	      		<FB title line="s2" fw={6} c="title-sub">{$state.namespace}:</FB>
+	      		<FB title line="s2" fw={6} c="title-sub">
+							<Link space={$state.namespace}/>
+						</FB>
 					{/if}
 				</FB>
 				<FB expand/>
