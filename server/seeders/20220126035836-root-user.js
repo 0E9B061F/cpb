@@ -1,7 +1,8 @@
 'use strict'
 
-const bcrypt = require('bcrypt')
-const { v4 } = require ('uuid')
+const { mkuser } = require('../lib/seeders.js')
+
+if (!process.env.CPBUSER) process.env.CPBUSER = 'qibly'
 
 if (!process.env.CPBROOTPW ||
     !process.env.CPBUSER ||
@@ -11,33 +12,21 @@ if (!process.env.CPBROOTPW ||
   throw new Error('please supply credentials (CPBROOTPW, CPBROOTMAIL, CPBUSER, CPBMAIL, CPBPW)')
 }
 
-const time = new Date()
-
-const mkuser = async (qi, name, mail, pw)=> {
-  console.log(`creating ${name}`)
-  const cid = v4()
-  await qi.bulkInsert('Configs', [{
-    uuid: cid,
-    createdAt: time,
-    updatedAt: time,
-  }])
-  const key = await bcrypt.hash(pw, 10)
-  return qi.bulkInsert('Users', [{
-    uuid: v4(),
-    handle: name,
-    email: mail,
-    key,
-    configUuid: cid,
-    createdAt: time,
-    updatedAt: time,
-    lastseen: time,
-  }])
-}
-
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await mkuser(queryInterface, 'root', process.env.CPBROOTMAIL, process.env.CPBROOTPW)
-    return mkuser(queryInterface, process.env.CPBUSER, process.env.CPBMAIL, process.env.CPBPW)
+    await mkuser(queryInterface, [{
+      handle: 'system',
+      email: 'system+'+process.env.CPBROOTMAIL,
+      pw: process.env.CPBROOTPW,
+    }, {
+      handle: 'root',
+      email: process.env.CPBROOTMAIL,
+      pw: process.env.CPBROOTPW,
+    }, {
+      handle: process.env.CPBUSER,
+      email: process.env.CPBMAIL,
+      pw: process.env.CPBPW,
+    }])
   },
 
   async down (queryInterface, Sequelize) {

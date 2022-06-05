@@ -1,25 +1,28 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+'use strict'
+
+const { Model } = require('sequelize')
+const cpbmodel = require('../lib/cpbmodel.js')
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       this.Config = this.belongsTo(models.config, {
-        foreignKey: { type: DataTypes.UUID }
+        foreignKey: { type: DataTypes.UUID },
       })
-      this.hasMany(models.page)
-      this.hasMany(models.version)
+      this.hasMany(models.resource, {
+        as: 'creator',
+        foreignKey: { type: DataTypes.UUID },
+      })
+      this.hasMany(models.version, {
+        as: 'editor',
+        foreignKey: { type: DataTypes.UUID },
+      })
+      this.hasOne(models.version, {
+        foreignKey: { type: DataTypes.UUID, allowNull: true, },
+      })
     }
   }
-  User.init({
-    uuid: {
-      allowNull: false,
-      primaryKey: true,
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      unique: true,
-    },
+  User.init(cpbmodel({
     handle: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -30,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         notIn: ['guest'],
       },
     },
-    key: {
+    hash: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -57,17 +60,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0,
     },
-    configUuid: {
-      type: DataTypes.UUID,
-      references: {
-        model: 'configs',
-        key: 'uuid',
-        as: 'configUuid',
-      },
-    },
-  }, {
-    sequelize,
-    modelName: 'user',
-  });
-  return User;
-};
+  }), {
+    sequelize, modelName: 'user',
+  })
+  return User
+}

@@ -1,11 +1,10 @@
 const fs = require('fs')
-const rc = require('./rc.js')
-const db = require('./models')
+const db = require('../models')
 const CPB = require('../lib/cpb.js')
 
 const mkname =ns=> `sitemap-${ns}.xml`
 
-const base = `${rc.proto}://${rc.domain}${rc.via ? ':'+rc.via : ''}`
+const base = CPB.rc.baseURL
 
 const mkindex =maps=> {
   let out = `<?xml version="1.0" encoding="UTF-8"?>

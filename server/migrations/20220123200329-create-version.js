@@ -1,18 +1,14 @@
-'use strict';
+'use strict'
+
+const { uuid, createdAt, updatedAt, ref } = require('../lib/parts.js')
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Versions', {
-      uuid: {
-        allowNull: false,
-        primaryKey: true,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
-        unique: true,
-        validate: {
-          isUUID: 4,
-        },
-      },
-      vnum: {
+      uuid,
+      createdAt,
+      updatedAt,
+      number: {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 1,
@@ -33,74 +29,27 @@ module.exports = {
       },
       title: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
         validate: {
           len: [1, 64],
           not: /\//,
         },
       },
-      body: {
+      source: {
         type: Sequelize.STRING,
         allowNull: false,
         defaultValue: '',
       },
-      prevUuid: {
-        type: Sequelize.UUID,
-        validate: {
-          isUUID: 4,
-        },
-        references: {
-          model: 'versions',
-          key: 'uuid',
-          as: 'prevUuid',
-        },
-      },
-      nextUuid: {
-        type: Sequelize.UUID,
-        validate: {
-          isUUID: 4,
-        },
-        references: {
-          model: 'versions',
-          key: 'uuid',
-          as: 'nextUuid',
-        },
-      },
-      pageUuid: {
-        type: Sequelize.UUID,
-        allowNull: false,
-        validate: {
-          isUUID: 4,
-        },
-        references: {
-          model: 'pages',
-          key: 'uuid',
-          as: 'pageUuid',
-        },
-      },
-      userUuid: {
-        type: Sequelize.UUID,
-        allowNull: false,
-        validate: {
-          isUUID: 4,
-        },
-        references: {
-          model: 'users',
-          key: 'uuid',
-          as: 'userUuid',
-        },
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
-    });
+      ...ref('resources', 'resource', true, 'CASCADE'),
+      ...ref('versions', 'prev', true, 'SET NULL'),
+      ...ref('versions', 'next', true, 'SET NULL'),
+      ...ref('users', 'editor', true, 'SET NULL'),
+      ...ref('pages', 'page', true, 'SET NULL'),
+      ...ref('images', 'image', true, 'SET NULL'),
+      ...ref('users', 'user', true, 'SET NULL'),
+    })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Versions');
+    await queryInterface.dropTable('Versions')
   }
-};
+}

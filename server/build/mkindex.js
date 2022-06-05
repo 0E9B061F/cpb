@@ -3,7 +3,10 @@
 const { readFileSync, writeFileSync } = require('fs')
 const mustache = require('mustache')
 const CPB = require('../lib/cpb.js')
-const vinfo = require('../lib/mkv.js')
+const vinfo = require('../../lib/mkv.js')
+
+const root = `${__dirname}/../..`
+const temp =(n)=> readFileSync(`${__dirname}/mustache/${n}.mustache`, {encoding: 'utf-8'})
 
 const manifest = {
   name: CPB.rc.title,
@@ -24,7 +27,7 @@ const manifest = {
 }
 
 const genRobots =()=> {
-  const template = readFileSync(`${__dirname}/robots.mustache`, {encoding: 'utf-8'})
+  const template = temp('robots')
   const robots = mustache.render(template, {
     api: CPB.rc.apiRoot.rel,
     login: CPB.rc.sysRoot.add('login').rel,
@@ -32,20 +35,20 @@ const genRobots =()=> {
     search: CPB.rc.sysRoot.add('search').rel,
     sitemap: `${CPB.rc.baseURL}/sitemap.xml`,
   })
-  writeFileSync(`${__dirname}/../public/robots.txt`, robots)
+  writeFileSync(`${root}/public/robots.txt`, robots)
 }
 const genManifest =()=> {
-  writeFileSync(`${__dirname}/../assets/conf/site.webmanifest`, JSON.stringify(manifest,))
+  writeFileSync(`${root}/assets/conf/site.webmanifest`, JSON.stringify(manifest))
 }
 const genBConf =()=> {
-  const template = readFileSync(`${__dirname}/browserconfig.mustache`, {encoding: 'utf-8'})
+  const template = temp('browserconfig')
   const xml = mustache.render(template, {
     icon: CPB.rc.icon('mstile-150x150.png').rel,
   })
-  writeFileSync(`${__dirname}/../assets/conf/browserconfig.xml`, xml)
+  writeFileSync(`${root}/assets/conf/browserconfig.xml`, xml)
 }
 const genIndex =()=> {
-  const template = readFileSync(`${__dirname}/index.mustache`, {encoding: 'utf-8'})
+  const template = temp('index')
   const html = mustache.render(template, {
     rc: CPB.rc, vinfo,
     cpbcss: CPB.rc.asset('build/cpb.css').rel,
@@ -59,7 +62,7 @@ const genIndex =()=> {
     manifest: CPB.rc.asset('conf/site.webmanifest').rel,
     ogimage: CPB.rc.image('og-default.png').rel,
   })
-  writeFileSync(`${__dirname}/../public/index.html`, html)
+  writeFileSync(`${root}/public/index.html`, html)
 }
 
 const generate =()=> {

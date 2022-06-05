@@ -1,27 +1,26 @@
-'use strict';
+'use strict'
+
+const { uuid, createdAt, updatedAt, ref } = require('../lib/parts.js')
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Users', {
-      uuid: {
-        allowNull: false,
-        primaryKey: true,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
-        unique: true,
-      },
+      uuid,
+      createdAt,
+      updatedAt,
       handle: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
       },
-      key: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
+      },
+      hash: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       logins: {
         type: Sequelize.INTEGER,
@@ -38,17 +37,10 @@ module.exports = {
         allowNull: false,
         defaultValue: 0,
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-      }
-    });
+      ...ref('configs', 'config'),
+    })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users');
+    await queryInterface.dropTable('Users')
   }
-};
+}

@@ -1,7 +1,7 @@
 'use strict'
 
-const CPB = require('./cpb.js')
-const util = require('./util.js')
+const CPB = require('./lib/cpb.js')
+const util = require('./lib/util.js')
 
 const express = require('express')
 const cors = require('cors')
@@ -14,7 +14,7 @@ const db = require('./models')
 
 const { v4 } = require('uuid')
 
-const api = require('./api.js')
+const api = require('./routes/api.js')
 
 const SequelizeStore = require("connect-session-sequelize")(session.Store)
 

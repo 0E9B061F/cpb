@@ -1,23 +1,37 @@
 'use strict'
 
-// sys:api/nst/avail/docs:WMD
-// sys:api/nst/get/Home
-// sys:api/nst/delete/main:draft_1
+// sys:api/nstu/docs:WMD
+// sys:api/nstu/docs:?get=list
+// sys:api/nstu/?get=list
+// sys:api/nstu/Home?get=history
+// sys:api/nstu/Home?get=links
+// sys:api/nstu/Home?get=authors
+// sys:api/nstu/tag:tank?get=list
+// sys:api/nstu/tag:blog?get=list
+// sys:api/nstu/docs:WMD?get=list
+// sys:api/nstu/main:draft_1
+// sys:api/nstu/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
 
-// sys:api/uuid/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+// sys:api/list/
+// sys:api/list/docs:
+// sys:api/list/~root
 
-// sys:api/page/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
-// sys:api/user/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+// sys:api/hist/main:Home
+// sys:api/hist/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
 
-const rc = require('./rc.js')
+// sys:api/search/QUERY
+
+const CPB = require('../lib/cpb.js')
 
 const api = require('express').Router()
 const { Op } = require('sequelize')
 const bcrypt = require('bcrypt')
 
-const db = require('./models')
-const util = require('./util.js')
-const { isuu } = require('../lib/util.js')
+const nstu = require('./nstu.js')
+
+const db = require('../models')
+const util = require('../lib/util.js')
+const { isuu } = require('../../lib/util.js')
 
 const saltRounds = 10
 
@@ -52,19 +66,21 @@ const ordef =(v, d)=> {
   return Number.isNaN(o) ? d : o
 }
 
+api.use('/nstu', nstu)
+
 api.get('/search/:query', (req, res)=> {
   const query = req.params.query
   const pat = `%${query}%`
-  let size = ordef(req.query.sz, rc.searchDefaults.sz)
-  if (size < rc.minResults) size = rc.minResults
-  else if (size > rc.maxResults) size = rc.maxResults
-  let page = ordef(req.query.pg, rc.searchDefaults.pg)
-  let inf = req.query.inf || rc.searchDefaults.inf
+  let size = ordef(req.query.sz, CPB.rc.searchDefaults.sz)
+  if (size < CPB.rc.minResults) size = CPB.rc.minResults
+  else if (size > CPB.rc.maxResults) size = CPB.rc.maxResults
+  let page = ordef(req.query.pg, CPB.rc.searchDefaults.pg)
+  let inf = req.query.inf || CPB.rc.searchDefaults.inf
   if (typeof(inf) == 'string') inf = inf.split(',')
   const intitle = inf.indexOf('title') > -1 || false
   const inbody = inf.indexOf('body') > -1 || false
   const both = (!intitle && !inbody) || (intitle && inbody)
-  const inhist = req.query.inh || rc.searchDefaults.inh
+  const inhist = req.query.inh || CPB.rc.searchDefaults.inh
   const where = {}
   const attr = ['namespace', 'title']
   if (both) {
@@ -152,7 +168,7 @@ api.get([...bi('/history/:ns/:title'), '/history/:uuid'], (req, res) => {
             },
             offset: size * (page - 1),
             limit: size,
-            order: [['vnum', 'DESC']],
+            order: [['number', 'DESC']],
           })
           .then(items=> items.map(i=> util.proc(i)))
           .then(items=> res.json(ok({
@@ -276,7 +292,7 @@ const needlogout =(req, res, next)=> {
   }
 }
 const notsingleuser =(req, res, next)=> {
-  if (!rc.singleuser) {
+  if (!CPB.rc.singleuser) {
     next()
   } else {
     res.json(invalid())

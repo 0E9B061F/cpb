@@ -1,30 +1,31 @@
-'use strict';
+'use strict'
+
+const { uuid, createdAt, updatedAt } = require('../lib/parts.js')
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Configs', {
-      uuid: {
-        allowNull: false,
-        primaryKey: true,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
-        unique: true,
-      },
+      uuid,
+      createdAt,
+      updatedAt,
       debug: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
         allowNull: false,
       },
-      createdAt: {
+      darkmode: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
         allowNull: false,
-        type: Sequelize.DATE
       },
-      updatedAt: {
+      autodark: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
         allowNull: false,
-        type: Sequelize.DATE
       },
-    });
+    })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Configs');
+    await queryInterface.dropTable('Configs')
   }
-};
+}
