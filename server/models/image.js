@@ -6,8 +6,9 @@ const cpbmodel = require('../lib/cpbmodel.js')
 module.exports = (sequelize, DataTypes) => {
   class Image extends Model {
     static associate(models) {
-      this.hasOne(models.version, {
+      this.belongsTo(models.version, {
         foreignKey: { type: DataTypes.UUID, allowNull: true, },
+        onDelete: 'CASCADE'
       })
     }
   }

@@ -54,7 +54,7 @@ const getOne = async (req, res)=> {
       },
     ],
   })
-  if (ver) Reply.ok(ver).send(res)
+  if (ver && !ver.resource.trashed) Reply.ok(ver).send(res)
   else Reply.missing().send(res)
 }
 const getListing = async (req, res)=> {
@@ -78,6 +78,9 @@ const getListing = async (req, res)=> {
           attributes: ['handle'],
         },
         { model: db.resource,
+          where: {
+            trashed: false,
+          },
           attributes: [
             'createdAt', 'views', 'trashed',
             'trashable', 'movable', 'editable'
@@ -116,10 +119,10 @@ const getHistory = async (req, res)=> {
     attributes: ['uuid', 'namespace', 'title'],
     include: {
       model: db.resource,
-      attributes: ['uuid'],
+      attributes: ['uuid', 'trashed'],
     },
   })
-  if (ver) {
+  if (ver && !ver.resource.trashed) {
     const data = await db.version.findAndCountAll({
       where: { resourceUuid: ver.resource.uuid },
       offset: size * (page - 1),
@@ -147,10 +150,10 @@ const getAuthors = async (req, res)=> {
     attributes: ['uuid', 'namespace', 'title'],
     include: {
       model: db.resource,
-      attributes: ['uuid'],
+      attributes: ['uuid', 'trashed'],
     },
   })
-  if (ver) {
+  if (ver && !ver.resource.trashed) {
     const data = await db.version.findAndCountAll({
       where: { resourceUuid: ver.resource.uuid },
       offset: size * (page - 1),
@@ -181,21 +184,44 @@ const getResource = async (req, res)=> {
 
 const postResource =(req, res)=> {}
 const putResource =(req, res)=> {}
-const deleteResource = async (req, res)=> {
+
+const destroyResource =async(req, res)=> {
   console.log('DBG: deleting resource')
   let where = libdb.nstuWhere(req.path)
   const ver = await db.version.findOne({where,
-    attributes: ['uuid'],
-    include: { model: db.resource, attributes: ['uuid'], },
+    include: { model: db.resource },
   })
   if (ver) {
-    await ver.resource.destroy()
-    Reply.ok("record deleted").send(res)
-  }
-  else Reply.missing().send(res)
+    if (ver.resource.trashable) {
+      if (ver.resource.trashed) {
+        await ver.resource.destroy()
+        Reply.ok("resource deleted").send(res)
+      } else Reply.invalid("resource has not been trashed").send(res)
+    } else Reply.unallowed("resource is not trashable").send(res)
+  } else Reply.missing().send(res)
+}
+const trashResource =async(req, res)=> {
+  console.log('DBG: trashing resource')
+  let where = libdb.nstuWhere(req.path)
+  const ver = await db.version.findOne({where,
+    include: { model: db.resource },
+  })
+  if (ver) {
+    if (ver.resource.trashable) {
+      if (!ver.resource.trashed) {
+        ver.resource.trashed = true
+        await ver.resource.save()
+        Reply.ok("record trashed").send(res)
+      } else Reply.invalid("resource is already trashed").send(res)
+    } else Reply.unallowed("resource is not trashable").send(res)
+  } else Reply.missing().send(res)
+}
+const deleteResource =async(req, res)=> {
+  if (req.query.mode == 'trash') await trashResource(req, res)
+  else await destroyResource(req, res)
 }
 
-nstu.get('/*', deleteResource)
+nstu.get('/*', getResource)
 nstu.post('/*', postResource)
 nstu.put('/*', putResource)
 nstu.delete('/*', deleteResource)

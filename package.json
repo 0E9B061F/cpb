@@ -9,9 +9,10 @@
     "app": "node server/app.js",
     "dump:dev": "rm -f cpb.dev.sqlite",
     "mig:dev": "npx sequelize-cli db:migrate --debug",
+    "sync": "server/bin/sync.js",
     "seed": "npx sequelize-cli db:seed --seed 20220126035836-root-user --seed 20220126035855-default-page --debug",
     "seed:dev": "npx sequelize-cli db:seed:all --debug",
-    "refresh:dev": "run-s dump:dev mig:dev seed:dev",
+    "refresh:dev": "run-s dump:dev sync seed:dev",
     "refresh": "run-s dump:dev mig:dev seed"
   },
   "devDependencies": {

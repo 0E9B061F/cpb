@@ -43,13 +43,13 @@ module.exports =(sequelize, DataTypes)=> {
           allowNull: true,
         }
       })
-      this.belongsTo(models.page, {
+      this.hasOne(models.page, {
         foreignKey: {
           type: DataTypes.UUID,
           allowNull: true,
         }
       })
-      this.belongsTo(models.image, {
+      this.hasOne(models.image, {
         foreignKey: {
           type: DataTypes.UUID,
           allowNull: true,

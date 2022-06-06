@@ -11,15 +11,37 @@ class Listing {
 
 }
 
+const mkmsg =(...m)=> m.filter(x=> !!x).join(' - ')
+
 class Reply extends Resource {
   static ok(val=null, conf={}) { return new this({...conf, val}) }
-  static missing() { return new this({err: 1, msg: 'no resource found'}) }
-  static invalid() { return new this({err: 3, msg: 'invalid action'}) }
-  static internal() { return new this({err: 4, msg: 'internal error'}) }
-  static unimplemented() { return new this({err: 5, msg: 'feature unimplemented'}) }
+  static missing(m) { return new this({
+    err: 1, name: 'missing',
+    msg: mkmsg('no resource found', m),
+  })}
+  static unauthorized(m) { return new this({
+    err: 2, name: 'unauthorized',
+    msg: mkmsg('you may not do that', m),
+  })}
+  static invalid(m) { return new this({
+    err: 3, name: 'invalid',
+    msg: mkmsg('action invalid', m),
+  })}
+  static internal(m) { return new this({
+    err: 4, name: 'internal',
+    msg: mkmsg('server encountered an error', m),
+  })}
+  static unimplemented(m) { return new this({
+    err: 5, name: 'unimplemented',
+    msg: mkmsg('this feature is unimplemented', m),
+  })}
+  static unallowed(m) { return new this({
+    err: 6, name: 'unallowed',
+    msg: mkmsg('that action has been disabled', m),
+  })}
   constructor(conf={}) {
     conf = Object.assign({
-      err: 0, msg: null, val: null,
+      err: 0, name: null, msg: null, val: null,
     }, conf)
     super(conf)
     Object.assign(this, conf)

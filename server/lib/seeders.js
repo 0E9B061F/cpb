@@ -45,7 +45,7 @@ const mkpage = async (qi, confs, users)=> {
         lastver.nextUuid = versionSet.uuid
         versionSet.prevUuid = lastver.uuid
       }
-      versionSet.pageUuid = pageSet.uuid
+      pageSet.versionUuid = versionSet.uuid
       versionSet.resourceUuid = resourceSet.uuid
       versionSet.namespace = conf.space
       versionSet.title = conf.title
@@ -55,9 +55,9 @@ const mkpage = async (qi, confs, users)=> {
       sets.pages.push(pageSet)
     }
   }
-  await qi.bulkInsert('Pages', sets.pages)
   await qi.bulkInsert('Resources', sets.resources)
-  return qi.bulkInsert('Versions', sets.versions)
+  await qi.bulkInsert('Versions', sets.versions)
+  return qi.bulkInsert('Pages', sets.pages)
 }
 
 const multiconf =(r,v,block)=> {
