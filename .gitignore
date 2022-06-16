@@ -6,6 +6,7 @@ assets/build/
 ignore/
 assets/conf/browserconfig.xml
 assets/conf/site.webmanifest
+assets/uploads
 notes/
 public/sitemap*
 public/index.html

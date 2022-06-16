@@ -6,12 +6,15 @@ const cpbmodel = require('../lib/cpbmodel.js')
 module.exports = (sequelize, DataTypes) => {
   class Page extends Model {
     static associate(models) {
-      this.belongsTo(models.version, {
+      this.hasOne(models.version, {
         foreignKey: {
           type: DataTypes.UUID,
           allowNull: true,
         },
-        onDelete: 'CASCADE',
+      })
+      this.belongsTo(models.resource, {
+        foreignKey: { type: DataTypes.UUID, allowNull: true, },
+        onDelete: 'CASCADE'
       })
     }
   }

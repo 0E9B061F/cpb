@@ -13,16 +13,14 @@ const guestsess =()=> {
   return {
     handle: 'guest',
     login: false,
-    uuid: '00000000-0000-0000-0000-000000000000',
   }
 }
 
 const mklogin =u=> {
   return {
+    handle: u.handle,
     login: true,
     uuid: u.uuid,
-    handle: u.handle,
-    config: u.config,
   }
 }
 
@@ -31,9 +29,24 @@ const exportsess =s=> {
     throw new Error(`'${JSON.stringify(s)}' is not a valid session`)
   }
   const e = Object.assign({}, s.cpb)
-  e.uuid = s.uuid
   return e
 }
 
+const validmime = {
+  image: /^image\/(?:png|jpeg|gif|apng|avif|svg+xml|webp)$/,
+}
+const extmap = {
+  'image/png': 'png',
+  'image/jpeg': 'jpeg',
+  'image/gif': 'gif',
+  'image/apng': 'apng',
+  'image/avif': 'avif',
+  'image/svg+xml': 'svg',
+  'image/webp': 'webp',
+}
+const thumbsizes = [
+  32, 64, 128, 256, 512,
+]
 
-module.exports = { exid, imid, proc, guestsess, mklogin, exportsess }
+
+module.exports = { exid, imid, proc, guestsess, mklogin, exportsess, validmime, extmap, thumbsizes }

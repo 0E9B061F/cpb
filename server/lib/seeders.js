@@ -32,6 +32,7 @@ const mkpage = async (qi, confs, users)=> {
     let versions = confs[n]
     const resourceSet = blank(time)
     resourceSet.creatorUuid = sample(users)
+    resourceSet.type = 'page'
     sets.resources.push(resourceSet)
     if (!Array.isArray(versions)) versions = [versions]
     let lastver
@@ -45,7 +46,8 @@ const mkpage = async (qi, confs, users)=> {
         lastver.nextUuid = versionSet.uuid
         versionSet.prevUuid = lastver.uuid
       }
-      pageSet.versionUuid = versionSet.uuid
+      versionSet.pageUuid = pageSet.uuid
+      pageSet.resourceUuid = resourceSet.uuid
       versionSet.resourceUuid = resourceSet.uuid
       versionSet.namespace = conf.space
       versionSet.title = conf.title
@@ -56,8 +58,8 @@ const mkpage = async (qi, confs, users)=> {
     }
   }
   await qi.bulkInsert('Resources', sets.resources)
-  await qi.bulkInsert('Versions', sets.versions)
-  return qi.bulkInsert('Pages', sets.pages)
+  await qi.bulkInsert('Pages', sets.pages)
+  return qi.bulkInsert('Versions', sets.versions)
 }
 
 const multiconf =(r,v,block)=> {
@@ -99,17 +101,29 @@ const mkuser = async (qi, confs)=> {
     const userSet = blank(time)
     const configSet = blank(time)
     resourceSet.creatorUuid = userSet.uuid
-    resourceSet.movable = false
-    resourceSet.trashable = false
+    if (!conf.pw || conf.special) {
+      resourceSet.movable = false
+      resourceSet.trashable = false
+      userSet.special = true
+    } else {
+      resourceSet.movable = true
+      resourceSet.trashable = true
+      userSet.special = conf.special || false
+    }
+    resourceSet.deletable = false
+    resourceSet.private = true
+    resourceSet.type = 'user'
     versionSet.editorUuid = userSet.uuid
     versionSet.userUuid = userSet.uuid
     versionSet.resourceUuid = resourceSet.uuid
     versionSet.namespace = `~${conf.handle}`
     userSet.configUuid = configSet.uuid
     userSet.handle = conf.handle
-    userSet.email = conf.email
+    if (conf.email) userSet.email = conf.email
     userSet.lastseen = time
-    userSet.hash = await bcrypt.hash(conf.pw, 10)
+    if (conf.pw) {
+      userSet.hash = await bcrypt.hash(conf.pw, 10)
+    }
     sets.resources.push(resourceSet)
     sets.versions.push(versionSet)
     sets.users.push(userSet)

@@ -31,29 +31,28 @@ module.exports =(sequelize, DataTypes)=> {
         }
       })
       this.Resource = this.belongsTo(models.resource, {
-        onDelete: 'CASCADE',
+        foreignKey: {
+          type: DataTypes.UUID,
+          allowNull: true
+        },
+      })
+      this.User = this.belongsTo(models.user, {
         foreignKey: {
           type: DataTypes.UUID,
           allowNull: true,
         }
       })
-      this.belongsTo(models.user, {
+      this.Page = this.belongsTo(models.page, {
         foreignKey: {
           type: DataTypes.UUID,
           allowNull: true,
-        }
+        },
       })
-      this.hasOne(models.page, {
+      this.Image = this.belongsTo(models.image, {
         foreignKey: {
           type: DataTypes.UUID,
           allowNull: true,
-        }
-      })
-      this.hasOne(models.image, {
-        foreignKey: {
-          type: DataTypes.UUID,
-          allowNull: true,
-        }
+        },
       })
       // this.belongsToMany(this, { through: Links })
       // this.belongsToMany(this, { through: Tags })

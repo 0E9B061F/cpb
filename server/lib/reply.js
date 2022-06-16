@@ -31,12 +31,16 @@ class Reply extends Resource {
     err: 4, name: 'internal',
     msg: mkmsg('server encountered an error', m),
   })}
+  static input(m) { return new this({
+    err: 5, name: 'input',
+    msg: mkmsg('malformed input', m),
+  })}
   static unimplemented(m) { return new this({
-    err: 5, name: 'unimplemented',
+    err: 6, name: 'unimplemented',
     msg: mkmsg('this feature is unimplemented', m),
   })}
   static unallowed(m) { return new this({
-    err: 6, name: 'unallowed',
+    err: 7, name: 'unallowed',
     msg: mkmsg('that action has been disabled', m),
   })}
   constructor(conf={}) {

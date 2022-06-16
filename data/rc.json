@@ -35,5 +35,17 @@
   "bookmarks": [],
   "sidebar": {
     "onRight": true
+  },
+  "images": {
+    "thumbnails": [32, 64, 128, 256, 512],
+    "extensions": {
+      "image/png": "png",
+      "image/jpeg": "jpeg",
+      "image/gif": "gif",
+      "image/apng": "apng",
+      "image/avif": "avif",
+      "image/svg+xml": "svg",
+      "image/webp": "webp"
+    }
   }
 }
