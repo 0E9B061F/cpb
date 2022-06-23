@@ -53,6 +53,12 @@ class Reply extends Resource {
       this.type = Array.isArray(this.val) ? 'list' : 'item'
     }
   }
+  parseErrors(errors) {
+    const details = []
+    errors.forEach(e=> details.push(e.message))
+    if (details.length) this.details = details
+    return this
+  }
   send(res) {
     res.charset = res.charset || 'utf-8'
     res.get('Content-Type') || res.set('Content-Type', 'application/json')

@@ -6,7 +6,7 @@
 // UPDATE sys:api/nst/docs:WMD
 
 const CPB = require('../lib/cpb.js')
-const CPBImage = require('../lib/cpbimage.js')
+const { CPBUpload } = require('../lib/cpbimage.js')
 const libdb = require('../lib/db.js')
 const Reply = require('../lib/reply.js')
 const sequelize = require('sequelize')
@@ -17,17 +17,22 @@ const pathlib = require('path')
 const rimraf = require('rimraf')
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, `${__dirname}/../../assets/uploads`)
+    cb(null, CPB.rc.uploads.temp)
   },
   filename: function (req, file, cb) {
     const base = req.imageUuid.toUpperCase()
-    const ext = util.extmap[file.mimetype] || ''
-    const full = `${base}.${ext}`
+    const ext = `.${util.extmap[file.mimetype]}` || ''
+    const full = `${base}${ext}`
     req.filename = { base, ext, full }
     cb(null, full)
   }
 })
-const upload = multer({ storage })
+const upload = multer({ storage, limits: {
+  fields: 10,
+  fileSize: 1048576 * 12,
+  files: 1,
+  headerPairs: 100,
+}}).fields([{ name: 'image', maxCount: 1 }])
 
 const nstu = require('express').Router()
 const { Op } = require('sequelize')
@@ -97,42 +102,64 @@ const remask =(o={}, m={}, black=false)=> {
   return r
 }
 
-const reshape =(v, req)=> {
-  if (v.toJSON) v = v.toJSON()
-  const mask = {
-    editor: e=> e.handle,
-    uuid: 1, number: 1,
-    namespace: 1, title: 1, source: 1,
+const shortMask = {
+  editor: e=> e.handle,
+  uuid: 1, number: 1,
+  namespace: 1, title: 1,
+  views: 1,  createdAt: 1,
+  image: {
+    rel: 1, size: 1, x: 1, y: 1,
+    thumbnails: { rel: 1, size: 1, x: 1, y: 1, thumb: 1 },
+  },
+  user: {
+    handle: 1,
+  },
+}
+const wholeMask = {
+  ...shortMask, source: 1,
+  resource: {
+    creator: c=> c.handle,
+    uuid: 1, type: 1,
+    trashed: 1, trashable: 1, movable: 1, editable: 1,
     views: 1,  createdAt: 1,
-    resource: {
-      creator: c=> c.handle,
-      uuid: 1, type: 1,
-      trashed: 1, trashable: 1, movable: 1, editable: 1,
-      views: 1,  createdAt: 1,
-    },
-    image: {
-      rel: 1, size: 1, x: 1, y: 1,
-      thumbnails: { rel: 1, size: 1, x: 1, y: 1 },
-    },
-    user: {
-      handle: 1, lastseen: 1, views: 1,
-    },
+  },
+  user: {
+    ...shortMask.user,
+    lastseen: 1, views: 1,
+  },
+}
+const guestMask = {
+  ...wholeMask,
+  user: {
+    ...wholeMask.user,
+    session: 1,
+    config: {
+      autodark: 1, darkmode: 1, debug: 1,
+    }
   }
-  if (v.user?.handle) {
+}
+const loginMask = {
+  ...guestMask,
+  user: {
+    ...guestMask.user,
+    email: 1, logins: 1,
+  }
+}
+
+const reshape =(v, req, m=false)=> {
+  if (v.toJSON) v = v.toJSON()
+  let mask
+  if (m) mask = m
+  else if (!v.user) mask = wholeMask
+  else {
     if (req.session.cpb.handle == 'guest' && req.session.cpb.handle == v.user.handle) {
-      mask.user.config = {
-        autodark: 1, darkmode: 1, debug: 1
-      }
-      mask.user.session = 1
       v.user.session = util.exportsess(req.session)
+      mask = guestMask
     } else if (req.session.cpb.login && req.session.cpb.handle == v.user.handle) {
-      mask.user.email = 1
-      mask.user.logins = 1
-      mask.user.config = {
-        autodark: 1, darkmode: 1, debug: 1
-      }
-      mask.user.session = 1
       v.user.session = util.exportsess(req.session)
+      mask = loginMask
+    } else {
+      mask = wholeMask
     }
   }
   return remask(v, mask)
@@ -153,164 +180,229 @@ const preAll =async(req, res, next)=> {
   next()
 }
 
-const getOne =async(req, res)=> {
-  console.log('DBG: getting single resource')
-  let where = libdb.nstuWhere(req.nstu)
-  const ver = await db.version.findOne({where,
-    attributes: [
-      'number', 'views', 'namespace', 'title',
-      'source', 'uuid', 'createdAt'
-    ],
-    include: [
-      { model: db.user, as: 'editor',
-        attributes: ['handle'],
-      },
-      { model: db.resource,
-        attributes: [
-          'uuid', 'createdAt', 'views', 'trashed',
-          'trashable', 'movable', 'editable', 'type',
-        ],
-        include: {
-          model: db.user, as: 'creator',
-          attributes: ['handle'],
-        },
-      },
-      { model: db.image,
-        attributes: ['path', 'rel', 'x', 'y', 'size'],
-        include: { model: db.thumbnail,
-          attributes: ['thumb', 'path', 'rel', 'x', 'y', 'size'],
-        },
-      },
-      { model: db.user,
-        include: { model: db.config }
-      },
-    ],
+const coreInclude = {
+  model: db.resource,
+  where: { trashed: false },
+}
+const wholeInclude = [
+  { ...coreInclude,
+    include: { model: db.user, as: 'creator' },
+  },
+  { model: db.user, as: 'editor' },
+  { model: db.user,
+    include: { model: db.config },
+  },
+  { model: db.image,
+    include: { model: db.thumbnail },
+  },
+  { model: db.page },
+]
+const wholeWhere =(where)=> {
+  const i = [
+    { model: db.resource,
+      where: { trashed: false, ...where },
+      include: { model: db.user, as: 'creator' },
+    },
+    { model: db.user, as: 'editor' },
+    { model: db.user,
+      include: { model: db.config },
+    },
+    { model: db.image,
+      include: { model: db.thumbnail },
+    },
+    { model: db.page },
+  ]
+  return i
+}
+
+const exists =async(nstu)=> {
+  const ver = await getCore(nstu)
+  return !!ver
+}
+const getCore =async(nstu)=> {
+  let where = libdb.nstuWhere(nstu)
+  return await db.version.findOne({
+    where, include: coreInclude,
   })
-  console.log(ver)
-  if (ver && !ver.resource.trashed) Reply.ok(reshape(ver, req)).send(res)
+}
+const getSingle =async(nstu)=> {
+  let where = libdb.nstuWhere(nstu)
+  return await db.version.findOne({
+    where, include: wholeInclude,
+  })
+}
+
+const procinf =(inf)=> {
+  if (!inf || CPB.rc.searchConfig.inf.valid.indexOf(inf) < 0) {
+    inf = CPB.rc.searchDefaults.inf
+  }
+  return inf
+}
+const proctype =(type)=> {
+  if (!type) {
+    type = CPB.rc.searchDefaults.type
+    return type
+  }
+  if (typeof(type) == 'string') type = type.split(',')
+  type = [...new Set(type)]
+  if (type.indexOf(CPB.rc.searchDefaults.type) >= 0) {
+    type = CPB.rc.searchDefaults.type
+  } else {
+    type.filter(t=> CPB.rc.searchConfig.type.valid.indexOf(t) >= 0)
+    if (type.sort() == CPB.rc.types.sort()) type = CPB.rc.searchDefaults.type
+  }
+  return type
+}
+const highlight =(list, query, inf)=> {
+  const rx = new RegExp(`(.{0,40}?)(${query})(.{0,40})`, 'i')
+  const ht = query && (inf == 'both' || inf == 'title')
+  const hs = query && (inf == 'both' || inf == 'source')
+  list.forEach(v=> {
+    const search = {}
+    if (hs) {
+      let sm = v.source.match(rx)
+      sm = sm ? sm.slice(1,4) : v.source.slice(0,40)
+      search.source = sm
+    } else search.source = v.source.slice(0,40)
+    delete v.source
+    if (v.title && ht) {
+      let tm = v.title.match(rx)
+      tm = tm ? tm.slice(1,4) : v.title
+      search.title = tm
+    }
+    v.search = search
+  })
+}
+
+const getOne =async(req, res)=> {
+  const ver = await getSingle(req.nstu)
+  if (ver) Reply.ok(reshape(ver, req)).send(res)
   else Reply.missing().send(res)
 }
 const getListing =async(req, res)=> {
-  console.log('DBG: getting resource index')
-  const nstu = req.nstu
   let where = {}
-  let uuid
-  let size = ordef(req.query.sz, 10, 5, 50)
-  let page = ordef(req.query.pg, 1, 1, 1000)
 
-  if (nstu.title || nstu.uuid) {
+  if (!req.nstu.index) {
     Reply.invalid().send(res)
   } else {
-    if (!req.query.inh) where.nextUuid = null
-    if (nstu.namespace) where.namespace = nstu.namespace
-    const ver = await db.version.findAndCountAll({where,
+    const inhist = !!req.query.inh
+    if (!inhist) where.nextUuid = null
+    if (req.nstu.namespace) where.namespace = req.nstu.namespace
+
+    const query = req.query.q || null
+    const pat = query ? `%${query}%` : null
+
+    const inf = procinf(req.query.inf)
+    const type = proctype(req.query.type)
+
+
+    if (pat) {
+      if (inf == 'both') {
+        where[Op.or] = [
+          { title: {[Op.like]: pat} },
+          { source: {[Op.like]: pat} },
+        ]
+      } else if (inf == 'title') {
+        where.title = {[Op.like]: pat}
+      } else if (inf == 'source') {
+        where.source = {[Op.like]: pat}
+      }
+    }
+
+    const typewhere = {}
+    if (type != CPB.rc.searchDefaults.type) {
+      if (type.length > 1) {
+        typewhere.type = { [Op.or]: type }
+      } else {
+        typewhere.type = type[0]
+      }
+    }
+
+    const include = wholeWhere(typewhere)
+
+    let size = ordef(req.query.sz, CPB.rc.searchConfig.sz.default, CPB.rc.searchConfig.sz.min, CPB.rc.searchConfig.sz.max)
+    const count = await db.version.count({where, include, distinct: 'version.id'})
+    const maxpg = Math.min(Math.ceil(count / size), CPB.rc.searchConfig.pg.max) || 1
+    let page = ordef(req.query.pg, CPB.rc.searchConfig.pg.default, CPB.rc.searchConfig.pg.min, maxpg)
+    console.log(page, CPB.rc.searchConfig.pg.default, CPB.rc.searchConfig.pg.min)
+
+    let list = await db.version.findAll({where,
       offset: size * (page - 1),
       limit: size,
       order: [['createdAt', 'DESC']],
-      attributes: [
-        'number', 'views', 'namespace', 'title',
-        'uuid', 'createdAt'
-      ],
-      include: [
-        { model: db.user, as: 'editor',
-          attributes: ['handle'],
-        },
-        { model: db.resource,
-          where: {
-            trashed: false,
-          },
-          attributes: [
-            'uuid', 'createdAt', 'views', 'trashed',
-            'trashable', 'movable', 'editable', 'type',
-          ],
-          include: {
-            model: db.user, as: 'creator',
-            attributes: ['handle'],
-          },
-        },
-        { model: db.image,
-          attributes: ['path', 'rel', 'x', 'y', 'size'],
-        },
-        { model: db.user,
-          attributes: ['handle', 'lastseen'],
-        },
-      ],
+      include,
     })
-    const rows = ver.rows.map(v=> reshape(v, req))
-    if (ver) Reply.ok(rows, {
-      pg: page, sz: size,
-      ct: ver.count, pp: Math.ceil(ver.count / size),
-    }).send(res)
-    else Reply.missing().send(res)
+
+    if (list) {
+      list = list.map(v=> reshape(v, req, wholeMask))
+      highlight(list, query, inf)
+      const typestr = typeof(type) == 'string' ? type : type.join(',')
+      Reply.ok(list, {
+        opt: {
+          pg: page, sz: size,
+          ct: count, pp: Math.ceil(count / size),
+          inh: inhist, inf, type: typestr,
+        }
+      }).send(res)
+    } else Reply.internal().send(res)
   }
 }
 const getHistory =async(req, res)=> {
-  console.log('DBG: getting resource history')
-  let where = libdb.nstuWhere(req.nstu)
-  let size = ordef(req.query.sz, 10, 5, 50)
-  let page = ordef(req.query.pg, 1, 1, 1000)
-  const ver = await db.version.findOne({where,
-    plain: true,
-    attributes: ['uuid', 'namespace', 'title'],
-    include: {
-      model: db.resource,
-      attributes: ['uuid', 'trashed'],
-    },
-  })
-  if (ver && !ver.resource.trashed) {
-    const data = await db.version.findAndCountAll({
-      where: { resourceUuid: ver.resource.uuid },
-      offset: size * (page - 1),
-      limit: size,
-      order: [['number', 'DESC']],
-      attributes: [
-        'number', 'views', 'namespace', 'title',
-        'uuid', 'createdAt'
-      ],
-      include: {
-        model: db.user, as: 'editor',
-        attributes: ['handle'],
-      },
-    })
-    const rows = data.rows.map(v=> reshape(v, req))
-    if (data) Reply.ok(rows, {
-      pg: page, sz: size,
-      ct: data.count, pp: Math.ceil(data.count / size),
-    }).send(res)
-    else Reply.internal().send(res)
+  const ver = await getCore(req.nstu)
+  if (!ver) {
+    Reply.missing().send(res)
+  } else {
+    try {
+      let size = ordef(req.query.sz, CPB.rc.listConfig.sz.default, CPB.rc.listConfig.sz.min, CPB.rc.listConfig.sz.max)
+      const count = await db.version.count({where: { resourceUuid: ver.resource.uuid }})
+      const maxpg = Math.min(Math.ceil(count / size), CPB.rc.listConfig.pg.max)
+      let page = ordef(req.query.pg, CPB.rc.listConfig.pg.default, CPB.rc.listConfig.pg.min, maxpg)
+      let list = await db.version.findAll({
+        where: { resourceUuid: ver.resource.uuid },
+        offset: size * (page - 1),
+        limit: size,
+        order: [['number', 'DESC']],
+        include: [
+          { model: db.user, as: 'editor' },
+          { model: db.user },
+          { model: db.image,
+            include: { model: db.thumbnail },
+          },
+        ],
+      })
+      list = list.map(v=> reshape(v, req, shortMask))
+      if (list) Reply.ok(list, {
+        opt: {
+          pg: page, sz: size,
+          ct: count, pp: Math.ceil(count / size),
+        },
+      }).send(res)
+      else Reply.internal().send(res)
+    } catch (e) {
+      Reply.internal().send(res)
+    }
   }
-  else Reply.missing().send(res)
 }
 const getAuthors =async(req, res)=> {
-  console.log('DBG: getting resource history')
-  let where = libdb.nstuWhere(req.nstu)
-  let size = ordef(req.query.sz, 100, 5, 500)
-  let page = ordef(req.query.pg, 1, 1, 1000)
-  const ver = await db.version.findOne({where,
-    plain: true,
-    attributes: ['uuid', 'namespace', 'title'],
-    include: {
-      model: db.resource,
-      attributes: ['uuid', 'trashed'],
-    },
-  })
-  if (ver && !ver.resource.trashed) {
-    const data = await db.version.findAndCountAll({
+  const ver = await getCore(req.nstu)
+  if (!ver) {
+    Reply.missing().send(res)
+  } else {
+    let data = await db.version.findAndCountAll({
       where: { resourceUuid: ver.resource.uuid },
-      offset: size * (page - 1),
-      limit: size,
       group: ['editor.handle'],
       include: {
         model: db.user, as: 'editor',
         attributes: ['handle'],
       },
     })
-    if (data) Reply.ok(data.count.sort((a, b) => (a.count < b.count) ? 1 : -1), {
-      pp: Math.ceil(data.count / size),
-      pg: page, sz: size,
-    }).send(res)
-    else Reply.internal().send(res)
-  } else Reply.missing().send(res)
+    if (!data) {
+      Reply.internal().send(res)
+    } else {
+      data = data.count.sort((a, b) => (a.count < b.count) ? 1 : -1)
+      Reply.ok(data).send(res)
+    }
+  }
 }
 const getLinks =async(req, res)=> {
   Reply.unimplemented().send(res)
@@ -323,50 +415,51 @@ const getResource =async(req, res)=> {
   else await getOne(req, res)
 }
 
-const exists =async(nstu)=> {
-  let where = libdb.nstuWhere(nstu)
-  const ver = await db.version.findOne({where,
-    include: {
-      model: db.resource,
-      where: { trashed: false },
-    },
-  })
-  return !!ver
-}
+
 const postPage =async(req, res, next)=> {
   if (req.body.type != 'page') {
     next()
     return
   }
   needlogin(req, res)
-  if (res.headersSent) return
-  console.log('posting page')
-  try {
-    const rid = v4()
-    const resource = await db.resource.create({
-      uuid: rid,
-      creatorUuid: req.session.cpb.uuid,
-      type: 'page',
-      versions: [{
-        namespace: req.nstu.namespace,
-        title: req.nstu.title,
-        source: req.body.source,
-        editorUuid: req.session.cpb.uuid,
-        page: {
-          resourceUuid: rid,
-        },
-      }],
-    }, {
-      include: [{
-        association: db.resource.Version,
-        include: [db.version.Page]
-      }]
-    })
-    Reply.ok(invert(resource, req)).send(res)
-  } catch (e) {
-    console.log(e)
-    Reply.internal().send(res)
+  if (res.headersSent) {
+    next()
+    return
   }
+  if (req.nstu.index || req.nstu.userspace) {
+    Reply.invalid('resources cannot be created here').send(res)
+  } else if (await exists(req.nstu)) {
+    Reply.invalid('resource already exists here').send(res)
+  } else {
+    try {
+      const rid = v4()
+      const resource = await db.resource.create({
+        uuid: rid,
+        creatorUuid: req.session.cpb.uuid,
+        type: 'page',
+        versions: [{
+          namespace: req.nstu.namespace,
+          title: req.nstu.title,
+          source: req.body.source,
+          editorUuid: req.session.cpb.uuid,
+          page: {
+            resourceUuid: rid,
+          },
+        }],
+      }, {
+        include: [{
+          association: db.resource.Version,
+          include: [db.version.Page]
+        }]
+      })
+      const ver = await getSingle(req.nstu)
+      Reply.ok(reshape(ver, req)).send(res)
+    } catch (e) {
+      console.log(e)
+      Reply.internal().send(res)
+    }
+  }
+  next()
 }
 const postImage =async(req, res, next)=> {
   if (req.body.type != 'image') {
@@ -374,59 +467,63 @@ const postImage =async(req, res, next)=> {
     return
   }
   needlogin(req, res)
-  if (res.headersSent) return
-  if (!req.files.image[0]) {
+  if (res.headersSent) {
+    next()
+    return
+  }
+  if (req.nstu.index || req.nstu.userspace) {
+    Reply.invalid('resources cannot be created here').send(res)
+  } else if (!req.upload) {
     Reply.input('no image uploaded').send(res)
-    return
-  }
-  if (!req.files.image[0].mimetype.match(util.validmime.image)) {
+  } else if (!req.upload.valid) {
     Reply.input(`file is not an image (got type ${req.files.image[0].mimetype})`).send(res)
-    return
-  }
-  console.log('posting image')
+  } else if (await exists(req.nstu)) {
+    Reply.invalid('resource already exists here').send(res)
+  } else {
+    const rid = v4()
+    const cimg = await req.upload.mkimage()
 
-  const rid = v4()
-  const cimg = new CPBImage(req.files.image[0].path)
-  await cimg.prep()
-
-  try {
-    const resource = await db.resource.create({
-      uuid: rid,
-      creatorUuid: req.session.cpb.uuid,
-      type: 'image',
-      versions: [{
-        namespace: req.nstu.namespace,
-        title: req.nstu.title,
-        source: req.body.source,
-        editorUuid: req.session.cpb.uuid,
-        image: {
-          uuid: req.imageUuid,
-          resourceUuid: rid,
-          path: req.files.image[0].path,
-          mime: req.files.image[0].mimetype,
-          x: cimg.x,
-          y: cimg.y,
-          size: cimg.size,
-          thumbnails: cimg.thumbinfo({resourceUuid: rid}),
-        },
-      }],
-    }, {
-      include: [{
-        association: db.resource.Version,
+    try {
+      const resource = await db.resource.create({
+        uuid: rid,
+        creatorUuid: req.session.cpb.uuid,
+        type: 'image',
+        versions: [{
+          namespace: req.nstu.namespace,
+          title: req.nstu.title,
+          source: req.body.source,
+          editorUuid: req.session.cpb.uuid,
+          image: {
+            uuid: req.imageUuid,
+            resourceUuid: rid,
+            path: req.files.image[0].path,
+            mime: req.files.image[0].mimetype,
+            x: cimg.x,
+            y: cimg.y,
+            size: cimg.size,
+            thumbnails: cimg.thumbinfo({resourceUuid: rid}),
+          },
+        }],
+      }, {
         include: [{
-          association: db.version.Image,
+          association: db.resource.Version,
           include: [{
-            association: db.image.Thumbnail,
+            association: db.version.Image,
+            include: [{
+              association: db.image.Thumbnail,
+            }]
           }]
         }]
-      }]
-    })
-    Reply.ok(invert(resource, req)).send(res)
-  } catch (e) {
-    console.log(e)
-    await cimg.rmall()
-    Reply.internal().send(res)
+      })
+      const ver = await getSingle(req.nstu)
+      Reply.ok(reshape(ver, req)).send(res)
+    } catch (e) {
+      console.log(e)
+      await cimg.rmall()
+      Reply.internal().send(res)
+    }
   }
+  next()
 }
 const postUser =async(req, res, next)=> {
   if (req.body.type != 'user') {
@@ -435,47 +532,58 @@ const postUser =async(req, res, next)=> {
   }
   notsingleuser(req, res)
   needlogout(req, res)
-  if (res.headersSent) return
-  console.log('posting user')
+  if (res.headersSent) {
+    next()
+    return
+  }
   if (!req.nstu.userspace) {
     Reply.invalid('invalid location for user').send(res)
-  }
-  try {
-    const rid = v4()
-    const user = await db.user.create({
-      handle: req.nstu.username,
-      email: req.body.email,
-      hash: req.body.pass,
-      config: {},
-    }, {
-      include: [{
-        association: db.user.Config,
-      }]
-    })
-    let resource = await db.resource.create({
-      uuid: rid,
-      creatorUuid: user.uuid,
-      type: 'user',
-      deletable: false,
-      private: true,
-      versions: [{
-        namespace: req.nstu.namespace,
-        source: req.body.source,
-        editorUuid: user.uuid,
-        userUuid: user.uuid,
-      }],
-    }, {
-      include: [{
-        association: db.resource.Version,
-      }]
-    })
-    req.session.cpb = util.mklogin(user)
-    resource = resource.toJSON()
-    resource.versions[0].user = user
-    Reply.ok(invert(resource, req)).send(res)
-  } catch (e) {
-    console.log(e)
-    Reply.internal().send(res)
+  } else if (req.nstu.reserved) {
+    Reply.invalid('reserved name').send(res)
+  } else if (await exists(req.nstu)) {
+    Reply.invalid('resource already exists here').send(res)
+  } else {
+    try {
+      const rid = v4()
+      let user = await db.user.create({
+        handle: req.nstu.username,
+        email: req.body.email,
+        hash: req.body.pass,
+        config: {},
+      }, {
+        include: [{
+          association: db.user.Config,
+        }]
+      })
+      let resource = await db.resource.create({
+        uuid: rid,
+        creatorUuid: user.uuid,
+        type: 'user',
+        deletable: false,
+        private: true,
+        versions: [{
+          namespace: req.nstu.namespace,
+          source: req.body.source,
+          editorUuid: user.uuid,
+          userUuid: user.uuid,
+        }],
+      }, {
+        include: [{
+          association: db.resource.Version,
+        }]
+      })
+      req.session.cpb = util.mklogin(user)
+      const ver = await getSingle(req.nstu)
+      Reply.ok(reshape(ver, req)).send(res)
+    } catch (e) {
+      if (e.name == 'SequelizeUniqueConstraintError' || 'SequelizeValidationError') {
+        Reply.input().parseErrors(e.errors).send(res)
+      } else {
+        console.log(e)
+        Reply.internal().send(res)
+      }
+    }
+    next()
   }
 }
 const postLogin =async(req, res, next)=> {
@@ -484,16 +592,23 @@ const postLogin =async(req, res, next)=> {
     return
   }
   needlogout(req, res)
-  if (res.headersSent) return
-  console.log('logging in')
+  if (res.headersSent) {
+    next()
+    return
+  }
   if (!req.nstu.userspace) {
     Reply.invalid('invalid location for user resource').send(res)
+    next()
+    return
   }
   try {
     let where = libdb.nstuWhere(req.nstu)
     const ver = await db.version.findOne({where,
       include: [
-        { model: db.resource },
+        { model: db.resource,
+          include: { model: db.user, as: 'creator' },
+        },
+        { model: db.user, as: 'editor' },
         { model: db.user,
           where: {hash: {[Op.not]: null}},
           include: { model: db.config },
@@ -513,16 +628,18 @@ const postLogin =async(req, res, next)=> {
     console.log(e)
     Reply.internal().send(res)
   }
+  next()
 }
 const postLogout =async(req, res, next)=> {
   if (req.body.type != 'logout') {
     next()
     return
   }
-  console.log('logging out')
   needlogin(req, res)
-  if (res.headersSent) return
-  else if (!req.nstu.userspace) {
+  if (res.headersSent) {
+    next()
+    return
+  } else if (!req.nstu.userspace) {
     Reply.invalid('invalid location for user resource').send(res)
   } else if (!req.nstu.username == req.session.cpb.handle) {
     Reply.invalid('you are not logged in as this user').send(res)
@@ -531,64 +648,143 @@ const postLogout =async(req, res, next)=> {
     const out = {session: req.session.cpb}
     Reply.ok(reshape(out, req)).send(res)
   }
-}
-const prePost =async(req, res, next)=> {
-  console.log('!!! !!! !!! GOT POST')
-  req.imageUuid = v4()
   next()
 }
-const postErr =async(req, res, next)=> {
-  if (req.body.type) Reply.input(`invalid type: ${req.body.type}`).send(res)
-  else Reply.input(`no type given`).send(res)
+const prePost =async(req, res, next)=> {
+  req.imageUuid = v4()
+  upload(req, res, function (err) {
+    if (err) console.log(err)
+    if (err instanceof multer.MulterError) {
+      if (err.code == 'LIMIT_FILE_SIZE') {
+        Reply.input('file is too large').send(res)
+      } else if (err.code == 'LIMIT_FILE_COUNT') {
+        Reply.input('you may only upload one file at a time').send(res)
+      } else {
+        Reply.internal('upload failed').send(res)
+      }
+    } else if (err) {
+      Reply.internal().send(res)
+    } else {
+      if (req.files && req.files.image?.[0]) {
+        req.upload = new CPBUpload(req.files.image[0].path, req.files.image[0].mimetype)
+      }
+      next()
+    }
+  })
+}
+const postEnd =async(req, res, next)=> {
+  if (!res.headersSent) {
+    Reply.internal().send(res)
+  }
+  if (req.upload) req.upload.cleanup()
 }
 
+const prePut =async(req, res, next)=> {
+  req.imageUuid = v4()
+  upload(req, res, function (err) {
+    if (err) console.log(err)
+    if (err instanceof multer.MulterError) {
+      if (err.code == 'LIMIT_FILE_SIZE') {
+        Reply.input('file is too large').send(res)
+      } else if (err.code == 'LIMIT_FILE_COUNT') {
+        Reply.input('you may only upload one file at a time').send(res)
+      } else {
+        Reply.internal('upload failed').send(res)
+      }
+    } else if (err) {
+      Reply.internal().send(res)
+    } else {
+      if (req.files && req.files.image?.[0]) {
+        req.upload = new CPBUpload(req.files.image[0].path, req.files.image[0].mimetype)
+      }
+      next()
+    }
+  })
+}
 const put =async(req, res, next)=> {
   needlogin(req, res)
   if (res.headersSent) return
   let where = libdb.nstuWhere(req.nstu)
   const old = await db.version.findOne({where,
     include: [
-      { model: db.resource },
+      { model: db.resource,
+        include: {
+          model: db.user, as: 'creator'
+        }
+      },
       { model: db.user,
         include: { model : db.config },
       },
     ]
   })
   if (old) {
+    if (old.resource.private && !loggedas(old.resource.creator.handle, req)) {
+      Reply.unauthorized('you may not edit edit another users private resource').send(res)
+      next()
+      return
+    }
     if (!old.resource.editable) {
-      return Reply.unallowed('resource is not editable').send(res)
+      Reply.unallowed('resource is not editable').send(res)
+      next()
+      return
     }
     if (old.resource.type != req.body.type) {
-      return Reply.input(`wrong type: ${req.body.type}`).send(res)
+      Reply.input(`wrong type: ${req.body.type}`).send(res)
+      next()
+      return
     }
     if (req.body.type == 'user' && req.body.handle) {
       req.body.namespace = `~${req.body.handle}`
     }
     const nsc = req.body.namespace !== undefined && req.body.namespace != old.namespace
     const tc = req.body.title !== undefined && req.body.title != old.title
+    const moving = nsc || tc
     const sc = req.body.source !== undefined && req.body.source != old.source
     const namespace = req.body.namespace === undefined ? old.namespace : req.body.namespace
     const title = req.body.title === undefined ? old.title : req.body.title
     const source = req.body.source === undefined ? old.source : req.body.source
-    if (!old.resource.movable && (nsc || tc)) {
-      return Reply.unallowed('resource is not movable').send(res)
+    const dest = moving ? new CPB.NSTU({namespace, title}) : req.nstu
+    if (moving) {
+      if (!old.resource.movable) {
+        Reply.unallowed('resource is not movable').send(res)
+        next()
+        return
+      }
+      if (dest.reserved) {
+        Reply.invalid('invalid location').send(res)
+        next()
+        return
+      }
+      if ((req.body.type == 'user' && !dest.userpage) || req.body.type != 'user' && !dest.contentspace || (title && !namespace)) {
+        Reply.invalid('invalid location').send(res)
+        next()
+        return
+      }
+      const existing = await exists(dest)
+      if (existing) {
+        Reply.invalid('a resource already exists there').send(res)
+        next()
+        return
+      }
     }
     if (req.body.type == 'image') {
       if ((req.body.namespace === undefined || req.body.namespace == old.namespace) &&
           (req.body.title === undefined || req.body.title == old.title) &&
           (req.body.source === undefined || req.body.source == old.source) &&
-          !req.files.image?.[0]) {
-        return Reply.input('nothing changed').send(res)
+          !req.upload) {
+        Reply.input('nothing changed').send(res)
+        next()
+        return
       }
-      if (req.files.image?.[0]) {
-        if (!req.files.image[0].mimetype.match(util.validmime.image)) {
-          Reply.input(`file is not an image (got type ${req.files.image[0].mimetype})`).send(res)
+      if (req.upload) {
+        if (!req.upload.valid) {
+          Reply.input(`file is not an image (got type ${req.upload.mime})`).send(res)
+          next()
           return
         }
-        const cimg = new CPBImage(req.files.image[0].path)
-        await cimg.prep()
+        const cimg = await req.upload.mkimage()
         try {
-          const ver = await db.version.create({
+          let ver = await db.version.create({
             number: old.number + 1,
             resourceUuid: old.resourceUuid,
             prevUuid: old.uuid,
@@ -597,7 +793,7 @@ const put =async(req, res, next)=> {
             image: {
               uuid: req.imageUuid,
               resourceUuid: old.resource.uuid,
-              path: req.files.image[0].path,
+              path: cimg.path,
               mime: req.files.image[0].mimetype,
               x: cimg.x,
               y: cimg.y,
@@ -614,14 +810,18 @@ const put =async(req, res, next)=> {
           })
           old.nextUuid = ver.uuid
           await old.save()
-          req.session.cpb = util.guestsess()
-          Reply.ok().send(res)
+          ver = await getSingle(dest)
+          Reply.ok(reshape(ver, req)).send(res)
+          next()
+          return
         } catch (e) {
           await cimg.rmall()
           Reply.internal().send(res)
+          next()
+          return
         }
       } else {
-        const ver = await db.version.create({
+        let ver = await db.version.create({
           number: old.number + 1,
           resourceUuid: old.resourceUuid,
           prevUuid: old.uuid,
@@ -631,7 +831,10 @@ const put =async(req, res, next)=> {
         })
         old.nextUuid = ver.uuid
         await old.save()
+        ver = await getSingle(dest)
         Reply.ok(reshape(ver, req)).send(res)
+        next()
+        return
       }
     } else if (req.body.type == 'user') {
       const ec = req.body.email !== undefined && req.body.email != old.user.email
@@ -644,62 +847,70 @@ const put =async(req, res, next)=> {
       if (doconfirm && req.body.confirmation) {
         confirmed = await bcrypt.compare(req.body.confirmation, old.user.hash)
       }
-      if (tc || (nsc && namespace[0] != '~')) {
-        Reply.input(`invalid location for user resource`)
-      } else if (!(nsc || sc || ec || pc || cdc || cdmc || cadc)) {
+      if (!(nsc || sc || ec || pc || cdc || cdmc || cadc)) {
         Reply.input('nothing changed').send(res)
+        next()
+        return
       } else if (doconfirm && !req.body.confirmation) {
         Reply.input('confirmation with current password required').send(res)
+        next()
+        return
       } else if (doconfirm && !confirmed) {
         Reply.input('invalid credentials').send(res)
+        next()
+        return
       } else {
-        let ver
-        if (cdc || cdmc || cadc) {
-          if (cdc) old.user.config.debug = req.body.confDebug
-          if (cdmc) old.user.config.darkmode = req.body.confDarkmode
-          if (cadc) old.user.config.autodark = req.body.confAutodark
-          await old.user.config.save()
-        }
-        if (nsc || ec || pc) {
-          const oh = old.user.handle
-          let cl = false
-          if (nsc) {
-            if (oh == req.session.cpb.handle) cl = true
-            old.user.handle = req.body.handle || namespace.slice(1)
+        try {
+          let ver
+          if (cdc || cdmc || cadc) {
+            if (cdc) old.user.config.debug = req.body.confDebug
+            if (cdmc) old.user.config.darkmode = req.body.confDarkmode
+            if (cadc) old.user.config.autodark = req.body.confAutodark
+            await old.user.config.save()
           }
-          if (ec) old.user.email = req.body.email
-          if (pc) old.user.hash = req.body.pass
-          await old.user.save()
-          if (cl) req.session.cpb.handle = old.user.handle
+          if (nsc || ec || pc) {
+            const oh = old.user.handle
+            let cl = false
+            if (nsc) {
+              if (oh == req.session.cpb.handle) cl = true
+              old.user.handle = req.body.handle || namespace.slice(1)
+            }
+            if (ec) old.user.email = req.body.email
+            if (pc) old.user.hash = req.body.pass
+            await old.user.save()
+            if (cl) req.session.cpb.handle = old.user.handle
+          }
+          if (nsc || sc) {
+            ver = await db.version.create({
+              number: old.number + 1,
+              resourceUuid: old.resourceUuid,
+              prevUuid: old.uuid,
+              namespace, source,
+              editorUuid: req.session.cpb.uuid,
+              userUuid: old.user.uuid,
+            })
+            old.nextUuid = ver.uuid
+            await old.save()
+          }
+          ver = await getSingle(dest)
+          Reply.ok(reshape(ver, req)).send(res)
+          next()
+          return
+        } catch(e) {
+          Reply.internal().send(res)
+          next()
+          return
         }
-        if (nsc || sc) {
-          ver = await db.version.create({
-            number: old.number + 1,
-            resourceUuid: old.resourceUuid,
-            prevUuid: old.uuid,
-            namespace, source,
-            editorUuid: req.session.cpb.uuid,
-            userUuid: old.user.uuid,
-          })
-          old.nextUuid = ver.uuid
-          await old.save()
-        }
-        if (ver) {
-          ver = ver.toJSON()
-          ver.resource = old.resource.toJSON()
-          ver.user = old.user.toJSON()
-        }
-        console.log(req.session)
-        Reply.ok(reshape(ver || old, req)).send(res)
       }
     } else if (req.body.type == 'page') {
       if ((req.body.namespace === undefined || req.body.namespace == old.namespace) &&
           (req.body.title === undefined || req.body.title == old.title) &&
           (req.body.source === undefined || req.body.source == old.source)) {
         Reply.input('nothing changed').send(res)
+        next()
         return
       }
-      const ver = await db.version.create({
+      let ver = await db.version.create({
         number: old.number + 1,
         resourceUuid: old.resourceUuid,
         prevUuid: old.uuid,
@@ -709,18 +920,23 @@ const put =async(req, res, next)=> {
       })
       old.nextUuid = ver.uuid
       await old.save()
+      ver = await getSingle(dest)
       Reply.ok(reshape(ver, req)).send(res)
-    } else Reply.input(`no such type: ${req.body.type}`).send(res)
-  } else Reply.missing().send(res)
-}
-const prePut =async(req, res, next)=> {
-  console.log('!!! !!! !!! GOT PUT')
-  req.imageUuid = v4()
-  next()
+      next()
+      return
+    } else {
+      Reply.input(`no such type: ${req.body.type}`).send(res)
+      next()
+      return
+    }
+  } else {
+    Reply.missing().send(res)
+    next()
+    return
+  }
 }
 
 const destroyResource =async(req, res)=> {
-  console.log('DBG: deleting resource')
   let where = libdb.nstuWhere(req.nstu)
   const ver = await db.version.findOne({where,
     include: {
@@ -748,14 +964,12 @@ const destroyResource =async(req, res)=> {
     await ver.resource.destroy()
     for (let x = 0; x < imgs.length; x++) {
       const img = imgs[x]
-      console.log(`deleting ${img}`)
       await fs.promises.unlink(img)
     }
-    Reply.ok("resource deleted").send(res)
+    Reply.ok().send(res)
   }
 }
 const trashResource =async(req, res)=> {
-  console.log('DBG: trashing resource')
   let where = libdb.nstuWhere(req.path)
   const ver = await db.version.findOne({where,
     include: [
@@ -767,21 +981,21 @@ const trashResource =async(req, res)=> {
     ],
   })
   if (!ver) {
-    Reply.missing().send(res)
+    return Reply.missing().send(res)
   } else if (!ver.resource.trashable) {
-    Reply.unallowed("resource is not trashable").send(res)
+    return Reply.unallowed("resource is not trashable").send(res)
   } else if (ver.resource.trashed) {
-    Reply.invalid("resource is already trashed").send(res)
-  } else if (ver.resource.private && !loggedas(ver.resource.creator.handle)) {
-    Reply.unallowed("private resource - only the owner can do that").send(res)
+    return Reply.invalid("resource is already trashed").send(res)
+  } else if (ver.resource.private && !loggedas(ver.resource.creator.handle, req)) {
+    return Reply.unallowed("private resource - only the owner can do that").send(res)
   } else {
     if (ver.resource.type == 'user') {
       if (!req.body.pass) {
-        Reply.input('must confirm user deletion with current password')
+        return Reply.input('must confirm user deletion with current password').send(res)
       } else {
         const confirmed = await bcrypt.compare(req.body.pass, ver.user.hash)
         if (!confirmed) {
-          Reply.input('invalid credentials')
+          return Reply.input('invalid credentials').send(res)
         } else {
           // on trashing a user, instead transform it into a dummy
           // account to maintain article ownership
@@ -820,13 +1034,14 @@ const trashResource =async(req, res)=> {
           r.movable = false
           await r.save()
           req.session.cpb = util.guestsess()
+          return Reply.ok().send(res)
         }
       }
     } else {
       ver.resource.trashed = true
       await ver.resource.save()
+      return Reply.ok().send(res)
     }
-    Reply.ok("record trashed").send(res)
   }
 }
 const deleteResource =async(req, res)=> {
@@ -839,15 +1054,15 @@ const deleteResource =async(req, res)=> {
 nstu.get('/*', preAll, getResource)
 nstu.post('/*',
   preAll,
-  prePost, upload.fields([{ name: 'image', maxCount: 1 }]),
+  prePost,
   postPage,
   postUser,
   postLogin,
   postLogout,
   postImage,
-  postErr
+  postEnd
 )
-nstu.put('/*', preAll, prePut, upload.fields([{ name: 'image', maxCount: 1 }]), put)
+nstu.put('/*', preAll, prePut, put, postEnd)
 nstu.delete('/*', preAll, deleteResource)
 
 module.exports = nstu

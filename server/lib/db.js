@@ -2,18 +2,21 @@
 
 const CPB = require('../lib/cpb.js')
 const db = require('../models')
+const { Op } = require('sequelize')
 
 
 const nstuWhere =(nstu)=> {
   if (typeof(nstu) == 'string') nstu = CPB.NSTU.parse(nstu)
   let where
   if (nstu.uuid) {
-    const uuid = nstu.uuid.toUpperCase()
+    const uuid = nstu.uuid.toLowerCase()
     where = {[Op.or]: [{uuid}, {resourceUuid: uuid, nextUuid: null}]}
   } else {
     where = {nextUuid: null}
-    if (nstu.namespace) where.namespace = nstu.namespace
-    if (nstu.title) where.title = nstu.title
+    const ns = nstu.namespace == undefined ? null : nstu.namespace
+    const t = nstu.title == undefined ? null : nstu.title
+    where.namespace = ns
+    where.title = t
   }
   return where
 }

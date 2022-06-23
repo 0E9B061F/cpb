@@ -3,8 +3,6 @@
 const { Model } = require('sequelize')
 const cpbmodel = require('../lib/cpbmodel.js')
 
-console.log(cpbmodel)
-
 module.exports =(sequelize, DataTypes)=> {
   class Config extends Model {
     static associate(models) {

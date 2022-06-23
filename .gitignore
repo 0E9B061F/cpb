@@ -1,7 +1,8 @@
 node_modules/
-rc.json
-rc.server.json
-cpb.dev.sqlite
+/rc.json
+/rc.server.json
+/cpb.dev.sqlite
+/cpb.test.sqlite
 assets/build/
 ignore/
 assets/conf/browserconfig.xml

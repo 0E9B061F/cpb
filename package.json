@@ -6,19 +6,21 @@
     "build": "rollup -c",
     "postbuild": "node server/build.js",
     "dev": "env NODE_ENV=development rollup -c -w",
-    "app": "node server/app.js",
+    "app": "server/bin/start.js",
     "dump:dev": "rm -f cpb.dev.sqlite",
     "mig:dev": "npx sequelize-cli db:migrate --debug",
     "sync": "server/bin/sync.js",
     "seed": "npx sequelize-cli db:seed --seed 20220126035836-root-user --seed 20220126035855-default-page --debug",
     "seed:dev": "npx sequelize-cli db:seed:all --debug",
     "refresh:dev": "run-s dump:dev sync seed:dev",
-    "refresh": "run-s dump:dev mig:dev seed"
+    "refresh": "run-s dump:dev mig:dev seed",
+    "test": "jest"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@rollup/plugin-replace": "^4.0.0",
+    "jest": "^28.1.1",
     "lorem-ipsum": "^2.0.4",
     "npm-run-all": "^4.1.5",
     "rollup": "^2.3.4",
@@ -27,6 +29,7 @@
     "rollup-plugin-svelte": "^7.0.0",
     "rollup-plugin-terser": "^7.0.0",
     "sequelize-cli": "^6.4.1",
+    "supertest": "^6.2.3",
     "svelte": "^3.48.0"
   },
   "dependencies": {

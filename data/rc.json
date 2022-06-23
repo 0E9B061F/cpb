@@ -27,6 +27,21 @@
     "sz": 25,
     "pg": 1
   },
+  "listConfig": {
+    "sz": {
+      "min": 5, "max": 50, "default": 25
+    },
+    "pg": {
+      "min": 1, "max": 1000, "default": 1
+    },
+    "inh": false
+  },
+  "searchConfig": {
+    "inf": {
+      "valid": ["title", "source", "both"],
+      "default": "both"
+    }
+  },
   "minResults": 5,
   "maxResults": 50,
   "readSpeed": 200,

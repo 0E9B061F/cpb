@@ -1,3 +1,8 @@
 {
-  "secret": "oed und leer"
+  "secret": "oed und leer",
+  "uploads": {
+    "temp": "/tmp/CPB/temp",
+    "path": "assets/uploads",
+    "testpath": "/tmp/CPB/uploads"
+  }
 }

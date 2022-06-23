@@ -4,7 +4,41 @@ const CPB = require('./cpb.js')
 const sharp = require('sharp')
 const pathlib = require('path')
 const fs = require('fs')
+const util = require('./util.js')
 
+const rm =async(path)=> {
+  try {
+    await fs.promises.access(path, fs.constants.W_OK)
+  } catch (e) {
+    return
+  }
+  await fs.promises.unlink(path)
+}
+
+class CPBUpload {
+  constructor(path, mime) {
+    this.path = path
+    this.mime = mime
+    this.valid = this.mime.match(util.validmime.image)
+    this.basename = pathlib.basename(this.path)
+    this.target = `${CPB.rc.uploads.path}/${this.basename}`
+    this.image = null
+  }
+  async mkimage() {
+    await fs.promises.copyFile(this.path, this.target)
+    this.image = new CPBImage(this.target)
+    await this.image.prep()
+    return this.image
+  }
+  async cleanup() {
+    await rm(this.path)
+  }
+  async rmall() {
+    await this.cleanup()
+    if (this.image) await this.image.rmall()
+    await rm(this.target)
+  }
+}
 
 class CPBImage {
   constructor(path) {
@@ -45,12 +79,12 @@ class CPBImage {
   }
   async rmall() {
     console.log(`deleting ${this.path}`)
-    await fs.promises.unlink(this.path)
+    await rm(this.path)
     const vals = Object.values(this.thumbs)
     for (let x = 0; x < vals.length; x++) {
       const th = vals[x]
       console.log(`deleting ${th.path}`)
-      await fs.promises.unlink(th.path)
+      await rm(th.path)
     }
   }
 }
@@ -72,4 +106,4 @@ class CPBThumb {
 }
 
 
-module.exports = CPBImage
+module.exports = { CPBUpload, CPBImage }

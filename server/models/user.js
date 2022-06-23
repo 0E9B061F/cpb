@@ -98,7 +98,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       regularAccountMustHaveHash() {
         if (!this.special && !this.hash) {
-          throw new Error('email required for regular users')
+          throw new Error('password required for regular users')
         }
       },
       systemAccountHasNoHash() {
