@@ -9,8 +9,8 @@
 
 {#if $hassess}
 <FR lab="session">
-  <PP lab="uuid" val={$session.val.uuid} />
-  <PP lab="login" val={$session.val.login} />
-  <PP lab="handle" val={$session.val.handle} />
+  <PP lab="uuid" val={$session.val.user.session.uuid} />
+  <PP lab="login" val={$session.val.user.session.login} />
+  <PP lab="handle" val={$session.val.user.session.handle} />
 </FR>
 {/if}

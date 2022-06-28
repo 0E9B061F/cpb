@@ -7,17 +7,20 @@
   const haspage = getContext('haspage')
   const page = getContext('page')
   const dbg = getContext('dbg')
+  const trash = getContext('trash')
 
-  const check =()=> {
+  const check =async()=> {
     if (key && value == key) {
       dbg(`VALID. DELETING`)
+      const res = await trash()
+      return res.err == 0
     } else {
-      dbg(`INCORRECT`)
+      return false
     }
   }
 
   let value
-  $: key = $haspage ? $page.val.pageUuid.match(/[^-]+/)[0].toUpperCase() : null
+  $: key = $haspage ? $page.val.resource.uuid.match(/[^-]+/)[0].toUpperCase() : null
   $: precheck = key && value == key
 </script>
 
@@ -35,7 +38,7 @@
       </FB>
       <FB vert center>
         <FB end line="n">
-          <Link disable={!precheck} nolink global does={check}>DELETE</Link>
+          <Link disable={!precheck} global cond={check}>DELETE</Link>
         </FB>
       </FB>
     </FB>

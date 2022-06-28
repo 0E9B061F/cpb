@@ -4,11 +4,11 @@ process.env.NODE_ENV = "test"
 
 
 const request = require('supertest')
-const { db, app } = require('../server.js')
+const { db, app } = require('../../server.js')
 const {
   expectLogout, expectLogin, expectMissing, expectInput, expectUnauthorized,
   expectUnallowed, expectOtherUser, expectSelfUser, resetdb
-} = require('../lib/testing.js')
+} = require('../../lib/testing.js')
 
 
 beforeEach(resetdb(db))

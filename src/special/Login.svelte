@@ -12,8 +12,8 @@
   let email
   let pass
 
-  const logw =()=> login({handle, pass})
-  const regw =()=> register({handle, email, pass})
+  const logw =()=> login(handle, pass)
+  const regw =()=> register(handle, email, pass)
 
   $: doreg = $loc.title == 'register'
 </script>

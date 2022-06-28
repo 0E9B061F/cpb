@@ -53,9 +53,9 @@ const generate = async ()=> {
       modified: r.createdAt.toISOString(),
     })
   })
-  fs.writeFileSync(`${__dirname}/../public/sitemap.xml`, mkindex(maps))
+  fs.writeFileSync(`${__dirname}/../../public/sitemap.xml`, mkindex(maps))
   Object.keys(maps).forEach(ns=> {
-    fs.writeFileSync(`${__dirname}/../public/${mkname(ns)}`, mkmap(maps[ns]))
+    fs.writeFileSync(`${__dirname}/../../public/${mkname(ns)}`, mkmap(maps[ns]))
   })
 }
 

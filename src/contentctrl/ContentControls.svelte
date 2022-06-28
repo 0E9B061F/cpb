@@ -41,8 +41,10 @@
     const t = new Tabs()
     if ($haslogin) {
       t.add('bookmark', BookmarkCtrl)
-      t.add('move', MoveCtrl)
-      t.add('delete', DeleteCtrl)
+      if ($state.anchor) {
+        t.add('move', MoveCtrl)
+        t.add('delete', DeleteCtrl)
+      }
       t.add('duplicate', DuplicateCtrl)
     }
     tabs = t

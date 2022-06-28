@@ -33,10 +33,10 @@
     words: $pageinfo.wc,
     links: $pageinfo.links,
     views: $page.val.views,
-    version: $page.val.vnum,
-    editor: {space: `~${$page.val.user.handle}`, label: $page.val.user.handle},
-    creator: {space: `~${$page.val.page.user.handle}`, label: $page.val.page.user.handle},
-    created: fmtdate($page.val.page.createdAt),
+    version: $page.val.number,
+    editor: {space: `~${$page.val.editor}`, label: $page.val.editor},
+    creator: {space: `~${$page.val.resource.creator}`, label: $page.val.resource.creator},
+    created: fmtdate($page.val.resource.createdAt),
     edited: fmtdate($page.val.createdAt),
   } : {}
 </script>

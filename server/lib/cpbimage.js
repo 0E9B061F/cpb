@@ -16,12 +16,13 @@ const rm =async(path)=> {
 }
 
 class CPBUpload {
-  constructor(path, mime) {
+  constructor(path, mime, preserve=false) {
     this.path = path
     this.mime = mime
     this.valid = this.mime.match(util.validmime.image)
     this.basename = pathlib.basename(this.path)
     this.target = `${CPB.rc.uploads.path}/${this.basename}`
+    this.preserve = preserve
     this.image = null
   }
   async mkimage() {
@@ -31,7 +32,7 @@ class CPBUpload {
     return this.image
   }
   async cleanup() {
-    await rm(this.path)
+    if (!this.preserve) await rm(this.path)
   }
   async rmall() {
     await this.cleanup()

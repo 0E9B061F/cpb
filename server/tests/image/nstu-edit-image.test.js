@@ -5,12 +5,12 @@ process.env.NODE_ENV = "test"
 
 const request = require('supertest')
 const fs = require('fs-extra')
-const { db, app, CPB } = require('../server.js')
+const { db, app, CPB } = require('../../server.js')
 const {
   expectLogout, expectLogin, expectMissing, expectInput, expectUnauthorized,
   expectUnallowed, expectOtherUser, expectSelfUser, expectInvalid, resetdb,
   expectImage, expectEmptyTemp, expectUploads, expectOk,
-} = require('../lib/testing.js')
+} = require('../../lib/testing.js')
 
 
 beforeEach(resetdb(db, true))
@@ -30,12 +30,12 @@ describe("editing image resources", ()=> {
     await expectLogin(rep, 'qibly')
     rep = await agent.put("/sys:api/nstu/img:foo")
     .field('type', 'image')
-    .attach('image', `${__dirname}/../../data/test.jpg`)
+    .attach('image', `${__dirname}/../../../data/test.jpg`)
     await expectImage(rep)
     await expectUploads(18)
     rep = await agent.put("/sys:api/nstu/img:foo")
     .field('type', 'image')
-    .attach('image', `${__dirname}/../../data/skiff.png`)
+    .attach('image', `${__dirname}/../../../data/skiff.png`)
     await expectImage(rep)
     await expectUploads(24)
   })
@@ -133,7 +133,7 @@ describe("editing image resources", ()=> {
     // update image data
     let rep = await agent.put("/sys:api/nstu/img:foo")
     .field('type', 'image')
-    .attach('image', `${__dirname}/../../data/test.jpg`)
+    .attach('image', `${__dirname}/../../../data/test.jpg`)
     await expectUnauthorized(rep)
     await expectUploads(12)
     // move image

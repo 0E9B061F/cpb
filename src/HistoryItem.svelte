@@ -8,8 +8,8 @@
 </script>
 
 <tr class="history-item">
-  <td class="history-num">{item.vnum}</td>
-  <td class="history-user"><Link user={item.user.handle}>{item.user.handle}</Link></td>
+  <td class="history-num">{item.number}</td>
+  <td class="history-user"><Link user={item.editor}/></td>
   <td class="history-title">{item.title}</td>
   <td class="history-vuuid grow">
     <Balance right><Link uuid={item.uuid}><UUID>{item.uuid}</UUID></Link></Balance>

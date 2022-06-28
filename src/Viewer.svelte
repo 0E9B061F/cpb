@@ -152,7 +152,7 @@
           {/if}
         </FB>
       {/if}
-      <SvelteMarkdown source={$page.val.body} {renderers} {options} on:parsed={onparse} />
+      <SvelteMarkdown source={$page.val.source} {renderers} {options} on:parsed={onparse} />
     </div>
   </FB>
 {/if}

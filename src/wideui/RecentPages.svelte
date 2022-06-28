@@ -13,9 +13,11 @@
   export let title = compact ? 'RECENT' : 'RECENT PAGES'
   let recents = []
   const refresh =()=> {
-    const a = ['recent']
-    if (count) a.push(count)
-    return grab(...a).then(res=> {
+    return grab('nstu', {
+      get: 'list',
+      sz: count,
+      type: 'page,image',
+    }).then(res=> {
       if (res.err == 0) recents = res.val
     })
     .catch(e=> handle(e))
@@ -49,7 +51,7 @@
           </FB>
           <FB c="recent-extra">
             <FB c="recent-date">{fmt(page.createdAt)}</FB>
-            <FB c="recent-user">({page.user.handle})</FB>
+            <FB c="recent-user">({page.editor})</FB>
           </FB>
         </FB>
       {/each}

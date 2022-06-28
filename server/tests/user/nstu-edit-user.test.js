@@ -4,12 +4,12 @@ process.env.NODE_ENV = "test"
 
 
 const request = require('supertest')
-const { db, app } = require('../server.js')
+const { db, app } = require('../../server.js')
 const {
   expectLogout, expectLogin, expectMissing, expectInput, expectUnauthorized,
   expectUnallowed, expectOtherUser, expectSelfUser, expectInvalid, resetdb,
   expectImage, expectEmptyTemp, expectUploads, expectOk,
-} = require('../lib/testing.js')
+} = require('../../lib/testing.js')
 
 
 beforeEach(resetdb(db))
@@ -88,7 +88,7 @@ describe("editing user resources", ()=> {
   test("users can edit their config", async()=> {
     const agent = request.agent(app)
     await agent.post("/sys:api/nstu/~qibly").send({type: 'login', pass: 'axiomatic'})
-    let rep = await agent.put("/sys:api/nstu/~qibly").send({type: 'user', confAutodark: false, confDebug: true})
+    let rep = await agent.put("/sys:api/nstu/~qibly").send({type: 'user', config: {autodark: false, debug: true}})
     await expectLogin(rep, 'qibly')
     expect(rep.body.val.user.config.autodark).toBe(false)
     expect(rep.body.val.user.config.debug).toBe(true)

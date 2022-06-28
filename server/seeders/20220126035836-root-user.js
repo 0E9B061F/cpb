@@ -15,7 +15,7 @@ if (!process.env.CPBROOTPW ||
 module.exports = {
   async up (queryInterface, Sequelize) {
     await mkuser(queryInterface, [
-      { handle: 'system' },
+      { handle: 'system', source: "Does everything a human doesn't." },
       { handle: 'guest' },
       { handle: 'root',
         email: process.env.CPBROOTMAIL,

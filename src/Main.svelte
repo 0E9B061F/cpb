@@ -181,14 +181,14 @@
 	}
 
 	const cmdu =(c, ...a)=> {
-		let o = ''
+		let o = null
 		if (a.length) {
-			if (typeof(a[a.length-1]) == 'object') {
-				o = util.mkq(a.pop())
-			}
+			if (typeof(a[a.length-1]) == 'object') o = a.pop()
 			a = `/${a.join('/')}`
 		} else a = ''
-		return CPB.rc.api(c, a, o).rel
+		let nstu = CPB.rc.api(c, a)
+		if (o) nstu = nstu.amend({opts: o})
+		return nstu.rel
 	}
 
 	const dbg =m=> {
@@ -219,29 +219,89 @@
 	}
 
 	// post('update', ns, t, {title, body})
-	const post =(...a)=> {
+	const postput =(method, ...a)=> {
 		const body = a.pop()
 		const url = cmdu(...a)
 		return fetch(url, {
-			method: 'POST',
+			method,
 			body: JSON.stringify(body),
       headers: { 'Content-Type': 'application/json' },
 		})
 		.then(res=> res.json())
 		.then(r=> {
-			dbg(`POST ${url}`)
-			dbg(r)
+			dbg(`${method} ${url}`)
+			dbg(body, r)
 			return r
 		})
 		.catch(e=> {
-			dbg(`POST ${url}`)
-			dbg(e)
+			dbg(`${method} ${url}`)
+			dbg(body, e)
 			return ({err: 6, msg: 'NETWORK ERROR'})
 		})
 	}
 
+	const post =(...a)=> { return postput('POST', ...a) }
+	const put =(...a)=> { return postput('PUT', ...a) }
+
+	const del =async(...a)=> {
+		const url = cmdu(...a)
+		let res = null
+		try {
+			res = await fetch(url, {
+				method: 'DELETE',
+			})
+			res = res.json()
+		} catch (e) {
+			res = ({err: 99, msg: 'network error'})
+		} finally {
+			dbg(`DELETE ${url}`)
+			dbg(res)
+		}
+		return res
+	}
+
+	const trash =async()=> {
+		const res = await del('nstu', $loc.base, {mode: 'trash'})
+		if (res.err == 0) $aod = Date.now()
+		return res
+	}
+	const move =async(nstu)=> {
+		if ($haspage) {
+			nstu = CPB.NSTU.parse(nstu)
+			const res = await put('nstu', $loc.base, {
+				type: $page.val.resource.type,
+				namespace: nstu.namespace,
+				title: nstu.title,
+			})
+			if (res.err == 0) $aod = Date.now()
+			return res
+		}
+	}
+	const duplicate =async(nstu)=> {
+		if ($haspage) {
+			nstu = CPB.NSTU.parse(nstu)
+			const res = await post('nstu', $loc.base, {
+				type: 'dupe',
+				namespace: nstu.namespace,
+				title: nstu.title,
+			})
+			if (res.err == 0) $aod = Date.now()
+			return res
+		}
+	}
+	const exists =async(nstu)=> {
+		nstu = CPB.NSTU.parse(nstu)
+		const res = await grab('nstu', nstu.base)
+		return res.err == 0
+	}
+
 	setContext('grab', grab)
 	setContext('post', post)
+	setContext('del', del)
+	setContext('trash', trash)
+	setContext('move', move)
+	setContext('duplicate', duplicate)
+	setContext('exists', exists)
 
 	const setTokens =t=> {
 		$tokens = t
@@ -249,31 +309,26 @@
 	setContext('setTokens', setTokens)
 
 	const postdraft =()=> {
-		const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
-		const c = $loc.opt.edit ? 'update' : 'get'
-		return post(c, ...a, $draft).then(res=> {
+		const m = $loc.opt.edit ? 'PUT' : 'POST'
+		return postput(m, 'nstu', $loc.normal, $draft).then(res=> {
 			$draft = null
 			if (!!$creating) $aod = Date.now()
 			hold(`Created '${$gs.tag()}'`)
 		}).catch(e=> handle(e))
 	}
-	const postuser =b=> {
-		post('register', b).then(res=> {
-			hold(`Created user '${b.handle}'`)
-		}).catch(e=> handle(e))
-	}
 
 	setContext('postdraft', postdraft)
-	setContext('postuser', postuser)
 
-	const login =b=> {
-		const start = $session.val.handle
-    return post('login', b)
+	const login =(hand, pass)=> {
+		const start = $session.val.user.handle
+    return post('nstu', `~${hand}`, {
+			type: 'login', pass,
+		})
   	.then(res=> {
-			setsession(res)
 			if (res.err == 0) {
-				if (start != $session.val.handle) {
-					hold(`Logged in as '${$session.val.handle}'`)
+				setsession(res)
+				if (start != $session.val.user.handle) {
+					hold(`Logged in as '${$session.val.user.handle}'`)
 				}
 				return true
 			} else {
@@ -283,8 +338,10 @@
 			}
     }).catch(e=> handle(e))
   }
-	const register =b=> {
-    return post('register', b)
+	const register =(handle, pass, email)=> {
+    return post('nstu', `~${handle}`, {
+			type: 'user', email, pass
+		})
   	.then(res=> {
 			getsession()
 			if (res.err == 0) {
@@ -301,7 +358,7 @@
     }).catch(e=> handle(e))
   }
 	const logout =()=> {
-    return post('logout', {})
+    return post('nstu', '~', {type: 'logout'})
 		.then(r=> {
 			getsession().then(s=> {
 				if ($hassess) msg(`Logged out`)
@@ -381,7 +438,10 @@
 	setContext('msg', msg)
 
 	const fullsearch =(q, o={})=> {
-		return grab('search', q, o)
+		o = Object.assign(o, {
+			get: 'list', q
+		})
+		return grab('nstu', o)
 		.catch(e=> handle(e))
 	}
 	setContext('fullsearch', fullsearch)
@@ -395,9 +455,11 @@
 		else savels()
 	}
 	const saveconf =c=> {
-		post('config', $session.val.handle, c)
+		put('nstu', `~`, {
+			type: 'user', config: c,
+		})
 		.then(c=> {
-			if (c.err == 0) $uc = c.val
+			if (c.err == 0) $uc = c.val.user.config
 		})
 		.catch(e=> handle(e))
 	}
@@ -411,9 +473,9 @@
 	const setsession =s=> {
 		$session = s
 		$hassess = !!$session && $session.err == 0 && !!$session.val
-		$haslogin = !!$hassess && !!$session.val.login
+		$haslogin = !!$hassess && !!$session.val.user.session.login
 		if ($haslogin) {
-			$uc = $session.val.config
+			$uc = $session.val.user.config
 		} else {
 			if (localStorage.getItem('CPBUC')) loadls()
 			else savels()
@@ -422,7 +484,7 @@
 	}
 
 	const getsession =()=> {
-		return grab('session').then(s=> setsession(s))
+		return grab('nstu', '~').then(v=> setsession(v))
 	}
 
 	const cleardata =(to={})=> {
@@ -660,7 +722,7 @@
 			s.title = $page.val.title
 		} else if ($loc.namespace || $loc.title) {
 			s.namespace = $loc.namespace
-			s.title = $loc.titlestr
+			s.title = $loc.title
 		} else {
 			s.title = 'INDEX'
 		}
@@ -799,33 +861,27 @@
 		if ($loc.namespace == $rc.syskey && cpbspace.has($loc.title)) {
 			after = false
 		} else if ($loc.userspace) {
-			let u = $loc.namespace.slice(1)
-			if (!u && $haslogin) u = $session.val.handle
-			if (u) {
-				after = grab('user', u).then(user=> {
-					cleardata({user})
-				})
-			}
+			after = grab('nstu', $loc.base).then(user=> {
+				cleardata({user})
+			})
 		} else if ($loc.opt.history) {
-			const a = $loc.uuid ? [$loc.uuid] : [$loc.namespace, $loc.title]
-			const o = {}
+			const o = {get: 'hist'}
 			if (!!$loc.opt.pg && $loc.opt.pg != $rc.historyDefaults.pg) o.pg = $loc.opt.pg
 			if (!!$loc.opt.sz && $loc.opt.sz != $rc.historyDefaults.sz) o.sz = $loc.opt.sz
 			if ($loc.title || $loc.namespace || $loc.uuid) {
-				const a2 = $loc.uuid ? ['uuid', $loc.uuid] : ['get', $loc.namespace, $loc.title]
-				after = grab(...a2).then(async page=> {
+				after = grab('nstu', $loc.base).then(async page=> {
 					if (page.val) page.val.historical = !!page.val.nextUuid
-					const history = await grab('history', ...a, o)
+					const history = await grab('nstu', $loc.base, o)
 					cleardata({page, history})
 				})
 			} else {
-				after = grab('history', ...a, o).then(history=> {
+				after = grab('nstu', $loc.base, o).then(history=> {
 					cleardata({history})
 				})
 			}
 		} else if ($loc.title || $loc.namespace || $loc.uuid) {
 			const a = $loc.uuid ? ['uuid', $loc.uuid.toLowerCase()] : ['get', $loc.namespace, $loc.title]
-			after = grab(...a).then(page=> {
+			after = grab('nstu', $loc.base).then(page=> {
 				if (page.val) page.val.historical = !!page.val.nextUuid
 				cleardata({page})
 			})

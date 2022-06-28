@@ -225,6 +225,8 @@ const mkuser = async (qi, confs)=> {
     resourceSet.type = 'user'
     versionSet.editorUuid = userSet.uuid
     versionSet.userUuid = userSet.uuid
+    if (conf.source) versionSet.source = conf.source
+    else versionSet.source = ''
     versionSet.resourceUuid = resourceSet.uuid
     versionSet.namespace = `~${conf.handle}`
     userSet.configUuid = configSet.uuid

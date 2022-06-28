@@ -107,6 +107,7 @@ const shortMask = {
   uuid: 1, number: 1,
   namespace: 1, title: 1,
   views: 1,  createdAt: 1,
+  nextUuid: 1, prevUuid: 1,
   image: {
     rel: 1, size: 1, x: 1, y: 1,
     thumbnails: { rel: 1, size: 1, x: 1, y: 1, thumb: 1 },
@@ -415,6 +416,142 @@ const getResource =async(req, res)=> {
   else await getOne(req, res)
 }
 
+const createPage =async(conf)=> {
+  const rid = v4()
+  try {
+    const resource = await db.resource.create({
+      uuid: rid,
+      creatorUuid: conf.creatorUuid,
+      type: 'page',
+      versions: [{
+        namespace: conf.namespace,
+        title: conf.title,
+        source: conf.source,
+        editorUuid: conf.editorUuid,
+        page: { resourceUuid: rid, },
+      }],
+    }, {
+      include: [{
+        association: db.resource.Version,
+        include: [db.version.Page]
+      }]
+    })
+    return resource
+  } catch (e) {
+    console.log(e)
+    return false
+  }
+}
+const createImage =async(conf)=> {
+  const rid = v4()
+  const cimg = await conf.upload.mkimage()
+  try {
+    const resource = await db.resource.create({
+      uuid: rid,
+      creatorUuid: conf.creatorUuid,
+      type: 'image',
+      versions: [{
+        namespace: conf.namespace,
+        title: conf.title,
+        source: conf.source,
+        editorUuid: conf.editorUuid,
+        image: {
+          uuid: conf.imageUuid,
+          resourceUuid: rid,
+          path: cimg.path,
+          mime: conf.mime,
+          x: cimg.x,
+          y: cimg.y,
+          size: cimg.size,
+          thumbnails: cimg.thumbinfo({resourceUuid: rid}),
+        },
+      }],
+    }, {
+      include: [{
+        association: db.resource.Version,
+        include: [{
+          association: db.version.Image,
+          include: [{
+            association: db.image.Thumbnail,
+          }]
+        }]
+      }]
+    })
+    return resource
+  } catch (e) {
+    console.log(e)
+    await cimg.rmall()
+    return false
+  }
+}
+const createUser =async(conf)=> {
+  try {
+    const rid = v4()
+    let user = await db.user.create({
+      handle: conf.handle,
+      email: conf.email,
+      hash: conf.pass,
+      config: {},
+    }, {
+      include: [{
+        association: db.user.Config,
+      }]
+    })
+    let resource = await db.resource.create({
+      uuid: rid,
+      creatorUuid: user.uuid,
+      type: 'user',
+      deletable: false,
+      private: true,
+      versions: [{
+        namespace: conf.namespace,
+        source: conf.source,
+        editorUuid: user.uuid,
+        userUuid: user.uuid,
+      }],
+    }, {
+      include: [{
+        association: db.resource.Version,
+      }]
+    })
+    return user
+  } catch (e) {
+    if (e.name == 'SequelizeUniqueConstraintError' || 'SequelizeValidationError') {
+      throw e
+      return false
+    } else {
+      console.log(e)
+      return false
+    }
+  }
+}
+
+const duplicateResource =async(conf)=> {
+  let dupe
+  if (conf.target.resource.type == 'page') {
+    dupe = await createPage({
+      namespace: conf.dest.namespace,
+      title: conf.dest.title,
+      source: conf.target.source,
+      creatorUuid: conf.creatorUuid,
+      editorUuid: conf.creatorUuid,
+    })
+  } else if (conf.target.resource.type == 'image') {
+    const upload = new CPBUpload(conf.target.image.path, conf.target.image.mime, true)
+    dupe = await createImage({
+      namespace: conf.dest.namespace,
+      title: conf.dest.title,
+      source: conf.target.source,
+      creatorUuid: conf.creatorUuid,
+      editorUuid: conf.creatorUuid,
+      upload,
+      mime: conf.target.mime,
+    })
+  } else {
+    throw new Error('invalid resource type')
+  }
+  return dupe
+}
 
 const postPage =async(req, res, next)=> {
   if (req.body.type != 'page') {
@@ -432,28 +569,19 @@ const postPage =async(req, res, next)=> {
     Reply.invalid('resource already exists here').send(res)
   } else {
     try {
-      const rid = v4()
-      const resource = await db.resource.create({
-        uuid: rid,
+      const resource = await createPage({
+        namespace: req.nstu.namespace,
+        title: req.nstu.title,
+        source: req.body.source,
         creatorUuid: req.session.cpb.uuid,
-        type: 'page',
-        versions: [{
-          namespace: req.nstu.namespace,
-          title: req.nstu.title,
-          source: req.body.source,
-          editorUuid: req.session.cpb.uuid,
-          page: {
-            resourceUuid: rid,
-          },
-        }],
-      }, {
-        include: [{
-          association: db.resource.Version,
-          include: [db.version.Page]
-        }]
+        editorUuid: req.session.cpb.uuid,
       })
-      const ver = await getSingle(req.nstu)
-      Reply.ok(reshape(ver, req)).send(res)
+      if (resource) {
+        const ver = await getSingle(req.nstu)
+        Reply.ok(reshape(ver, req)).send(res)
+      } else {
+        Reply.internal().send(res)
+      }
     } catch (e) {
       console.log(e)
       Reply.internal().send(res)
@@ -480,46 +608,24 @@ const postImage =async(req, res, next)=> {
   } else if (await exists(req.nstu)) {
     Reply.invalid('resource already exists here').send(res)
   } else {
-    const rid = v4()
-    const cimg = await req.upload.mkimage()
-
     try {
-      const resource = await db.resource.create({
-        uuid: rid,
+      const resource = await createImage({
+        upload: req.upload,
+        namespace: req.nstu.namespace,
+        title: req.nstu.title,
+        source: req.body.source,
         creatorUuid: req.session.cpb.uuid,
-        type: 'image',
-        versions: [{
-          namespace: req.nstu.namespace,
-          title: req.nstu.title,
-          source: req.body.source,
-          editorUuid: req.session.cpb.uuid,
-          image: {
-            uuid: req.imageUuid,
-            resourceUuid: rid,
-            path: req.files.image[0].path,
-            mime: req.files.image[0].mimetype,
-            x: cimg.x,
-            y: cimg.y,
-            size: cimg.size,
-            thumbnails: cimg.thumbinfo({resourceUuid: rid}),
-          },
-        }],
-      }, {
-        include: [{
-          association: db.resource.Version,
-          include: [{
-            association: db.version.Image,
-            include: [{
-              association: db.image.Thumbnail,
-            }]
-          }]
-        }]
+        editorUuid: req.session.cpb.uuid,
+        mime: req.files.image[0].mimetype,
       })
-      const ver = await getSingle(req.nstu)
-      Reply.ok(reshape(ver, req)).send(res)
+      if (resource) {
+        const ver = await getSingle(req.nstu)
+        Reply.ok(reshape(ver, req)).send(res)
+      } else {
+        Reply.internal().send(res)
+      }
     } catch (e) {
       console.log(e)
-      await cimg.rmall()
       Reply.internal().send(res)
     }
   }
@@ -544,37 +650,20 @@ const postUser =async(req, res, next)=> {
     Reply.invalid('resource already exists here').send(res)
   } else {
     try {
-      const rid = v4()
-      let user = await db.user.create({
+      const user = await createUser({
+        namespace: req.nstu.namespace,
+        source: req.body.source,
         handle: req.nstu.username,
         email: req.body.email,
-        hash: req.body.pass,
-        config: {},
-      }, {
-        include: [{
-          association: db.user.Config,
-        }]
+        pass: req.body.pass,
       })
-      let resource = await db.resource.create({
-        uuid: rid,
-        creatorUuid: user.uuid,
-        type: 'user',
-        deletable: false,
-        private: true,
-        versions: [{
-          namespace: req.nstu.namespace,
-          source: req.body.source,
-          editorUuid: user.uuid,
-          userUuid: user.uuid,
-        }],
-      }, {
-        include: [{
-          association: db.resource.Version,
-        }]
-      })
-      req.session.cpb = util.mklogin(user)
-      const ver = await getSingle(req.nstu)
-      Reply.ok(reshape(ver, req)).send(res)
+      if (user) {
+        req.session.cpb = util.mklogin(user)
+        const ver = await getSingle(req.nstu)
+        Reply.ok(reshape(ver, req)).send(res)
+      } else {
+        Reply.internal().send(res)
+      }
     } catch (e) {
       if (e.name == 'SequelizeUniqueConstraintError' || 'SequelizeValidationError') {
         Reply.input().parseErrors(e.errors).send(res)
@@ -647,6 +736,50 @@ const postLogout =async(req, res, next)=> {
     req.session.cpb = util.guestsess()
     const out = {session: req.session.cpb}
     Reply.ok(reshape(out, req)).send(res)
+  }
+  next()
+}
+const postDuplicate =async(req, res, next)=> {
+  if (req.body.type != 'dupe') {
+    next()
+    return
+  }
+  needlogin(req, res)
+  if (res.headersSent) {
+    next()
+    return
+  }
+  const target = await getSingle(req.nstu)
+  if (!target) {
+    Reply.invalid('no resource here').send(res)
+  } else if (target.resource.type == 'user') {
+    Reply.invalid('cannot duplicate users').send(res)
+  } else {
+    const dest = new CPB.NSTU({
+      namespace: req.body.namespace, title: req.body.title,
+    })
+    const occupied = await exists(dest)
+    if (occupied) {
+      Reply.invalid('resource already exists at destination').send(res)
+    } else if (!dest.contentspace) {
+      Reply.invalid('invalid destination for resource').send(res)
+    } else {
+      try {
+        const dupe = await duplicateResource({
+          target, dest,
+          creatorUuid: req.session.cpb.uuid,
+        })
+        if (!dupe) {
+          Reply.internal().send(res)
+        } else {
+          const ver = await getSingle(dest)
+          Reply.ok(reshape(ver, req)).send(res)
+        }
+      } catch (e) {
+        console.log(e)
+        Reply.internal().send(res)
+      }
+    }
   }
   next()
 }
@@ -837,11 +970,12 @@ const put =async(req, res, next)=> {
         return
       }
     } else if (req.body.type == 'user') {
+      console.log(req.body)
       const ec = req.body.email !== undefined && req.body.email != old.user.email
       const pc = req.body.pass !== undefined
-      const cdc = req.body.confDebug !== undefined && req.body.confDebug != old.user.config.debug
-      const cdmc = req.body.confDarkmode !== undefined && req.body.confDarkmode != old.user.config.darkmode
-      const cadc = req.body.confAutodark !== undefined && req.body.confAutodark != old.user.config.autodark
+      const cdc = req.body.config?.debug !== undefined && req.body.config.debug != old.user.config.debug
+      const cdmc = req.body.config?.darkmode !== undefined && req.body.config.darkmode != old.user.config.darkmode
+      const cadc = req.body.config?.autodark !== undefined && req.body.config.autodark != old.user.config.autodark
       const doconfirm = ec || pc || nsc
       let confirmed = false
       if (doconfirm && req.body.confirmation) {
@@ -863,9 +997,9 @@ const put =async(req, res, next)=> {
         try {
           let ver
           if (cdc || cdmc || cadc) {
-            if (cdc) old.user.config.debug = req.body.confDebug
-            if (cdmc) old.user.config.darkmode = req.body.confDarkmode
-            if (cadc) old.user.config.autodark = req.body.confAutodark
+            if (cdc) old.user.config.debug = req.body.config.debug
+            if (cdmc) old.user.config.darkmode = req.body.config.darkmode
+            if (cadc) old.user.config.autodark = req.body.config.autodark
             await old.user.config.save()
           }
           if (nsc || ec || pc) {
@@ -1060,7 +1194,8 @@ nstu.post('/*',
   postLogin,
   postLogout,
   postImage,
-  postEnd
+  postDuplicate,
+  postEnd,
 )
 nstu.put('/*', preAll, prePut, put, postEnd)
 nstu.delete('/*', preAll, deleteResource)

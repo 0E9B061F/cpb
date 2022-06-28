@@ -3,6 +3,7 @@
 const repl = require('repl')
 const { Op } = require('sequelize')
 const util = require('../lib/util.js')
+const cpb = require('../lib/cpb.js')
 const seeders = require('./lib/seeders.js')
 
 const init =c=> {
@@ -11,6 +12,7 @@ const init =c=> {
   c.Op = Op
   c.u = util
   c.seed = seeders
+  c.cpb = cpb
 }
 
 const r = repl.start({prompt: '> '})

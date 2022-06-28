@@ -24,9 +24,9 @@
 <meta property="og:type" content={type} />
 
 {#if type == 'article' && $haspage}
-  <meta property="article:published_time" content={$page.val.page.createdAt} />
+  <meta property="article:published_time" content={$page.val.resource.createdAt} />
   <meta property="article:modified_time" content={$page.val.createdAt} />
-  <meta property="article:author" content={$page.val.user.handle} />
+  <meta property="article:author" content={$page.val.editor} />
   {#if $loc.namespace || $space}
     <meta property="article:section" content={$loc.namespace || $space} />
     <meta property="article:tag" content={$loc.namespace || $space} />

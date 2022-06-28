@@ -21,7 +21,7 @@
     <th>TITLE</th>
     <th class="grow">UUID</th>
   </tr>
-  {#each $history.val.items as item}
+  {#each $history.val as item}
     <HistoryItem {item} />
   {/each}
   </table>

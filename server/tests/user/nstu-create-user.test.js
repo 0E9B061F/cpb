@@ -4,11 +4,11 @@ process.env.NODE_ENV = "test"
 
 
 const request = require('supertest')
-const { db, app } = require('../server.js')
+const { db, app } = require('../../server.js')
 const {
   expectLogout, expectLogin, expectMissing, expectInput, expectUnauthorized,
   expectUnallowed, expectOtherUser, expectSelfUser, expectInvalid, resetdb,
-} = require('../lib/testing.js')
+} = require('../../lib/testing.js')
 
 
 beforeEach(resetdb(db))
@@ -24,7 +24,6 @@ describe("creating user resources", ()=> {
   test("grants a login as the created user", async()=> {
     const agent = request.agent(app)
     let rep = await agent.post("/sys:api/nstu/~TEST").send({type: 'user', pass: 'desdichado', email: 'black@knight.com'})
-    console.log(rep)
     await expectLogin(rep, 'TEST')
     rep = await agent.get("/sys:api/nstu/~")
     await expectLogin(rep, 'TEST')

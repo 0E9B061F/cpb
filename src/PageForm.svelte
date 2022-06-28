@@ -8,11 +8,9 @@
   const postdraft = getContext('postdraft')
   const loc = getContext('loc')
 
-  let namespace = $page.val ? $page.val.namespace : $loc.namespace
-  let title = $page.val ? $page.val.title : $loc.title
-  let body = $page.val ? $page.val.body : ''
+  let body = $page.val ? $page.val.source : ''
 
-  $: $draft = {namespace, title, body}
+  $: $draft = {type: 'page', source: body}
 </script>
 
 <FB vert zero form expand c="editor-area">

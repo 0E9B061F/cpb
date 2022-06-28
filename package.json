@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rollup -c",
-    "postbuild": "node server/build.js",
+    "postbuild": "node server/build/build.js",
     "dev": "env NODE_ENV=development rollup -c -w",
     "app": "server/bin/start.js",
     "dump:dev": "rm -f cpb.dev.sqlite",

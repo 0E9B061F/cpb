@@ -19,8 +19,8 @@
 	  <FB vert center>
 			{#if $state.content}
 				<FB>
-					<MaybeUUID right uuid={$page.val.pageUuid}/>
-					<FB vert center><span class="foot-label">PAGE</span></FB>
+					<MaybeUUID right uuid={$page.val.resource.uuid}/>
+					<FB vert center><span class="foot-label">RSRC</span></FB>
 				</FB>
 				<FB>
 					<MaybeUUID right uuid={$page.val.prevUuid}/>

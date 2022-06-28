@@ -97,6 +97,10 @@ api.get('/missing/:titles', (req, res) => {
   db.version.findAll({
     where: {
       [Op.or]: Object.values(titles),
+    },
+    include: {
+      model: db.resource,
+      where: { trashed: false },
     }
   }).then(pages=> {
     const found = {}
