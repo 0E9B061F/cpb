@@ -11,6 +11,7 @@
 
   const loc = getContext('loc')
   const haslogin = getContext('haslogin')
+  const state = getContext('state')
 
   let tab
   let cmp
@@ -41,7 +42,7 @@
     const t = new Tabs()
     if ($haslogin) {
       t.add('bookmark', BookmarkCtrl)
-      if ($state.anchor) {
+      if ($state.anchor || $state.pageperm) {
         t.add('move', MoveCtrl)
         t.add('delete', DeleteCtrl)
       }

@@ -109,7 +109,7 @@ const shortMask = {
   views: 1,  createdAt: 1,
   nextUuid: 1, prevUuid: 1,
   image: {
-    rel: 1, size: 1, x: 1, y: 1,
+    rel: 1, size: 1, x: 1, y: 1, mime: 1, max: 1,
     thumbnails: { rel: 1, size: 1, x: 1, y: 1, thumb: 1 },
   },
   user: {
@@ -537,7 +537,7 @@ const duplicateResource =async(conf)=> {
       editorUuid: conf.creatorUuid,
     })
   } else if (conf.target.resource.type == 'image') {
-    const upload = new CPBUpload(conf.target.image.path, conf.target.image.mime, true)
+    const upload = new CPBUpload(conf.target.image.path, conf.target.image.mime, conf.imageUuid.toUpperCase(), true)
     dupe = await createImage({
       namespace: conf.dest.namespace,
       title: conf.dest.title,
@@ -545,7 +545,8 @@ const duplicateResource =async(conf)=> {
       creatorUuid: conf.creatorUuid,
       editorUuid: conf.creatorUuid,
       upload,
-      mime: conf.target.mime,
+      mime: conf.target.image.mime,
+      imageUuid: conf.imageUuid,
     })
   } else {
     throw new Error('invalid resource type')
@@ -617,6 +618,7 @@ const postImage =async(req, res, next)=> {
         creatorUuid: req.session.cpb.uuid,
         editorUuid: req.session.cpb.uuid,
         mime: req.files.image[0].mimetype,
+        imageUuid: req.imageUuid,
       })
       if (resource) {
         const ver = await getSingle(req.nstu)
@@ -768,6 +770,7 @@ const postDuplicate =async(req, res, next)=> {
         const dupe = await duplicateResource({
           target, dest,
           creatorUuid: req.session.cpb.uuid,
+          imageUuid: req.imageUuid,
         })
         if (!dupe) {
           Reply.internal().send(res)

@@ -222,15 +222,25 @@
 	const postput =(method, ...a)=> {
 		const body = a.pop()
 		const url = cmdu(...a)
-		return fetch(url, {
-			method,
-			body: JSON.stringify(body),
-      headers: { 'Content-Type': 'application/json' },
+		let prom
+		if (body instanceof FormData) {
+			console.log('FOOOOOOOOOOOOOOOOOOOOOOOOOOO')
+			prom = fetch(url, { method, body })
+		} else {
+			prom =  fetch(url, {
+				method,
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify(body),
+			})
+		}
+		return prom.then(res=> {
+			console.log(res)
+			return res.json()
 		})
-		.then(res=> res.json())
 		.then(r=> {
 			dbg(`${method} ${url}`)
-			dbg(body, r)
+			if (body instanceof FormData) dbg([...body.entries()], r)
+			else dbg(body, r)
 			return r
 		})
 		.catch(e=> {
@@ -617,7 +627,7 @@
 		s.loading = false
 		s.loadtime = Date.now() - s.loadstart
 		if ($haspage && $loc.uuid) {
-			if ($loc.uuid.toLowerCase() == $page.val.pageUuid) s.pageperm = true
+			if ($loc.uuid.toLowerCase() == $page.val.resource.uuid) s.pageperm = true
 			else if ($loc.uuid.toLowerCase() == $page.val.uuid) s.verperm = true
 		}
 		if (!$loc.uuid && !$loc.namespace) {

@@ -118,6 +118,23 @@
     highlights = []
   }
 
+  const thinfo =(thumb, rel)=> {
+    return { thumb, rel }
+  }
+
+  const thumb =wanted=> {
+    let out = null
+    let found = null
+    if (wanted > $page.val.image.max) return thinfo(false, $page.val.image.rel)
+    $page.val.image.thumbnails.forEach(t=> {
+      if (t.thumb == wanted) out = t.rel
+      else if (t.thumb < wanted && (!found || t.thumb > found.thumb)) {
+        found = t
+      }
+    })
+    return thinfo(true, out) || thinfo(true, found?.rel) || thinfo(false, $page.val.image.rel)
+  }
+
   let shl
 
   $: if (body) {
@@ -130,6 +147,7 @@
       }
     }
   }
+  $: image = $haspage && $page.val.resource.type == 'image' ? thumb(768) : null
 </script>
 
 {#if $haspage}
@@ -151,6 +169,23 @@
             <FB vc title line="b3" fw={6}><Link space={$state.namespace} title={$state.title}/></FB>
           {/if}
         </FB>
+      {/if}
+      {#if image}
+        {#if image.thumb}
+          <FB center c="image-viewer">
+            <FB vert>
+              <Link external={$page.val.image.rel}><img src={image.rel}/></Link>
+              <FB expand end line="s2" fw={6}>(click to expand)</FB>
+            </FB>
+          </FB>
+        {:else}
+          <FB center c="image-viewer">
+            <FB vert>
+              <img src={image.rel}/>
+              <FB expand end line="s2" fw={6}>(full size)</FB>
+            </FB>
+          </FB>
+        {/if}
       {/if}
       <SvelteMarkdown source={$page.val.source} {renderers} {options} on:parsed={onparse} />
     </div>

@@ -16,12 +16,15 @@ const rm =async(path)=> {
 }
 
 class CPBUpload {
-  constructor(path, mime, preserve=false) {
+  constructor(path, mime, rename=false, preserve=false) {
     this.path = path
     this.mime = mime
+    this.ext = util.extmap[this.mime]
     this.valid = this.mime.match(util.validmime.image)
     this.basename = pathlib.basename(this.path)
-    this.target = `${CPB.rc.uploads.path}/${this.basename}`
+    this.rename = rename
+    const tbase = this.rename ? `${this.rename}.${this.ext}` : this.basename
+    this.target = `${CPB.rc.uploads.path}/${tbase}`
     this.preserve = preserve
     this.image = null
   }
@@ -56,10 +59,13 @@ class CPBImage {
     this.x = this.meta.width
     this.y = this.meta.height
     this.size = (await fs.promises.stat(this.path)).size
+    const max = Math.max(this.x, this.y)
     for (let x = 0; x < CPB.rc.images.thumbnails.length; x++) {
       const s = CPB.rc.images.thumbnails[x]
-      this.thumbs[s] = new CPBThumb(this, this.thumbpath(s), s)
-      await this.thumbs[s].prep()
+      if (s < max) {
+        this.thumbs[s] = new CPBThumb(this, this.thumbpath(s), s)
+        await this.thumbs[s].prep()
+      }
     }
   }
   get max() { return Math.max(this.x, this.y) }

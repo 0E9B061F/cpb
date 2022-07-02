@@ -614,12 +614,22 @@ ol.treelike {
   gap: 5px;
 }
 
-.fb-form input {
+.fb-form input:not([type="file"]) {
   height: 1.8rem;
   line-height: 1.8rem;
   border: 0;
   border-bottom: 1px solid rgb(0,100,200);
 	background-color: #f5f5f5;
+}
+.fb-form input[type="file"] {
+  height: 2.4rem;
+  line-height: 2rem;
+  border: 0;
+  direction: rtl;
+}
+.editor-module {
+  border-right: var(--pxgap) solid var(--matte);
+  padding-right: calc(2 * var(--pxgap));
 }
 .fb-form .cpblink {
   line-height: 1.8rem;
@@ -668,7 +678,7 @@ ol.treelike {
   outline: 0;
 }
 .editor-rule {
-  position: absolute;
+  position: relative;
   width: calc(100% - 0.625rem);
   height: 1px;
   background-color: var(--embossed);
@@ -853,6 +863,15 @@ h6 {
 }
 .rendered .highlight-2 {
   background-color: #ffeaea;
+}
+
+.image-viewer {
+  margin-top: 2rem;
+}
+.image-viewer img {
+  max-width: 768px;
+  max-height: 1024px;
+  border: var(--pxgap) solid var(--matte);
 }
 
 

@@ -52,7 +52,7 @@
     "onRight": true
   },
   "images": {
-    "thumbnails": [32, 64, 128, 256, 512],
+    "thumbnails": [32, 64, 128, 256, 512, 768],
     "extensions": {
       "image/png": "png",
       "image/jpeg": "jpeg",

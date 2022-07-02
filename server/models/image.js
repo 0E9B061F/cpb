@@ -74,6 +74,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    max: {
+      type: DataTypes.VIRTUAL,
+      get() { return Math.max(this.x, this.y) },
+    },
   }), {
     sequelize, modelName: 'image',
     hooks: {
