@@ -59,6 +59,8 @@
   export let c = []
   export let current = false
   export let info = null
+  export let precise = false
+  export let force = false
 
   export let overload = false
   export let decmd = false
@@ -93,10 +95,12 @@
   }
 
   const goto =p=> {
+    console.log(force)
     if (does) does()
     if (!nolink) {
-      if (!current || global) $gs.goto(href)
-      else reload()
+      if (force) reload(href)
+      else if (!current || global) $gs.goto(href)
+      else reload(href)
     }
   }
   const nav =()=> {
@@ -138,7 +142,7 @@
         scratch.space = scratch.nstu.namespace
         scratch.title = scratch.nstu.title
         scratch.sub = scratch.nstu.tail
-        scratch.opt = scratch.nstu.opts
+        scratch.opt = Object.assign({}, scratch.opt, scratch.nstu.opts)
         scratch.cmd = scratch.nstu.hash
         scratch.shortenable = scratch.nstu.shortenable
       }
@@ -189,17 +193,15 @@
     preload()
     parsenst()
 
-    if (!scratch.nstu) {
-      scratch.nstu = new CPB.NSTU({
-        namespace: scratch.space,
-        title: scratch.title,
-        tail: scratch.sub,
-        hash: scratch.cmd,
-        opts: scratch.opt,
-        uuid: scratch.uuid,
-      })
-      scratch.shortenable = scratch.nstu.shortenable
-    }
+    scratch.nstu = new CPB.NSTU({
+      namespace: scratch.space,
+      title: scratch.title,
+      tail: scratch.sub,
+      hash: scratch.cmd,
+      opts: scratch.opt,
+      uuid: scratch.uuid,
+    })
+    scratch.shortenable = scratch.nstu.shortenable
     nstu = scratch.nstu
 
     if (scratch.space == $rc.syskey) special = true
@@ -253,7 +255,8 @@
 
     href = href.replace(/ /g, '_')
 
-    current = $loc.same && scratch.nstu.same($loc)
+    current = precise ? $loc.identical && scratch.nstu.identical($loc) : $loc.same && scratch.nstu.same($loc)
+    if (precise) console.log(current, href, disable)
 
     if (info) rinfo = info
     if (current && !global) rinfo = `${rinfo} (current)`
@@ -339,7 +342,7 @@
       bounce, nst
     )
   }
-  $: current = $loc && $loc.same && nstu && nstu.same($loc)
+  $: current = precise ? $loc && $loc.identical && nstu && nstu.identical($loc) : $loc && $loc.same && nstu && nstu.same($loc)
   $: if (!special && !nolink && !bounce && !self && !global && !silent && !current && !nored && !external) {
     reddable = true
   } else {

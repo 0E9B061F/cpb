@@ -201,6 +201,10 @@ a, .nolink, a:visited {
 .rendered .system .cpblink:hover .cpblink-text {
   text-decoration: underline;
 }
+.rendered .system .cpblink.disabled-link:hover .cpblink-text,
+.rendered .system .cpblink.current-link:hover .cpblink-text {
+  text-decoration: none;
+}
 .rendered .cpblink.missing .cpblink-text {
   text-decoration-color: var(--cc-missing-deco);
 }
@@ -868,10 +872,15 @@ h6 {
 .image-viewer {
   margin-top: 2rem;
 }
+.image-box {
+  min-width: 256px;
+  min-height: 256px;
+  border: var(--pxgap) solid var(--matte);
+  background-color: var(--metal);
+}
 .image-viewer img {
   max-width: 768px;
   max-height: 1024px;
-  border: var(--pxgap) solid var(--matte);
 }
 
 

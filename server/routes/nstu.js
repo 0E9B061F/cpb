@@ -121,7 +121,7 @@ const wholeMask = {
   resource: {
     creator: c=> c.handle,
     uuid: 1, type: 1,
-    trashed: 1, trashable: 1, movable: 1, editable: 1,
+    trashed: 1, trashable: 1, movable: 1, editable: 1, private: 1,
     views: 1,  createdAt: 1,
   },
   user: {

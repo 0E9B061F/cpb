@@ -26,5 +26,5 @@
   {/each}
   </table>
   <FB expand/>
-  <SearchPagination result={$history.val}/>
+  <SearchPagination result={$history}/>
 {/if}

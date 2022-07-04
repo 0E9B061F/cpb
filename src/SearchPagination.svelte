@@ -10,25 +10,25 @@
 
   let firstpage, lastpage, prevpage, nextpage
   $: if (result) {
-    firstpage = result.page <= 1
-    lastpage = result.page >= result.pages
-    prevpage = result.page - 1 > 1
-    nextpage = result.page + 1 < result.pages
+    firstpage = result.opt.pg <= 1
+    lastpage = result.opt.pg >= result.opt.pp
+    prevpage = result.opt.pg - 1 > 1
+    nextpage = result.opt.pg + 1 < result.opt.pp
   }
 </script>
 
 {#if result}
   <FB between c="pagination">
     <PaginLink lab="FIRST" pnum={1} enable={!firstpage}/>
-    <SearchWing {width} neg page={result.page} pages={result.pages}/>
+    <SearchWing {width} neg page={result.opt.pg} pages={result.opt.pp}/>
     <FB c="pagination-center">
-      <PaginLink lab="PREV" pnum={result.page - 1} enable={prevpage}/>
+      <PaginLink lab="PREV" pnum={result.opt.pg - 1} enable={prevpage}/>
       <SearchInter cond={prevpage}/>
-      <PaginLink lab="PAGE" pnum={result.page} nolink/>
+      <PaginLink lab="PAGE" pnum={result.opt.pg} nolink/>
       <SearchInter cond={nextpage}/>
-      <PaginLink lab="NEXT" pnum={result.page + 1} enable={nextpage}/>
+      <PaginLink lab="NEXT" pnum={result.opt.pg + 1} enable={nextpage}/>
     </FB>
-    <SearchWing {width} page={result.page} pages={result.pages}/>
-    <PaginLink lab="LAST" pnum={result.pages} enable={!lastpage}/>
+    <SearchWing {width} page={result.opt.pg} pages={result.opt.pp}/>
+    <PaginLink lab="LAST" pnum={result.opt.pp} enable={!lastpage}/>
   </FB>
 {/if}

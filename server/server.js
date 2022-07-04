@@ -6,6 +6,7 @@ const util = require('./lib/util.js')
 const express = require('express')
 const cors = require('cors')
 const sirv = require('sirv')
+const serveStatic = require('serve-static')
 const compress = require('compression')()
 const session = require('express-session')
 
@@ -23,7 +24,7 @@ const html = sirv('public', {
   maxAge: 31536000, // 1Y
   single: true
 })
-const assets = sirv('assets', {
+const assets = serveStatic('assets', {
   maxAge: 31536000, // 1Y
 })
 

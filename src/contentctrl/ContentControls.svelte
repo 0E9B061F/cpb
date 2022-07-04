@@ -42,11 +42,13 @@
     const t = new Tabs()
     if ($haslogin) {
       t.add('bookmark', BookmarkCtrl)
-      if ($state.anchor || $state.pageperm) {
-        t.add('move', MoveCtrl)
-        t.add('delete', DeleteCtrl)
+      if (!$state.private || $state.owned) {
+        if ($state.anchor || $state.pageperm) {
+          t.add('move', MoveCtrl)
+          t.add('delete', DeleteCtrl)
+        }
+        if (!$state.user) t.add('duplicate', DuplicateCtrl)
       }
-      t.add('duplicate', DuplicateCtrl)
     }
     tabs = t
     if (!tabs.get(tab)) {

@@ -2,7 +2,6 @@
   import FB from '../FB.svelte'
   import InfoTOC from './InfoTOC.svelte'
   import Tabulate from '../util/Tabulate.svelte'
-  import HighlightControls from '../HighlightControls.svelte'
   import QR from '../QR.svelte'
   import { getContext } from 'svelte'
   import date from 'date-and-time'
@@ -75,9 +74,9 @@
     {#if $state.verperm}
       <FB center line="s1" c="blacktag">
         {#if $state.old}
-          OLD VERSION
+          HISTORICAL
         {:else}
-          CURRENT VERS.
+          CURRENT
         {/if}
       </FB>
     {/if}
@@ -98,7 +97,6 @@
     <QR data={vpermac} ver={3} scale={2} uuid={$page.val.uuid} title="Version Permalink" />
     <QR data={permac} ver={3} scale={2} uuid={$page.val.resource.uuid} title="Page Permalink" />
   </FB>
-  <HighlightControls/>
   {#if $ui <= 1}
     <InfoTOC/>
   {/if}

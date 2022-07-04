@@ -447,11 +447,13 @@
 	}
 	setContext('msg', msg)
 
-	const fullsearch =(q, o={})=> {
-		o = Object.assign(o, {
-			get: 'list', q
-		})
-		return grab('nstu', o)
+	const fullsearch =(o={}, ns)=> {
+		console.log(o)
+		o = { ...o, get: 'list' }
+		const a = [o]
+		if (ns) a.unshift(`${ns}:`)
+		console.log(a)
+		return grab('nstu', ...a)
 		.catch(e=> handle(e))
 	}
 	setContext('fullsearch', fullsearch)
@@ -532,6 +534,7 @@
 			editing: false, creating: false, error: 0,
 			current: false, head: false, old: false, anchor: false,
 			system: false, history: false, user: false,
+			private: false, owned: false,
 			pageperm: false, verperm: false,
 			label: 'BLANK', cmp: null,
 			namespace: null, title: null,
@@ -634,16 +637,10 @@
 			s.cmp = Homepage
 			s.home = true
 			s.label = 'HOME'
-		} else if ($loc.namespace && !$loc.title) {
-			if ($loc.userspace) {
-				s.cmp = User
-				s.user = true
-				s.label = 'USER'
-			} else {
-				s.cmp = Index
-				s.index = true
-				s.label = 'INDEX'
-			}
+		} else if ($loc.namespace && !$loc.title && !$loc.userspace) {
+			s.cmp = Index
+			s.index = true
+			s.label = 'INDEX'
 		} else if ($hashistory && $loc.opt.history) {
 			s.cmp = History
 			s.history = true
@@ -708,6 +705,9 @@
 			s.anchor = true
 			s.label = 'ANCHOR'
 			s.content = true
+			if ($page.val.resource.type == 'user') {
+				s.user = true
+			}
 			if ($haslogin) {
 				s.editable = true
 			}
@@ -730,6 +730,9 @@
 		if ($haspage) {
 			s.namespace = $page.val.namespace
 			s.title = $page.val.title
+			s.private = $page.val.resource.private
+			s.owned = $haslogin && $session.val.user.session.handle == $page.val.resource.creator
+			if (s.private && !s.owned) s.editable = false
 		} else if ($loc.namespace || $loc.title) {
 			s.namespace = $loc.namespace
 			s.title = $loc.title
@@ -830,7 +833,7 @@
 		}
 	}
 
-	const preload =p=> {
+	const preload =(p,f)=> {
 		console.log('CPB PRE-LOAD')
 		$loc = parseloc(p)
 		if ($loc.rel != $path) {
@@ -838,7 +841,8 @@
 			window.history.replaceState({}, $loc.rel, $loc.rel)
 			setpaths()
 		}
-		if ($loc.load) load()
+		console.log(f)
+		if ($loc.load || f) load()
 		else if ($loc.scroll && $loc.hash) {
 			dbg(`SCROLLING TO ${$loc.cmd}`)
 			scrollto($loc.hash)
@@ -870,10 +874,6 @@
 		let after = false
 		if ($loc.namespace == $rc.syskey && cpbspace.has($loc.title)) {
 			after = false
-		} else if ($loc.userspace) {
-			after = grab('nstu', $loc.base).then(user=> {
-				cleardata({user})
-			})
 		} else if ($loc.opt.history) {
 			const o = {get: 'hist'}
 			if (!!$loc.opt.pg && $loc.opt.pg != $rc.historyDefaults.pg) o.pg = $loc.opt.pg
@@ -917,15 +917,20 @@
 	}
 	setContext('updatescroll', updatescroll)
 
-	const reload =()=> {
-		launch($path)
+	const reload =(p)=> {
+		dbg(`FORCE LOAD ${p}`)
+		if (p != $path) {
+			window.history.pushState({}, p, p)
+		}
+		setpaths()
+		launch($path, true)
 	}
 	setContext('reload', reload)
 
-	const launch =p=> {
+	const launch =(p,f)=> {
 		console.log('COMMONPLACE BOOK: LAUNCH')
-		if ($hassess) preload($path)
-		else getsession().then(s=> preload($path))
+		if ($hassess) preload($path, f)
+		else getsession().then(s=> preload($path, f))
 	}
 
 	const drophash =()=> {

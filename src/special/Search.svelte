@@ -6,13 +6,15 @@
   import SearchPagination from '../SearchPagination.svelte'
   import { getContext } from 'svelte'
   const loc = getContext('loc')
+  export let namespace = null
   let result
 </script>
 
 <FB vert expand>
 <SearchBar
   bind:result
-  query={$loc.sub[0]}
+  {namespace}
+  query={$loc.opt.q}
   pgOpt={$loc.opt.pg}
   szOpt={$loc.opt.sz}
   inf={$loc.opt.inf}
@@ -20,25 +22,22 @@
   options
 />
 
-{#if result && result.items}
+{#if result && result.val}
   <FB vert expand c="results search-results">
     <FB c="results-heading">
       <div class="results-cell col1">TITLE</div>
       <div class="results-cell col2">TEXT</div>
     </FB>
     <FB expand vert c="results-items">
-      {#each result.items as item}
+      {#each result.val as item}
         <FB c="results-row">
           <div class="results-cell col1 title-header">
-            {#if item.namespace != 'main'}
-              <span class="ns-header">({item.namespace})</span>
-            {/if}
-            <Link space={item.namespace} title={item.plain} nored>
-              <SearchEmph text={item.title}/>
+            <Link space={item.namespace} title={item.title} nored>
+              {#if item.namespace != 'main'}<span class="ns-header">{item.namespace}{#if item.namespace && item.namespace[0] != '~'}:{/if}</span>{/if}<SearchEmph text={item.search.title || item.title}/>
             </Link>
           </div>
           <div class="results-cell col2 body-header">
-            <SearchEmph text={item.body}/>
+            <SearchEmph text={item.search.source}/>
           </div>
         </FB>
       {/each}

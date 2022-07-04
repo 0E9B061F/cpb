@@ -171,21 +171,19 @@
         </FB>
       {/if}
       {#if image}
-        {#if image.thumb}
-          <FB center c="image-viewer">
-            <FB vert>
-              <Link external={$page.val.image.rel}><img src={image.rel}/></Link>
+        <FB center c="image-viewer system">
+          <FB vert>
+          {#if image.thumb}
+            <Link external={$page.val.image.rel}>
+              <FB center c="image-box"><FB vert center><img src={image.rel}/></FB></FB>
               <FB expand end line="s2" fw={6}>(click to expand)</FB>
-            </FB>
+            </Link>
+          {:else}
+            <FB center c="image-box"><FB vert center><img src={image.rel}/></FB></FB>
+            <FB expand end line="s2" fw={6}>(full size)</FB>
+          {/if}
           </FB>
-        {:else}
-          <FB center c="image-viewer">
-            <FB vert>
-              <img src={image.rel}/>
-              <FB expand end line="s2" fw={6}>(full size)</FB>
-            </FB>
-          </FB>
-        {/if}
+        </FB>
       {/if}
       <SvelteMarkdown source={$page.val.source} {renderers} {options} on:parsed={onparse} />
     </div>

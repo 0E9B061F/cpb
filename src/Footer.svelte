@@ -38,7 +38,7 @@
 				<FB c="foot-controls" expand end>
 					<FB vert center>
 						{#if $state.creating}
-							<Link self global first={postdraft}>CREATE</Link>
+							<Link self global first={postdraft} force>CREATE</Link>
 						{:else if $state.editing}
 							<Link self global first={postdraft} opt={{edit: undefined}}>SAVE</Link>
 						{/if}

@@ -52,6 +52,7 @@
     "qrcode": "^1.5.0",
     "rimraf": "^3.0.2",
     "sequelize": "^6.12.5",
+    "serve-static": "^1.15.0",
     "sharp": "^0.30.6",
     "sirv": "^2.0.0",
     "sirv-cli": "^1.0.0",

@@ -10,6 +10,7 @@
 	import SearchEmph from './SearchEmph.svelte'
 
   import { getContext, createEventDispatcher } from 'svelte'
+	import CPB from '../lib/cpb.js'
 	const dispatch = createEventDispatcher()
   const rc = getContext('rc')
   const gs = getContext('gs')
@@ -24,21 +25,22 @@
 	export let preview = false
 	export let options = false
 	export let auto = false
-	export let result = []
+	export let result = null
+	export let namespace = null
   let exists = false
 	let focused
 	let timer = null
 	let input
 	let gb, sb
 	let fresh = true
-	export let inf = 'title,body'
-	let titleOpt, bodyOpt
+	export let inf = 'title,source'
+	let titleOpt, sourceOpt
 	if (inf) {
 		titleOpt = inf.split(',').indexOf('title') > -1
-		bodyOpt = inf.split(',').indexOf('body') > -1
+		sourceOpt = inf.split(',').indexOf('source') > -1
 	} else {
 		titleOpt = true
-		bodyOpt = true
+		sourceOpt = true
 	}
 	export let inhOpt = false
 	export let szOpt = 25
@@ -63,35 +65,42 @@
 		input.erase()
 	}
 	const quit =()=> input.quit()
-	const search =()=> {
-		if (!query || query == '') {
-			result = []
-			timer = null
+	const search =(after=null)=> {
+		fullsearch(searchOpt, namespace)
+		.then(res=> {
 			dispatch('done')
-		} else {
-			fullsearch(query, searchOpt)
-			.then(res=> {
-				dispatch('done')
-				if (res.err == 0) {
-					result = res.val
-					timer = null
-					fresh = false
-				}
-			})
-		}
+			if (after) after()
+			if (res.err == 0) {
+				res.val.forEach(i=> i.nstu = new CPB.NSTU({namespace: i.namespace, title: i.title}))
+				result = res
+				timer = null
+				fresh = false
+				changed = false
+			}
+		})
+	}
+	const manualSearch =()=> {
+		search(()=> exit())
+	}
+	const autoSearch =()=> {
+		if (!query) {
+			result = null
+			timer = null
+			changed = false
+		} else search()
 	}
 	const delay =()=> {
     if (timer) clearTimeout(timer)
-    timer = setTimeout(search, 500)
+    timer = setTimeout(autoSearch, 500)
   }
 
 	const edited =e=> {
 		query = e.detail.val
 	}
 
-	$: if (result.length) {
+	$: if (result && result.val.length) {
 		exists = false
-		result.forEach(i=> {
+		result.val.forEach(i=> {
 			if (i.title == query) exists = i
 		})
 	}
@@ -105,24 +114,29 @@
 		setcontrols()
 	}
 
-	$: if (typeof(pgOpt) != 'number') pgOpt = parseInt(pgOpt)
+	$: if (typeof(pgOpt) != 'number') pgOpt = parseInt(pgOpt) || null
+
+	let changed = false
 
 	let searchOpt = {}
 	const mkopts =()=> {
 		const f = []
 		if (titleOpt) f.push('title')
-		if (bodyOpt) f.push('body')
+		if (sourceOpt) f.push('source')
 		const o = {}
 		if (szOpt != $rc.searchDefaults.sz) o.sz = szOpt
 		if (f.join(',') != $rc.searchDefaults.inf.join(',')) o.inf = f
 		if (inhOpt != $rc.searchDefaults.inh) o.inh = inhOpt
 		if (pgOpt != $rc.searchDefaults.pg) o.pg = pgOpt
+		if (query) o.q = query
 		searchOpt = o
+		changed = true
 	}
-	$: mkopts(titleOpt, bodyOpt, szOpt, inhOpt)
+	$: mkopts(titleOpt, sourceOpt, szOpt, inhOpt, query, pgOpt)
 
 	$: if (auto) delay(query)
-	else if (fresh && query) search()
+	$: if (!auto) search(false, pgOpt)
+	$: console.log(pgOpt)
 
 	$: createin = $loc.namespace && $loc.namespace != $rc.syskey ? $loc.namespace : $rc.defns
 </script>
@@ -138,11 +152,11 @@
 	>
 		<svelte:fragment slot="extra">{#if preview}
 			<FB vert c="search-preview-wrapper">
-				{#if result.items}
+				{#if result && result.val}
 				<FB vert c="search-preview">
-					{#each result.items as item}
+					{#each result.val as item}
 						<FB leaf line c="search-preview-item">
-							<Link does={quit} space={item.namespace} title={item.plain} nored><SearchEmph text={item.title}/></Link>
+							<Link does={quit} space={item.namespace} title={item.title} nored><SearchEmph text={item.search.title || item.title}/></Link>
 						</FB>
 					{/each}
 				</FB>
@@ -168,7 +182,7 @@
 						</Link>
 				  {/if}
 					<Link does={quit}
-						nst="{$rc.syskey}:{$rc.defsearch}" sub={[query]}
+						nst="" opt={{q: query}}
 						disable={!query}
 						marked={!$modifiers.Shift}
 						bind:this={sb}>
@@ -178,10 +192,11 @@
 			</FB>
 		{/if}</svelte:fragment>
 		<svelte:fragment slot="buttons">{#if !preview}
-			<Link does={quit}
-				nst="{$rc.syskey}:{$rc.defsearch}" sub={[query]}
-				disable={!query}
-				marked={!$modifiers.Shift}
+			<Link does={manualSearch}
+				precise
+				space={namespace}
+				overload
+				disable={!changed}
 				bind:this={sb}
 				opt={searchOpt}
 				>
@@ -190,8 +205,8 @@
 		{/if}</svelte:fragment>
 		<svelte:fragment slot="options">{#if options}
 			<FB line>
-				<Check lab="TITLES" bind:state={titleOpt}/>
-				<Check lab="BODY" bind:state={bodyOpt}/>
+				<Check lab="TITLE" bind:state={titleOpt}/>
+				<Check lab="SOURCE" bind:state={sourceOpt}/>
 				<FB leaf spacer={1}/>
 				<Check lab="HISTORY" bind:state={inhOpt}/>
 				<FB expand/>

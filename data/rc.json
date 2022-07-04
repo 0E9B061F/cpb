@@ -19,7 +19,7 @@
   "title": "CPB",
   "searchDefaults": {
     "sz": 25,
-    "inf": ["title", "body"],
+    "inf": ["title", "source"],
     "inh": false,
     "pg": 1
   },

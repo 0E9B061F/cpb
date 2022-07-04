@@ -31,8 +31,8 @@
     value = ''
   }
   export const quit =()=> {
-    exit()
     erase()
+    exit()
   }
   const edited =val=> {
     dispatch('edited', {val})
