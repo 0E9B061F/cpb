@@ -13,7 +13,7 @@
     "seed": "npx sequelize-cli db:seed --seed 20220126035836-root-user --seed 20220126035855-default-page --debug",
     "seed:dev": "npx sequelize-cli db:seed:all --debug",
     "refresh:dev": "run-s dump:dev sync seed:dev",
-    "refresh": "run-s dump:dev mig:dev seed",
+    "refresh": "run-s dump:dev sync seed",
     "test": "jest"
   },
   "devDependencies": {
