@@ -108,7 +108,7 @@
     else goto(href)
   }
   const clicked =()=> {
-    if (disable || (current && !global)) return
+    if (disable || (current && !global && !nolink)) return
     if (cond) cond().then(r=> { if (r) nav() })
     else nav()
   }
@@ -321,7 +321,7 @@
     if (nolink) cc.push('nolink')
     if (external) cc.push('external')
     if (selfanchor) cc.push('selfanchor')
-    if (!global && current) cc.push('current-link')
+    if (!nolink && !global && current) cc.push('current-link')
     cls = cc.join(' ')
   }
 

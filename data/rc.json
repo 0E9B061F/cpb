@@ -17,16 +17,6 @@
   "fadein": 2500,
   "homekey": "~",
   "title": "CPB",
-  "searchDefaults": {
-    "sz": 25,
-    "inf": ["title", "source"],
-    "inh": false,
-    "pg": 1
-  },
-  "historyDefaults": {
-    "sz": 25,
-    "pg": 1
-  },
   "listConfig": {
     "sz": {
       "min": 5, "max": 50, "default": 25
@@ -34,7 +24,10 @@
     "pg": {
       "min": 1, "max": 1000, "default": 1
     },
-    "inh": false
+    "inh": false,
+    "ui": {
+      "min": 0, "max": 99, "default": 0
+    }
   },
   "searchConfig": {
     "inf": {

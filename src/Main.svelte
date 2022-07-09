@@ -41,7 +41,7 @@
 
 	let lut
 
-  let rc = writable(rco)
+  let rc = writable(CPB.rc)
 	let booted = writable(Date.now() - lastboot < $rc.bootwait)
 
 	let aod = writable(0)

@@ -34,6 +34,9 @@ const upload = multer({ storage, limits: {
   headerPairs: 100,
 }}).fields([{ name: 'image', maxCount: 1 }])
 
+const clip = 500
+const hclip = clip / 2
+
 const nstu = require('express').Router()
 const { Op } = require('sequelize')
 const bcrypt = require('bcrypt')
@@ -255,16 +258,16 @@ const proctype =(type)=> {
   return type
 }
 const highlight =(list, query, inf)=> {
-  const rx = new RegExp(`(.{0,40}?)(${query})(.{0,40})`, 'i')
+  const rx = new RegExp(`(.{0,${hclip}}?)(${query})(.{0,${hclip}})`, 'i')
   const ht = query && (inf == 'both' || inf == 'title')
   const hs = query && (inf == 'both' || inf == 'source')
   list.forEach(v=> {
     const search = {}
     if (hs) {
       let sm = v.source.match(rx)
-      sm = sm ? sm.slice(1,4) : v.source.slice(0,40)
+      sm = sm ? sm.slice(1,4) : v.source.slice(0,clip)
       search.source = sm
-    } else search.source = v.source.slice(0,40)
+    } else search.source = v.source.slice(0,clip)
     delete v.source
     if (v.title && ht) {
       let tm = v.title.match(rx)

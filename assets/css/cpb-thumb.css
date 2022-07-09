@@ -1,0 +1,31 @@
+/* border colors */
+.cpb-thumb .thumb-frame {
+  border: var(--pxgap) solid var(--matte);
+}
+.cpb-thumb.linked-thumb .thumb-frame {
+  border: var(--pxgap) solid var(--matte);
+}
+.cpb-thumb.linked-thumb:hover .thumb-frame {
+  border: var(--pxgap) solid var(--blue);
+}
+
+.cpb-thumb {
+  --borderspace: calc(var(--pxgap) * 2);
+}
+.cpb-thumb.fixed-thumb,
+.cpb-thumb.fixw-thumb {
+  width: calc(var(--fixedw) + var(--borderspace));
+}
+.cpb-thumb.fixed-thumb,
+.cpb-thumb.fixh-thumb {
+  height: calc(var(--fixedh) + var(--borderspace));
+}
+.cpb-thumb .thumb-frame {
+  width: calc(var(--framew) + var(--borderspace));
+  height: calc(var(--frameh) + var(--borderspace));
+  background-color: var(--metal);
+}
+.cpb-thumb img {
+  max-width: var(--thsize);
+  max-height: var(--thsize);
+}

@@ -1,4 +1,5 @@
 @import 'hacks.css';
+@import 'cpb-thumb.css';
 
 body {
   /* measures */
@@ -79,7 +80,7 @@ body {
 
   --title: #2a2a2a;
   --matte: #353535;
-  --antimatte: #efefef;
+  --antimatte: var(--paper);
   --rough: #f9f9f9;
   --metal: #f7f7f7;
   --rubber: #efefef;
@@ -116,7 +117,7 @@ body {
   --brick: var(--brick-dark);
   /* dark mode */
   --code-fg: var(--barelygreen);
-  --paper: #252525;
+  --paper: #2d2d34;
 
   --print: #d1d1d1;
   --halfprint: #c9c9c9;
@@ -128,8 +129,8 @@ body {
   --cc-missing: var(--red);
   --cc-link-deco: var(--sootgold);
   --cc-missing-deco: var(--sootgold);
-  --matte: var(--subgold);
-  --antimatte: var(--paper);
+  --matte: #191919;
+  --antimatte: #aaa;
   --metal: #202020;
   --rubber: #181818;
   --rough: #1e1e1e;
@@ -872,16 +873,6 @@ h6 {
 .image-viewer {
   margin-top: 2rem;
 }
-.image-box {
-  min-width: 256px;
-  min-height: 256px;
-  border: var(--pxgap) solid var(--matte);
-  background-color: var(--metal);
-}
-.image-viewer img {
-  max-width: 768px;
-  max-height: 1024px;
-}
 
 
 .rendered .mountinfo {
@@ -1117,6 +1108,34 @@ h6 {
 	margin-top: var(--dblgap);
 	margin-bottom: var(--dblgap);
 }
+
+.fb-grid.search-results {
+  gap: calc(2 * var(--pxgap));
+}
+.search-result {
+  max-height: 76px;
+  overflow: hidden;
+}
+.result-title {
+  font-weight: bold;
+}
+.results-ui-0 .result-title {
+  float: left;
+  padding-right: 0.5rem;
+}
+.results-ui-0 .result-type {
+  float: right;
+  padding-left: 0.5rem;
+  margin-left: 0.5rem;
+  padding-right: 0.5rem;
+  text-transform: uppercase;
+}
+
+.search-result .cpb-thumb {
+  float: left;
+  margin-right: 0.5rem;
+}
+
 .results-items.fb-grid {
   gap: 0.625rem;
 }
@@ -1762,7 +1781,7 @@ h6 {
 
 .fill {
   background-color: var(--matte);
-  color: var(--paper);
+  color: var(--antimatte);
 }
 
 

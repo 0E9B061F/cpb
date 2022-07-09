@@ -4,6 +4,7 @@
   import Hardmargin from './margin/Hardmargin.svelte'
   import LinkShim from './rendered/LinkShim.svelte'
   import CPBLinkShim from './rendered/CPBLinkShim.svelte'
+  import CPBThumb from './cpb-thumb/CPBThumb.svelte'
   import WikiLink from './rendered/WikiLink.svelte'
   import BibleLink from './rendered/BibleLink.svelte'
   import Figure from './rendered/Figure.svelte'
@@ -118,23 +119,6 @@
     highlights = []
   }
 
-  const thinfo =(thumb, rel)=> {
-    return { thumb, rel }
-  }
-
-  const thumb =wanted=> {
-    let out = null
-    let found = null
-    if (wanted > $page.val.image.max) return thinfo(false, $page.val.image.rel)
-    $page.val.image.thumbnails.forEach(t=> {
-      if (t.thumb == wanted) out = t.rel
-      else if (t.thumb < wanted && (!found || t.thumb > found.thumb)) {
-        found = t
-      }
-    })
-    return thinfo(true, out) || thinfo(true, found?.rel) || thinfo(false, $page.val.image.rel)
-  }
-
   let shl
 
   $: if (body) {
@@ -147,7 +131,7 @@
       }
     }
   }
-  $: image = $haspage && $page.val.resource.type == 'image' ? thumb(768) : null
+  $: image = $haspage && $page.val.resource.type == 'image'
 </script>
 
 {#if $haspage}
@@ -171,19 +155,9 @@
         </FB>
       {/if}
       {#if image}
-        <FB center c="image-viewer system">
-          <FB vert>
-          {#if image.thumb}
-            <Link external={$page.val.image.rel}>
-              <FB center c="image-box"><FB vert center><img src={image.rel}/></FB></FB>
-              <FB expand end line="s2" fw={6}>(click to expand)</FB>
-            </Link>
-          {:else}
-            <FB center c="image-box"><FB vert center><img src={image.rel}/></FB></FB>
-            <FB expand end line="s2" fw={6}>(full size)</FB>
-          {/if}
-          </FB>
-        </FB>
+        <div class="image-viewer">
+          <CPBThumb image={$page.val} thumb={768} pad={256}/>
+        </div>
       {/if}
       <SvelteMarkdown source={$page.val.source} {renderers} {options} on:parsed={onparse} />
     </div>

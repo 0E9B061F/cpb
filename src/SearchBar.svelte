@@ -17,6 +17,7 @@
   const path = getContext('path')
   const loc = getContext('loc')
   const fullsearch = getContext('fullsearch')
+  const exists = getContext('exists')
   const modifiers = getContext('modifiers')
   const setcontrols = getContext('setcontrols')
   const haslogin = getContext('haslogin')
@@ -27,7 +28,8 @@
 	export let auto = false
 	export let result = null
 	export let namespace = null
-  let exists = false
+  let exact = false
+  let nstu = null
 	let focused
 	let timer = null
 	let input
@@ -79,6 +81,9 @@
 			}
 		})
 	}
+	const check =()=> {
+		exists(nstu).then(res=> exact = res)
+	}
 	const manualSearch =()=> {
 		search(()=> exit())
 	}
@@ -87,7 +92,11 @@
 			result = null
 			timer = null
 			changed = false
-		} else search()
+			exact = false
+		} else {
+			check()
+			search()
+		}
 	}
 	const delay =()=> {
     if (timer) clearTimeout(timer)
@@ -96,13 +105,6 @@
 
 	const edited =e=> {
 		query = e.detail.val
-	}
-
-	$: if (result && result.val.length) {
-		exists = false
-		result.val.forEach(i=> {
-			if (i.title == query) exists = i
-		})
 	}
 
 	$: markcg = !!$modifiers.Shift
@@ -120,18 +122,21 @@
 
 	let searchOpt = {}
 	const mkopts =()=> {
-		const f = []
-		if (titleOpt) f.push('title')
-		if (sourceOpt) f.push('source')
+		let f
+		if (titleOpt && sourceOpt) f = 'both'
+		else if (titleOpt) f = 'title'
+		else if (sourceOpt) f = 'source'
+		else f = 'both'
 		const o = {}
 		if (szOpt != $rc.searchDefaults.sz) o.sz = szOpt
-		if (f.join(',') != $rc.searchDefaults.inf.join(',')) o.inf = f
+		if (f != $rc.searchDefaults.inf) o.inf = f
 		if (inhOpt != $rc.searchDefaults.inh) o.inh = inhOpt
 		if (pgOpt != $rc.searchDefaults.pg) o.pg = pgOpt
 		if (query) o.q = query
 		searchOpt = o
 		changed = true
 	}
+	$: nstu = query ? CPB.NSTU.parse(query).amend({from: $loc.namespace || $rc.defns}) : null
 	$: mkopts(titleOpt, sourceOpt, szOpt, inhOpt, query, pgOpt)
 
 	$: if (auto) delay(query)
@@ -163,19 +168,18 @@
 				{/if}
 
 				<FB around c="search-controls">
-				  {#if exists}
+				  {#if nstu && exact}
 				    <Link global does={quit}
-							space={exists.namespace}
-							title={exists.title}
+							disable={!nstu}
+							nst={nstu?.rel}
 							marked={$modifiers.Shift}
 							bind:this={gb}>
 							GO
 						</Link>
 				  {:else}
 				    <Link global does={quit}
-							space={createin}
-							title={query}
-							disable={!query || !$haslogin}
+							disable={!nstu || !$haslogin}
+							nst={nstu?.rel}
 							marked={$modifiers.Shift}
 							bind:this={gb}>
 							CREATE
