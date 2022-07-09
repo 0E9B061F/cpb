@@ -87,6 +87,9 @@
 	const manualSearch =()=> {
 		search(()=> exit())
 	}
+	const clear =()=> {
+		erase()
+	}
 	const autoSearch =()=> {
 		if (!query) {
 			result = null
@@ -204,7 +207,7 @@
 				bind:this={sb}
 				opt={searchOpt}
 				>
-				SEARCH
+				{#if query}SEARCH{:else}LIST{/if}
 			</Link>
 		{/if}</svelte:fragment>
 		<svelte:fragment slot="options">{#if options}

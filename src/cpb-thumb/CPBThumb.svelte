@@ -13,6 +13,7 @@
   export let fixh = false
   export let caption = null
   export let anchor = false
+  export let hint = true
 
   const pickthumb =(ver, wanted)=> {
     let out = null
@@ -32,6 +33,7 @@
     const c = ['cpb-thumb']
     const s = {}
     if (linked) c.push('linked-thumb')
+    if (hint) c.push('hinted-thumb')
     if (pad) c.push(`padded-${pad}`)
     s['--framew'] = `${framew}px`
     s['--frameh'] = `${frameh}px`

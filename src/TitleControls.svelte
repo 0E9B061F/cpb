@@ -39,6 +39,9 @@
 		{#if showany}
 			<span class="content-subtitle">&middot;</span>
 		{/if}
+		{#if $haslogin && ($state.home || $state.index)}
+			<Link nored local decode={false} nst="@">CREATE</Link>
+		{/if}
 		<span class="content-subtitle">
 			{$state.label}
 		</span>

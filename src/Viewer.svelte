@@ -156,7 +156,7 @@
       {/if}
       {#if image}
         <div class="image-viewer">
-          <CPBThumb image={$page.val} thumb={768} pad={256}/>
+          <CPBThumb image={$page.val} thumb={768} pad={256} hint={false}/>
         </div>
       {/if}
       <SvelteMarkdown source={$page.val.source} {renderers} {options} on:parsed={onparse} />

@@ -67,6 +67,11 @@
   export let deopt = false
   export let strip = false
 
+  export let from = null
+  export let local = false
+  export let decode = true
+  export let split = false
+
   export let external = false
 
   let href
@@ -79,9 +84,11 @@
   let rinfo = ''
   let registered
   let nstu
+  let head
   let index = false
   let userpage = false
   let homepage = false
+  let dosplit = false
 
   export let addr = href
 
@@ -136,7 +143,8 @@
 
   const parsenst =()=> {
     if (nst) {
-      scratch.nstu = CPB.NSTU.parse(nst)
+      scratch.nstu = CPB.NSTU.parse(nst, {decode})
+      if (from) scratch.nstu = scratch.nstu.amend({from})
       if (scratch.nstu.valid) {
         scratch.uuid = scratch.nstu.uuid
         scratch.space = scratch.nstu.namespace
@@ -200,9 +208,13 @@
       hash: scratch.cmd,
       opts: scratch.opt,
       uuid: scratch.uuid,
+      decode,
     })
+    if (from) scratch.nstu = scratch.nstu.amend({from})
     scratch.shortenable = scratch.nstu.shortenable
     nstu = scratch.nstu
+    head = nstu.head()
+    dosplit = split && nstu.namespace && !nstu.shortenable
 
     if (scratch.space == $rc.syskey) special = true
     if (scratch.space && !scratch.title) {
@@ -327,6 +339,8 @@
 
   export const trigger =()=> clicked()
 
+  $: if (local) from = $loc.namespace
+
   $: selfanchor = self && cmd
 
   $: if (self) {
@@ -359,5 +373,5 @@
 {:else if external}
   <a {href} title={rinfo} class={cls}>{#if marked}<LinkMark/>{/if}<span class="cpblink-text"><slot>{text}</slot></span>{#if txtmark}<span class="txtmark">{txtmark}</span>{/if}</a>
 {:else}
-  <a {href} title={rinfo} class={cls} on:click|preventDefault={clicked}>{#if marked}<LinkMark/>{/if}<span class="cpblink-text"><slot>{text}</slot></span>{#if txtmark}<span class="txtmark">{txtmark}</span>{/if}</a>
+  {#if dosplit}<a href={head.rel}>{head.namespace}:</a>{/if}<a {href} title={rinfo} class={cls} on:click|preventDefault={clicked}>{#if marked}<LinkMark/>{/if}<span class="cpblink-text"><slot>{text}</slot></span>{#if txtmark}<span class="txtmark">{txtmark}</span>{/if}</a>
 {/if}
