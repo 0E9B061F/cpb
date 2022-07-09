@@ -1,0 +1,33 @@
+.fb-grid.search-results {
+  gap: calc(2 * var(--pxgap));
+}
+
+.search-result {
+  max-height: 76px;
+  overflow: hidden;
+}
+
+.search-result .cpb-thumb {
+  float: left;
+  margin-right: 0.5rem;
+}
+
+.search-result .result-title {
+  float: left;
+  padding-right: 0.5rem;
+}
+
+.search-result .result-title .title {
+  font-weight: 900;
+}
+.search-result .result-title .namespace {
+  font-weight: 600;
+}
+
+.search-result .result-type {
+  float: right;
+  padding-left: 0.5rem;
+  margin-left: 0.5rem;
+  padding-right: 0.5rem;
+  text-transform: uppercase;
+}

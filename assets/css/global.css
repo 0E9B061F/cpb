@@ -1,5 +1,6 @@
 @import 'hacks.css';
 @import 'cpb-thumb.css';
+@import 'search-results.css';
 
 body {
   /* measures */
@@ -1109,53 +1110,9 @@ h6 {
 	margin-bottom: var(--dblgap);
 }
 
-.fb-grid.search-results {
-  gap: calc(2 * var(--pxgap));
-}
-.search-result {
-  max-height: 76px;
-  overflow: hidden;
-}
-.result-title {
-  font-weight: bold;
-}
-.results-ui-0 .result-title {
-  float: left;
-  padding-right: 0.5rem;
-}
-.results-ui-0 .result-type {
-  float: right;
-  padding-left: 0.5rem;
-  margin-left: 0.5rem;
-  padding-right: 0.5rem;
-  text-transform: uppercase;
-}
 
-.search-result .cpb-thumb {
-  float: left;
-  margin-right: 0.5rem;
-}
 
-.results-items.fb-grid {
-  gap: 0.625rem;
-}
-.results-row,
-.results-cell  {
-  height: 1rem;
-  line-height: 1rem;
-  font-size: 1rem;
-}
-.results .results-cell {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.search-results .col1 {
-  width: 30%;
-}
-.search-results .col2 {
-  width: 70%;
-}
+
 
 .hidden {
 	display: none;

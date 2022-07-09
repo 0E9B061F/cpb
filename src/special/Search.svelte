@@ -49,10 +49,14 @@
             <CPBThumb image={item} thumb={64} anchor pad={false} fixw/>
           {/if}
           <div class="result-title">
-            {#if item.namespace != 'main'}<Link space={item.namespace}/>{/if}
-            <Link space={item.namespace} title={item.title} nored>
-              <SearchEmph text={item.search.title || item.title}/>
-            </Link>
+            {#if item.namespace != 'main'}
+              <span class="namespace"><Link space={item.namespace}/></span>
+            {/if}
+            <span class="title">
+              <Link space={item.namespace} title={item.title} nored>
+                <SearchEmph text={item.search.title || item.title}/>
+              </Link>
+            </span>
           </div>
           <div class="result-type blacktag">
             {item.resource.type}
