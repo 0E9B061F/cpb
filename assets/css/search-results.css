@@ -22,9 +22,11 @@
 }
 .search-result .result-title .namespace {
   font-weight: 600;
+  font-size: 0.85rem;
 }
 .search-result .result-title .namespace.only {
   font-weight: 900;
+  font-size: 1rem;
 }
 
 .search-result .result-type {
