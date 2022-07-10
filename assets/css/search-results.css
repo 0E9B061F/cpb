@@ -23,6 +23,9 @@
 .search-result .result-title .namespace {
   font-weight: 600;
 }
+.search-result .result-title .namespace.only {
+  font-weight: 900;
+}
 
 .search-result .result-type {
   float: right;

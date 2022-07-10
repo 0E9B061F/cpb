@@ -50,7 +50,7 @@
           {/if}
           <div class="result-title">
             {#if item.namespace != 'main'}
-              <span class="namespace"><Link space={item.namespace}/></span>
+              <span class="namespace" class:only={!item.title}><Link space={item.namespace}/></span>
             {/if}
             <span class="title">
               <Link space={item.namespace} title={item.title} nored>
