@@ -2,6 +2,7 @@
   import FB from '../FB.svelte'
   import Link from '../link/Link.svelte'
   import ThumbFrame from './ThumbFrame.svelte'
+  import ThumbWrapper from './ThumbWrapper.svelte'
   import CPB from '../../lib/cpb.js'
 
   export let image
@@ -62,14 +63,16 @@
   $: mkc(thumb, linked, pad, selected)
 </script>
 
-{#if nstu || anchored}
-  <Link nst={nstu || anchored} nored>
-    <ThumbFrame {classes} {style} {selected} {image}/>
-  </Link>
-{:else if selected.thumb}
-  <Link external={image.image.rel} nored>
-    <ThumbFrame {classes} {style} {selected} {image}/>
-  </Link>
-{:else}
-  <ThumbFrame {classes} {style} {selected} {image}/>
-{/if}
+<ThumbWrapper {classes} {style}>
+  {#if nstu || anchored}
+    <Link nst={nstu || anchored} nored>
+      <ThumbFrame {selected} {image}/>
+    </Link>
+  {:else if selected.thumb}
+    <Link external={image.image.rel} nored>
+      <ThumbFrame {selected} {image}/>
+    </Link>
+  {:else}
+    <ThumbFrame {selected} {image}/>
+  {/if}
+</ThumbWrapper>

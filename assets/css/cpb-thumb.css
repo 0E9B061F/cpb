@@ -5,7 +5,7 @@
 .cpb-thumb.linked-thumb .thumb-frame {
   border: var(--pxgap) solid var(--matte);
 }
-.cpb-thumb.linked-thumb.hinted-thumb:hover .thumb-frame {
+.cpb-thumb.linked-thumb.hinted-thumb .thumb-frame:hover {
   border: var(--pxgap) solid var(--blue);
 }
 
