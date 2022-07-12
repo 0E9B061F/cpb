@@ -3,6 +3,7 @@
   import util from '../../lib/util.js'
   import { getContext } from 'svelte'
   const rc = getContext('rc')
+  const external = getContext('external')
   export let nst
   export let text = null
   const pclip = /^(:?[^:]+:)?(?<clip>.+) \(/
@@ -26,10 +27,18 @@
 </script>
 
 {#if selfanchor}
-  {#if display}
-    <Link self deopt cmd={selfanchor}>{display}</Link>
+  {#if external}
+    {#if display}
+      <Link space={external.namespace} title={external.title} cmd={selfanchor}>{display}</Link>
+    {:else}
+      <Link space={external.namespace} title={external.title} cmd={selfanchor}/>
+    {/if}
   {:else}
-    <Link self deopt cmd={selfanchor}/>
+    {#if display}
+      <Link self deopt cmd={selfanchor}>{display}</Link>
+    {:else}
+      <Link self deopt cmd={selfanchor}/>
+    {/if}
   {/if}
 {:else if self}
   <Link self strip/>

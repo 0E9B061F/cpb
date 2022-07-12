@@ -6,6 +6,7 @@
 // UPDATE sys:api/nst/docs:WMD
 
 const CPB = require('../lib/cpb.js')
+const WMD = require('../lib/analyzer.js')
 const { CPBUpload } = require('../lib/cpbimage.js')
 const libdb = require('../lib/db.js')
 const Reply = require('../lib/reply.js')
@@ -111,6 +112,7 @@ const shortMask = {
   namespace: 1, title: 1,
   views: 1,  createdAt: 1,
   nextUuid: 1, prevUuid: 1,
+  lede: 1, wordCount: 1,
   image: {
     rel: 1, size: 1, x: 1, y: 1, mime: 1, max: 1,
     thumbnails: { rel: 1, size: 1, x: 1, y: 1, thumb: 1 },
@@ -120,7 +122,7 @@ const shortMask = {
   },
 }
 const wholeMask = {
-  ...shortMask, source: 1,
+  ...shortMask, source: 1, text: 1,
   resource: {
     creator: c=> c.handle,
     uuid: 1, type: 1,
@@ -264,17 +266,18 @@ const highlight =(list, query, inf)=> {
   list.forEach(v=> {
     const search = {}
     if (hs) {
-      let sm = v.source.match(rx)
-      sm = sm ? sm.slice(1,4) : v.source.slice(0,clip)
-      search.source = sm
-    } else search.source = v.source.slice(0,clip)
+      let sm = v.text.match(rx)
+      sm = sm ? sm.slice(1,4) : null
+      search.text = sm
+    }
     delete v.source
+    delete v.text
     if (v.title && ht) {
       let tm = v.title.match(rx)
-      tm = tm ? tm.slice(1,4) : v.title
+      tm = tm ? tm.slice(1,4) : null
       search.title = tm
     }
-    v.search = search
+    if (search.text || search.title) v.search = search
   })
 }
 
@@ -304,12 +307,12 @@ const getListing =async(req, res)=> {
       if (inf == 'both') {
         where[Op.or] = [
           { title: {[Op.like]: pat} },
-          { source: {[Op.like]: pat} },
+          { text: {[Op.like]: pat} },
         ]
       } else if (inf == 'title') {
         where.title = {[Op.like]: pat}
       } else if (inf == 'source') {
-        where.source = {[Op.like]: pat}
+        where.text = {[Op.like]: pat}
       }
     }
 
@@ -419,6 +422,16 @@ const getResource =async(req, res)=> {
   else await getOne(req, res)
 }
 
+const produceVersion =(conf)=> {
+  const doc = new WMD(conf.source || '')
+  return {
+    ...conf,
+    text: doc.allText.text,
+    lede: doc.lede.raw,
+    wordCount: doc.wordCount,
+  }
+}
+
 const createPage =async(conf)=> {
   const rid = v4()
   try {
@@ -426,13 +439,12 @@ const createPage =async(conf)=> {
       uuid: rid,
       creatorUuid: conf.creatorUuid,
       type: 'page',
-      versions: [{
-        namespace: conf.namespace,
-        title: conf.title,
-        source: conf.source,
-        editorUuid: conf.editorUuid,
-        page: { resourceUuid: rid, },
-      }],
+      versions: [
+        produceVersion({
+          ...conf,
+          page: { resourceUuid: rid },
+        }),
+      ],
     }, {
       include: [{
         association: db.resource.Version,
@@ -453,22 +465,21 @@ const createImage =async(conf)=> {
       uuid: rid,
       creatorUuid: conf.creatorUuid,
       type: 'image',
-      versions: [{
-        namespace: conf.namespace,
-        title: conf.title,
-        source: conf.source,
-        editorUuid: conf.editorUuid,
-        image: {
-          uuid: conf.imageUuid,
-          resourceUuid: rid,
-          path: cimg.path,
-          mime: conf.mime,
-          x: cimg.x,
-          y: cimg.y,
-          size: cimg.size,
-          thumbnails: cimg.thumbinfo({resourceUuid: rid}),
-        },
-      }],
+      versions: [
+        produceVersion({
+          ...conf,
+          image: {
+            uuid: conf.imageUuid,
+            resourceUuid: rid,
+            path: cimg.path,
+            mime: conf.mime,
+            x: cimg.x,
+            y: cimg.y,
+            size: cimg.size,
+            thumbnails: cimg.thumbinfo({resourceUuid: rid}),
+          },
+        }),
+      ],
     }, {
       include: [{
         association: db.resource.Version,
@@ -506,12 +517,12 @@ const createUser =async(conf)=> {
       type: 'user',
       deletable: false,
       private: true,
-      versions: [{
-        namespace: conf.namespace,
-        source: conf.source,
-        editorUuid: user.uuid,
-        userUuid: user.uuid,
-      }],
+      versions: [
+        produceVersion({
+          ...conf,
+          userUuid: user.uuid,
+        }),
+      ],
     }, {
       include: [{
         association: db.resource.Version,
@@ -923,7 +934,7 @@ const put =async(req, res, next)=> {
         }
         const cimg = await req.upload.mkimage()
         try {
-          let ver = await db.version.create({
+          let ver = await db.version.create(produceVersion({
             number: old.number + 1,
             resourceUuid: old.resourceUuid,
             prevUuid: old.uuid,
@@ -938,8 +949,8 @@ const put =async(req, res, next)=> {
               y: cimg.y,
               size: cimg.size,
               thumbnails: cimg.thumbinfo({resourceUuid: old.resource.uuid}),
-            }
-          }, {
+            },
+          }), {
             include: [{
               association: db.version.Image,
               include: [{
@@ -960,14 +971,14 @@ const put =async(req, res, next)=> {
           return
         }
       } else {
-        let ver = await db.version.create({
+        let ver = await db.version.create(produceVersion({
           number: old.number + 1,
           resourceUuid: old.resourceUuid,
           prevUuid: old.uuid,
           namespace, title, source,
           editorUuid: req.session.cpb.uuid,
           imageUuid: old.imageUuid,
-        })
+        }))
         old.nextUuid = ver.uuid
         await old.save()
         ver = await getSingle(dest)
@@ -1021,14 +1032,14 @@ const put =async(req, res, next)=> {
             if (cl) req.session.cpb.handle = old.user.handle
           }
           if (nsc || sc) {
-            ver = await db.version.create({
+            ver = await db.version.create(produceVersion({
               number: old.number + 1,
               resourceUuid: old.resourceUuid,
               prevUuid: old.uuid,
               namespace, source,
               editorUuid: req.session.cpb.uuid,
               userUuid: old.user.uuid,
-            })
+            }))
             old.nextUuid = ver.uuid
             await old.save()
           }
@@ -1050,14 +1061,14 @@ const put =async(req, res, next)=> {
         next()
         return
       }
-      let ver = await db.version.create({
+      let ver = await db.version.create(produceVersion({
         number: old.number + 1,
         resourceUuid: old.resourceUuid,
         prevUuid: old.uuid,
         namespace, title, source,
         editorUuid: req.session.cpb.uuid,
         pageUuid: old.pageUuid,
-      })
+      }))
       old.nextUuid = ver.uuid
       await old.save()
       ver = await getSingle(dest)
@@ -1164,12 +1175,12 @@ const trashResource =async(req, res)=> {
           await u.save()
           const r = ver.resource
           await db.version.destroy({where: {resourceUuid: r.uuid}})
-          await db.version.create({
+          await db.version.create(produceVersion({
             resourceUuid: r.uuid,
             userUuid: u.uuid,
             namespace: `~${u.handle}`,
             editorUuid: u.uuid,
-          })
+          }))
           r.trashable = false
           r.movable = false
           await r.save()

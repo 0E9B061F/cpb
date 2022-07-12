@@ -90,6 +90,18 @@ module.exports =(sequelize, DataTypes)=> {
       allowNull: false,
       defaultValue: '',
     },
+    lede: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    text: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    wordCount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   }), {
     sequelize, modelName: 'version',
   })

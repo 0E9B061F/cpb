@@ -5,6 +5,7 @@
   import SearchEmph from '../SearchEmph.svelte'
   import SearchPagination from '../SearchPagination.svelte'
   import CPBThumb from '../cpb-thumb/CPBThumb.svelte'
+  import WMDRenderer from '../rendered/WMDRenderer.svelte'
   import { getContext } from 'svelte'
   const rc = getContext('rc')
   const loc = getContext('loc')
@@ -54,7 +55,11 @@
             {/if}
             <span class="title">
               <Link space={item.namespace} title={item.title} nored>
-                <SearchEmph text={item.search.title || item.title}/>
+                {#if item.search && item.search.title}
+                  <SearchEmph text={item.search.title}/>
+                {:else if item.title}
+                  {item.title}
+                {/if}
               </Link>
             </span>
           </div>
@@ -62,7 +67,11 @@
             {item.resource.type}
           </div>
           <div class="result-text">
-            <SearchEmph text={item.search.source}/>
+            {#if item.search && item.search.text}
+              <SearchEmph text={item.search.text}/>
+            {:else if item.lede}
+              <WMDRenderer source={item.lede} inline external={item}/>
+            {/if}
           </div>
         </div>
       {:else if uiOpt == 1}

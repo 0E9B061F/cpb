@@ -179,7 +179,7 @@
 							bind:this={gb}>
 							GO
 						</Link>
-				  {:else}
+				  {:else if $haslogin}
 				    <Link global does={quit}
 							disable={!nstu || !$haslogin}
 							nst={nstu?.rel}
@@ -191,7 +191,7 @@
 					<Link does={quit}
 						nst="" opt={{q: query}}
 						disable={!query}
-						marked={!$modifiers.Shift}
+						marked={$haslogin && !$modifiers.Shift}
 						bind:this={sb}>
 						SEARCH
 					</Link>

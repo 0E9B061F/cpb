@@ -35,6 +35,7 @@
 	import rco from '../lib/rc.js'
 	import util from '../lib/util.js'
 	import CPB from '../lib/cpb.js'
+	import ReadInfo from '../lib/cpb/readinfo.js'
 	import { Fortune } from '../lib/fortune.mjs'
 
 	let lastboot = localStorage.getItem('lastboot') || 0
@@ -768,6 +769,7 @@
 
 	const loadend =()=> {
 		console.log('CPB LOAD END')
+		setReadInfo()
 		parsenst()
 		buildstate()
 		renderstart = Date.now()
@@ -876,8 +878,8 @@
 			after = false
 		} else if ($loc.opt.history) {
 			const o = {get: 'hist'}
-			if (!!$loc.opt.pg && $loc.opt.pg != $rc.historyDefaults.pg) o.pg = $loc.opt.pg
-			if (!!$loc.opt.sz && $loc.opt.sz != $rc.historyDefaults.sz) o.sz = $loc.opt.sz
+			if (!!$loc.opt.pg && $loc.opt.pg != $rc.listDefaults.pg) o.pg = $loc.opt.pg
+			if (!!$loc.opt.sz && $loc.opt.sz != $rc.listDefaults.sz) o.sz = $loc.opt.sz
 			if ($loc.title || $loc.namespace || $loc.uuid) {
 				after = grab('nstu', $loc.base).then(async page=> {
 					if (page.val) page.val.historical = !!page.val.nextUuid
@@ -1161,12 +1163,15 @@
 	setContext('uiname', uiname)
 	$: mkc($usedark, $loading, $finished, $uiname)
 
-	const pageinfo = writable({})
-	setContext('pageinfo', pageinfo)
-	const setPageinfo =(wc, time, links)=> {
-		$pageinfo = { wc, time, links }
+	const readInfo = writable(new ReadInfo(0))
+	setContext('readInfo', readInfo)
+	const setReadInfo =()=> {
+		if ($haspage) {
+			$readInfo = new ReadInfo($page.val.wordCount)
+		} else {
+			$readInfo = new ReadInfo(0)
+		}
 	}
-	setContext('setPageinfo', setPageinfo)
 
 	const blockInfo = writable({})
 	setContext('blockInfo', blockInfo)

@@ -7,6 +7,7 @@ const { sample } = require('../../lib/util.js')
 const bcrypt = require('bcrypt')
 const util = require('./util.js')
 const CPB = require('./cpb.js')
+const WMD = require('./analyzer.js')
 const { CPBImage } = require('./cpbimage.js')
 
 const images = [
@@ -88,6 +89,10 @@ const mkpage = async (qi, confs, users)=> {
       versionSet.namespace = conf.space
       versionSet.title = conf.title
       versionSet.source = conf.source
+      const doc = new WMD(versionSet.source)
+      versionSet.text = doc.allText.text
+      versionSet.lede = doc.lede.raw
+      versionSet.wordCount = doc.wordCount
       lastver = versionSet
       sets.versions.push(versionSet)
       sets.pages.push(pageSet)
@@ -141,6 +146,11 @@ const mkimage = async (qi, confs, users)=> {
       versionSet.namespace = conf.space
       versionSet.title = conf.title
       if (conf.source) versionSet.source = conf.source
+      else versionSet.source = ''
+      const doc = new WMD(versionSet.source)
+      versionSet.text = doc.allText.text
+      versionSet.lede = doc.lede.raw
+      versionSet.wordCount = doc.wordCount
       versionSet.imageUuid = imageSet.uuid
 
       imageSet.resourceUuid = resourceSet.uuid
@@ -227,6 +237,10 @@ const mkuser = async (qi, confs)=> {
     versionSet.userUuid = userSet.uuid
     if (conf.source) versionSet.source = conf.source
     else versionSet.source = ''
+    const doc = new WMD(versionSet.source)
+    versionSet.text = doc.allText.text
+    versionSet.lede = doc.lede.raw
+    versionSet.wordCount = doc.wordCount
     versionSet.resourceUuid = resourceSet.uuid
     versionSet.namespace = `~${conf.handle}`
     userSet.configUuid = configSet.uuid

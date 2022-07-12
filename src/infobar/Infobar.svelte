@@ -9,7 +9,7 @@
   const gs = getContext('gs')
   const haspage = getContext('haspage')
   const page = getContext('page')
-  const pageinfo = getContext('pageinfo')
+  const readInfo = getContext('readInfo')
   const state = getContext('state')
   const ui = getContext('ui')
 
@@ -30,9 +30,9 @@
   const mkdata =()=> {
     const d = {}
     if ($haspage) {
-      d.time = $pageinfo.time
-      d.words = $pageinfo.wc
-      d.links = $pageinfo.links
+      d.time = $readInfo.label
+      d.words = $page.val.wordCount
+      d.links = 0
       d.views = $page.val.views
       d.version = $page.val.number
       d.editor = {space: `~${$page.val.editor}`, label: $page.val.editor}
