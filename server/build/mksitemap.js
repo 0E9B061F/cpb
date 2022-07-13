@@ -37,7 +37,7 @@ const mkmap =map=> {
 }
 
 const generate = async ()=> {
-  const all = await db.version.findAll({
+  const all = await db.Version.findAll({
     attributes: ['namespace', 'title', 'createdAt'],
     where: { nextUuid: null },
     order: [['createdAt', 'DESC']],

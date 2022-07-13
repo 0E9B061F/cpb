@@ -46,7 +46,7 @@ const getusers =async(qi)=> {
 const mkpage = async (qi, confs, users)=> {
   if (!users) {
     let system = await qi.sequelize.query(
-      `SELECT uuid from USERS where handle="system";`
+      `SELECT uuid from USER where handle="system";`
     )
     system = system[0][0]
     users = [system.uuid]
@@ -98,9 +98,9 @@ const mkpage = async (qi, confs, users)=> {
       sets.pages.push(pageSet)
     }
   }
-  await qi.bulkInsert('Resources', sets.resources)
-  await qi.bulkInsert('Pages', sets.pages)
-  return qi.bulkInsert('Versions', sets.versions)
+  await qi.bulkInsert('Resource', sets.resources)
+  await qi.bulkInsert('Page', sets.pages)
+  return qi.bulkInsert('Version', sets.versions)
 }
 
 const mkimage = async (qi, confs, users)=> {
@@ -176,10 +176,10 @@ const mkimage = async (qi, confs, users)=> {
       sets.images.push(imageSet)
     }
   }
-  await qi.bulkInsert('Resources', sets.resources)
-  await qi.bulkInsert('Images', sets.images)
-  await qi.bulkInsert('Thumbnails', sets.thumbs)
-  return qi.bulkInsert('Versions', sets.versions)
+  await qi.bulkInsert('Resource', sets.resources)
+  await qi.bulkInsert('Image', sets.images)
+  await qi.bulkInsert('Thumbnail', sets.thumbs)
+  return qi.bulkInsert('Version', sets.versions)
 }
 
 const multiconf =(r,v,block)=> {
@@ -255,10 +255,10 @@ const mkuser = async (qi, confs)=> {
     sets.users.push(userSet)
     sets.configs.push(configSet)
   }
-  await qi.bulkInsert('Configs', sets.configs)
-  await qi.bulkInsert('Users', sets.users)
-  await qi.bulkInsert('Resources', sets.resources)
-  await qi.bulkInsert('Versions', sets.versions)
+  await qi.bulkInsert('Config', sets.configs)
+  await qi.bulkInsert('User', sets.users)
+  await qi.bulkInsert('Resource', sets.resources)
+  await qi.bulkInsert('Version', sets.versions)
   return sets.users.map(u=> u.uuid)
 }
 

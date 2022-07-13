@@ -22,7 +22,7 @@ module.exports =(sequelize, DataTypes)=> {
           allowNull: true,
         }
       })
-      this.belongsTo(models.user, {
+      this.belongsTo(models.User, {
         as: 'editor',
         onDelete: 'SET NULL',
         foreignKey: {
@@ -30,25 +30,25 @@ module.exports =(sequelize, DataTypes)=> {
           allowNull: true,
         }
       })
-      this.Resource = this.belongsTo(models.resource, {
+      this.Resource = this.belongsTo(models.Resource, {
         foreignKey: {
           type: DataTypes.UUID,
           allowNull: true
         },
       })
-      this.User = this.belongsTo(models.user, {
+      this.User = this.belongsTo(models.User, {
         foreignKey: {
           type: DataTypes.UUID,
           allowNull: true,
         }
       })
-      this.Page = this.belongsTo(models.page, {
+      this.Page = this.belongsTo(models.Page, {
         foreignKey: {
           type: DataTypes.UUID,
           allowNull: true,
         },
       })
-      this.Image = this.belongsTo(models.image, {
+      this.Image = this.belongsTo(models.Image, {
         foreignKey: {
           type: DataTypes.UUID,
           allowNull: true,
@@ -103,7 +103,7 @@ module.exports =(sequelize, DataTypes)=> {
       allowNull: false,
     },
   }), {
-    sequelize, modelName: 'version',
+    sequelize, modelName: 'Version',
   })
   return Version
 }

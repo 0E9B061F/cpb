@@ -6,13 +6,13 @@ const cpbmodel = require('../lib/cpbmodel.js')
 module.exports = (sequelize, DataTypes) => {
   class Page extends Model {
     static associate(models) {
-      this.hasOne(models.version, {
+      this.hasOne(models.Version, {
         foreignKey: {
           type: DataTypes.UUID,
           allowNull: true,
         },
       })
-      this.belongsTo(models.resource, {
+      this.belongsTo(models.Resource, {
         foreignKey: { type: DataTypes.UUID, allowNull: true, },
         onDelete: 'CASCADE'
       })
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Page.init(cpbmodel({
   }), {
-    sequelize, modelName: 'page',
+    sequelize, modelName: 'Page',
   })
   return Page
 }

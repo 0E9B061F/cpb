@@ -70,7 +70,7 @@ const ordef =(v, d)=> {
 api.use('/nstu', nstu)
 
 api.get('/titles/:ns', (req, res)=> {
-  db.version.findAll({
+  db.Version.findAll({
     attributes: ['title'],
     where: {
       nextUuid: null,
@@ -94,12 +94,12 @@ api.get('/missing/:titles', (req, res) => {
       titles[t] = {namespace, title, nextUuid: null}
     }
   })
-  db.version.findAll({
+  db.Version.findAll({
     where: {
       [Op.or]: Object.values(titles),
     },
     include: {
-      model: db.resource,
+      model: db.Resource,
       where: { trashed: false },
     }
   }).then(pages=> {

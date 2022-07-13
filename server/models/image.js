@@ -12,14 +12,14 @@ const CPB = require('../lib/cpb.js')
 module.exports = (sequelize, DataTypes) => {
   class Image extends Model {
     static associate(models) {
-      this.hasOne(models.version, {
+      this.hasOne(models.Version, {
         foreignKey: { type: DataTypes.UUID, allowNull: true, },
       })
-      this.belongsTo(models.resource, {
+      this.belongsTo(models.Resource, {
         foreignKey: { type: DataTypes.UUID, allowNull: true, },
         onDelete: 'CASCADE'
       })
-      this.Thumbnail = this.hasMany(models.thumbnail, {
+      this.Thumbnail = this.hasMany(models.Thumbnail, {
         foreignKey: { type: DataTypes.UUID, allowNull: true, },
         onDelete: 'CASCADE',
       })
@@ -79,7 +79,7 @@ module.exports = (sequelize, DataTypes) => {
       get() { return Math.max(this.x, this.y) },
     },
   }), {
-    sequelize, modelName: 'image',
+    sequelize, modelName: 'Image',
     hooks: {
     },
   })
