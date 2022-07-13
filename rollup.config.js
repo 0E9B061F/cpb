@@ -8,6 +8,8 @@ import css from 'rollup-plugin-css-only';
 import replace from '@rollup/plugin-replace'
 import vinfo from './lib/mkversion.js'
 
+console.log(vinfo)
+
 const production = !process.env.ROLLUP_WATCH;
 
 function serve() {

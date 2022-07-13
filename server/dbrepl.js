@@ -5,6 +5,7 @@ const { Op } = require('sequelize')
 const util = require('../lib/util.js')
 const cpb = require('../lib/cpb.js')
 const seeders = require('./lib/seeders.js')
+const vinfo = require('../lib/mkv.js')
 
 const init =c=> {
   const db = require('./models')
@@ -13,6 +14,7 @@ const init =c=> {
   c.u = util
   c.seed = seeders
   c.cpb = cpb
+  c.vinfo = vinfo
 }
 
 const r = repl.start({prompt: '> '})
