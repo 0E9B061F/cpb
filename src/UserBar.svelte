@@ -34,9 +34,9 @@
     {#if $hassess && $session.val.user.session.login}
       <Link first={logout} global self info="End your session. We'll be sorry to see you go!">LOGOUT</Link>
     {:else if !$rc.singleuser}
-      <Link system="login">LOGIN</Link>
+      <Link nored system="login">LOGIN</Link>
       {#if mini && $hassess && !$session.val.user.session.login}<FB vc expand c="ubmini fill"/>{/if}
-      <Link system="register">REGISTER</Link>
+      <Link nored system="register">REGISTER</Link>
     {/if}
   {/if}
 </FB>

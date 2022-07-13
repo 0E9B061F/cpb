@@ -28,6 +28,7 @@
   const title = getContext('title')
   const rc = getContext('rc')
   const uc = getContext('uc')
+  const loc = getContext('loc')
   const links = getContext('links')
   const linkmap = getContext('linkmap')
   const modifiers = getContext('modifiers')
@@ -45,6 +46,7 @@
 
 <FB>
   <Link nolink does={()=> go('main')} disable={tab == 'main'}>MAIN</Link>
+  <Link nolink does={()=> go('loc')} disable={tab == 'loc'}>LOC</Link>
   <Link nolink does={()=> go('rc')} disable={tab == 'rc'}>RC</Link>
   <Link nolink does={()=> go('uc')} disable={tab == 'uc'}>UC</Link>
   <Link nolink does={()=> go('state')} disable={tab == 'state'}>STATE</Link>
@@ -86,6 +88,12 @@
     <PP lab="ctrl" val={$modifiers.Control} />
     <PP lab="alt" val={$modifiers.Alt} />
   </FR>
+</FT>
+{:else if tab == 'loc'}
+<FT>
+  {#each Object.entries($loc) as conf}
+    <PP lab={conf[0]} val={conf[1]} />
+  {/each}
 </FT>
 {:else if tab == 'rc'}
 <FT>

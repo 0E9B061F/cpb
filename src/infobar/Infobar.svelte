@@ -68,10 +68,10 @@
   </FB>
 
   {#if $state.pageperm || $state.verperm}
-    <FB center line="s1" c="blacktag">
-      PERMALINK
-    </FB>
     {#if $state.verperm}
+      <FB center line="s1" c="blacktag">
+        VERSION
+      </FB>
       <FB center line="s1" c="blacktag">
         {#if $state.old}
           HISTORICAL
@@ -79,6 +79,10 @@
           CURRENT
         {/if}
       </FB>
+    {:else}
+    <FB center line="s1" c="blacktag">
+      RESOURCE
+    </FB>
     {/if}
   {/if}
   <FB spacer={1}/>

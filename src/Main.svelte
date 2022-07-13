@@ -634,10 +634,21 @@
 			if ($loc.uuid.toLowerCase() == $page.val.resource.uuid) s.pageperm = true
 			else if ($loc.uuid.toLowerCase() == $page.val.uuid) s.verperm = true
 		}
-		if (!$loc.uuid && !$loc.namespace) {
+		if ($loc.nullindex) {
 			s.cmp = Homepage
 			s.home = true
 			s.label = 'HOME'
+		} else if ($loc.nullpage) {
+			const res = cpbspace.nav($loc.title)
+			if (res.err > 0) {
+				s.label = 'ERROR'
+				s.error = res.err
+				s.cmp = geterr(res.err)
+			} else {
+				s.system = true
+				s.label = 'SYSTEM'
+				s.cmp = res.cmp
+			}
 		} else if ($loc.namespace && !$loc.title && !$loc.userspace) {
 			s.cmp = Index
 			s.index = true
@@ -711,17 +722,6 @@
 			}
 			if ($haslogin) {
 				s.editable = true
-			}
-		} else if ($loc.namespace == $rc.syskey) {
-			const res = cpbspace.nav($loc.title)
-			if (res.err > 0) {
-				s.label = 'ERROR'
-				s.error = res.err
-				s.cmp = geterr(res.err)
-			} else {
-				s.system = true
-				s.label = 'SYSTEM'
-				s.cmp = res.cmp
 			}
 		} else {
 			s.cmp = geterr(500)

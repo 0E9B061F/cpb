@@ -93,7 +93,7 @@
   export let addr = href
 
   if (system) {
-    space = $rc.syskey
+    space = ''
     title = system
   }
   if (user) {
@@ -173,7 +173,7 @@
   }
 
   const preload =()=> {
-    if (space) scratch.space = space
+    if (space || space == '') scratch.space = space
     if (title) scratch.title = title
     if (uuid) scratch.uuid = uuid
     if (sub) {
@@ -216,7 +216,7 @@
     head = nstu.head()
     dosplit = split && nstu.namespace && !nstu.shortenable
 
-    if (scratch.space == $rc.syskey) special = true
+    if (nstu.nullspace) special = true
     if (scratch.space && !scratch.title) {
       if (nstu.userspace) userpage = true
       else index = true
@@ -265,7 +265,7 @@
     }
     if (scratch.cmd) href = `${href}#${scratch.cmd}`
 
-    href = href.replace(/ /g, '_')
+    href = nstu.rel
 
     current = precise ? $loc.identical && scratch.nstu.identical($loc) : $loc.same && scratch.nstu.same($loc)
     if (precise) console.log(current, href, disable)
@@ -274,6 +274,8 @@
     if (current && !global) rinfo = `${rinfo} (current)`
 
     addr = href
+
+    console.log(nstu.rel, href)
   }
 
   const parsecmd =c=> {

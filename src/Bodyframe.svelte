@@ -11,7 +11,7 @@
   let c = []
   const classify =()=> {
     c = []
-    if ($loc.namespace == $rc.syskey) {
+    if ($loc.nullpage) {
       c.push('special-page')
       c.push(`${$loc.title}-special`)
     } else {

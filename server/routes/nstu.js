@@ -578,7 +578,7 @@ const postPage =async(req, res, next)=> {
     next()
     return
   }
-  if (req.nstu.index || req.nstu.userspace) {
+  if (req.nstu.index || req.nstu.userspace || req.nstu.nullspace) {
     Reply.invalid('resources cannot be created here').send(res)
   } else if (await exists(req.nstu)) {
     Reply.invalid('resource already exists here').send(res)
@@ -614,7 +614,7 @@ const postImage =async(req, res, next)=> {
     next()
     return
   }
-  if (req.nstu.index || req.nstu.userspace) {
+  if (req.nstu.index || req.nstu.userspace || req.nstu.nullspace) {
     Reply.invalid('resources cannot be created here').send(res)
   } else if (!req.upload) {
     Reply.input('no image uploaded').send(res)
