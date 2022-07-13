@@ -225,7 +225,7 @@
       homepage = true
     }
 
-    special = special || index || homepage || userpage
+    special = special || index || homepage
 
     mkident()
 
@@ -282,7 +282,7 @@
 
   const mkident =()=> {
     if (userpage) {
-      ident = null
+      ident = nstu.base
       text = scratch.space
     } else if (index) {
       ident = null
@@ -294,24 +294,24 @@
       ident = null
       text = 'BUTTON'
     } else if (scratch.uuid) {
-      ident = scratch.uuid
+      ident = nstu.base
       text = scratch.uuid
     } else if (scratch.title) {
-      ident = `${scratch.space}:${scratch.title}`
+      ident = nstu.base
       if (($loc.namespace && $loc.namespace == scratch.space) || (!$loc.namespace && scratch.space == $rc.defns)) {
         text = `${scratch.title}`
       } else {
         text = `${scratch.space}:${scratch.title}`
       }
     } else if (scratch.space) {
-      ident = scratch.space
+      ident = nstu.base
       if (scratch.space[0] == '~') {
         text = scratch.space
       } else {
         text = `${scratch.space}:`
       }
     } else {
-      ident = `${$rc.defns}:${$rc.deftitle}`
+      ident = nstu.base
       if ($loc.namespace != $rc.defns) {
         text = `${$rc.defns}:${$rc.deftitle}`
       } else {

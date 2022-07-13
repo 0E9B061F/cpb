@@ -33,6 +33,7 @@ const nstu = require('./nstu.js')
 const db = require('../models')
 const util = require('../lib/util.js')
 const { isuu } = require('../../lib/util.js')
+const libdb = require('../lib/db.js')
 
 const saltRounds = 10
 
@@ -81,19 +82,17 @@ api.get('/titles/:ns', (req, res)=> {
   }).catch(e=> res.json(internal(e)))
 })
 
-api.get('/missing/:titles', (req, res) => {
+api.post('/missing', (req, res) => {
   const titles = {}
-  req.params.titles.split('+').map(t=> {
-    if (isuu(t)) {
-      t = util.imid(t)
-      titles[t.toUpperCase()] = {[Op.or]: [{pageUuid: t, nextUuid: null}, {uuid: t}]}
+  const nstus = req.body.nstus || []
+  for (let i = 0, m = nstus.length; i < m; i++) {
+    const nstu = CPB.NSTU.parse(nstus[i])
+    if (nstu.uuid) {
+      titles[nstu.normal] = {[Op.or]: [{resourceUuid: nstu.uuid.toLowerCase(), nextUuid: null}, {uuid: nstu.uuid.toLowerCase()}]}
     } else {
-      const t2 = t.split(':')
-      const namespace = t2[0] || 'main'
-      const title = t2[1] || 'Home'
-      titles[t] = {namespace, title, nextUuid: null}
+      titles[nstu.normal] = {namespace: nstu.namespace, title: nstu.title || null, nextUuid: null}
     }
-  })
+  }
   db.version.findAll({
     where: {
       [Op.or]: Object.values(titles),
@@ -103,17 +102,20 @@ api.get('/missing/:titles', (req, res) => {
       where: { trashed: false },
     }
   }).then(pages=> {
-    const found = {}
     const map = {}
-    pages.forEach(p=> {
-      if (p.title == 'Home') found[p.namespace] = true
-      found[`${p.namespace}:${p.title}`] = true
-      found[p.uuid] = true
-      if (!p.nextUuid) found[p.pageUuid] = true
-    })
-    Object.keys(titles).forEach(nstu=> {
+    const found = {}
+    for (let i = 0, m = pages.length; i < m; i++) {
+      const p = pages[i]
+      const n = new CPB.NSTU({namespace: p.namespace, title: p.title})
+      found[n.normal] = true
+      found[p.uuid.toUpperCase()] = true
+      if (!p.nextUuid) found[p.resourceUuid.toUpperCase()] = true
+    }
+    const keys = Object.keys(titles)
+    for (let i = 0, m = keys.length; i < m; i++) {
+      const nstu = keys[i]
       if (!found[nstu]) map[nstu] = true
-    })
+    }
     res.json(ok(map))
   }).catch(e=> res.json(internal(e)))
 })

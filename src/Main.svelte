@@ -963,8 +963,8 @@
 
 	const linkupdate =links=> {
 		if (!links.length) return
-    const titles = [...new Set(links)].join('+')
-    grab('missing', titles)
+    const titles = [...new Set(links)]
+    post('missing', {nstus: titles})
     .then(res=> $linkmap = res)
 		.catch(e=> handle(e))
   }
