@@ -34,9 +34,9 @@
     <FB spacer="3"/>
     <FB flip line="b3">
       {#if doreg}
-        <Link cond={regw} global bounce>REGISTER</Link>
+        <Link cond={regw} global>REGISTER</Link>
       {:else}
-        <Link cond={logw} global bounce>LOGIN</Link>
+        <Link cond={logw} global>LOGIN</Link>
       {/if}
     </FB>
   </FB>

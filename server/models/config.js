@@ -22,7 +22,7 @@ module.exports =(sequelize, DataTypes)=> {
     },
     autodark: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true,
+      defaultValue: false,
       allowNull: false,
     },
   }), {
