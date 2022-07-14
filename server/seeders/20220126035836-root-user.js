@@ -30,7 +30,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Users', null, {})
-    return queryInterface.bulkDelete('Configs', null, {})
+    await queryInterface.bulkDelete('User', null, {})
+    return queryInterface.bulkDelete('Config', null, {})
   }
 }

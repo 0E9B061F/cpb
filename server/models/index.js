@@ -8,11 +8,15 @@ const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../database.json')[env];
 const db = {};
 
+const opts = {
+  ...config,
+}
+
 let sequelize;
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  sequelize = new Sequelize(process.env[config.use_env_variable], opts);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(opts.database, opts.username, opts.password, opts);
 }
 
 fs

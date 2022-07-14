@@ -19,6 +19,9 @@ const api = require('./routes/api.js')
 
 const SequelizeStore = require("connect-session-sequelize")(session.Store)
 
+const store = new SequelizeStore({db: db.sequelize})
+
+store.sync()
 
 const html = sirv('public', {
   maxAge: 31536000, // 1Y
@@ -31,7 +34,7 @@ const assets = serveStatic('assets', {
 const app = express()
 app.use(session({
   secret: CPB.rc.secret,
-  store: new SequelizeStore({db: db.sequelize}),
+  store,
   resave: false,
 }))
 app.use((req, res, next)=> {

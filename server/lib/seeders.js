@@ -98,9 +98,9 @@ const mkpage = async (qi, confs, users)=> {
       sets.pages.push(pageSet)
     }
   }
-  await qi.bulkInsert('Resources', sets.resources)
-  await qi.bulkInsert('Pages', sets.pages)
-  return qi.bulkInsert('Versions', sets.versions)
+  await qi.bulkInsert('resources', sets.resources)
+  await qi.bulkInsert('pages', sets.pages)
+  return qi.bulkInsert('versions', sets.versions)
 }
 
 const mkimage = async (qi, confs, users)=> {
@@ -176,10 +176,10 @@ const mkimage = async (qi, confs, users)=> {
       sets.images.push(imageSet)
     }
   }
-  await qi.bulkInsert('Resources', sets.resources)
-  await qi.bulkInsert('Images', sets.images)
-  await qi.bulkInsert('Thumbnails', sets.thumbs)
-  return qi.bulkInsert('Versions', sets.versions)
+  await qi.bulkInsert('resources', sets.resources)
+  await qi.bulkInsert('images', sets.images)
+  await qi.bulkInsert('thumbnails', sets.thumbs)
+  return qi.bulkInsert('versions', sets.versions)
 }
 
 const multiconf =(r,v,block)=> {
@@ -255,10 +255,10 @@ const mkuser = async (qi, confs)=> {
     sets.users.push(userSet)
     sets.configs.push(configSet)
   }
-  await qi.bulkInsert('Configs', sets.configs)
-  await qi.bulkInsert('Users', sets.users)
-  await qi.bulkInsert('Resources', sets.resources)
-  await qi.bulkInsert('Versions', sets.versions)
+  await qi.bulkInsert('configs', sets.configs)
+  await qi.bulkInsert('users', sets.users)
+  await qi.bulkInsert('resources', sets.resources)
+  await qi.bulkInsert('versions', sets.versions)
   return sets.users.map(u=> u.uuid)
 }
 
