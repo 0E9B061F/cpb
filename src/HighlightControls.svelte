@@ -27,7 +27,6 @@
     if (i >= 0) highlights[i] = e.detail.val
     else highlights.push(e.detail.val)
     hlstr = mkhlstr(highlights)
-    console.log(highlights, hlstr)
   }
 
   const entered =(i, e)=> {

@@ -144,7 +144,6 @@
 
 	$: if (auto) delay(query)
 	$: if (!auto) search(false, pgOpt)
-	$: console.log(pgOpt)
 
 	$: createin = $loc.namespace && $loc.namespace != $rc.syskey ? $loc.namespace : $rc.defns
 </script>

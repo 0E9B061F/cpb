@@ -85,12 +85,10 @@ class CPBImage {
     })
   }
   async rmall() {
-    console.log(`deleting ${this.path}`)
     await rm(this.path)
     const vals = Object.values(this.thumbs)
     for (let x = 0; x < vals.length; x++) {
       const th = vals[x]
-      console.log(`deleting ${th.path}`)
       await rm(th.path)
     }
   }

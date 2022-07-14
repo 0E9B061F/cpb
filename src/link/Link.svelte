@@ -102,7 +102,6 @@
   }
 
   const goto =p=> {
-    console.log(force)
     if (does) does()
     if (!nolink) {
       if (force) reload(href)
@@ -268,14 +267,12 @@
     href = nstu.rel
 
     current = precise ? $loc.identical && scratch.nstu.identical($loc) : $loc.same && scratch.nstu.same($loc)
-    if (precise) console.log(current, href, disable)
 
     if (info) rinfo = info
     if (current && !global) rinfo = `${rinfo} (current)`
 
     addr = href
 
-    console.log(nstu.rel, href)
   }
 
   const parsecmd =c=> {

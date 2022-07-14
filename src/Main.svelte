@@ -225,7 +225,6 @@
 		const url = cmdu(...a)
 		let prom
 		if (body instanceof FormData) {
-			console.log('FOOOOOOOOOOOOOOOOOOOOOOOOOOO')
 			prom = fetch(url, { method, body })
 		} else {
 			prom =  fetch(url, {
@@ -235,7 +234,6 @@
 			})
 		}
 		return prom.then(res=> {
-			console.log(res)
 			return res.json()
 		})
 		.then(r=> {
@@ -449,11 +447,9 @@
 	setContext('msg', msg)
 
 	const fullsearch =(o={}, ns)=> {
-		console.log(o)
 		o = { ...o, get: 'list' }
 		const a = [o]
 		if (ns) a.unshift(`${ns}:`)
-		console.log(a)
 		return grab('nstu', ...a)
 		.catch(e=> handle(e))
 	}

@@ -8,7 +8,6 @@
     center = null
     right = null
     if (text && typeof(text) != 'string') {
-      console.log(text)
       left = text[0]
       center = text[1]
       right = text[2]
