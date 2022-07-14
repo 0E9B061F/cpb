@@ -6,7 +6,7 @@ const cpbmodel = require('../lib/cpbmodel.js')
 module.exports =(sequelize, DataTypes)=> {
   class Config extends Model {
     static associate(models) {
-      this.User = this.hasOne(models.User, {foreignKey: { type: DataTypes.UUID }})
+      this.User = this.hasOne(models.user, {foreignKey: { type: DataTypes.UUID }})
     }
   }
   Config.init(cpbmodel({
@@ -26,7 +26,7 @@ module.exports =(sequelize, DataTypes)=> {
       allowNull: false,
     },
   }), {
-    sequelize, modelName: 'Config',
+    sequelize, modelName: 'config',
   })
   return Config
 }

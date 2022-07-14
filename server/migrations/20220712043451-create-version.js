@@ -2,7 +2,7 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    return queryInterface.createTable('Version', {
+    return queryInterface.createTable('versions', {
       uuid: {
         allowNull: false,
         primaryKey: true,
@@ -48,37 +48,37 @@ module.exports = {
       prevUuid: {
         type: Sequelize.DataTypes.UUID,
         allowNull: true,
-        references: { model: 'version', key: 'uuid' },
+        references: { model: 'versions', key: 'uuid' },
       },
       nextUuid: {
         type: Sequelize.DataTypes.UUID,
         allowNull: true,
-        references: { model: 'version', key: 'uuid' },
+        references: { model: 'versions', key: 'uuid' },
       },
       editorUuid: {
         type: Sequelize.DataTypes.UUID,
         allowNull: true,
-        references: { model: 'user', key: 'uuid' },
+        references: { model: 'users', key: 'uuid' },
       },
       resourceUuid: {
         type: Sequelize.DataTypes.UUID,
         allowNull: true,
-        references: { model: 'resource', key: 'uuid' },
+        references: { model: 'resources', key: 'uuid' },
       },
       userUuid: {
         type: Sequelize.DataTypes.UUID,
         allowNull: true,
-        references: { model: 'user', key: 'uuid' },
+        references: { model: 'users', key: 'uuid' },
       },
       pageUuid: {
         type: Sequelize.DataTypes.UUID,
         allowNull: true,
-        references: { model: 'page', key: 'uuid' },
+        references: { model: 'pages', key: 'uuid' },
       },
       imageUuid: {
         type: Sequelize.DataTypes.UUID,
         allowNull: true,
-        references: { model: 'image', key: 'uuid' },
+        references: { model: 'images', key: 'uuid' },
       },
 
       createdAt: Sequelize.DATE,
@@ -87,6 +87,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.dropTable('Version');
+    return queryInterface.dropTable('versions');
   }
 };

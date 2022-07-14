@@ -2,7 +2,7 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    return queryInterface.createTable('Config', {
+    return queryInterface.createTable('configs', {
       uuid: {
         allowNull: false,
         primaryKey: true,
@@ -35,6 +35,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.dropTable('Config');
+    return queryInterface.dropTable('configs');
   }
 };

@@ -2,7 +2,7 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    return queryInterface.createTable('Thumbnail', {
+    return queryInterface.createTable('thumbnails', {
       uuid: {
         allowNull: false,
         primaryKey: true,
@@ -38,7 +38,7 @@ module.exports = {
       imageUuid: {
         type: Sequelize.DataTypes.UUID,
         allowNull: true,
-        references: { model: 'image', key: 'uuid' },
+        references: { model: 'images', key: 'uuid' },
       },
 
       createdAt: Sequelize.DATE,
@@ -47,6 +47,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.dropTable('Thumbnail');
+    return queryInterface.dropTable('thumbnails');
   }
 };

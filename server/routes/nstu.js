@@ -187,36 +187,36 @@ const preAll =async(req, res, next)=> {
 }
 
 const coreInclude = {
-  model: db.Resource,
+  model: db.resource,
   where: { trashed: false },
 }
 const wholeInclude = [
   { ...coreInclude,
-    include: { model: db.User, as: 'creator' },
+    include: { model: db.user, as: 'creator' },
   },
-  { model: db.User, as: 'editor' },
-  { model: db.User,
-    include: { model: db.Config },
+  { model: db.user, as: 'editor' },
+  { model: db.user,
+    include: { model: db.config },
   },
-  { model: db.Image,
-    include: { model: db.Thumbnail },
+  { model: db.image,
+    include: { model: db.thumbnail },
   },
-  { model: db.Page },
+  { model: db.page },
 ]
 const wholeWhere =(where)=> {
   const i = [
-    { model: db.Resource,
+    { model: db.resource,
       where: { trashed: false, ...where },
-      include: { model: db.User, as: 'creator' },
+      include: { model: db.user, as: 'creator' },
     },
-    { model: db.User, as: 'editor' },
-    { model: db.User,
-      include: { model: db.Config },
+    { model: db.user, as: 'editor' },
+    { model: db.user,
+      include: { model: db.config },
     },
-    { model: db.Image,
-      include: { model: db.Thumbnail },
+    { model: db.image,
+      include: { model: db.thumbnail },
     },
-    { model: db.Page },
+    { model: db.page },
   ]
   return i
 }
@@ -227,13 +227,13 @@ const exists =async(nstu)=> {
 }
 const getCore =async(nstu)=> {
   let where = libdb.nstuWhere(nstu)
-  return await db.Version.findOne({
+  return await db.version.findOne({
     where, include: coreInclude,
   })
 }
 const getSingle =async(nstu)=> {
   let where = libdb.nstuWhere(nstu)
-  return await db.Version.findOne({
+  return await db.version.findOne({
     where, include: wholeInclude,
   })
 }
@@ -328,12 +328,12 @@ const getListing =async(req, res)=> {
     const include = wholeWhere(typewhere)
 
     let size = ordef(req.query.sz, CPB.rc.searchConfig.sz.default, CPB.rc.searchConfig.sz.min, CPB.rc.searchConfig.sz.max)
-    const count = await db.Version.count({where, include, distinct: 'version.id'})
+    const count = await db.version.count({where, include, distinct: 'version.id'})
     const maxpg = Math.min(Math.ceil(count / size), CPB.rc.searchConfig.pg.max) || 1
     let page = ordef(req.query.pg, CPB.rc.searchConfig.pg.default, CPB.rc.searchConfig.pg.min, maxpg)
     console.log(page, CPB.rc.searchConfig.pg.default, CPB.rc.searchConfig.pg.min)
 
-    let list = await db.Version.findAll({where,
+    let list = await db.version.findAll({where,
       offset: size * (page - 1),
       limit: size,
       order: [['createdAt', 'DESC']],
@@ -361,19 +361,19 @@ const getHistory =async(req, res)=> {
   } else {
     try {
       let size = ordef(req.query.sz, CPB.rc.listConfig.sz.default, CPB.rc.listConfig.sz.min, CPB.rc.listConfig.sz.max)
-      const count = await db.Version.count({where: { resourceUuid: ver.resource.uuid }})
+      const count = await db.version.count({where: { resourceUuid: ver.resource.uuid }})
       const maxpg = Math.min(Math.ceil(count / size), CPB.rc.listConfig.pg.max)
       let page = ordef(req.query.pg, CPB.rc.listConfig.pg.default, CPB.rc.listConfig.pg.min, maxpg)
-      let list = await db.Version.findAll({
+      let list = await db.version.findAll({
         where: { resourceUuid: ver.resource.uuid },
         offset: size * (page - 1),
         limit: size,
         order: [['number', 'DESC']],
         include: [
-          { model: db.User, as: 'editor' },
-          { model: db.User },
-          { model: db.Image,
-            include: { model: db.Thumbnail },
+          { model: db.user, as: 'editor' },
+          { model: db.user },
+          { model: db.image,
+            include: { model: db.thumbnail },
           },
         ],
       })
@@ -395,11 +395,11 @@ const getAuthors =async(req, res)=> {
   if (!ver) {
     Reply.missing().send(res)
   } else {
-    let data = await db.Version.findAndCountAll({
+    let data = await db.version.findAndCountAll({
       where: { resourceUuid: ver.resource.uuid },
       group: ['editor.handle'],
       include: {
-        model: db.User, as: 'editor',
+        model: db.user, as: 'editor',
         attributes: ['handle'],
       },
     })
@@ -435,7 +435,7 @@ const produceVersion =(conf)=> {
 const createPage =async(conf)=> {
   const rid = v4()
   try {
-    const resource = await db.Resource.create({
+    const resource = await db.resource.create({
       uuid: rid,
       creatorUuid: conf.creatorUuid,
       type: 'page',
@@ -447,8 +447,8 @@ const createPage =async(conf)=> {
       ],
     }, {
       include: [{
-        association: db.Resource.Version,
-        include: [db.Version.Page]
+        association: db.resource.Version,
+        include: [db.version.Page]
       }]
     })
     return resource
@@ -461,7 +461,7 @@ const createImage =async(conf)=> {
   const rid = v4()
   const cimg = await conf.upload.mkimage()
   try {
-    const resource = await db.Resource.create({
+    const resource = await db.resource.create({
       uuid: rid,
       creatorUuid: conf.creatorUuid,
       type: 'image',
@@ -482,11 +482,11 @@ const createImage =async(conf)=> {
       ],
     }, {
       include: [{
-        association: db.Resource.Version,
+        association: db.resource.Version,
         include: [{
-          association: db.Version.Image,
+          association: db.version.Image,
           include: [{
-            association: db.Image.Thumbnail,
+            association: db.image.Thumbnail,
           }]
         }]
       }]
@@ -501,17 +501,17 @@ const createImage =async(conf)=> {
 const createUser =async(conf)=> {
   try {
     const rid = v4()
-    let user = await db.User.create({
+    let user = await db.user.create({
       handle: conf.handle,
       email: conf.email,
       hash: conf.pass,
       config: {},
     }, {
       include: [{
-        association: db.User.Config,
+        association: db.user.Config,
       }]
     })
-    let resource = await db.Resource.create({
+    let resource = await db.resource.create({
       uuid: rid,
       creatorUuid: user.uuid,
       type: 'user',
@@ -525,7 +525,7 @@ const createUser =async(conf)=> {
       ],
     }, {
       include: [{
-        association: db.Resource.Version,
+        association: db.resource.Version,
       }]
     })
     return user
@@ -708,15 +708,15 @@ const postLogin =async(req, res, next)=> {
   }
   try {
     let where = libdb.nstuWhere(req.nstu)
-    const ver = await db.Version.findOne({where,
+    const ver = await db.version.findOne({where,
       include: [
-        { model: db.Resource,
-          include: { model: db.User, as: 'creator' },
+        { model: db.resource,
+          include: { model: db.user, as: 'creator' },
         },
-        { model: db.User, as: 'editor' },
-        { model: db.User,
+        { model: db.user, as: 'editor' },
+        { model: db.user,
           where: {hash: {[Op.not]: null}},
-          include: { model: db.Config },
+          include: { model: db.config },
         },
       ]
     })
@@ -855,15 +855,15 @@ const put =async(req, res, next)=> {
   needlogin(req, res)
   if (res.headersSent) return
   let where = libdb.nstuWhere(req.nstu)
-  const old = await db.Version.findOne({where,
+  const old = await db.version.findOne({where,
     include: [
-      { model: db.Resource,
+      { model: db.resource,
         include: {
-          model: db.User, as: 'creator'
+          model: db.user, as: 'creator'
         }
       },
-      { model: db.User,
-        include: { model : db.Config },
+      { model: db.user,
+        include: { model : db.config },
       },
     ]
   })
@@ -934,7 +934,7 @@ const put =async(req, res, next)=> {
         }
         const cimg = await req.upload.mkimage()
         try {
-          let ver = await db.Version.create(produceVersion({
+          let ver = await db.version.create(produceVersion({
             number: old.number + 1,
             resourceUuid: old.resourceUuid,
             prevUuid: old.uuid,
@@ -952,9 +952,9 @@ const put =async(req, res, next)=> {
             },
           }), {
             include: [{
-              association: db.Version.Image,
+              association: db.version.Image,
               include: [{
-                association: db.Image.Thumbnail,
+                association: db.image.Thumbnail,
               }]
             }]
           })
@@ -971,7 +971,7 @@ const put =async(req, res, next)=> {
           return
         }
       } else {
-        let ver = await db.Version.create(produceVersion({
+        let ver = await db.version.create(produceVersion({
           number: old.number + 1,
           resourceUuid: old.resourceUuid,
           prevUuid: old.uuid,
@@ -1032,7 +1032,7 @@ const put =async(req, res, next)=> {
             if (cl) req.session.cpb.handle = old.user.handle
           }
           if (nsc || sc) {
-            ver = await db.Version.create(produceVersion({
+            ver = await db.version.create(produceVersion({
               number: old.number + 1,
               resourceUuid: old.resourceUuid,
               prevUuid: old.uuid,
@@ -1061,7 +1061,7 @@ const put =async(req, res, next)=> {
         next()
         return
       }
-      let ver = await db.Version.create(produceVersion({
+      let ver = await db.version.create(produceVersion({
         number: old.number + 1,
         resourceUuid: old.resourceUuid,
         prevUuid: old.uuid,
@@ -1089,12 +1089,12 @@ const put =async(req, res, next)=> {
 
 const destroyResource =async(req, res)=> {
   let where = libdb.nstuWhere(req.nstu)
-  const ver = await db.Version.findOne({where,
+  const ver = await db.version.findOne({where,
     include: {
-      model: db.Resource,
+      model: db.resource,
       include: {
-        model: db.Image,
-        include: { model: db.Thumbnail },
+        model: db.image,
+        include: { model: db.thumbnail },
       },
     },
   })
@@ -1122,13 +1122,13 @@ const destroyResource =async(req, res)=> {
 }
 const trashResource =async(req, res)=> {
   let where = libdb.nstuWhere(req.path)
-  const ver = await db.Version.findOne({where,
+  const ver = await db.version.findOne({where,
     include: [
       {
-        model: db.Resource,
-        include: { model: db.User, as: 'creator' }
+        model: db.resource,
+        include: { model: db.user, as: 'creator' }
       },
-      { model: db.User },
+      { model: db.user },
     ],
   })
   if (!ver) {
@@ -1152,7 +1152,7 @@ const trashResource =async(req, res)=> {
           // account to maintain article ownership
           // trashing users is not reversible, unlike other resources,
           // and requires password confirmation
-          const lastdel = await db.User.findOne({
+          const lastdel = await db.user.findOne({
             where: {deleted: true},
             attributes: ['delnum'],
             order: [['delnum', 'DESC']]
@@ -1174,8 +1174,8 @@ const trashResource =async(req, res)=> {
           u.lastseen = d
           await u.save()
           const r = ver.resource
-          await db.Version.destroy({where: {resourceUuid: r.uuid}})
-          await db.Version.create(produceVersion({
+          await db.version.destroy({where: {resourceUuid: r.uuid}})
+          await db.version.create(produceVersion({
             resourceUuid: r.uuid,
             userUuid: u.uuid,
             namespace: `~${u.handle}`,

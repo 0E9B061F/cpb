@@ -2,7 +2,7 @@
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    return queryInterface.createTable('Page', {
+    return queryInterface.createTable('pages', {
       uuid: {
         allowNull: false,
         primaryKey: true,
@@ -17,7 +17,7 @@ module.exports = {
       resourceUuid: {
         type: Sequelize.DataTypes.UUID,
         allowNull: true,
-        references: { model: 'resource', key: 'uuid' },
+        references: { model: 'resources', key: 'uuid' },
       },
 
       createdAt: Sequelize.DATE,
@@ -26,6 +26,6 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    return queryInterface.dropTable('Page');
+    return queryInterface.dropTable('pages');
   }
 };

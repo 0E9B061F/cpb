@@ -12,7 +12,7 @@ const CPB = require('../lib/cpb.js')
 module.exports = (sequelize, DataTypes) => {
   class Thumbnail extends Model {
     static associate(models) {
-      this.belongsTo(models.Image, {
+      this.belongsTo(models.image, {
         foreignKey: { type: DataTypes.UUID, allowNull: true, },
         onDelete: 'CASCADE',
       })
@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
   }), {
-    sequelize, modelName: 'Thumbnail',
+    sequelize, modelName: 'thumbnail',
     hooks: {
     },
   })

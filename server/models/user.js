@@ -8,18 +8,18 @@ const bcrypt = require('bcrypt')
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      this.Config = this.belongsTo(models.Config, {
+      this.Config = this.belongsTo(models.config, {
         foreignKey: { type: DataTypes.UUID },
       })
-      this.hasMany(models.Resource, {
+      this.hasMany(models.resource, {
         as: 'creator',
         foreignKey: { type: DataTypes.UUID },
       })
-      this.hasMany(models.Version, {
+      this.hasMany(models.version, {
         as: 'editor',
         foreignKey: { type: DataTypes.UUID },
       })
-      this.hasOne(models.Version, {
+      this.hasOne(models.version, {
         foreignKey: { type: DataTypes.UUID, allowNull: true, },
       })
     }
@@ -89,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 0,
     },
   }), {
-    sequelize, modelName: 'User',
+    sequelize, modelName: 'user',
     validate: {
       regularAccountMustHaveEmail() {
         if (!this.special && !this.email) {

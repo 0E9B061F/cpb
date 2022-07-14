@@ -6,19 +6,19 @@ const cpbmodel = require('../lib/cpbmodel.js')
 module.exports =(sequelize, DataTypes)=> {
   class Resource extends Model {
     static associate(models) {
-      this.Version = this.hasMany(models.Version, {
+      this.Version = this.hasMany(models.version, {
         foreignKey: { type: DataTypes.UUID, allowNull: true, },
         onDelete: 'CASCADE',
       })
-      this.hasMany(models.Page, {
+      this.hasMany(models.page, {
         foreignKey: { type: DataTypes.UUID, allowNull: true, },
         onDelete: 'CASCADE',
       })
-      this.hasMany(models.Image, {
+      this.hasMany(models.image, {
         foreignKey: { type: DataTypes.UUID, allowNull: true, },
         onDelete: 'CASCADE',
       })
-      this.belongsTo(models.User, {
+      this.belongsTo(models.user, {
         as: 'creator',
         foreignKey: { type: DataTypes.UUID, allowNull: true, }
       })
@@ -68,7 +68,7 @@ module.exports =(sequelize, DataTypes)=> {
       defaultValue: 0,
     },
   }), {
-    sequelize, modelName: 'Resource',
+    sequelize, modelName: 'resource',
     validate: {
       usersAreNotDeletable() {
         if (this.type == 'user' && this.deletable) {
