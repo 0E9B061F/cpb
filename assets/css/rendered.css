@@ -24,10 +24,11 @@
 .rendered .ov,
 .preview .ov {}
 .rendered .oo,
-.preview .ov {
+.preview .oo {
   color: #00000000;
   user-select: none;
   width: 0;
+  display: inline-block;
 }
 
 .previewed p {
@@ -107,12 +108,10 @@
   background-color: var(--microprint);
   font-weight: 500;
 }
-.rendered .source-cite.current {
-}
 .rendered .source-cite.current a {
   font-weight: 600;
 }
 
-
-  background-color: var(--microprint);
+.click-copy {
+  cursor: pointer;
 }

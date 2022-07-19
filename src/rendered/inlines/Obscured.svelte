@@ -1,4 +1,5 @@
 <script>
+  import ClickCopy from  '../../util/ClickCopy.svelte'
   import util from '../../../lib/util.js'
   export let text
   let split, handle, domain, last, rest, obscured
@@ -22,6 +23,8 @@
   $: parse(text)
 </script>
 
-{#each obscured as part}
-  {#if typeof(part) == 'string'}<span class="ov">{part}</span>{:else}<span class="ov">{part[0]}</span><span class="oo">{part[1]}</span><span class="ov">{part[2]}</span>{/if}
-{/each}
+<ClickCopy copy={text}>
+  {#each obscured as part}
+    {#if typeof(part) == 'string'}<span class="ov">{part}</span>{:else}<span class="ov">{part[0]}</span><span class="oo">{part[1]}</span><span class="ov">{part[2]}</span>{/if}
+  {/each}
+</ClickCopy>
