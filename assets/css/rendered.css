@@ -22,9 +22,9 @@
 }
 
 .rendered .ov,
-.preview .ov {}
+.previewed .ov {}
 .rendered .oo,
-.preview .oo {
+.previewed .oo {
   color: #00000000;
   user-select: none;
   width: 0;
