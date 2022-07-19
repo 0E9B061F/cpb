@@ -115,3 +115,10 @@
 .click-copy {
   cursor: pointer;
 }
+
+.rendered .title, .previewed .title {
+  font-weight: 900;
+}
+.rendered .alert, .previewed .alert {
+  color: var(--red);
+}

@@ -937,16 +937,6 @@ h6 {
   width: 100%;
 }
 
-.rendered .smallcaps {
-  font-variant: small-caps;
-}
-.rendered .title {
-  font-weight: 900;
-}
-.rendered .alert {
-  color: var(--red);
-}
-
 .figcontent {
   position: relative;
   border-right: 1px solid var(--rubber);
