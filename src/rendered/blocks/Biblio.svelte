@@ -1,6 +1,6 @@
 <script>
   import FB from '../../FB.svelte'
-  export let args = []
+  export let args
 </script>
 
 <FB c="bibliography bodyblock">

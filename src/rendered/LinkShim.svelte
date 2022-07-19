@@ -3,7 +3,8 @@
   import util from '../../lib/util.js'
   export let href = ''
   export let title = undefined
-  let nst = href
+  export let text
+  export let raw
 </script>
 
-<Link {nst} {title}><slot></slot></Link>
+{raw}

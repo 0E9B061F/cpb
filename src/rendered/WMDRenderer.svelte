@@ -5,11 +5,11 @@
   import CPBLinkShim from './CPBLinkShim.svelte'
   import WikiLink from './WikiLink.svelte'
   import BibleLink from './BibleLink.svelte'
-  import Figure from './Figure.svelte'
   import Attribution from './Attribution.svelte'
   import ExternalLink from './ExternalLink.svelte'
   import Block from './Block.svelte'
-  import Decorated from './Decorated.svelte'
+  import Code from './Code.svelte'
+  import Decorator from './Decorator.svelte'
   import PGPKey from './PGPKey.svelte'
   import Dash from './Dash.svelte'
   import Heading from './Heading.svelte'
@@ -17,7 +17,7 @@
 
   import { getContext, setContext } from 'svelte'
   import { marked } from 'marked'
-  import wmd from '../../lib/wmd.js'
+  import wmd from '../../lib/wmd/wmd.js'
   marked.use(wmd)
   const options = marked.defaults
   let slugger = new marked.Slugger()
@@ -37,13 +37,13 @@
     wikilink: WikiLink,
     biblelink: BibleLink,
     dash: Dash,
-    figure: Figure,
     attribution: Attribution,
     block: Block,
-    decorated: Decorated,
-    multidec: Decorated,
+    linedeco: Decorator,
+    blockdeco: Decorator,
     pgpkey: PGPKey,
     heading: Heading,
+    code: Code,
     // section: Section,
   }
 </script>

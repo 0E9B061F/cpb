@@ -66,11 +66,11 @@
           <div class="result-type blacktag">
             {item.resource.type}
           </div>
-          <div class="result-text">
+          <div class="result-text previewed">
             {#if item.search && item.search.text}
               <SearchEmph text={item.search.text}/>
             {:else if item.lede}
-              <WMDRenderer source={item.lede} inline external={item}/>
+              <WMDRenderer source={item.lede} external={item}/>
             {/if}
           </div>
         </div>

@@ -13,3 +13,4 @@ notes/
 public/sitemap*
 public/index.html
 public/robots.txt
+.repl-log

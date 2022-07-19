@@ -1,7 +1,7 @@
 'use strict'
 
 const { inspect } = require('util')
-const wmd = require('../../lib/wmd.js')
+const wmd = require('../../lib/wmd/wmd.js')
 const marked = require('marked')
 marked.use(wmd)
 
@@ -59,7 +59,7 @@ class WMD {
       if (token.type == 'cpblink') this.cpbLinks.push(token)
       else if (token.family == 'extlink') this.extLinks.push(token)
       else if (token.family == 'decorator') {
-        if (token.cmd == 'LEDE') {
+        if (token.cmd == 'lede') {
           this.userLede.addRaw(token.text)
           inLede = true
         }

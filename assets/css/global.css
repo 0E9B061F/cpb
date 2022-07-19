@@ -1,6 +1,7 @@
 @import 'hacks.css';
 @import 'cpb-thumb.css';
 @import 'search-results.css';
+@import 'rendered.css';
 
 body {
   /* measures */
@@ -886,20 +887,7 @@ h6 {
   font-size: 1.2rem;
 }
 
-.rendered h1 {
-  border-bottom: var(--subgap) solid var(--microprint);
-  padding-bottom: var(--pxgap);
-}
-.rendered h1,
-.rendered h2,
-.rendered h3,
-.rendered h4,
-.rendered h5,
-.rendered h6 {
-	margin-bottom: 0;
-  color: var(--title);
-  clear: left;
-}
+
 
 .cpb-heading .hidable {
   visibility: hidden;
@@ -925,11 +913,6 @@ h6 {
   user-select: none;
 }
 
-.rendered p {
-	margin-top: 1rem;
-	margin-bottom: 0;
-	font-size: 1.1rem;
-}
 .rendered > h1:nth-child(3) {
   margin-top: 0;
 }
@@ -938,28 +921,7 @@ h6 {
   margin-top: 1rem;
 }
 
-.rendered .quotation {
-  margin: 2rem auto 2rem auto;
-  max-width: 500px;
-}
-.rendered .quotation blockquote p {
-  margin: 0;
-  font-style: italic;
-  font-size: var(--xnf);
-}
-.rendered .quotation figcaption {
-  margin-top: var(--gap);
-  text-align: right;
-  font-size: var(--xs2f);
-  padding-right: 10%;
-}
 
-.rendered figure {
-  margin-top: 2rem;
-}
-.rendered figure.right {
-  float: right;
-}
 
 .rendered .bibliography {
   gap: 2rem;

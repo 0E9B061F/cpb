@@ -1,0 +1,118 @@
+.rendered .clear {
+  clear: both;
+}
+
+.rendered .aside.inline {
+  text-decoration: underline dotted var(--microprint);
+}
+
+.rendered h1 {
+  border-bottom: var(--subgap) solid var(--microprint);
+  padding-bottom: var(--pxgap);
+}
+.rendered h1,
+.rendered h2,
+.rendered h3,
+.rendered h4,
+.rendered h5,
+.rendered h6 {
+	margin-bottom: 0;
+  color: var(--title);
+  clear: both;
+}
+
+.rendered .ov,
+.preview .ov {}
+.rendered .oo,
+.preview .ov {
+  color: #00000000;
+  user-select: none;
+  width: 0;
+}
+
+.previewed p {
+  margin: 0;
+}
+.rendered p {
+	margin-top: 1rem;
+	margin-bottom: 0;
+	font-size: 1.1rem;
+}
+
+.rendered .code-wrapper {
+  margin-top: 1rem;
+  background-color: var(--metal);
+  display: inline-block;
+}
+.rendered .code-wrapper code {
+  display: block;
+}
+
+.rendered figure {
+  margin: 1rem 0 1rem 0;
+}
+.rendered figure > *:first-child {
+  margin-top: 0;
+}
+
+.rendered .inset figure {
+  margin: 2rem auto 2rem auto;
+  max-width: 500px;
+}
+.rendered .left figure,
+.rendered .right figure {
+  max-width: 300px;
+}
+.rendered .left figure {
+  float: left;
+  margin-right: 2rem;
+}
+.rendered .right figure {
+  float: right;
+  margin-left: 2rem;
+}
+
+.rendered .quotation blockquote {
+  margin: 0;
+}
+.rendered .quotation blockquote p {
+  margin: 0;
+  font-style: italic;
+  font-size: var(--xnf);
+}
+.rendered .quotation figure figcaption {
+  margin-top: var(--gap);
+  text-align: right;
+  font-size: var(--xs2f);
+  padding-right: 10%;
+}
+
+.rendered .citation.marked .citation-text {
+  text-decoration-style: solid;
+  text-decoration-line: underline;
+  text-decoration-color: var(--microprint);
+  text-decoration-thickness: 4px;
+}
+
+.rendered .citation .citation-link {
+  font-size: 0.9em;
+  vertical-align: super;
+  user-select: none;
+  font-weight: 400;
+}
+
+.rendered .citation.current,
+.rendered .source.current .source-info,
+.rendered .source-cite.current {
+  background-color: var(--microprint);
+  font-weight: 500;
+}
+.rendered .source-cite.current {
+}
+.rendered .source-cite.current a {
+  font-weight: 600;
+}
+
+
+  background-color: var(--microprint);
+}
