@@ -17,6 +17,8 @@ const init =c=> {
     CPB: require('../lib/cpb.js'),
     vinfo: require('../lib/mkv.js'),
     lexer: require('../lib/wmd/lexer.js'),
+    dlex: require('../lib/dmd/lexer.js'),
+    dmd: require('../lib/dmd/dmd.js'),
     wmd: require('../lib/wmd/wmd.js'),
   })
 }

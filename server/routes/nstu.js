@@ -432,6 +432,23 @@ const produceVersion =(conf)=> {
   }
 }
 
+const createDirectory =async(conf)=> {
+  const rid = v4()
+  try {
+    const resource = await db.resource.create({
+      uuid: rid,
+      creatorUuid: conf.creatorUuid,
+      type: 'directory',
+      versions: [ produceVersion(conf) ],
+    }, {
+      include: { association: db.resource.Version }
+    })
+    return resource
+  } catch (e) {
+    console.log(e)
+    return false
+  }
+}
 const createPage =async(conf)=> {
   const rid = v4()
   try {
