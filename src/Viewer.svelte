@@ -1,11 +1,14 @@
 <script>
   import FB from './FB.svelte'
+  import Alert from './Alert.svelte'
   import Link from './link/Link.svelte'
   import Hardmargin from './margin/Hardmargin.svelte'
   import Infobar from './infobar/Infobar.svelte'
   import ContentControls from './contentctrl/ContentControls.svelte'
   import CPBThumb from './cpb-thumb/CPBThumb.svelte'
   import WMDRenderer from './rendered/WMDRenderer.svelte'
+  import DMDRenderer from './rendered/DMDRenderer.svelte'
+  import Menubar from './Menubar.svelte'
 
   import { getContext, setContext, onMount, afterUpdate, tick } from 'svelte'
   import { writable } from 'svelte/store'
@@ -125,6 +128,10 @@
     }
   }
   $: image = $haspage && $page.val.resource.type == 'image'
+
+  $: alertspecial = $loc.special && $haslogin
+  $: alertmount = $loc.uuid
+  $: hasalerts = alertspecial || alertmount
 </script>
 
 {#if $haspage}
@@ -133,26 +140,35 @@
     <div class="rendered" bind:this={body}>
       {#if $haslogin}<ContentControls/>{/if}
       <Infobar/>
-      {#if $state.uuid}
-        <FB rel c="mountinfo">
-          <FB fw={9} center abs c="notabene">
-            <FB vert center>NB</FB>
-          </FB>
-          {#if $state.old}
-            <FB vc line="n">was</FB>
-            <FB vc title line="b3" fw={6}>{$state.namespace}:{$state.title}</FB>
-          {:else}
-            <FB vc line="n">mounted at</FB>
-            <FB vc title line="b3" fw={6}><Link space={$state.namespace} title={$state.title}/></FB>
+      <Menubar/>
+      {#if hasalerts}
+        <div class="alerts">
+          {#if alertspecial}
+            <Alert head="RESERVED LOCATION" message="The system uses this location to {$loc.special.purpose}. A {$loc.special.type} is expected."/>
           {/if}
-        </FB>
+          {#if alertmount}
+            <Alert>
+              <svelte:fragment slot="head">
+                {#if $state.old}
+                  was {$state.namespace}:{$state.title}
+                {:else}
+                  mounted at <Link space={$state.namespace} title={$state.title}/>
+                {/if}
+              </svelte:fragment>
+            </Alert>
+          {/if}
+        </div>
       {/if}
       {#if image}
         <div class="image-viewer">
           <CPBThumb image={$page.val} thumb={768} pad={256} hint={false}/>
         </div>
       {/if}
-      <WMDRenderer source={$page.val.source} {onparse}/>
+      {#if $page.val.resource.type == 'directory'}
+        <DMDRenderer source={$page.val.source} {onparse}/>
+      {:else}
+        <WMDRenderer source={$page.val.source} {onparse}/>
+      {/if}
     </div>
   </FB>
 {/if}

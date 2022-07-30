@@ -60,6 +60,7 @@
 	const parseloc =()=> {
     const l = CPB.Location.parse($path)
 		l.compare($loc)
+		l.checkreserves()
     return l
   }
 	let loc = writable({})
@@ -387,6 +388,11 @@
 		"where days are numbered",
 		"devised by some ancient dread",
 		"when found, make a note of",
+		"spare not, lengthen thy cords",
+		"this broken jaw of our lost kingdoms",
+		"blank and pitiless as the sun",
+		"twice victorious i crossed the river acheron",
+		"what hath god wrought",
 	])
 
 	const fortune =()=> fortunes.get()
@@ -598,10 +604,7 @@
 			else if (!$haslogin) return true
 			else return 401
 		}),
-		search: new Route(Search),
 		test: new Route(Test),
-		forms: new Route(TestForms),
-		links: new Route(TestLinks),
 		loading: new Route(LoadingScreen),
 	})
 	setContext('cpbspace', cpbspace)
@@ -630,12 +633,12 @@
 			if ($loc.uuid.toLowerCase() == $page.val.resource.uuid) s.pageperm = true
 			else if ($loc.uuid.toLowerCase() == $page.val.uuid) s.verperm = true
 		}
+		const res = cpbspace.nav($loc.title)
 		if ($loc.nullindex) {
 			s.cmp = Homepage
 			s.home = true
 			s.label = 'HOME'
-		} else if ($loc.nullpage) {
-			const res = cpbspace.nav($loc.title)
+		} else if ($loc.nullpage && !res.err) {
 			if (res.err > 0) {
 				s.label = 'ERROR'
 				s.error = res.err

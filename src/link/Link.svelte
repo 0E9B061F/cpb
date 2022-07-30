@@ -333,6 +333,7 @@
     if (external) cc.push('external')
     if (selfanchor) cc.push('selfanchor')
     if (!nolink && !global && current) cc.push('current-link')
+    if (nolink || !href) cc.push('deadlink')
     cls = cc.join(' ')
   }
 

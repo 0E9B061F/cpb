@@ -13,8 +13,8 @@ const nstuWhere =(nstu)=> {
     where = {[Op.or]: [{uuid}, {resourceUuid: uuid, nextUuid: null}]}
   } else {
     where = {nextUuid: null}
-    const ns = nstu.namespace == undefined ? null : nstu.namespace
-    const t = nstu.title == undefined ? null : nstu.title
+    const ns = nstu.namespace || null
+    const t = nstu.title || null
     where.namespace = ns
     where.title = t
   }

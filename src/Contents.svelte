@@ -1,6 +1,7 @@
 <script>
   import FB from './FB.svelte'
   import R2 from './r2/R2.svelte'
+  import Menubar from './Menubar.svelte'
   import Hexagram from './hex/Hexagram.svelte'
   import R2Hider from './r2/R2Hider.svelte'
   import Titleframe from './Titleframe.svelte'
@@ -79,10 +80,13 @@
       </FB>
     </FB>
   </svelte:fragment>
-<div class="watermargin" bind:this={waterm}></div>
-{#if !$loading}
-  <Bodyframe/>
-  <Footer/>
-{/if}
+  <div class="watermargin" bind:this={waterm}></div>
+  {#if !$loading}
+    {#if !$state.content}
+      <Menubar/>
+    {/if}
+    <Bodyframe/>
+    <Footer/>
+  {/if}
 </R2Hider>
 </FB>

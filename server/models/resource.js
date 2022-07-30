@@ -29,7 +29,7 @@ module.exports =(sequelize, DataTypes)=> {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        isIn: [['page', 'image', 'user']],
+        isIn: [['page', 'image', 'user', 'directory']],
       }
     },
     trashed: {

@@ -33,6 +33,7 @@ class Text {
     }
   }
 }
+
 class WMD {
   constructor(doc) {
     this.doc = doc
@@ -93,6 +94,5 @@ class WMD {
   get links() { return [...this.cpbLinks, ...this.extLinks] }
   get lede() { return this.userLede.empty ? this.autoText : this.userLede }
 }
-
 
 module.exports = WMD

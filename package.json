@@ -1,6 +1,6 @@
 {
   "name": "cpb",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "private": true,
   "scripts": {
     "build": "env NODE_ENV=production rollup -c",
@@ -8,6 +8,7 @@
     "postbuild": "node server/build/build.js",
     "dev": "env NODE_ENV=development rollup -c -w",
     "app": "env NODE_ENV=production server/bin/start.js",
+    "app:dev": "env NODE_ENV=development server/bin/start.js",
     "dump:dev": "rm -f cpb.dev.sqlite",
     "dump:test": "rm -f cpb.test.sqlite",
     "dump": "rm -f cpb.prod.sqlite",

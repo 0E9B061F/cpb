@@ -1,0 +1,69 @@
+.directory.root {
+  padding: 0;
+}
+.directory.root > .item {
+  position: relative;
+}
+.directory.menu.root > .item > .directory.sub {
+  position: absolute;
+  left: 0px;
+}
+
+.directory.menu {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  gap: 5px;
+}
+.directory.menu .item {
+  padding-right: 5px;
+}
+.directory.menu .directory {
+  margin: 0;
+  padding: 0;
+}
+.dir-label {
+  user-select: none;
+  font-weight: bold;
+}
+.subdir::marker {
+  color: var(--blue);
+}
+.directory .item {
+  list-style-type: none;
+}
+.subdir.fold > .directory {
+  display: none;
+}
+
+.directory.menu .subdir.unfold,
+.directory.menu .subdir.unfold .directory {
+  background-color: var(--metal);
+}
+.directory.menu .subdir.unfold .directory {
+  padding-right: 1rem;
+}
+.directory.menu > .subdir > .directory {
+  border-bottom: 1px solid var(--rubber);
+}
+
+.subdir .bullet {
+  font-size: 0.75rem;
+  vertical-align: text-top;
+}
+
+.directory.menu .directory.sub {
+  z-index: 100;
+}
+
+.directory .directory.sub {
+  padding: 0;
+  margin-left: 1rem;
+}
+
+.directory.menu .directory.sub {
+  margin: 0;
+}
+.directory.menu .directory.sub .directory.sub {
+  margin-left: 1rem;
+}

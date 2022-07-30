@@ -7,7 +7,7 @@ const { sample } = require('../../lib/util.js')
 const bcrypt = require('bcrypt')
 const util = require('./util.js')
 const CPB = require('./cpb.js')
-const WMD = require('./analyzer.js')
+const WMD = require('./wmd-analyzer.js')
 const { CPBImage } = require('./cpbimage.js')
 
 const images = [

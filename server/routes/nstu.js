@@ -6,7 +6,8 @@
 // UPDATE sys:api/nst/docs:WMD
 
 const CPB = require('../lib/cpb.js')
-const WMD = require('../lib/analyzer.js')
+const WMD = require('../lib/wmd-analyzer.js')
+const DMD = require('../lib/dmd-analyzer.js')
 const { CPBUpload } = require('../lib/cpbimage.js')
 const libdb = require('../lib/db.js')
 const Reply = require('../lib/reply.js')
@@ -422,8 +423,8 @@ const getResource =async(req, res)=> {
   else await getOne(req, res)
 }
 
-const produceVersion =(conf)=> {
-  const doc = new WMD(conf.source || '')
+const produceVersion =(conf, dmd=false)=> {
+  const doc = dmd ? new WMD(conf.source || '') : new DMD(conf.source || '')
   return {
     ...conf,
     text: doc.allText.text,
@@ -439,7 +440,7 @@ const createDirectory =async(conf)=> {
       uuid: rid,
       creatorUuid: conf.creatorUuid,
       type: 'directory',
-      versions: [ produceVersion(conf) ],
+      versions: [ produceVersion(conf, true) ],
     }, {
       include: { association: db.resource.Version }
     })
@@ -586,7 +587,8 @@ const duplicateResource =async(conf)=> {
 }
 
 const postPage =async(req, res, next)=> {
-  if (req.body.type != 'page') {
+  console.log('!!!!!!!!!!!! POSTING PAGE OR DIR')
+  if (req.body.type != 'page' && req.body.type != 'directory') {
     next()
     return
   }
@@ -595,24 +597,37 @@ const postPage =async(req, res, next)=> {
     next()
     return
   }
-  if (req.nstu.index || req.nstu.userspace || req.nstu.nullspace) {
+  if (req.nstu.index || req.nstu.userspace) {
     Reply.invalid('resources cannot be created here').send(res)
   } else if (await exists(req.nstu)) {
     Reply.invalid('resource already exists here').send(res)
   } else {
     try {
-      const resource = await createPage({
-        namespace: req.nstu.namespace,
-        title: req.nstu.title,
-        source: req.body.source,
-        creatorUuid: req.session.cpb.uuid,
-        editorUuid: req.session.cpb.uuid,
-      })
+      let resource
+      if (req.body.type == 'directory') {
+        resource = await createDirectory({
+          namespace: req.nstu.namespace || null,
+          title: req.nstu.title,
+          source: req.body.source,
+          creatorUuid: req.session.cpb.uuid,
+          editorUuid: req.session.cpb.uuid,
+        })
+      } else {
+        resource = await createPage({
+          namespace: req.nstu.namespace || null,
+          title: req.nstu.title,
+          source: req.body.source,
+          creatorUuid: req.session.cpb.uuid,
+          editorUuid: req.session.cpb.uuid,
+        })
+      }
       if (resource) {
+        console.log(resource)
+        console.log(resource.versions[0])
         const ver = await getSingle(req.nstu)
         Reply.ok(reshape(ver, req)).send(res)
       } else {
-        Reply.internal().send(res)
+        throw new Error('failed to create resource')
       }
     } catch (e) {
       console.log(e)
@@ -1070,7 +1085,7 @@ const put =async(req, res, next)=> {
           return
         }
       }
-    } else if (req.body.type == 'page') {
+    } else if (req.body.type == 'page' || req.body.type == 'directory') {
       if ((req.body.namespace === undefined || req.body.namespace == old.namespace) &&
           (req.body.title === undefined || req.body.title == old.title) &&
           (req.body.source === undefined || req.body.source == old.source)) {
@@ -1078,14 +1093,26 @@ const put =async(req, res, next)=> {
         next()
         return
       }
-      let ver = await db.version.create(produceVersion({
-        number: old.number + 1,
-        resourceUuid: old.resourceUuid,
-        prevUuid: old.uuid,
-        namespace, title, source,
-        editorUuid: req.session.cpb.uuid,
-        pageUuid: old.pageUuid,
-      }))
+      let ver
+      if (req.body.type == 'directory') {
+        ver = await db.version.create(produceVersion({
+          number: old.number + 1,
+          resourceUuid: old.resourceUuid,
+          prevUuid: old.uuid,
+          namespace, title, source,
+          editorUuid: req.session.cpb.uuid,
+          pageUuid: old.pageUuid,
+        }, true))
+      } else {
+        ver = await db.version.create(produceVersion({
+          number: old.number + 1,
+          resourceUuid: old.resourceUuid,
+          prevUuid: old.uuid,
+          namespace, title, source,
+          editorUuid: req.session.cpb.uuid,
+          pageUuid: old.pageUuid,
+        }))
+      }
       old.nextUuid = ver.uuid
       await old.save()
       ver = await getSingle(dest)

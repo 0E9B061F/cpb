@@ -71,7 +71,7 @@ module.exports =(sequelize, DataTypes)=> {
     },
     namespace: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         len: [1, 64],
         not: /\//,

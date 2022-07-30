@@ -20,6 +20,8 @@ const init =c=> {
     dlex: require('../lib/dmd/lexer.js'),
     dmd: require('../lib/dmd/dmd.js'),
     wmd: require('../lib/wmd/wmd.js'),
+    dmda: require('../server/lib/dmd-analyzer.js'),
+    libdb: require('../server/lib/db.js'),
   })
 }
 

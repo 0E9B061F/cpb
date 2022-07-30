@@ -1,0 +1,16 @@
+.alerts {
+  margin-top: 5px;
+}
+.alert {
+  position: relative;
+}
+.menubar .alert:not(:first-child) {
+  margin-top: 1px;
+}
+.alert .icon {
+  width: 30px;
+}
+.rendered .alert .icon {
+  position: absolute;
+  left: -35px;
+}

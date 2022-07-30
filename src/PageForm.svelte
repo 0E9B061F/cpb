@@ -11,7 +11,19 @@
   const postdraft = getContext('postdraft')
   const loc = getContext('loc')
 
-  let type = $haspage ? $page.val.resource.type : 'page'
+
+  const dotype =()=> {
+    if ($haspage) {
+      return $page.val.resource.type
+    } else if ($loc.special?.type) {
+      return $loc.special.type
+    } else {
+      return 'page'
+    }
+  }
+
+
+  let type = dotype()
   let body = $haspage ? $page.val.source : ''
   let files
 
@@ -31,15 +43,30 @@
   $: $draft = mkdraft(type, body, file)
 </script>
 
+
+
 <FB vert zero form expand c="editor-area">
+  {#if $loc.special}
+    <FB rel c="alert">
+      <FB fw={9} center c="icon">
+        NB
+      </FB>
+      <FB vert zero>
+        <FB vc para="s1" fw={7}>RESERVED LOCATION</FB>
+        <FB vc para="s1">The system uses this location to {$loc.special.purpose}. A <strong>{$loc.special.type}</strong> is expected.</FB>
+      </FB>
+    </FB>
+  {/if}
   <div class="editor-rule"></div>
   <textarea class="main-editor" bind:value={body} spellcheck="false"></textarea>
   <div class="editor-rule bottom-rule"></div>
   <FB c="editor-module">
     {#if $haspage}
       <FB expand fw={6}>{$page.val.resource.type.toUpperCase()}</FB>
+    {:else if $loc.special?.type}
+      <FB expand fw={6}>{$loc.special.type.toUpperCase()}</FB>
     {:else}
-      <FB expand><Link nolink does={()=> type = 'page'} disable={type == 'page'}>PAGE</Link> &middot; <Link nolink does={()=> type = 'image'} disable={type == 'image'}>IMAGE</Link></FB>
+      <FB expand><Link nolink does={()=> type = 'page'} disable={type == 'page'}>PAGE</Link> &middot; <Link nolink does={()=> type = 'image'} disable={type == 'image'}>IMAGE</Link> &middot; <Link nolink does={()=> type = 'directory'} disable={type == 'directory'}>DIRECTORY</Link></FB>
     {/if}
     {#if type == 'image'}
       <input type="file" name="image" bind:files>

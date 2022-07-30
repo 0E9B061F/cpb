@@ -5,6 +5,8 @@
   const blockInfo = getContext('blockInfo')
   const loc = getContext('loc')
   const finished = getContext('finished')
+  const page = getContext('page')
+  const haspage = getContext('haspage')
 
   let markers = []
 

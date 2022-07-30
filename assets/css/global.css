@@ -2,6 +2,8 @@
 @import 'cpb-thumb.css';
 @import 'search-results.css';
 @import 'rendered.css';
+@import 'directory.css';
+@import 'alerts.css';
 
 body {
   /* measures */
@@ -184,6 +186,10 @@ a, .nolink, a:visited {
 }
 .cpblink.missing {
   color: var(--cc-missing);
+}
+
+.cpblink.deadlink {
+  color: #5b9385;
 }
 
 .cpblink:hover .cpblink-text {
@@ -879,8 +885,9 @@ h6 {
 
 .rendered .mountinfo {
   min-height: 30px;
+  margin-top: 0.5rem;
 }
-.rendered .mountinfo .notabene {
+.rendered .notabene {
   height: 30px;
   width: 30px;
   left: -35px;
@@ -1526,46 +1533,57 @@ h6 {
   line-height: var(--xs4);
   font-size: var(--xs4f);
 }
+.ln-s4.tight { font-size: var(--xs4); }
 .ln-s3 {
   line-height: var(--xs3);
   font-size: var(--xs3f);
 }
+.ln-s3.tight { font-size: var(--xs3); }
 .ln-s2 {
   line-height: var(--xs2);
   font-size: var(--xs2f);
 }
+.ln-s2.tight { font-size: var(--xs2); }
 .ln-s1 {
   line-height: var(--xs1);
   font-size: var(--xs1f);
 }
+.ln-s1.tight { font-size: var(--xs1); }
 .ln-n {
   line-height: var(--xn);
   font-size: var(--xnf);
 }
+.ln-n.tight { font-size: var(--xn); }
 .ln-b1 {
   line-height: var(--xb1);
   font-size: var(--xb1f);
 }
+.ln-b1.tight { font-size: var(--xb1); }
 .ln-b2 {
   line-height: var(--xb2);
   font-size: var(--xb2f);
 }
+.ln-b2.tight { font-size: var(--xb2); }
 .ln-b3 {
   line-height: var(--xb3);
   font-size: var(--xb3f);
 }
+.ln-b3.tight { font-size: var(--xb3); }
 .ln-b4 {
   line-height: var(--xb4);
   font-size: var(--xb4f);
 }
+.ln-b4.tight { font-size: var(--xb4); }
 .ln-b5 {
   line-height: var(--xb5);
   font-size: var(--xb5f);
 }
+.ln-b5.tight { font-size: var(--xb5); }
 .ln-b6 {
   line-height: var(--xb6);
   font-size: var(--xb6f);
 }
+.ln-b6.tight { font-size: var(--xb6); }
 
 .fd-line {
   overflow: hidden;

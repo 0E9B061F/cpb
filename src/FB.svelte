@@ -20,6 +20,7 @@
   export let spacer = null
   export let line = false
   export let para = false
+  export let tight = false
   export let grid = false
   export let end = false
   export let just = false
@@ -106,6 +107,7 @@
       const n = typeof(para) != 'string' ? 'n' : para
       cc.push(`ln-${n}`)
     }
+    if (tight) cc.push('tight')
 
     if (grid) {
       cc.push('gr')

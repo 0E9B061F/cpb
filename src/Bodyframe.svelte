@@ -11,7 +11,7 @@
   let c = []
   const classify =()=> {
     c = []
-    if ($loc.nullpage) {
+    if ($state.system) {
       c.push('special-page')
       c.push(`${$loc.title}-special`)
     } else {
@@ -21,6 +21,7 @@
   }
   $: classify($loc)
 </script>
+
 
 <FB vert expand {c}>
   {#if !$state.loading}<Generic cmp={$component}/>{/if}
