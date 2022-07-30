@@ -136,6 +136,7 @@
 		if (inhOpt != $rc.searchDefaults.inh) o.inh = inhOpt
 		if (pgOpt != $rc.searchDefaults.pg) o.pg = pgOpt
 		if (query) o.q = query
+		o.type = 'page,image' 
 		searchOpt = o
 		changed = true
 	}
