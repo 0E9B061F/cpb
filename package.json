@@ -1,11 +1,12 @@
 {
   "name": "cpb",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "private": true,
   "scripts": {
     "build": "env NODE_ENV=production rollup -c",
+    "postbuild": "env NODE_ENV=production node server/build/build.js",
     "build:dev": "env NODE_ENV=development rollup -c",
-    "postbuild": "node server/build/build.js",
+    "postbuild:dev": "env NODE_ENV=development node server/build/build.js",
     "dev": "env NODE_ENV=development rollup -c -w",
     "app": "env NODE_ENV=production server/bin/start.js",
     "app:dev": "env NODE_ENV=development server/bin/start.js",
