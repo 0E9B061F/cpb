@@ -30,6 +30,73 @@
 
   setContext('external', external)
 
+  const citedex = {}
+  let citetotal = 0
+  let sourcetotal = 0
+  const citations = {}
+  const sources = {}
+
+  class Citation {
+    constructor(ident, detail) {
+      this.ident = ident
+      this.detail = detail
+      this.citeno = citeno(this.ident)
+      this.index = indexno()
+      this.anchor = `cite-${this.ident}-${this.citeno}`
+      this.target = `source-${this.ident}-${this.citeno}`
+    }
+    get src() {
+      return sources[this.ident]
+    }
+    get srcno() {
+      return this.src.index
+    }
+    decorate(s) { return `🙦${s || this.index}` }
+    get display() {
+      return this.decorate()
+      if (this.src) {
+        return `[${this.srcno}:${this.citeno}]`
+      } else {
+        return '[source missing]'
+      }
+    }
+  }
+
+  class Source {
+    constructor(ident) {
+      this.ident = ident
+      this.index = sourcetotal += 1
+    }
+    get citations() {
+      return citations[this.ident] || []
+    }
+    get targets() {
+      return this.citations.map(c=> c.target)
+    }
+  }
+
+  const citeno =(ident)=> {
+    if (citedex[ident]) return citedex[ident] += 1
+    else return citedex[ident] = 1
+  }
+  const indexno =()=> {
+    return citetotal += 1
+  }
+  const addCitation =(ident, detail)=> {
+    const c = new Citation(ident, detail)
+    if (!citations[ident]) citations[ident] = []
+    citations[ident].push(c)
+    return c
+  }
+  const addSource =(ident)=> {
+    sources[ident] = new Source(ident)
+    return sources[ident]
+  }
+
+  setContext('citeno', citeno)
+  setContext('addSource', addSource)
+  setContext('addCitation', addCitation)
+
   const renderers = {
     link: LinkShim,
     cpblink: CPBLinkShim,

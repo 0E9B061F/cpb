@@ -5,6 +5,7 @@
   import { getContext } from 'svelte'
   const addCitation = getContext('addCitation')
   const loc = getContext('loc')
+  const external = getContext('external')
 
   export let args
 
@@ -15,5 +16,5 @@
 </script>
 
 <span class="citation" class:marked={mark} class:current={current} id={cite.anchor}>
-  <span class="citation-text"><slot></slot></span>{#if cite}<span class="citation-link system"><Link self cmd={cite.target}>{cite.display}</Link></span>{/if}
+  <span class="citation-text"><slot></slot></span>{#if cite}<span class="citation-link system">{#if external}<Link space={external.namespace} title={external.title} cmd={cite.target}>{cite.display}</Link>{:else}<Link self cmd={cite.target}>{cite.display}</Link>{/if}</span>{/if}
 </span>
