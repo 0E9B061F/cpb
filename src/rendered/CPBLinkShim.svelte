@@ -41,7 +41,11 @@
     {/if}
   {/if}
 {:else if self}
-  <Link self strip/>
+  {#if external}
+    <Link space={external.namespace} title={external.title}/>
+  {:else}
+    <Link self strip/>
+  {/if}
 {:else if display}
   <Link {nst}>{display}</Link>
 {:else if site}
