@@ -469,6 +469,7 @@ ol.treelike {
   height: 30px;
   font-size: 2rem;
   text-align: right;
+  font-family: "Noto Sans Linear A", "Noto Sans Linear B", sans-serif;
 }
 .logo {
 	font-size: 2rem;
