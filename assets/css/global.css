@@ -134,7 +134,7 @@ body {
   --cc-link-deco: var(--sootgold);
   --cc-missing-deco: var(--sootgold);
   --matte: #191919;
-  --antimatte: #aaa;
+  --antimatte: var(--offgold);
   --metal: #202020;
   --rubber: #181818;
   --rough: #1e1e1e;
@@ -473,6 +473,7 @@ ol.treelike {
   font-size: 2rem;
   text-align: right;
   font-family: "Noto Sans Linear A", "Noto Sans Linear B", sans-serif;
+  overflow: hidden;
 }
 .logo {
 	font-size: 2rem;

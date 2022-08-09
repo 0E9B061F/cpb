@@ -32,6 +32,9 @@
 .directory .item {
   list-style-type: none;
 }
+.directory.menu .item {
+  white-space: nowrap;
+}
 .subdir.fold > .directory {
   display: none;
 }

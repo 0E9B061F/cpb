@@ -16,5 +16,5 @@
 </script>
 
 <span class="citation" class:marked={mark} class:current={current} id={cite.anchor}>
-  <span class="citation-text"><slot></slot></span>{#if cite}<span class="citation-link system">{#if external}<Link space={external.namespace} title={external.title} cmd={cite.target}>{cite.display}</Link>{:else}<Link self cmd={cite.target}>{cite.display}</Link>{/if}</span>{/if}
+  <span class="citation-text"><slot></slot></span>{#if cite}<span class="citation-link system">{#if external}<Link space={external.namespace} title={external.title} cmd={cite.target}><span class="cite-marker">🙣</span>{cite.index}</Link>{:else}<Link self cmd={cite.target}><span class="cite-marker">🙣</span>{cite.index}</Link>{/if}</span>{/if}
 </span>
