@@ -188,8 +188,11 @@ a, .nolink, a:visited {
   color: var(--cc-missing);
 }
 
-.cpblink.deadlink {
+.cpblink.deadlink, .click-copy {
   color: #5b9385;
+}
+.click-copy:hover {
+  text-decoration: underline;
 }
 
 .cpblink:hover .cpblink-text {
